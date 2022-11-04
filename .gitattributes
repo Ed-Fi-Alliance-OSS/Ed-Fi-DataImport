@@ -1,0 +1,11 @@
+*.cmd text
+*.ps1 text
+
+*.sln text
+*.csproj text
+*.cs text
+*.config text
+*.sql text
+
+*.exe binary
+*.dll binary

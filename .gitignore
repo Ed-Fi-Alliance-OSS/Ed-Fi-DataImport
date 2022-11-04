@@ -1,0 +1,36 @@
+/.vs/
+/.idea/
+/packages/
+/package/
+/**/bin/
+/**/obj/
+/**/*.csproj.user
+/DataImport.sln.DotSettings.user
+TestResult.xml
+/tools/nuget.exe
+/EdFi.DataImport.Web.*.nupkg
+/**/.upgrade-assistant
+/log.txt
+.env
+
+/**/wwwroot/bundles/
+/**/wwwroot/content/
+/**/publish/
+/**/*.nupkg
+.tools
+.vscode/settings.json
+
+#Installer Files
+/Installer/downloads/
+/Installer/AppCommon/
+/Installer/tools/
+/Installer/*.log
+
+#Test Results
+**/TestResults/
+
+#Solution-Specific
+.tssconf
+
+
+*.sarif
