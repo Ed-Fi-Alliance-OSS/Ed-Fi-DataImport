@@ -1,0 +1,62 @@
+{
+  "title": "Automation - Student Assessment",
+  "description": "Automated Test Data for Student Assessments",
+  "apiVersion": "3.4.0",
+  "template": {
+    "maps": [
+      {
+        "name": "Automated - SA Map for 3.4.0",
+        "resourcePath": "/ed-fi/studentAssessments",
+        "attribute": null,
+        "columnHeaders": [
+          "adminyear",
+          "DistrictNumber",
+          "DistrictName",
+          "SchoolNumber",
+          "SchoolName",
+          "sasid",
+          "listeningss_adj",
+          "speakingss_adj",
+          "readingss_adj",
+          "writingss_adj",
+          "comprehensionss_adj",
+          "oralss_adj",
+          "literacyss_adj",
+          "Overallss_adj"
+        ],
+        "customFileProcessor": null,
+        "map": {
+          "studentAssessmentIdentifier": {
+            "Column": "sasid"
+          },
+          "assessmentReference": {
+            "assessmentIdentifier": "DI-TEST-2021",
+            "namespace": "uri://ed-fi.org/Assessment/Assessment.xml"
+          },
+          "schoolYearTypeReference": {
+            "schoolYear": 2021
+          },
+          "studentReference": {
+            "studentUniqueId": {
+              "Column": "sasid"
+            }
+          },
+          "administrationDate": "01-01-2021",
+          "scoreResults": [
+            {
+              "assessmentReportingMethodDescriptor": "uri://ed-fi.org/AssessmentReportingMethodDescriptor#Scale score",
+              "resultDatatypeTypeDescriptor": "uri://ed-fi.org/ResultDatatypeTypeDescriptor#Integer",
+              "result": {
+                "Column": "Overallss_adj"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "bootstraps": [],
+    "lookups": [],
+    "supplementalInformation": null,
+    "preprocessors": []
+  }
+}

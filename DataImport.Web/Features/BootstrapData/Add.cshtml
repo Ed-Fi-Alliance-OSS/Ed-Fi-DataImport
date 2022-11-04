@@ -1,0 +1,60 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.BootstrapData.AddBootstrapData.Command
+
+@{
+    ViewBag.Title = "Add Bootstrap Data";
+}
+
+<h2>Add Bootstrap Data</h2>
+
+@using (Html.AjaxForm())
+{
+    @Html.Input(m => m.Name)
+    @Html.DropDown(m => m.ApiVersionId, Model.ApiVersions)
+    @Html.DropDown(m => m.ResourcePath, new List<SelectListItem> { new SelectListItem { Text = "Select Resource" } })
+    @Html.Input(m => m.Data, new { placeholder = "JSON Data", style = "height:500px;" })
+    @Html.HiddenFor(m => m.Id)
+    @Html.SubmitButton("Save Bootstrap Data", new { id = "btnSubmit" })
+    @section scripts{
+        <script type="text/javascript">
+        $(function ($) {
+
+            var $apiVersionIdElem = $('#@Html.IdFor(m => m.ApiVersionId)');
+            var $resourcePathElem = $('#@Html.IdFor(m => m.ResourcePath)');
+
+            refreshResourcePathVisibility();
+
+            $apiVersionIdElem.change(function () {
+                clearValidationSummary();
+
+                var apiVersionId = $(this).val();
+                if (!apiVersionId) {
+                    refreshResourcePathVisibility();
+                    $resourcePathElem.val('');
+                    return;
+                }
+
+                var $resourcePathDropdown = $('#@Html.IdFor(m => m.ResourcePath)');
+                loadResourcesDropdown(apiVersionId,
+                    $resourcePathDropdown,
+                    function() {
+                        refreshResourcePathVisibility();
+                    });
+            });
+
+            function refreshResourcePathVisibility() {
+                var apiVersionId = $apiVersionIdElem.val();
+                var disabled = apiVersionId === '';
+                $resourcePathElem.prop("disabled", disabled);;
+            }
+        });
+        </script>
+    }
+}

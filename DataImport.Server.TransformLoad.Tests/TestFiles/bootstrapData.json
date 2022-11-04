@@ -1,0 +1,55 @@
+{
+    "educationOrganizationReference": {
+      "educationOrganizationId": 255901
+    },
+    "identifier": "LAB-ASSESSMENT-2018",
+    "title": "Lab Assessment for SY 2018",
+    "version": 2018,
+    "namespace": "http://ed-fi.org/Assessment/Assessment.xml",
+    "assessedGradeLevels": [
+      {
+        "gradeLevelDescriptor": "First grade"
+      },
+      {
+        "gradeLevelDescriptor": "Second grade"
+      },
+      {
+        "gradeLevelDescriptor": "Third grade"
+      },
+      {
+        "gradeLevelDescriptor": "Fourth grade"
+      },
+      {
+        "gradeLevelDescriptor": "Fifth grade"
+      },
+      {
+        "gradeLevelDescriptor": "Sixth grade"
+      },
+      {
+        "gradeLevelDescriptor": "Seventh grade"
+      },
+      {
+        "gradeLevelDescriptor": "Eighth grade"
+      },
+      {
+        "gradeLevelDescriptor": "Ninth grade"
+      },
+      {
+        "gradeLevelDescriptor": "Tenth grade"
+      },
+      {
+        "gradeLevelDescriptor": "Eleventh grade"
+      },
+      {
+        "gradeLevelDescriptor": "Twelfth grade"
+      },
+      {
+        "gradeLevelDescriptor": "Ungraded"
+      }
+    ],
+    "academicSubjects": [
+      {
+        "academicSubjectDescriptor": "Reading"
+      }
+    ]
+  }

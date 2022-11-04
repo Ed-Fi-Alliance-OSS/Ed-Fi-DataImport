@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DataImport.Server.TransformLoad (Prod)": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Production"
+      }
+    }
+  }
+}

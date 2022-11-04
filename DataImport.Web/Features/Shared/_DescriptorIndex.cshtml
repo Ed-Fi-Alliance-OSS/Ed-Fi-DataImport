@@ -1,0 +1,73 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Common.ExtensionMethods
+@using DataImport.Web.Features.DataMaps
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.DataMaps.RetrieveDescriptors.ViewModel
+
+@{ 
+    var apiVersion = Model.ApiVersionId.HasValue ? Model.ApiVersionId.Value.ToString() : "null";
+    var onChangeCommand = $"loadDescriptorLookupModal(null, this.value, {apiVersion})"; 
+}
+
+@Html.DropDownListFor(m => m.ApiServerId, Model.ApiServers, new
+{
+    @class = "form-control",
+    style = "margin-bottom:15px",
+    onchange = onChangeCommand
+})
+
+@if (!Model.DescriptorsFound)
+{
+
+    if (Model.AvailableDescriptors != null)
+    {
+        <div class="alert alert-info">
+            <p>
+                Please manually select the descriptor below.
+            </p>
+        </div>
+
+        @Html.DropDownListFor(m => m.DescriptorName, Model.AvailableDescriptors, new { @class = "form-control" })
+        <div style="margin-top:15px">
+            <button id="searchDescriptorBtn" class="btn btn-primary">Search</button>
+        </div> }
+}
+else
+{
+    @Html.HiddenFor(x => x.ApiServerId)
+
+    <table id="tblDescriptors" class="table table-striped table-hover table-bordered table-responsive">
+        <thead>
+            <tr>
+                <th>Code Value</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model.Descriptors.Items)
+            {
+                <tr>
+                    <td>@m.CodeValue</td>
+                    <td>@m.Description</td>
+                    <td align="center">
+                        @{ var descriptorValue = Model.ApiVersion.IsOdsV2() ? m.CodeValue : string.Concat(m.Namespace, "#", m.CodeValue); }
+                        <button type="button" class="btn btn-primary select-descriptor-btn" value="@descriptorValue">Select</button>
+                    </td>
+                </tr>
+}
+        </tbody>
+    </table> 
+    var previousUrl = Url.Action("RetrieveDescriptors", "DataMaps", new RetrieveDescriptors.Query { DescriptorName = Model.DescriptorName, PageNumber = Model.Descriptors.PageNumber - 1, ApiServerId = Model.ApiServerId, ApiVersionId = Model.ApiVersionId });
+    var nextUrl = Url.Action("RetrieveDescriptors", "DataMaps", new RetrieveDescriptors.Query { DescriptorName = Model.DescriptorName, PageNumber = Model.Descriptors.PageNumber + 1, ApiServerId = Model.ApiServerId, ApiVersionId = Model.ApiVersionId });
+
+    @Html.PagingControl(previousUrl, nextUrl, Model.Descriptors)
+
+    <p>Looking for a different descriptor? <a id="manualDescriptorSearchLink" style="cursor: pointer;">Try a manual search.</a></p>
+}

@@ -1,0 +1,71 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Features.Assessment
+@using DataImport.Web.Helpers
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Assessment.AssessmentDetails.AssessmentDetail
+
+@{
+    ViewBag.Title = "Assessment Details";
+}
+
+<h2>@Model.AssessmentTitle</h2>
+
+<table class="table">
+    <tbody>
+        @Html.Detail(x => x.AssessmentIdentifier)
+        @Html.Detail(x => x.Namespace)
+        @Html.Detail(x => x.AssessmentVersion)
+        @Html.Detail(x => x.AssessmentCategoryDescriptor)
+        @Html.Detail(x => x.AcademicSubjects)
+        @Html.Detail(x => x.AssessedGradeLevels)
+        @Html.Detail(x => x.IdentificationCodes)
+    </tbody>
+</table>
+
+<h4>Performance Levels</h4>
+
+<table id="tblPerformanceLevels" class="table table-striped table-hover table-bordered table-responsive">
+    <thead>
+        <tr>
+            <th>Performance Level</th>
+            <th>Assessment Reporting Method</th>
+            <th>Result Data Type</th>
+            <th>Minimum Score</th>
+            <th>Maximum Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model.PerformanceLevels)
+        {
+            <tr>
+                <td>@(s.PerformanceLevelDescriptor?.ToDescriptorName())</td>
+                <td>@(s.AssessmentReportingMethodDescriptor?.ToDescriptorName())</td>
+                <td>@(s.ResultDatatypeTypeDescriptor?.ToDescriptorName())</td>
+                <td>@s.MinimumScore</td>
+                <td>@s.MaximumScore</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="ajax-content">
+    @await Html.PartialAsync("_ObjectiveAssessmentDetails",
+             new ObjectiveAssessmentDetails.ViewModel {Id = Model.Id, ObjectiveAssessments = Model.ObjectiveAssessments, ApiServerId = Model.ApiServerId  })
+</div>
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function ($) {
+            $('#tblPerformanceLevels').footable();
+            $('#tblObjectiveAssessments').footable();
+        });
+    </script>
+}

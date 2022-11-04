@@ -1,0 +1,112 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Features.Log
+@model DataImport.Web.Features.Log.LogViewModel
+
+@{
+    ViewBag.Title = "Logs";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<ul id="logs-tabs" class="nav nav-tabs">
+    <li id="liFiles" class="active"><a data-toggle="tab" href="#divFiles">Files</a></li>
+    <li id="liLogIngestion"><a data-toggle="tab" href="#divLogIngestion">Ingestion</a></li>
+    <li id="liLogApplication"><a data-toggle="tab" href="#divLogApplication">Application</a></li>
+</ul>
+<div class="tab-content">
+    <div id="divFiles" class="tab-pane fade in active ajax-content"></div>
+    <div id="divLogIngestion" class="tab-pane fade">
+        <div class="row" style=" margin-top: 15px; margin-bottom: 15px ">
+            <div class="col-md-3"><span style="font-weight: bold">Results</span>@Html.DropDownListFor(m => m.Results, Html.GetEnumSelectList(typeof(DataImport.Models.IngestionResult)),"Select Result", new {@class="form-control"})</div>
+            <div class="col-md-3"><span style="font-weight: bold">Http Statuses</span>@Html.DropDownListFor(m =>m.HttpStatuses, Html.GetEnumSelectList(typeof(DataImport.Common.Enums.EdFiHttpStatus)), "Select Status", new { @class = "form-control" })</div>
+            <div class="col-md-4"><span style="font-weight: bold">File Name</span>@Html.TextBox("FileName", "", new { @class = "form-control" })</div>
+            <div class="col-md-2"> <button type="button" class="btn btn-primary filterresults" style="margin-top: 20px; float: right">Filter Results</button> </div>
+        </div>
+        <hr/>
+        <div id="ingestionLog" class="ajax-content"></div>
+    </div>
+    <div id="divLogApplication" class="tab-pane fade ajax-content"></div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        $(function($) {
+
+            function filters() {
+                var logFilters = {};
+                var result = $("#Results").children("option:selected").val();
+                var response = $("#HttpStatuses").children("option:selected").val();
+                logFilters.SelectedResult = result.length != 0 ? result : '0';
+                logFilters.SelectedResponse = response.length != 0 ? response : '0';
+                logFilters.FileName = $("#FileName").val();
+                return logFilters;
+            }
+
+            var ingestionLogUrl = "@Url.Action("IngestionLog", "Log", new IngestionLog.Query { PageNumber = 1 })";
+            var filesUrl = "@Html.Raw(Url.Action("FilesLog", "Log", new FilesLog.Query { PageNumber = 1, ApiServerId = Model.ApiServerId }))";
+            var logApplicationUrl = "@Url.Action("ApplicationLog", "Log", new ApplicationLog.Query { PageNumber = 1 })";
+
+            $("#divFiles").load(filesUrl);
+
+            function loadIngestionData(url) {
+
+                var filterBtn = $('.filterresults');
+                filterBtn.prop('disabled', true);
+
+                var logFilters = filters();
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: logFilters,
+                    dataType: "html",
+                    success: function(data) {
+                        $("#ingestionLog").html(data);
+                    },
+                    complete: function() {
+                        filterBtn.prop('disabled', false);
+                    }
+                });
+            }
+
+            var expand = function(event) {
+                event.preventDefault();
+                var parent = $(this).closest("tr");
+                parent.toggleClass('expand').nextUntil('tr.parentrow').slideToggle(100);
+            };
+            $(document).on('click', '.sign', expand);
+
+            var pagingHandlerIngestionLog = function (event) {
+                event.preventDefault();
+                loadIngestionData($(this).attr('href'));
+            };
+
+            $(document).on('click', '.filterresults', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                loadIngestionData(ingestionLogUrl);
+            });
+            $(document).on('click', '.navigate-previous-page-ingestion-log', pagingHandlerIngestionLog);
+            $(document).on('click', '.navigate-next-page-ingestion-log', pagingHandlerIngestionLog);
+
+            $(document).on('click', '.ajax-submit-link', ajaxPostFromHref);
+
+            $('#logs-tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var activatedTab = $(e.target).attr("href");
+
+                if (activatedTab === "#divFiles") {
+                    $("#divFiles").load(filesUrl);
+                } else if (activatedTab === "#divLogIngestion") {
+                    loadIngestionData(ingestionLogUrl);
+                } else if (activatedTab === "#divLogApplication") {
+                    $("#divLogApplication").load(logApplicationUrl);
+                }
+            });
+        });
+    </script>
+}

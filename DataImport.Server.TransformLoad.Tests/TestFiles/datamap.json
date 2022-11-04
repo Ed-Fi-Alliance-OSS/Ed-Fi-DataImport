@@ -1,0 +1,28 @@
+{
+  "assessmentReference": {
+    "identifier": "LAB-ASSESSMENT-2018",
+    "namespace": "http://ed-fi.org/Assessment/Assessment.xml"
+  },
+  "studentReference": {
+    "studentUniqueId": {
+      "Column": "STUDENT_ID",
+      "Default": "0"
+    }
+  },
+  "administrationDate": "08-01-2018",
+  "customRegistrationFee": {
+    "Column": "REG_FEE"
+  },
+  "identifier": "LAB-ASSESSMENT-2018",
+  "performanceLevels": [],
+  "scoreResults": [
+    {
+      "assessmentReportingMethodType": "Raw score",
+      "resultDatatypeType": "Integer",
+      "result": {
+        "Column": "OVERALL_SCORE"
+      }
+    }
+  ],
+  "studentObjectiveAssessments": []
+}

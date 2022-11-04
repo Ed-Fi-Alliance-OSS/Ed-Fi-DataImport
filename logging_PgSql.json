@@ -1,0 +1,70 @@
+{
+  "Serilog": {  
+    "WriteTo": [
+      {
+        "Name": "PostgreSQL",
+        "Args": {
+          "connectionString": "defaultConnection",
+          "tableName": "ApplicationLogs",
+          "schemaName": "public",
+          "needAutoCreateTable": false,
+          "loggerColumnOptions": {
+            "Id": "IdAutoIncrement",
+            "Logged": "Timestamp",
+            "Properties": "LogEvent",
+            "Message": "RenderedMessage",
+            "Exception": "Exception"
+          },
+          "loggerPropertyColumnOptions": {
+            "MachineName": {
+              "Name": "MachineName",
+              "Format": "{l}",
+              "WriteMethod": "Raw",
+              "DbType": "Varchar"
+            },
+            "Level": {
+              "Name": "LevelShortName",
+              "WriteMethod": "Raw",
+              "DbType": "Varchar"
+            },
+            "UserName": {
+              "Name": "UserName",
+              "WriteMethod": "Raw",
+              "DbType": "Varchar"
+            },
+            "Logger": {
+              "Name": "SourceContext",
+              "WriteMethod": "Raw",
+              "DbType": "Varchar"
+            },
+            "ServerName": {
+              "Name": "ServerName",
+              "WriteMethod": "Raw",
+              "DbType": "Varchar"
+            },
+            "Port": {
+              "Name": "ServerPort",
+              "WriteMethod": "Raw",
+              "DbType": "Varchar"
+            },
+            "Url": {
+              "Name": "Url",
+              "WriteMethod": "Raw",
+              "DbType": "Varchar"
+            },
+            "ServerAddress": {
+              "Name": "LocalAddress",
+              "WriteMethod": "Raw",
+              "DbType": "Varchar"
+            },
+            "RemoteAddress": {
+              "Name": "RemoteAddress",
+              "WriteMethod": "Raw",
+              "DbType": "Varchar"
+            }
+          }         
+        }
+      }
+    ]
+  }
+}

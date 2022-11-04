@@ -1,0 +1,331 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Common.Enums
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Share.FileExport.Command
+
+@{
+    ViewBag.Title = "Export Template";
+    bool hasBootstraps = Model.Bootstraps.Any();
+    bool hasDataMaps = Model.DataMaps.Any();
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    Export templates to upload to the
+    <a href="https://github.com/Ed-Fi-Exchange-OSS/DataImport-Templates">
+        DataImport-Templates repository
+    </a>
+    in the Ed-Fi Exchange.
+</p>
+
+@if (!hasBootstraps && !hasDataMaps)
+{
+    <p class="bg-warning" style="padding: 0.5em;">
+        Before you can create an export, you must first define some
+        @Html.ActionLink("Bootstrap Data", "Add", "BootstrapData")
+        or a
+        @Html.ActionLink("Data Map", "Add", "DataMaps")
+
+        Once you've created something to share, return here to begin
+        the export process.
+    </p>
+}
+else
+{
+    using (Html.AjaxForm(callback: "handleExportContent"))
+    {
+        <div id="step-select-data-maps" class="collapse wizard-step">
+            <h4>Data Maps</h4>
+
+            <p>Select the Data Maps that you wish to include in the export.</p>
+            <div class="alert alert-info">
+                <p>
+                    If more than one Data Map is selected, they must have the same API Version.
+                </p>
+            </div>
+
+            <div id="apiVersionDataMapsValidation" class="alert alert-danger">
+                <p>
+                    Exported Data Maps must have the same API Version.
+                </p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped table-hover table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th class="text-center col-md-1">Export?</th>
+                                <th>Data Map Name</th>
+                                <th>Api Version</th>
+                                <th>Resource</th>
+                                <th>Lookups</th>
+                                <th>Custom File Processor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < Model.DataMaps.Length; i++)
+                            {
+                                var dataMap = Model.DataMaps[i];
+                                <tr>
+                                    <td class="text-center">
+                                        @Html.HiddenFor(m => m.DataMaps[i].Id)
+                                        @Html.HiddenFor(m => m.DataMaps[i].Name)
+                                        @Html.HiddenFor(m => m.DataMaps[i].ApiVersion)
+                                        @Html.HiddenFor(m => m.DataMaps[i].ResourcePath)
+                                        @Html.HiddenFor(m => m.DataMaps[i].Lookups)
+                                        @Html.HiddenFor(m => m.DataMaps[i].CustomFileProcessor)
+                                        @Html.CheckBoxFor(m => m.DataMaps[i].Selected)
+                                    </td>
+                                    <td>
+                                        @dataMap.Name
+                                    </td>
+                                    <td>
+                                        @dataMap.ApiVersion
+                                    </td>
+                                    <td>
+                                        @dataMap.ResourcePath
+                                    </td>
+                                    <td>
+                                        @if (string.IsNullOrEmpty(dataMap.Lookups))
+                                        {
+                                            <em>This Data Map does not rely on any Lookups.</em>
+                                        }
+                                        else
+                                        {
+                                            @dataMap.Lookups
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (string.IsNullOrEmpty(dataMap.CustomFileProcessor))
+                                        {
+                                            <em>This Data Map does not rely on a custom file processor.</em>
+                                        }
+                                        else
+                                        {
+                                            @dataMap.CustomFileProcessor
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @Html.Button("Continue", new { id = "goToBootstraps" })
+        </div>
+
+        <div id="step-select-bootstraps" class="collapse wizard-step">
+            <h4>Bootstrap Data</h4>
+
+            <p>Select the Bootstrap Data definitions that you wish to include in the export. Only definitions compatible with your Data Map selection(s) can be selected.</p>
+
+            <div id="apiVersionBootstrapValidation" class="alert alert-danger">
+                <p>
+                    Exported Bootstrap Data Definitions must have the same API Version.
+                </p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-9">
+                    <table class="table table-striped table-hover table-bordered table-responsive" id="tblBootstraps">
+                        <thead>
+                            <tr>
+                                <th class="text-center col-md-1">Export?</th>
+                                <th>Bootstrap Name</th>
+                                <th>API Version</th>
+                                <th>Resource</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < Model.Bootstraps.Length; i++)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        @Html.HiddenFor(m => m.Bootstraps[i].Id)
+                                        @Html.HiddenFor(m => m.Bootstraps[i].ApiVersion)
+                                        @Html.HiddenFor(m => m.Bootstraps[i].ResourcePath)
+                                        @Html.CheckBoxFor(m => m.Bootstraps[i].Selected)
+                                    </td>
+                                    <td>
+                                        @Model.Bootstraps[i].Name
+                                    </td>
+                                    <td>
+                                        @Model.Bootstraps[i].ApiVersion
+                                    </td>
+                                    <td>
+                                        @Model.Bootstraps[i].ResourcePath
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @Html.Button("Continue", new { id = "goToMetadata" })
+        </div>
+
+        <div id="step-collect-metadata" class="collapse wizard-step">
+            <h4>Template Summary</h4>
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    @Html.Input(x => x.Title)
+                    @Html.Input(x => x.Description)
+                    @Html.ReadOnlyInput(x => x.ApiVersion, "apiVersionContent")
+                </div>
+            </div>
+            @Html.SubmitButton("Preview")
+        </div>
+
+        <div id="step-preview" class="collapse wizard-step">
+            <h4>Preview</h4>
+
+            <p>Review the content of your export before downloading.</p>
+
+            @Html.TextArea("exportJson", null, new { @readonly = true, rows = 25, cols = 80 })
+
+            @Html.SubmitButton("Download")
+        </div>
+    }
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        var userHasPreviewed = false;
+        var currentStep = -1;
+        var steps = [];
+
+        function handleExportContent(data) {
+            var indent = 4;
+            var json = JSON.stringify(data, null, indent);
+
+            if (userHasPreviewed) {
+                saveFile(json, timestamp() + ".json", "application/json");
+                return;
+            }
+
+            $("#exportJson").val(json);
+            advanceWizardStep();
+            userHasPreviewed = true;
+        }
+
+        function advanceWizardStep() {
+            $(".wizard-step").hide();
+            currentStep++;
+            $(steps[currentStep]).show();
+        }
+
+        $(function() {
+            showApiVersionValidation(false, '#apiVersionDataMapsValidation');
+            showApiVersionValidation(false, '#apiVersionBootstrapValidation');
+            invalidateApiVersion([]);
+            $("#goToBootstraps").click(validateApiVersionsForDataMapsAndProceed);
+            $("#goToMetadata").click(validateApiVersionsForBootstrapsAndProceed);
+
+            @if (hasDataMaps)
+            {
+                @:steps.push("#step-select-data-maps");
+            }
+
+            @if (hasBootstraps)
+            {
+                @:steps.push("#step-select-bootstraps");
+            }
+
+            steps.push("#step-collect-metadata");
+            steps.push("#step-preview");
+
+            advanceWizardStep();
+        });
+
+        function validateApiVersionsForDataMapsAndProceed() {
+            validateApiVersionsForEntity('DataMaps', '#apiVersionDataMapsValidation', true);
+        }
+
+        function validateApiVersionsForBootstrapsAndProceed() {
+            validateApiVersionsForEntity('Bootstraps', '#apiVersionBootstrapValidation');
+        }
+
+        function validateApiVersionsForEntity(selector, errorMessageSelector, filterBootstraps) {
+            var uniqueApiVersions = [];
+            var checkedEntities = $('input[id^=' + selector + '_][type=checkbox]:checked');
+            if (checkedEntities.length > 0) {
+
+                for (var i = 0; i < checkedEntities.length; i++) {
+                    var entitySelector = checkedEntities[i];
+                    var apiVersion = $('#' + entitySelector.id.replace('Selected', 'ApiVersion')).val();
+                    if (uniqueApiVersions.indexOf(apiVersion) < 0) {
+                        uniqueApiVersions.push(apiVersion);
+                    }
+
+                    if (uniqueApiVersions.length > 1) {
+                        showApiVersionValidation(true, errorMessageSelector);
+                        return;
+                    }
+
+                    if (filterBootstraps) {
+                        filterBootstrapDataByApiVersion(uniqueApiVersions[0]);
+                    }
+                }
+
+                invalidateApiVersion(uniqueApiVersions);
+            }
+
+            advanceWizardStep();
+        }
+
+        function showApiVersionValidation(val, selector) {
+            if (val) {
+                $(selector).show();
+            } else {
+                $(selector).hide();
+            }
+        }
+
+        function invalidateApiVersion(selectedApiVersions) {
+            $('#ApiVersion')[0].value = selectedApiVersions.length > 0 ? selectedApiVersions[0] : '2.5+';
+            $('#apiVersionContent')[0].innerText = $('#ApiVersion')[0].value;
+        }
+
+        function filterBootstrapDataByApiVersion(apiVersion) {
+            var hasBootstraps = false;
+            $('#tblBootstraps').find('tr').each(function(rowIndex, r) {
+                if (rowIndex === 0) { // rowIndex is a table header
+                    return;
+                }
+                var bootstrapApiVersion = $('#Bootstraps_' + (rowIndex - 1).toString() + '__ApiVersion').val();
+                var bootstrapCheckbox = $('#Bootstraps_' + (rowIndex - 1).toString() + '__Selected');
+
+
+                if (bootstrapApiVersion === apiVersion) {
+                    bootstrapCheckbox.show();
+                    hasBootstraps = true;
+                } else {
+                    bootstrapCheckbox.hide();
+                }
+            });
+
+            if (!hasBootstraps) {
+                removeSelectBootstrapsStep();
+            }
+        }
+
+        function removeSelectBootstrapsStep() {
+
+            var index = steps.indexOf('#step-select-bootstraps');
+            if (index >= 0) {
+                steps.splice(index, 1);
+            }
+        }
+    </script>
+}

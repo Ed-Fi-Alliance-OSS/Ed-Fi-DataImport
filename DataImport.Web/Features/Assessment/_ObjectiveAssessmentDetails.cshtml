@@ -1,0 +1,43 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Features.Assessment
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Assessment.ObjectiveAssessmentDetails.ViewModel
+
+<h4>Objective Assessments</h4>
+
+<table id="tblObjectiveAssessments" class="table table-striped table-hover table-bordered table-responsive">
+    <thead>
+    <tr>
+        <th>Identification Code</th>
+        <th>Description</th>
+        <th>Max Raw Score</th>
+        <th>Nomenclature</th>
+        <th>Percent of Assessment</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var s in Model.ObjectiveAssessments.Items)
+    {
+        <tr>
+            <td>@s.IdentificationCode</td>
+            <td>@s.Description</td>
+            <td>@s.MaxRawScore</td>
+            <td>@s.Nomenclature</td>
+            <td>@s.PercentOfAssessment</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@{
+    var previousUrl = Url.Action("ObjectiveAssessmentDetails", "Assessment", new ObjectiveAssessmentDetails.Query {Id = Model.Id, PageNumber = Model.ObjectiveAssessments.PageNumber - 1, ApiServerId = Model.ApiServerId });
+    var nextUrl = Url.Action("ObjectiveAssessmentDetails", "Assessment", new ObjectiveAssessmentDetails.Query {Id = Model.Id, PageNumber = Model.ObjectiveAssessments.PageNumber + 1, ApiServerId = Model.ApiServerId });
+}
+@Html.PagingControl(previousUrl, nextUrl, Model.ObjectiveAssessments)
+

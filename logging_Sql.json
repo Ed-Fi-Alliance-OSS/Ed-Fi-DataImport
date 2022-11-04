@@ -1,0 +1,92 @@
+{ 
+  "Serilog": {  
+    "WriteTo": [
+      {
+        "Name": "MSSqlServer",
+        "Args": {
+          "connectionString": "defaultConnection",
+          "sinkOptionsSection": {
+            "tableName": "ApplicationLogs",
+            "autoCreateSqlTable": false
+          },
+          "columnOptionsSection": {
+            "disableTriggers": true,
+            "clusteredColumnstoreIndex": false,
+            "primaryKeyColumnName": "Id",
+            "addStandardColumns": [ "Message", "Exception", "LogEvent" ],
+            "removeStandardColumns": [ "MessageTemplate", "Properties", "Level" ],
+            "additionalColumns": [
+              {
+                "ColumnName": "MachineName",
+                "DataType": "nvarchar",
+                "DataLength": 200,
+                "PropertyName": "MachineName"
+              },
+              {
+                "ColumnName": "Level",
+                "DataType": "nvarchar",
+                "DataLength": 5,
+                "PropertyName": "LevelShortName"
+              },
+              {
+                "ColumnName": "UserName",
+                "DataType": "nvarchar",
+                "DataLength": 200,
+                "PropertyName": "UserName"
+              },
+              {
+                "ColumnName": "Logger",
+                "DataType": "nvarchar",
+                "DataLength": 300,
+                "PropertyName": "SourceContext"
+              },
+              {
+                "ColumnName": "ServerName",
+                "DataType": "nvarchar",
+                "DataLength": 200,
+                "PropertyName": "ServerName"
+              },
+              {
+                "ColumnName": "Port",
+                "DataType": "nvarchar",
+                "DataLength": 100,
+                "PropertyName": "ServerPort"
+              },
+              {
+                "ColumnName": "Url",
+                "DataType": "nvarchar",
+                "DataLength": 2000,
+                "PropertyName": "Url"
+              },
+              {
+                "ColumnName": "ServerAddress",
+                "DataType": "nvarchar",
+                "DataLength": 100,
+                "PropertyName": "LocalAddress"
+              },
+              {
+                "ColumnName": "RemoteAddress",
+                "DataType": "nvarchar",
+                "DataLength": -1,
+                "PropertyName": "RemoteAddress"
+              }
+            ],
+            "Id": {
+              "nonClusteredIndex": false,
+              "DataType": "bigint"
+            },
+            "TimeStamp": {
+              "columnName": "Logged",
+              "DataType": "datetimeoffset",
+              "DataLength": 7
+            },
+            "LogEvent": {
+              "columnName": "Properties",
+              "excludeStandardColumns": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}

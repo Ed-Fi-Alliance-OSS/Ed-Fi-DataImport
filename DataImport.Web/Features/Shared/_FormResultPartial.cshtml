@@ -1,0 +1,16 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@model DataImport.Web.Models.FormResult
+
+@if (Model != null && Model.ShowInfoMessage)
+{
+    <div class="panel @(Model.IsSuccess ? "panel-success" : "panel-danger")">
+        <div class="panel-heading">@(Model.IsSuccess ? "Success" : "Error")</div>
+        <div class="panel-body">@Model.InfoMessage</div>
+    </div>
+}

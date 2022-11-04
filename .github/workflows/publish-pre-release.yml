@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: Apache-2.0
+# Licensed to the Ed-Fi Alliance under one or more agreements.
+# The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+# See the LICENSE and NOTICES files in the project root for more information.
+
+name: Publish pre-release
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+env:
+  BUILD_VERSION: ${{ secrets.SEMANTIC_VERSION }}
+  API_KEY: ${{ secrets.AZURE_ARTIFACTS_PAT }}
+  AZURE_ARTIFACTS_FEED_URL: ${{ secrets.AZURE_ARTIFACTS_FEED_URL }}
+  VSS_NUGET_EXTERNAL_FEED_ENDPOINTS: '{"endpointCredentials": [{"endpoint": "${{ secrets.AZURE_ARTIFACTS_FEED_URL }}","password": "${{ secrets.AZURE_ARTIFACTS_PAT }}"}]}'
+
+jobs:
+  create-and-publish-pre-release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # v2.4.0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@499789684c9a0d41c9b3f0d66a785ba17b1d51ab # v1.9.0
+      with:
+        dotnet-version: 6.0.x
+    - name: Build
+      run: ./build.ps1 -Command Build -Configuration Release -Version ${{ env.BUILD_VERSION }} -BuildCounter ${{ github.run_number }}
+      shell: pwsh
+      env:
+        PythonExecutableLocation: "/usr/bin/python"
+    - name: Package
+      run: ./build.ps1 -Command Package -Configuration Release -Version ${{ env.BUILD_VERSION }} -BuildCounter ${{ github.run_number }}
+      shell: pwsh
+    - name: PackageTransformLoad
+      run: ./build.ps1 -Command PackageTransformLoad -Configuration Release -Version ${{ env.BUILD_VERSION }} -BuildCounter ${{ github.run_number }}
+      shell: pwsh
+    - name: Install-credential-handler
+      run: iex "& { $(irm https://aka.ms/install-artifacts-credprovider.ps1) } -AddNetfx"
+      shell: pwsh
+    - name: PushPackage
+      run: ./build.ps1 -Command PushPreRelease -NuGetApiKey ${{ env.API_KEY }} -Version ${{ env.BUILD_VERSION }} -BuildCounter ${{ github.run_number }} -EdFiNuGetFeed ${{env.AZURE_ARTIFACTS_FEED_URL}} -PackageFileType Web
+      shell: pwsh
+    - name: PushTransformLoad
+      run: ./build.ps1 -Command PushPreRelease -NuGetApiKey ${{ env.API_KEY }} -Version ${{ env.BUILD_VERSION }} -BuildCounter ${{ github.run_number }} -EdFiNuGetFeed ${{env.AZURE_ARTIFACTS_FEED_URL}} -PackageFileType TransformLoad
+      shell: pwsh

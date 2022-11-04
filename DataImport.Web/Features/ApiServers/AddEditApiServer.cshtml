@@ -1,0 +1,160 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.ApiServers.AddEditApiServerViewModel
+
+@{
+    ViewBag.Title = (!@Model.Id.HasValue ? "Add" : "Edit") + " API Connection";
+    var hidden = string.IsNullOrEmpty(Model.ApiVersion) ? "hidden=true" : "";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (Model.ConfigurationFailureMsg != null)
+{
+    <div class="alert alert-danger">@Model.ConfigurationFailureMsg</div>
+}
+
+@if (Model.EncryptionFailureMsg != null)
+{
+    <div class="alert alert-danger" id="encryption-error">@Model.EncryptionFailureMsg</div>
+}
+
+<div id="validationSummary" class="alert alert-danger hidden"></div>
+
+@using (Html.AjaxForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.Input(m => m.Name)
+
+    <div id="divApiVersion" @hidden>
+        @Html.ReadOnlyInput(m => m.ApiVersion, "ApiVersionContent")
+    </div>
+
+    @Html.Input(m => m.Url, new { placeholder = "API Server Base URL (Example: https://[url]/api/v2.0/2019)" },
+        Html.HelpSpan("Examples: https://ods.example.com/api/v2.0/2019, https://ods.example.com/data/v3, or https://ods.example.com/data/v3/2019"),
+        Html.OdsApiUrlHelpModalButton())
+
+    @Html.Input(m => m.Key)
+    @Html.Input(m => m.Secret)
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="button" class="btn btn-default btn-sm" id="btnTest">Test Connection</button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <hr />
+            <button type="submit" class="btn btn-primary" id="btnSave">Save Changes</button>
+            <a href="@Url.Action("Index")">Cancel</a>
+            <p class="help-block">
+                <span class="text-warning" id="txtSaveChangesWarning">Please test the connection to enable saving your changes.</span>&nbsp;
+            </p>
+        </div>
+    </div>
+}
+
+@section scripts
+{
+    <script src="/bundles/jqueryval.min.js"></script>
+    
+    <script type="text/javascript">
+        $(function($) {
+            disableSaveButton(true);
+            $("#btnTest").click(function() {
+                disableFormButtons(true);
+                clearValidationSummary();
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        id: $("#Id").val(),
+                        url: $("#Url").val(),
+                        apiVersion: $("#ApiVersion").val(),
+                        key: $("#Key").val(),
+                        secret: $("#Secret").val()
+                    },
+                    dataType: "json",
+                    url: '@Url.Action("TestOdsApiConfiguration")',
+                    success: function(data) {
+                        disableTestButton(false);
+                        if (data.isSuccessful === true) {
+                            disableSaveButton(false);
+                            toastr.success("Connection to API successful!");
+                        } else {
+                            toastr.error("Unable to connect to the API: " + data.message);
+                        }
+                    },
+                    error: function(data) {
+                        handleAjaxErrors(data);
+                        disableTestButton(false);
+                    }
+                });
+            });
+            $("#Url").change(function() {
+                var apiServerUrl = $("#Url").val();
+                disableFormButtons(true);
+                clearValidationSummary();
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        apiServerUrl: apiServerUrl,
+                    },
+                    dataType: "html",
+                    url: '@Url.Action("InferOdsApiVersion")',
+                    success: function(data) {
+                        handleApiVersionResponse(data);
+                    },
+                    error: function(data) {
+                        handleAjaxErrors(data);
+                        handleApiVersionResponse(null);
+                    },
+                    complete: function() {
+                        disableTestButton(false);
+                    }
+                });
+            });
+            $("#Key").keyup(function() {
+                disableSaveButton(true);
+            });
+            $("#Secret").keyup(function() {
+                disableSaveButton(true);
+            });
+
+            function handleApiVersionResponse(apiVersion) {
+                var apiUrl = $("#Url").val();
+                if (!apiVersion && apiUrl)
+                    $('#validationSummary').empty().removeClass('hidden')
+                        .append('<li>Please enter a valid ODS API URL</li>');
+                var input = $("#ApiVersion");
+                input.val(apiVersion);
+                $("#ApiVersionContent").text(apiVersion);
+                $("#divApiVersion").attr('hidden', !apiVersion);
+            }
+
+            function disableFormButtons(disabled) {
+                disableSaveButton(disabled);
+                disableTestButton(disabled);
+            }
+
+            function disableSaveButton(disabled) {
+                $("#btnSave").prop("disabled", disabled);
+                if (disabled) {
+                    $("#txtSaveChangesWarning").show();
+                } else {
+                    $("#txtSaveChangesWarning").hide();
+                }
+            }
+
+            function disableTestButton(disabled) {
+                $("#btnTest").prop("disabled", disabled);
+            }
+        });
+    </script>
+}

@@ -1,0 +1,802 @@
+
+{
+  "apiVersion": "2.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019",
+  "resourcePath": "/educationOrganizationNetworks",
+  "produces": [
+    "application/json"
+  ],
+  "apis": [
+    {
+      "path": "/educationOrganizationNetworks",
+      "description": "This entity is a self-organized membership network of peer-level education organizations intended to provide shared services or collective procurement.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getEducationOrganizationNetworksAll",
+          "type": "array",
+          "items": {
+            "$ref": "educationOrganizationNetwork"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources based with paging capabilities (using the \"Get All\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get All\" pattern. In this version of the API there is support for paging.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The matching resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "educationOrganizationNetwork"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getEducationOrganizationNetworksByExample",
+          "type": "array",
+          "items": {
+            "$ref": "educationOrganizationNetwork"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            },
+            {
+              "paramType": "query",
+              "name": "educationOrganizationNetworkId",
+              "description": "A unique number or alphanumeric code assigned to a network of education organizations.",
+              "type": "integer",
+              "format": "int32",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "networkPurposeType",
+              "description": "The purpose(s) of the network (e.g., shared services, collective procurement).",
+              "type": "string",
+              "format": "",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources matching values of an example resource (using the \"Get By Example\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Example\" search pattern.  The values of any properties of the resource that are specified will be used to return all matching results (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "educationOrganizationNetwork"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getEducationOrganizationNetworkByKey",
+          "type": "educationOrganizationNetwork",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "educationOrganizationNetworkId",
+              "description": "A unique number or alphanumeric code assigned to a network of education organizations.",
+              "type": "integer",
+              "format": "int32",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the values of the resource's natural key (using the \"Get By Key\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Key\" search pattern. The values of the natural key of the resource must be fully specified, and the service will return the matching result (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "educationOrganizationNetwork"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "POST",
+          "nickname": "postEducationOrganizationNetworks",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "body",
+              "name": "educationOrganizationNetwork",
+              "description": "The JSON representation of the \"educationOrganizationNetwork\" resource to be created or updated.",
+              "type": "educationOrganizationNetwork",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Creates or updates resources based on the natural key values of the supplied resource.",
+          "notes": "The POST operation can be used to create or update resources. In database terms, this is often referred to as an \"upsert\" operation (insert + update).  Clients should NOT include the resource \"id\" in the JSON body because it will result in an error (you must use a PUT operation to update a resource by \"id\"). The web service will identify whether the resource already exists based on the natural key values provided, and update or create the resource appropriately.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/educationOrganizationNetworks/{id}",
+      "description": "This entity is a self-organized membership network of peer-level education organizations intended to provide shared services or collective procurement.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getEducationOrganizationNetworksById",
+          "type": "educationOrganizationNetwork",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be retrieved.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the resource's identifier (using the \"Get By Id\" pattern).",
+          "notes": "This GET operation retrieves a resource by the specified resource identifier.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "educationOrganizationNetwork"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "PUT",
+          "nickname": "putEducationOrganizationNetwork",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be updated.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the PUT from updating a resource modified by another consumer.",
+              "type": "string",
+              "required": false
+            },
+            {
+              "paramType": "body",
+              "name": "educationOrganizationNetwork",
+              "description": "The JSON representation of the \"educationOrganizationNetwork\" resource to be updated.",
+              "type": "educationOrganizationNetwork",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Updates or creates a resource based on the resource identifier.",
+          "notes": "The PUT operation is used to update or create a resource by identifier.  If the resource doesn't exist, the resource will be created using that identifier.  Additionally, natural key values cannot be changed using this operation, and will not be modified in the database.  If the resource \"id\" is provided in the JSON body, it will be ignored as well.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "DELETE",
+          "nickname": "deleteEducationOrganizationNetworkById",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be deleted.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the DELETE from removing a resource modified by another consumer.",
+              "type": "string",
+              "required": false,
+              "allowMultiple": false
+            }
+          ],
+          "summary": "Deletes an existing resource using the resource identifier.",
+          "notes": "The DELETE operation is used to delete an existing resource by identifier.  If the resource doesn't exist, an error will result (the resource will not be found).",
+          "responseMessages": [
+            {
+              "code": 202,
+              "message": "The request has accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was successfully deleted."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {
+    "educationOrganizationNetwork": {
+      "id": "educationOrganizationNetwork",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "description": "The unique identifier of the resource."
+        },
+        "educationOrganizationNetworkId": {
+          "type": "integer",
+          "format": "int32",
+          "required": true,
+          "description": "A unique number or alphanumeric code assigned to a network of education organizations."
+        },
+        "nameOfInstitution": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The full, legally accepted name of the institution."
+        },
+        "networkPurposeType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The purpose(s) of the network (e.g., shared services, collective procurement)."
+        },
+        "operationalStatusType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The current operational status of the EducationOrganization (e.g., active, inactive)."
+        },
+        "shortNameOfInstitution": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A short name for the institution."
+        },
+        "stateOrganizationId": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The identifier assigned to an education organization by the StateEducationAgency (SEA)."
+        },
+        "webSite": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The public web site address (URL) for the EducationOrganization."
+        },
+        "addresses": {
+          "type": "array",
+          "required": true,
+          "description": "An unordered collection of educationOrganizationAddresses.  The set of elements that describes the physical location of the education entity, including the street address, city, state, ZIP code, and ZIP code + 4.",
+          "items": {
+            "$ref": "educationOrganizationAddress"
+          }
+        },
+        "educationOrganizationCategories": {
+          "type": "array",
+          "required": true,
+          "description": "An unordered collection of educationOrganizationCategories.  The classification of the education agency within the geographic boundaries of a state according to the level of administrative and operational control granted by the state.",
+          "items": {
+            "$ref": "educationOrganizationCategory"
+          }
+        },
+        "identificationCodes": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of educationOrganizationIdentificationCodes.  A unique number or alphanumeric code assigned to an education organization by a school, school system, a state, or other agency or entity.",
+          "items": {
+            "$ref": "educationOrganizationIdentificationCode"
+          }
+        },
+        "institutionTelephones": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of educationOrganizationInstitutionTelephones.  The 10-digit telephone number, including the area code, for the education entity.",
+          "items": {
+            "$ref": "educationOrganizationInstitutionTelephone"
+          }
+        },
+        "internationalAddresses": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of educationOrganizationInternationalAddresses.  The set of elements that describes the international physical location of the education entity.",
+          "items": {
+            "$ref": "educationOrganizationInternationalAddress"
+          }
+        },
+        "_etag": {
+          "type": "string",
+          "required": false,
+          "description": "A unique system-generated value that identifies the version of the resource."
+        }
+      }
+    },
+    "educationOrganizationAddress": {
+      "id": "educationOrganizationAddress",
+      "properties": {
+        "addressType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of address listed for an individual or organization.    For example:  Physical Address, Mailing Address, Home Address, etc.)"
+        },
+        "stateAbbreviationType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The abbreviation for the state (within the United States) or outlying area in which an address is located."
+        },
+        "streetNumberName": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The street number and street name or post office box number of an address."
+        },
+        "apartmentRoomSuiteNumber": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The apartment, room, or suite number of an address."
+        },
+        "buildingSiteNumber": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The number of the building on the site, if more than one building shares the same address."
+        },
+        "city": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name of the city in which an address is located."
+        },
+        "postalCode": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The five or nine digit zip code or overseas postal code portion of an address."
+        },
+        "nameOfCounty": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The name of the county, parish, borough, or comparable unit (within a state) in                         'which an address is located."
+        },
+        "countyFIPSCode": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The Federal Information Processing Standards (FIPS) numeric code for the county issued by the National Institute of Standards and Technology (NIST). Counties are considered to be the \"first-order subdivisions\" of each State and statistically equivalent entity, regardless of their local designations (county, parish, borough, etc.) Counties in different States will have the same code. A unique county number is created when combined with the 2-digit FIPS State Code."
+        },
+        "latitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic latitude of the physical address."
+        },
+        "longitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic longitude of the physical address."
+        },
+        "beginDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The first date the address is valid. For physical addresses, the date the person moved to that address."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The last date the address is valid. For physical addresses, this would be the date the person moved from that address."
+        }
+      }
+    },
+    "educationOrganizationCategory": {
+      "id": "educationOrganizationCategory",
+      "properties": {
+        "type": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The classification of the education agency within the geographic boundaries of a state according to the level of administrative and operational control granted by the state."
+        }
+      }
+    },
+    "educationOrganizationIdentificationCode": {
+      "id": "educationOrganizationIdentificationCode",
+      "properties": {
+        "educationOrganizationIdentificationSystemDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The school system, state, or agency assigning the identification code."
+        },
+        "identificationCode": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique number or alphanumeric code that is assigned to an education organization by a school, school system, state, or other agency or entity."
+        }
+      }
+    },
+    "educationOrganizationInstitutionTelephone": {
+      "id": "educationOrganizationInstitutionTelephone",
+      "properties": {
+        "institutionTelephoneNumberType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of communication number listed for an individual or organization."
+        },
+        "telephoneNumber": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The telephone number including the area code, and extension, if applicable."
+        }
+      }
+    },
+    "educationOrganizationInternationalAddress": {
+      "id": "educationOrganizationInternationalAddress",
+      "properties": {
+        "addressType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of address listed for an individual or organization. For example:  Physical Address, Mailing Address, Home Address, etc.)"
+        },
+        "countryDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name of the country."
+        },
+        "addressLine1": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The first line of the address."
+        },
+        "addressLine2": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The second line of the address."
+        },
+        "addressLine3": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The third line of the address."
+        },
+        "addressLine4": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The fourth line of the address."
+        },
+        "latitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic latitude of the physical address."
+        },
+        "longitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic longitude of the physical address."
+        },
+        "beginDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The first date the address is valid. For physical addresses, the date the person moved to that address."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The last date the address is valid. For physical addresses, this would be the date the person moved from that address."
+        }
+      }
+    },
+    "webServiceError": {
+      "id": "webServiceError",
+      "properties": {
+        "message": {
+          "type": "string",
+          "required": false,
+          "description": "The \"user-friendly\" error message."
+        },
+        "exceptionMessage": {
+          "type": "string",
+          "required": false,
+          "description": "The system-generated exception message."
+        },
+        "exceptionType": {
+          "type": "string",
+          "required": false,
+          "description": "The type of the exception."
+        },
+        "stackTrace": {
+          "type": "string",
+          "required": false,
+          "description": "The server-side stack trace (only available in DEBUG builds)."
+        }
+      }
+    },
+    "link": {
+      "id": "link",
+      "properties": {
+        "rel": {
+          "type": "string",
+          "required": false,
+          "description": "Describes the nature of the relationship to the referenced resource."
+        },
+        "href": {
+          "type": "string",
+          "required": false,
+          "description": "The URL to the related resource."
+        }
+      }
+    }
+  }
+}

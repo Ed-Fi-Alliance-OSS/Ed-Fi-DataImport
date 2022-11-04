@@ -1,0 +1,114 @@
+{
+    "title": "Student Assessments Demo",
+    "description": "A bootstrap for assessments, with a data map for student assessments.",
+    "apiVersion": "2.5+",
+    "template": {
+        "maps": [
+            {
+                "name": "Test Map",
+                "resourcePath": "/studentAssessments",
+                "columnHeaders": [
+                    "adminyear",
+                    "DistrictNumber",
+                    "DistrictName",
+                    "SchoolNumber",
+                    "SchoolName",
+                    "sasid",
+                    "listeningss_adj",
+                    "speakingss_adj",
+                    "readingss_adj",
+                    "writingss_adj",
+                    "comprehensionss_adj",
+                    "oralss_adj",
+                    "literacyss_adj",
+                    "Overallss_adj"
+                ],
+                "map": {
+                    "assessmentReference": {
+                        "identifier": "ACCESS-ELL-2018",
+                        "namespace": "http://ed-fi.org/Assessment/Assessment.xml"
+                    },
+                    "studentReference": {
+                        "studentUniqueId": {
+                            "Column": "sasid",
+                            "Default": "0"
+                        }
+                    },
+                    "administrationDate": "08-01-2017",
+                    "identifier": "ACCESS-ELL-2018",
+                    "scoreResults": [
+                        {
+                            "assessmentReportingMethodType": "Raw score",
+                            "resultDatatypeType": "Integer",
+                            "result": {
+                                "Column": "Overallss_adj"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "bootstraps": [
+            {
+                "name": "Assessments Bootstrap",
+                "resourcePath": "/assessments",
+                "data": {
+                    "educationOrganizationReference": {
+                        "educationOrganizationId": 255901
+                    },
+                    "identifier": "ACCESS-ELL-2018",
+                    "title": "ACCESS-ELL-2018",
+                    "version": 2018,
+                    "namespace": "http://ed-fi.org/Assessment/Assessment.xml",
+                    "assessedGradeLevels": [
+                        {
+                            "gradeLevelDescriptor": "First grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Second grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Third grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Fourth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Fifth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Sixth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Seventh grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Eighth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Ninth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Tenth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Eleventh grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Twelfth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "Ungraded"
+                        }
+                    ],
+                    "academicSubjects": [
+                        {
+                            "academicSubjectDescriptor": "Reading"
+                        }
+                    ]
+                }
+            }
+        ],
+        "lookups": []
+    }
+}

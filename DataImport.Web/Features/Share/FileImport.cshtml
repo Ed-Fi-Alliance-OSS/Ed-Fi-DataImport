@@ -1,0 +1,81 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Features.Share
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Share.FileImport.Form
+
+@{
+    ViewBag.Title = "Import Template";
+    var conflictingPreprocessors = (List<SharingPreprocessor>)ViewBag.ConflictingPreprocessors;
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (Model.OverwriteExistingPreprocessors)
+{
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <strong>Warning: </strong>Existing Preprocessor Conflict
+        </div>
+        <div class="panel-body">
+            <p>
+                The following preprocessor(s) are conflicting with the existing ones:
+            </p>
+            <ul>
+                @foreach (var preprocessor in conflictingPreprocessors)
+                {
+                    <li>@preprocessor.Name</li>
+                }
+            </ul>
+            <br/>
+            <p>
+                <strong>Click 'Import with Overwrite' to replace the existing preprocessors or 'Cancel' to navigate back to the previous screen.</strong>
+            </p>
+        </div>
+    </div>
+}
+
+@using (Html.AjaxForm("FileImport"))
+{
+    <h4>Template Information</h4>
+    @Html.ReadOnlyInput(m => m.Title)
+    @Html.ReadOnlyInput(m => m.Description)
+
+    <div class="alert alert-info">
+        <p>
+            This template was originally defined against ODS / API version <strong>@Model.OriginalApiVersion</strong>.
+            You can attempt to import it to any ODS / API version for which you have saved a connection. Whatever
+            version you select, we'll begin the process by first checking the template for compatibility with your
+            selected ODS / API version. If it is compatible, then the import will proceed. If it is incompatible,
+            we'll provide detailed diagnostic information about the incompatibility.
+        </p>
+    </div>
+
+    @Html.DropDown(m => m.ApiVersion, Model.ApiVersions)
+    @Html.HiddenFor(m => m.OriginalApiVersion)
+
+    <h4>Template Preview</h4>
+    @Html.TextAreaFor(m => m.Template, new { @readonly = true, rows = 15, cols = 80 })
+    @Html.HiddenFor(m => m.OverwriteExistingPreprocessors)
+
+    if (Model.OverwriteExistingPreprocessors)
+    {
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary" id="btnSubmitWithOverwrite">Import with Overwrite</button>
+
+                <a href="@Url.Action("FileIndex")">Cancel</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        @Html.SubmitButton("Import Template", new { id = "btnSubmit" })
+    }
+}

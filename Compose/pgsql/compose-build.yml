@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: Apache-2.0
+# Licensed to the Ed-Fi Alliance under one or more agreements.
+# The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+# See the LICENSE and NOTICES files in the project root for more information.
+
+version: "3.8"
+
+services:
+  dataimport:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    image: dataimport
+    ports:
+      - "8080:80"
+    environment:
+      POSTGRES_HOST: pb-dataimport
+      POSTGRES_PORT: "${PGBOUNCER_LISTEN_PORT:-6432}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      DATABASEENGINE: ${DATABASE_ENGINE:-PostgreSql}
+      APPSETTINGS__DATABASEENGINE: ${DATABASE_ENGINE:-PostgreSql}
+      CONNECTIONSTRINGS__DEFAULTCONNECTION: "host=pb-dataimport;port=${PGBOUNCER_LISTEN_PORT:-6433};username=${POSTGRES_USER};password=${POSTGRES_PASSWORD};database=EdFi_DataImport;"
+      APPSETTINGS__ENCRYPTIONKEY: "${ENCRYPTION_KEY}"
+      APPSETTINGS__SHARENAME: "${APPSETTINGS__SHARENAME:-/app/Common/temp}"
+      TZ: "${TIME_ZONE:-US/Central}"
+    depends_on:
+      - pb-dataimport 
+    restart: always
+    hostname: dataimport 
+    container_name: ed-fi-dataimport
+
+  db-dataimport:
+    image: postgres@sha256:67cff2d866a237c54a21f2038e15e61cd257b7dde465436e231bb91e31ac9f79 # postgres:11-alpine
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "EdFi_DataImport"
+    volumes:
+      - vol-db-dataimport:/var/lib/postgresql/data
+    restart: always
+    container_name: ed-fi-db-dataimport
+
+  pb-dataimport:
+    image: pgbouncer/pgbouncer@sha256:aa8a38b7b33e5fe70c679053f97a8e55c74d52b00c195f0880845e52b50ce516 #pgbouncer:1.15.0
+    environment:
+      DATABASES: "* = host = db-dataimport port=5432 user=${POSTGRES_USER} password=${POSTGRES_PASSWORD}"
+      PGBOUNCER_LISTEN_PORT: "${PGBOUNCER_LISTEN_PORT:-6432}"
+    ports:
+      - "5403:${PGBOUNCER_LISTEN_PORT:-6432}"
+    restart: always
+    container_name: ed-fi-pb-dataimport
+    depends_on:
+      - db-dataimport
+
+volumes:
+  vol-db-dataimport:
+    driver: local
+    name: vol-db-dataimport

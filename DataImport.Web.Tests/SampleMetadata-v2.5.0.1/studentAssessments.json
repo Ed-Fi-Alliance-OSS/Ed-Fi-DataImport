@@ -1,0 +1,1040 @@
+
+{
+  "apiVersion": "2.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019",
+  "resourcePath": "/studentAssessments",
+  "produces": [
+    "application/json"
+  ],
+  "apis": [
+    {
+      "path": "/studentAssessments",
+      "description": "This entity represents the analysis or scoring of a student's response on an assessment. The analysis results in a value that represents a student's performance on a set of items on a test.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getStudentAssessmentsAll",
+          "type": "array",
+          "items": {
+            "$ref": "studentAssessment"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources based with paging capabilities (using the \"Get All\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get All\" pattern. In this version of the API there is support for paging.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The matching resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "studentAssessment"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getStudentAssessmentsByExample",
+          "type": "array",
+          "items": {
+            "$ref": "studentAssessment"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            },
+            {
+              "paramType": "query",
+              "name": "identifier",
+              "description": "A unique number or alphanumeric code assigned to an assessment administered to a student.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "assessmentIdentifier",
+              "description": "A unique number or alphanumeric code assigned to an assessment.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "namespace",
+              "description": "Namespace for the Assessment.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "studentUniqueId",
+              "description": "A unique alphanumeric code assigned to a student.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "administrationEnvironmentType",
+              "description": "The environment in which the test was administered. For example:          Electronic          Classroom          Testing Center          ...",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "eventCircumstanceType",
+              "description": "An unusual event occurred during the administration of the assessment. This could include fire alarm, student became ill, etc.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "whenAssessedGradeLevelDescriptor",
+              "description": "The grade level of a student when assessed.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "administrationLanguageDescriptor",
+              "description": "The language in which an assessment is written and/or administered.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "reasonNotTestedType",
+              "description": "The primary reason student is not tested. For example:          Absent          Refusal by parent          Refusal by student          Medical waiver          Illness          Disruptive behavior          LEP Exempt          ...",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "retestIndicatorType",
+              "description": "Indicator if the test was retaken. For example:          Primary administration          First retest          Second retest          ...",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "administrationDate",
+              "description": "The date and time an assessment was completed by the student. The use of ISO-8601 formats with a timezone designator (UTC or time offset) is recommended in order to prevent ambiguity due to time zones.",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "administrationEndDate",
+              "description": "The date and time an assessment administration ended.",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "serialNumber",
+              "description": "The unique number for the assessment form or answer document.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "eventDescription",
+              "description": "Describes special events that occur before during or after the assessment session that may impact use of results.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "id",
+              "description": "",
+              "type": "string",
+              "format": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources matching values of an example resource (using the \"Get By Example\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Example\" search pattern.  The values of any properties of the resource that are specified will be used to return all matching results (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "studentAssessment"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getStudentAssessmentByKey",
+          "type": "studentAssessment",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "assessmentIdentifier",
+              "description": "A unique number or alphanumeric code assigned to an assessment.",
+              "type": "string",
+              "format": "",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "namespace",
+              "description": "Namespace for the Assessment.",
+              "type": "string",
+              "format": "",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "identifier",
+              "description": "A unique number or alphanumeric code assigned to an assessment administered to a student.",
+              "type": "string",
+              "format": "",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "studentUniqueId",
+              "description": "A unique alphanumeric code assigned to a student.",
+              "type": "string",
+              "format": "",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the values of the resource's natural key (using the \"Get By Key\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Key\" search pattern. The values of the natural key of the resource must be fully specified, and the service will return the matching result (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "studentAssessment"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "POST",
+          "nickname": "postStudentAssessments",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "body",
+              "name": "studentAssessment",
+              "description": "The JSON representation of the \"studentAssessment\" resource to be created or updated.",
+              "type": "studentAssessment",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Creates or updates resources based on the natural key values of the supplied resource.",
+          "notes": "The POST operation can be used to create or update resources. In database terms, this is often referred to as an \"upsert\" operation (insert + update).  Clients should NOT include the resource \"id\" in the JSON body because it will result in an error (you must use a PUT operation to update a resource by \"id\"). The web service will identify whether the resource already exists based on the natural key values provided, and update or create the resource appropriately.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/studentAssessments/{id}",
+      "description": "This entity represents the analysis or scoring of a student's response on an assessment. The analysis results in a value that represents a student's performance on a set of items on a test.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getStudentAssessmentsById",
+          "type": "studentAssessment",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be retrieved.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the resource's identifier (using the \"Get By Id\" pattern).",
+          "notes": "This GET operation retrieves a resource by the specified resource identifier.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "studentAssessment"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "PUT",
+          "nickname": "putStudentAssessment",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be updated.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the PUT from updating a resource modified by another consumer.",
+              "type": "string",
+              "required": false
+            },
+            {
+              "paramType": "body",
+              "name": "studentAssessment",
+              "description": "The JSON representation of the \"studentAssessment\" resource to be updated.",
+              "type": "studentAssessment",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Updates or creates a resource based on the resource identifier.",
+          "notes": "The PUT operation is used to update or create a resource by identifier.  If the resource doesn't exist, the resource will be created using that identifier.  Additionally, natural key values cannot be changed using this operation, and will not be modified in the database.  If the resource \"id\" is provided in the JSON body, it will be ignored as well.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "DELETE",
+          "nickname": "deleteStudentAssessmentById",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be deleted.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the DELETE from removing a resource modified by another consumer.",
+              "type": "string",
+              "required": false,
+              "allowMultiple": false
+            }
+          ],
+          "summary": "Deletes an existing resource using the resource identifier.",
+          "notes": "The DELETE operation is used to delete an existing resource by identifier.  If the resource doesn't exist, an error will result (the resource will not be found).",
+          "responseMessages": [
+            {
+              "code": 202,
+              "message": "The request has accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was successfully deleted."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {
+    "studentAssessment": {
+      "id": "studentAssessment",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "description": "The unique identifier of the resource."
+        },
+        "assessmentReference": {
+          "type": "assessmentReference",
+          "required": true,
+          "description": "A reference to the related Assessment resource."
+        },
+        "studentReference": {
+          "type": "studentReference",
+          "required": true,
+          "description": "A reference to the related Student resource."
+        },
+        "administrationDate": {
+          "type": "string",
+          "format": "date-time",
+          "required": true,
+          "description": "The date and time an assessment was completed by the student. The use of ISO-8601 formats with a timezone designator (UTC or time offset) is recommended in order to prevent ambiguity due to time zones."
+        },
+        "administrationEndDate": {
+          "type": "string",
+          "format": "date-time",
+          "required": false,
+          "description": "The date and time an assessment administration ended."
+        },
+        "administrationEnvironmentType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The environment in which the test was administered. For example:          Electronic          Classroom          Testing Center          ..."
+        },
+        "administrationLanguageDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The language in which an assessment is written and/or administered."
+        },
+        "eventCircumstanceType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An unusual event occurred during the administration of the assessment. This could include fire alarm, student became ill, etc."
+        },
+        "eventDescription": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Describes special events that occur before during or after the assessment session that may impact use of results."
+        },
+        "reasonNotTestedType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The primary reason student is not tested. For example:          Absent          Refusal by parent          Refusal by student          Medical waiver          Illness          Disruptive behavior          LEP Exempt          ..."
+        },
+        "retestIndicatorType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Indicator if the test was retaken. For example:          Primary administration          First retest          Second retest          ..."
+        },
+        "serialNumber": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The unique number for the assessment form or answer document."
+        },
+        "identifier": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique number or alphanumeric code assigned to an assessment administered to a student."
+        },
+        "whenAssessedGradeLevelDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The grade level of a student when assessed."
+        },
+        "accommodations": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentAssessmentAccommodations.  The specific type of special variation used in how an examination is presented, how it is administered, or how the test taker is allowed to respond. This generally refers to changes that do not substantially alter what the examinationmeasures. The proper use of accommodations does not substantially change academic level or performance criteria. For example:          Braille          Enlarged monitor view          Extra time          Large Print          Setting          Oral Administration          ...",
+          "items": {
+            "$ref": "studentAssessmentAccommodation"
+          }
+        },
+        "items": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentAssessmentItems.  NEEDS DOCUMENTATION",
+          "items": {
+            "$ref": "studentAssessmentItem"
+          }
+        },
+        "performanceLevels": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentAssessmentPerformanceLevels.  The performance level(s) achieved for the StudentAssessment.",
+          "items": {
+            "$ref": "studentAssessmentPerformanceLevel"
+          }
+        },
+        "scoreResults": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentAssessmentScoreResults.  A meaningful score or statistical expression of the performance of an individual. The results can be expressed as a number, percentile, range, level, etc.",
+          "items": {
+            "$ref": "studentAssessmentScoreResult"
+          }
+        },
+        "studentObjectiveAssessments": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentAssessmentStudentObjectiveAssessments.  NEEDS DOCUMENTATION",
+          "items": {
+            "$ref": "studentAssessmentStudentObjectiveAssessment"
+          }
+        },
+        "_etag": {
+          "type": "string",
+          "required": false,
+          "description": "A unique system-generated value that identifies the version of the resource."
+        }
+      }
+    },
+    "assessmentReference": {
+      "id": "assessmentReference",
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique number or alphanumeric code assigned to an assessment."
+        },
+        "namespace": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "Namespace for the Assessment."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related assessment resource."
+        }
+      }
+    },
+    "studentReference": {
+      "id": "studentReference",
+      "properties": {
+        "studentUniqueId": {
+          "type": "string",
+          "format": "int32",
+          "required": true,
+          "description": "A unique alphanumeric code assigned to a student."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related student resource."
+        }
+      }
+    },
+    "studentAssessmentAccommodation": {
+      "id": "studentAssessmentAccommodation",
+      "properties": {
+        "accommodationDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The specific type of special variation used in how an examination is presented, how it is administered, or how the test taker is allowed to respond. This generally refers to changes that do not substantially alter what the examinationmeasures. The proper use of accommodations does not substantially change academic level or performance criteria. For example:          Braille          Enlarged monitor view          Extra time          Large Print          Setting          Oral Administration          ..."
+        }
+      }
+    },
+    "studentAssessmentItem": {
+      "id": "studentAssessmentItem",
+      "properties": {
+        "assessmentItemReference": {
+          "type": "assessmentItemReference",
+          "required": true,
+          "description": "A reference to the related AssessmentItem resource."
+        },
+        "assessmentItemResultType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The analyzed result of a student's response to an assessment item. For example:          Correct          Incorrect           Met standard          ..."
+        },
+        "responseIndicatorType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Indicator of the response. For example:          Nonscorable response          Ineffective response          Effective response          Partial response          ..."
+        },
+        "assessmentResponse": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A student's response to a stimulus on a test."
+        },
+        "descriptiveFeedback": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The formative descriptive feedback that was given to a learner in response to the results from a scored/evaluated assessment item."
+        },
+        "rawScoreResult": {
+          "type": "integer",
+          "format": "int32",
+          "required": false,
+          "description": "A meaningful raw score of the performance of an individual on an assessment item."
+        },
+        "timeAssessed": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The overall time a student actually spent during the AssessmentItem."
+        }
+      }
+    },
+    "studentAssessmentPerformanceLevel": {
+      "id": "studentAssessmentPerformanceLevel",
+      "properties": {
+        "assessmentReportingMethodType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The method that the instructor of the class uses to report the performance and achievement of all students. It may be a qualitative method such as individualized teacher comments or a quantitative method such as a letter or numerical grade. In some cases, more than one type of reporting method may be used."
+        },
+        "performanceLevelDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A specification of which performance level value describes the student proficiency."
+        },
+        "performanceLevelMet": {
+          "type": "boolean",
+          "format": "",
+          "required": true,
+          "description": "Optional indicator of whether the performance level was met."
+        }
+      }
+    },
+    "studentAssessmentScoreResult": {
+      "id": "studentAssessmentScoreResult",
+      "properties": {
+        "assessmentReportingMethodType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The method that the administrator of the assessment uses to report the performance and achievement of all students. It may be a qualitative method such as performance level descriptors or a quantitative method such as a numerical grade or cut score. More than one type of reporting method may be used."
+        },
+        "resultDatatypeType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The datatype of the result. The results can be expressed as a number, percentile, range, level, etc."
+        },
+        "result": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The value of a meaningful raw score or statistical expression of the performance of an individual. The results can be expressed as a number, percentile, range, level, etc."
+        }
+      }
+    },
+    "studentAssessmentStudentObjectiveAssessment": {
+      "id": "studentAssessmentStudentObjectiveAssessment",
+      "properties": {
+        "objectiveAssessmentReference": {
+          "type": "objectiveAssessmentReference",
+          "required": true,
+          "description": "A reference to the related ObjectiveAssessment resource."
+        },
+        "performanceLevels": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentAssessmentStudentObjectiveAssessmentPerformanceLevels.  The PerformanceLevel(s) achieved for the ObjectiveAssessment.",
+          "items": {
+            "$ref": "studentAssessmentStudentObjectiveAssessmentPerformanceLevel"
+          }
+        },
+        "scoreResults": {
+          "type": "array",
+          "required": true,
+          "description": "An unordered collection of studentAssessmentStudentObjectiveAssessmentScoreResults.  A meaningful score or statistical expression of the performance of an individual. The results can be expressed as a number, percentile, range, level, etc.",
+          "items": {
+            "$ref": "studentAssessmentStudentObjectiveAssessmentScoreResult"
+          }
+        }
+      }
+    },
+    "studentAssessmentStudentObjectiveAssessmentPerformanceLevel": {
+      "id": "studentAssessmentStudentObjectiveAssessmentPerformanceLevel",
+      "properties": {
+        "assessmentReportingMethodType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The method that the instructor of the class uses to report the performance and achievement of all students. It may be a qualitative method such as individualized teacher comments or a quantitative method such as a letter or numerical grade. In some cases, more than one type of reporting method may be used."
+        },
+        "performanceLevelDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A specification of which performance level value describes the student proficiency."
+        },
+        "performanceLevelMet": {
+          "type": "boolean",
+          "format": "",
+          "required": true,
+          "description": "Optional indicator of whether the performance level was met."
+        }
+      }
+    },
+    "studentAssessmentStudentObjectiveAssessmentScoreResult": {
+      "id": "studentAssessmentStudentObjectiveAssessmentScoreResult",
+      "properties": {
+        "assessmentReportingMethodType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The method that the administrator of the assessment uses to report the performance and achievement of all students. It may be a qualitative method such as performance level descriptors or a quantitative method such as a numerical grade or cut score. More than one type of reporting method may be used."
+        },
+        "resultDatatypeType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The datatype of the result. The results can be expressed as a number, percentile, range, level, etc."
+        },
+        "result": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The value of a meaningful raw score or statistical expression of the performance of an individual. The results can be expressed as a number, percentile, range, level, etc."
+        }
+      }
+    },
+    "assessmentItemReference": {
+      "id": "assessmentItemReference",
+      "properties": {
+        "assessmentIdentifier": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique number or alphanumeric code assigned to an assessment."
+        },
+        "identificationCode": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique number or alphanumeric code assigned to a space, room, site, building, individual, organization, program, or institution by a school, school system, state, or other agency or entity."
+        },
+        "namespace": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "Namespace for the Assessment."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related assessmentItem resource."
+        }
+      }
+    },
+    "objectiveAssessmentReference": {
+      "id": "objectiveAssessmentReference",
+      "properties": {
+        "assessmentIdentifier": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique number or alphanumeric code assigned to an assessment."
+        },
+        "identificationCode": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique number or alphanumeric code assigned to a space, room, site, building, individual, organization, program, or institution by a school, school system, a state, or other agency or entity."
+        },
+        "namespace": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "Namespace for the Assessment."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related objectiveAssessment resource."
+        }
+      }
+    },
+    "webServiceError": {
+      "id": "webServiceError",
+      "properties": {
+        "message": {
+          "type": "string",
+          "required": false,
+          "description": "The \"user-friendly\" error message."
+        },
+        "exceptionMessage": {
+          "type": "string",
+          "required": false,
+          "description": "The system-generated exception message."
+        },
+        "exceptionType": {
+          "type": "string",
+          "required": false,
+          "description": "The type of the exception."
+        },
+        "stackTrace": {
+          "type": "string",
+          "required": false,
+          "description": "The server-side stack trace (only available in DEBUG builds)."
+        }
+      }
+    },
+    "link": {
+      "id": "link",
+      "properties": {
+        "rel": {
+          "type": "string",
+          "required": false,
+          "description": "Describes the nature of the relationship to the referenced resource."
+        },
+        "href": {
+          "type": "string",
+          "required": false,
+          "description": "The URL to the related resource."
+        }
+      }
+    }
+  }
+}

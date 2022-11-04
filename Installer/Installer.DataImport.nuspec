@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>EdFi.DataImport.Installation</id>
+    <version>1.0.0</version>
+    <title>DataImport Installer Scripts</title>
+    <authors>Ed-Fi Alliance</authors>
+    <projectUrl>https://github.com/Ed-Fi-Closed/Ed-Fi-DataImport</projectUrl>
+    <copyright>Copyright © 2020, Ed-Fi Alliance, LLC and contributors.</copyright>
+    <summary>Application installer modules for the DataImport application</summary>
+    <description>Application installer modules for the DataImport application</description>   
+  </metadata>
+  <files>
+    <file src="install.ps1" />    
+    <file src="uninstall.ps1" />
+    <file src="global.json" />
+    <file src="Install-EdFiDataImport.psm1" />
+    <file src="AppCommon/**" target="AppCommon/"/>   
+    <file src="./README.md" />
+    <file src="./key-management.psm1" />
+    <file src="./assets/post-install-readme.txt" />
+  </files>
+</package>

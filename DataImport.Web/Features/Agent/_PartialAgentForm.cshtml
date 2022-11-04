@@ -1,0 +1,218 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Agent.AddEditAgentViewModel
+
+@if (Model.EncryptionFailureMsg != null)
+{
+    <div class="alert alert-danger" id="encryption-error">@Model.EncryptionFailureMsg</div>
+}
+
+<h4>Connection</h4>
+@Html.Input(m => m.Name)
+@Html.DropDown(m => m.ApiServerId, Model.ApiServers)
+@Html.DropDown(m => m.AgentTypeCode, Model.AgentTypes)
+@Html.Input(m => m.RunOrder)
+
+<div class="ftp-agents-only">
+    @Html.Input(m => m.Url)
+    @Html.Input(m => m.Port)
+    @Html.Input(m => m.Username, new { autocomplete = "off" })
+    @Html.Input(m => m.Password, new { autocomplete = "new-password", type = "password" })
+    @Html.Input(m => m.Directory)
+    @Html.Input(m => m.FilePattern)
+    @Html.Button("Test Connection", new { id = "btnTest" })
+</div>
+
+@Html.Input(m => m.Enabled)
+
+<h4>Data Maps</h4>
+
+<div class="alert alert-info">
+    <p>
+        This agent will apply <em>all</em> of the selected data maps to <em>all</em> of the files uploaded to it.
+        Referenced columns in the selected data maps must be present in all of the files the agent processes.
+    </p>
+    <p>
+        If, instead, you wish for <em>certain</em> data maps to only be applied to <em>certain</em> files, you must
+        define multiple agents.
+    </p>
+</div>
+
+<table id="tblAgentDataMaps" class="table table-striped table-hover table-bordered table-responsive">
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Processing Order</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model.MappedAgents)
+        {
+            <tr>
+                <td>
+                    @m.DataMapName
+                    @Html.Hidden("ddlDataMaps", Json.Serialize(m), new { id = "" })
+                </td>
+                <td class="processing-order">@m.ProcessingOrder</td>
+                <td style="text-align: center;">
+                    <a class="delete-row" style="cursor:pointer" title="Delete"><i class="fas fa-fw fa-trash-alt"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="form-group row">
+    <div class="col-xs-2">
+        @Html.Label("DataMapDropDown", "Add Data Map", new { @class = "control-label" })
+    </div>
+    <div class="col-xs-6">
+        @Html.DropDownList("ddlDataMap", Model.DataMaps.Select(x => new SelectListItem { Text = x.Text, Value = x.Value }), new { @class = "form-control", id = "ddlDataMap" })
+    </div>
+    <div class="col-xs-2">
+        <button id="btnAddMap" name="btnAddMap" type="button" class="btn btn-default">Add Map</button>
+    </div>
+</div>
+
+
+<h4>Bootstraps</h4>
+
+<table id="tblAgentBootstrapDatas" class="table table-striped table-hover table-bordered table-responsive">
+    <thead>
+        <tr>
+            <td>Bootstrap Name</td>
+            <td>Resource</td>
+            <td>Processing Order</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model.AgentBootstrapDatas.OrderBy(x => x.ProcessingOrder))
+        {
+            <tr>
+                <td>
+                    @m.BootstrapName
+                    @Html.Hidden("ddlBootstrapDatas", Json.Serialize(m), new { id = "" })
+                </td>
+                <td>@m.Resource</td>
+                <td class="processing-order">@m.ProcessingOrder</td>
+                <td style="text-align: center;">
+                    <a class="delete-row" style="cursor: pointer" title="Delete"><i class="fas fa-fw fa-trash-alt"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="form-group row">
+    <div class="col-xs-2">
+        @Html.Label("BootstrapDataDropDown", "Add Bootstrap Data", new { @class = "control-label" })
+    </div>
+    <div class="col-xs-6">
+        <select name="BootstrapDataDropDown"
+                id="ddlBootstrapDatas"
+                class="form-control">
+            @foreach (var b in Model.BootstrapDatas)
+            {
+                <option value="@b.Value"
+                        data-resource="@b.Resource">
+                    @b.Text
+                </option>
+            }
+
+            Select Bootstrap Data
+        </select>
+    </div>
+    <div class="col-xs-2">
+        <button id="btnAddBootstrapData" name="btnAddBootstrapData" type="button" class="btn btn-default">Add Bootstrap</button>
+    </div>
+</div>
+
+
+<div class="scheduled-agents-only">
+    <h4>Schedule</h4>
+    <table id="tblAgentSchedule" class="table table-striped table-hover table-bordered table-responsive">
+        <thead>
+            <tr>
+                <td>Day</td>
+                <td>Hour</td>
+                <td>Minute</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model.AgentSchedules)
+            {
+                <tr>
+                    @Html.Hidden("ddlSchedules", Json.Serialize(m), new { id = "" })
+                    <td>@Enum.GetName(typeof(DayOfWeek), m.Day)</td>
+                    <td>@(Convert.ToString(m.Hour).PadLeft(2, '0'))</td>
+                    <td>@(Convert.ToString(m.Minute).PadLeft(2, '0'))</td>
+                    <td style="text-align: center;">
+                        <a class="delete-row" style="cursor: pointer" title="Delete"><i class="fas fa-fw fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="form-group row">
+        <div class="col-xs-2">
+            @Html.Label("ddlDay", "Add Schedule", new { @class = "control-label" })
+        </div>
+        <div class="col-xs-2">
+            <select id="ddlDay" name="ddlDay" class="form-control">
+                <option value="">Select Day</option>
+                @foreach (var i in Enumerable.Range(0, 7))
+                {
+                    <option value="@i">@Enum.GetName(typeof(DayOfWeek), i)</option>
+                }
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <select id="ddlHour" name="ddlHour" class="form-control">
+                <option value="">Select Hour</option>
+                @foreach (var i in Enumerable.Range(0, 24).Select(x => x.ToString("00")))
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <select id="ddlMinute" name="ddlMinute" class="form-control">
+                <option value="">Select Minute</option>
+                @foreach (var i in Enumerable.Range(0, 60).Select(x => x.ToString("00")))
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <button id="btnAddSchedule" name="btnAddSchedule" type="button" class="btn btn-default">Add Schedule</button>
+        </div>
+    </div>
+</div>
+
+@if (Model.RowProcessors.Any())
+{
+    <div class="non-powershell-agents-only">
+        <h4>Row Processing</h4>
+        @Html.DropDown(m => m.RowProcessorId, Model.RowProcessors)
+    </div>
+}
+
+<div class="powershell-agents-only">
+    <h4>File Generation</h4>
+    @Html.DropDown(m => m.FileGeneratorId, Model.FileGenerators)
+</div>
+
+@Html.HiddenFor(m => m.Id)
+@Html.SubmitButton("Save Agent", new { id = "btnSubmit" })
+

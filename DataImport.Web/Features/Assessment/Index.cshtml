@@ -1,0 +1,58 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Features.Assessment
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Assessment.AssessmentIndex.ViewModel
+
+@{
+    ViewBag.Title = "Assessments";
+    ViewBag.ShowLoadingIndicatorWhenChangingApiConnection = true;
+}
+
+<h2>@ViewBag.Title</h2>
+
+@await Html.PartialAsync("_SelectApiServerPartial", Model)
+@if (Model.ApiServerId.HasValue)
+{
+    <table id="tblAssessments" class="table table-striped table-hover table-bordered table-responsive">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Subject</th>
+                <th>Grade</th>
+                <th>System</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model.Assessments.Items)
+            {
+                <tr>
+                    <td>@Html.ActionLink(m.Title, "Details", new { m.Id, ApiServerId = Model.ApiServerId })</td>
+                    <td>@m.CategoryDescriptor</td>
+                    <td>@m.AcademicSubjectDescriptor</td>
+                    <td>@m.AssessedGradeLevelDescriptor</td>
+                    <td>@(m.AssessmentIdentificationSystemDescriptor)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    var previousUrl = Url.Action("Index", "Assessment", new AssessmentIndex.Query { PageNumber = Model.Assessments.PageNumber - 1, ApiServerId = Model.ApiServerId });
+    var nextUrl = Url.Action("Index", "Assessment", new AssessmentIndex.Query { PageNumber = Model.Assessments.PageNumber + 1, ApiServerId = Model.ApiServerId });
+    @Html.PagingControl(previousUrl, nextUrl, Model.Assessments, behaviorOverrideName: "full-page-load")
+
+    @section scripts
+    {
+        <script type="text/javascript">
+            $(function ($) {
+                $('#tblAssessments').footable();
+            });
+        </script>
+    }
+}

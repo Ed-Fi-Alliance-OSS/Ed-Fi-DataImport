@@ -1,0 +1,31 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Models
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.BootstrapData.EditBootstrapData.ViewModel
+
+@{
+    ViewBag.Title = "Edit Bootstrap Data";
+}
+
+<h2>Edit Bootstrap Data</h2>
+
+@if (Model.MetadataIsIncompatible)
+{
+    @(Html.BootstrapDataIncompatibleWithMetadataWarning(Model.ResourcePath))
+}
+
+@using (Html.AjaxForm())
+{
+    @Html.Input(m => m.Name)
+    @Html.Display(m => m.ApiVersion)
+    @Html.Display(m => m.ResourceName)
+    @Html.Input(m => m.Data, new { placeholder = "JSON Data", style = "height:500px;" })
+    @Html.HiddenFor(m => m.Id)
+    @Html.SubmitButton("Save Bootstrap Data", new { id = "btnSubmit" })
+}

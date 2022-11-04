@@ -1,0 +1,16 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@model DataImport.Web.Features.Shared.ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h2 class="text-danger">An error occurred while processing your request.</h2>
+<p>First, check the "Application" Log on the @Html.ActionLink("Logs", "Index", "Log") page.</p>
+<p>Next, contact your system administrator to further troubleshoot this issue. If the system administrator accesses Data Import on the web server via a 'localhost' URL, they will be able to witness additional troubleshooting information.</p>
+

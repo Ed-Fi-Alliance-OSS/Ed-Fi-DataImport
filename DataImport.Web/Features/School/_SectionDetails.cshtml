@@ -1,0 +1,36 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Features.School
+@using DataImport.Web.Helpers
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.School.SchoolDetails.Detail
+
+<h2>Section</h2>
+<table id="tblSections" class="table table-striped table-hover table-bordered table-responsive">
+    <thead>
+        <tr>
+            <th>Section Code</th>
+            <th>Sequence</th>
+            <th>Environment</th>
+            <th>Subject</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model.Sections.Items)
+        {
+<tr>
+    <td>@s.SectionIdentifier</td>
+    <td>@s.SequenceOfCourse</td>
+    <td>@s.EducationalEnvironmentDescriptor.ToDescriptorName()</td>
+    <td>@s.AcademicSubjectDescriptor.ToDescriptorName()</td>
+</tr>}
+    </tbody>
+</table>
+@{ var previousUrl = Url.Action("SectionDetails", "School", new SectionDetails.Query { Id = Model.Id, PageNumber = Model.Sections.PageNumber - 1, ApiServerId = Model.ApiServerId });
+                var nextUrl = Url.Action("SectionDetails", "School", new SectionDetails.Query { Id = Model.Id, PageNumber = Model.Sections.PageNumber + 1, ApiServerId = Model.ApiServerId }); }
+@Html.PagingControl(previousUrl, nextUrl, Model.Sections)

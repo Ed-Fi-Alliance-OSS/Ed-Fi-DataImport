@@ -1,0 +1,132 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Migrations\20190703195323_InitialMigration.designer.cs">
+      <DependentUpon>20190703195323_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190703225328_ApplySchemaUpdates.designer.cs">
+      <DependentUpon>20190703225328_ApplySchemaUpdates.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190709160528_Update-Configuration-With-ContactDetails.designer.cs">
+      <DependentUpon>20190709160528_Update-Configuration-With-ContactDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190710125350_Add-Resource-Path-ApiSection.designer.cs">
+      <DependentUpon>20190710125350_Add-Resource-Path-ApiSection.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190710190953_Update-Contact-Details-As-Required.designer.cs">
+      <DependentUpon>20190710190953_Update-Contact-Details-As-Required.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190711134453_Index-Lookup-SourceTable.designer.cs">
+      <DependentUpon>20190711134453_Index-Lookup-SourceTable.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190711162650_Remove-Unused-ApplicationLog-Columns.designer.cs">
+      <DependentUpon>20190711162650_Remove-Unused-ApplicationLog-Columns.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190712164113_Update-Configuration-ContactDetails-Optional.designer.cs">
+      <DependentUpon>20190712164113_Update-Configuration-ContactDetails-Optional.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190718181022_Add-Agent-Archive.designer.cs">
+      <DependentUpon>20190718181022_Add-Agent-Archive.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190723145742_Add-Template-Sharing-Api-Config.designer.cs">
+      <DependentUpon>20190723145742_Add-Template-Sharing-Api-Config.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190808164921_Add-Bootstrap-Name.designer.cs">
+      <DependentUpon>20190808164921_Add-Bootstrap-Name.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190903191213_Update-V25-Api-Versions.designer.cs">
+      <DependentUpon>20190903191213_Update-V25-Api-Versions.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190905180332_DropContactConfigurationColumns.designer.cs">
+      <DependentUpon>20190905180332_DropContactConfigurationColumns.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190912150149_Clear-Out-Api-Server-Info.designer.cs">
+      <DependentUpon>20190912150149_Clear-Out-Api-Server-Info.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190912184807_Full-Path-Resource-Names.designer.cs">
+      <DependentUpon>20190912184807_Full-Path-Resource-Names.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190912185247_Drop-Resource-Path.designer.cs">
+      <DependentUpon>20190912185247_Drop-Resource-Path.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20190912191053_Identify-Resources-As-Paths.designer.cs">
+      <DependentUpon>20190912191053_Identify-Resources-As-Paths.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20191016190038_Drop-Configuration-JanitorReportLast.designer.cs">
+      <DependentUpon>20191016190038_Drop-Configuration-JanitorReportLast.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20191023220527_Drop-Agent-Queue.designer.cs">
+      <DependentUpon>20191023220527_Drop-Agent-Queue.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20191029170036_Add-JobStatus.designer.cs">
+      <DependentUpon>20191029170036_Add-JobStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20191105180746_Add-Agent-Preprocessor.designer.cs">
+      <DependentUpon>20191105180746_Add-Agent-Preprocessor.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20191121202948_Add-Configuration-EnableProductImprovement.designer.cs">
+      <DependentUpon>20191121202948_Add-Configuration-EnableProductImprovement.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20191204161351_Add-Agent-FileGenerator.designer.cs">
+      <DependentUpon>20191204161351_Add-Agent-FileGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20200908113901_Add-ApiVersions.Designer.cs">
+      <DependentUpon>20200908113901_Add-ApiVersions.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20200910121231_Add-ApiVersionId-To-DataMaps.designer.cs">
+      <DependentUpon>20200910121231_Add-ApiVersionId-To-DataMaps.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20200917082558_Add-ApiServerId-To-Agent.designer.cs">
+      <DependentUpon>20200917082558_Add-ApiServerId-To-Agent.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20200917093341_Add-ApiVersionId-To-BootstrapData.designer.cs">
+      <DependentUpon>20200917093341_Add-ApiVersionId-To-BootstrapData.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20200918084016_Add-BootstrapDataApiServers.designer.cs">
+      <DependentUpon>20200918084016_Add-BootstrapDataApiServers.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20200925103934_Change-IngestionLogs.designer.cs">
+      <DependentUpon>20200925103934_Change-IngestionLogs.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20200928123917_Move-ProcessingOrder-To-BootstrapDataAgent.designer.cs">
+      <DependentUpon>20200928123917_Move-ProcessingOrder-To-BootstrapDataAgent.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20201026101000_Add-Scripts.designer.cs">
+      <DependentUpon>20201026101000_Add-Scripts.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20201104090128_Add-PowerShellPreprocessorOptions-Columns.designer.cs">
+      <DependentUpon>20201104090128_Add-PowerShellPreprocessorOptions-Columns.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20201105085857_Add-FileProcessorScript-To-DataMap.designer.cs">
+      <DependentUpon>20201105085857_Add-FileProcessorScript-To-DataMap.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20201111122222_Migrate-Agents-To-Script-Processors.designer.cs">
+      <DependentUpon>20201111122222_Migrate-Agents-To-Script-Processors.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20201116140210_Add-Attribute-To-Preprocessors.designer.cs">
+      <DependentUpon>20201116140210_Add-Attribute-To-Preprocessors.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Migrations\20201116195741_Add-Agent-Port.designer.cs">
+      <DependentUpon>20201116195741_Add-Agent-Port.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Humanizer" Version="2.11.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.0" />
+  </ItemGroup>
+</Project>

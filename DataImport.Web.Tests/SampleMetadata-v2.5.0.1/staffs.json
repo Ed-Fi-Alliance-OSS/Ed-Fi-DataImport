@@ -1,0 +1,1261 @@
+
+{
+  "apiVersion": "2.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019",
+  "resourcePath": "/staffs",
+  "produces": [
+    "application/json"
+  ],
+  "apis": [
+    {
+      "path": "/staffs",
+      "description": "This entity represents an individual who performs specified activities for any public or private education institution or agency that provides instructional and/or support services to students or staff at the early childhood level through high school completion. For example, this includes:      1. An \"employee\" who performs services under the direction of the employing institution or agency is compensated for such services by the employer and is eligible for employee benefits and wage or salary tax withholdings      2. A \"contractor\" or \"consultant\" who performs services for an agreed upon fee or an employee of a management service contracted to work on site      3. A \"volunteer\" who performs services on a voluntary and uncompensated basis      4. An in-kind service provider      5. An independent contractor or businessperson working at a school site.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getStaffsAll",
+          "type": "array",
+          "items": {
+            "$ref": "staff"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources based with paging capabilities (using the \"Get All\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get All\" pattern. In this version of the API there is support for paging.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The matching resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "staff"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getStaffsByExample",
+          "type": "array",
+          "items": {
+            "$ref": "staff"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            },
+            {
+              "paramType": "query",
+              "name": "staffUniqueId",
+              "description": "A unique alphanumeric code assigned to a staff.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "citizenshipStatusType",
+              "description": "An indicator of whether or not the person is a U.S. citizen.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "highestCompletedLevelOfEducationDescriptor",
+              "description": "The extent of formal instruction an individual has received (e.g., the highest grade in school completed or its equivalent or the highest degree received).",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "oldEthnicityType",
+              "description": "Previous definition of Ethnicity combining Hispanic/Latino and race:          1 - American Indian or Alaskan Native          2 - Asian or Pacific Islander          3 - Black, not of Hispanic origin          4 - Hispanic          5 - White, not of Hispanic origin.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "sexType",
+              "description": "A person's gender.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "personalTitlePrefix",
+              "description": "A prefix used to denote the title, degree, position, or seniority of the person.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "firstName",
+              "description": "A name given to an individual at birth, baptism, or during another naming ceremony, or through legal change.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "middleName",
+              "description": "A secondary name given to an individual at birth, baptism, or during another naming ceremony.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "lastSurname",
+              "description": "The name borne in common by members of a family.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "generationCodeSuffix",
+              "description": "An appendage, if any, used to denote an individual's generation in his family (e.g., Jr., Sr., III).",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "maidenName",
+              "description": "The person's maiden name.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "birthDate",
+              "description": "The month, day, and year on which an individual was born.",
+              "type": "string",
+              "format": "date",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "hispanicLatinoEthnicity",
+              "description": "An indication that the individual traces his or her origin or descent to Mexico, Puerto Rico, Cuba, Central, and South America, and other Spanish cultures, regardless of race. The term, \"Spanish origin,\" can be used in addition to \"Hispanic or Latino.\"",
+              "type": "boolean",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "yearsOfPriorProfessionalExperience",
+              "description": "The total number of years that an individual has previously held a similar professional position in one or more education institutions.",
+              "type": "number",
+              "format": "double",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "yearsOfPriorTeachingExperience",
+              "description": "The total number of years that an individual has previously held a teaching position in one or more education institutions.",
+              "type": "number",
+              "format": "double",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "loginId",
+              "description": "The login ID for the user; used for security access control interface.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "highlyQualifiedTeacher",
+              "description": "An indication of whether a teacher is classified as highly qualified for his/her assignment according to state definition. This attribute indicates the teacher is highly qualified for ALL Sections being taught.",
+              "type": "boolean",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "id",
+              "description": "",
+              "type": "string",
+              "format": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources matching values of an example resource (using the \"Get By Example\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Example\" search pattern.  The values of any properties of the resource that are specified will be used to return all matching results (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "staff"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getStaffByKey",
+          "type": "staff",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "staffUniqueId",
+              "description": "A unique alphanumeric code assigned to a staff.",
+              "type": "string",
+              "format": "",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the values of the resource's natural key (using the \"Get By Key\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Key\" search pattern. The values of the natural key of the resource must be fully specified, and the service will return the matching result (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "staff"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "POST",
+          "nickname": "postStaffs",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "body",
+              "name": "staff",
+              "description": "The JSON representation of the \"staff\" resource to be created or updated.",
+              "type": "staff",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Creates or updates resources based on the natural key values of the supplied resource.",
+          "notes": "The POST operation can be used to create or update resources. In database terms, this is often referred to as an \"upsert\" operation (insert + update).  Clients should NOT include the resource \"id\" in the JSON body because it will result in an error (you must use a PUT operation to update a resource by \"id\"). The web service will identify whether the resource already exists based on the natural key values provided, and update or create the resource appropriately.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/staffs/{id}",
+      "description": "This entity represents an individual who performs specified activities for any public or private education institution or agency that provides instructional and/or support services to students or staff at the early childhood level through high school completion. For example, this includes:      1. An \"employee\" who performs services under the direction of the employing institution or agency is compensated for such services by the employer and is eligible for employee benefits and wage or salary tax withholdings      2. A \"contractor\" or \"consultant\" who performs services for an agreed upon fee or an employee of a management service contracted to work on site      3. A \"volunteer\" who performs services on a voluntary and uncompensated basis      4. An in-kind service provider      5. An independent contractor or businessperson working at a school site.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getStaffsById",
+          "type": "staff",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be retrieved.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the resource's identifier (using the \"Get By Id\" pattern).",
+          "notes": "This GET operation retrieves a resource by the specified resource identifier.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "staff"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "PUT",
+          "nickname": "putStaff",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be updated.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the PUT from updating a resource modified by another consumer.",
+              "type": "string",
+              "required": false
+            },
+            {
+              "paramType": "body",
+              "name": "staff",
+              "description": "The JSON representation of the \"staff\" resource to be updated.",
+              "type": "staff",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Updates or creates a resource based on the resource identifier.",
+          "notes": "The PUT operation is used to update or create a resource by identifier.  If the resource doesn't exist, the resource will be created using that identifier.  Additionally, natural key values cannot be changed using this operation, and will not be modified in the database.  If the resource \"id\" is provided in the JSON body, it will be ignored as well.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "DELETE",
+          "nickname": "deleteStaffById",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be deleted.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the DELETE from removing a resource modified by another consumer.",
+              "type": "string",
+              "required": false,
+              "allowMultiple": false
+            }
+          ],
+          "summary": "Deletes an existing resource using the resource identifier.",
+          "notes": "The DELETE operation is used to delete an existing resource by identifier.  If the resource doesn't exist, an error will result (the resource will not be found).",
+          "responseMessages": [
+            {
+              "code": 202,
+              "message": "The request has accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was successfully deleted."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {
+    "staff": {
+      "id": "staff",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "description": "The unique identifier of the resource."
+        },
+        "birthDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The month, day, and year on which an individual was born."
+        },
+        "citizenshipStatusType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An indicator of whether or not the person is a U.S. citizen."
+        },
+        "firstName": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A name given to an individual at birth, baptism, or during another naming ceremony, or through legal change."
+        },
+        "generationCodeSuffix": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An appendage, if any, used to denote an individual's generation in his family (e.g., Jr., Sr., III)."
+        },
+        "highestCompletedLevelOfEducationDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The extent of formal instruction an individual has received (e.g., the highest grade in school completed or its equivalent or the highest degree received)."
+        },
+        "highlyQualifiedTeacher": {
+          "type": "boolean",
+          "format": "",
+          "required": false,
+          "description": "An indication of whether a teacher is classified as highly qualified for his/her assignment according to state definition. This attribute indicates the teacher is highly qualified for ALL Sections being taught."
+        },
+        "hispanicLatinoEthnicity": {
+          "type": "boolean",
+          "format": "",
+          "required": true,
+          "description": "An indication that the individual traces his or her origin or descent to Mexico, Puerto Rico, Cuba, Central, and South America, and other Spanish cultures, regardless of race. The term, \"Spanish origin,\" can be used in addition to \"Hispanic or Latino.\""
+        },
+        "lastSurname": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name borne in common by members of a family."
+        },
+        "loginId": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The login ID for the user; used for security access control interface."
+        },
+        "maidenName": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The person's maiden name."
+        },
+        "middleName": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A secondary name given to an individual at birth, baptism, or during another naming ceremony."
+        },
+        "oldEthnicityType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Previous definition of Ethnicity combining Hispanic/Latino and race:          1 - American Indian or Alaskan Native          2 - Asian or Pacific Islander          3 - Black, not of Hispanic origin          4 - Hispanic          5 - White, not of Hispanic origin."
+        },
+        "personalTitlePrefix": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A prefix used to denote the title, degree, position, or seniority of the person."
+        },
+        "sexType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A person's gender."
+        },
+        "staffUniqueId": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique alphanumeric code assigned to a staff."
+        },
+        "yearsOfPriorProfessionalExperience": {
+          "type": "number",
+          "format": "double",
+          "required": false,
+          "description": "The total number of years that an individual has previously held a similar professional position in one or more education institutions."
+        },
+        "yearsOfPriorTeachingExperience": {
+          "type": "number",
+          "format": "double",
+          "required": false,
+          "description": "The total number of years that an individual has previously held a teaching position in one or more education institutions."
+        },
+        "addresses": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffAddresses.  The set of elements that describes an address, including the street address, city, state, and ZIP code.",
+          "items": {
+            "$ref": "staffAddress"
+          }
+        },
+        "credentials": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffCredentials.  The legal document or authorization giving authorization to perform teaching assignment services.",
+          "items": {
+            "$ref": "staffCredential"
+          }
+        },
+        "electronicMails": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffElectronicMails.  The numbers, letters, and symbols used to identify an electronic mail (e-mail) user within the network to which the individual or organization belongs.",
+          "items": {
+            "$ref": "staffElectronicMail"
+          }
+        },
+        "identificationCodes": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffIdentificationCodes.  A unique number or alphanumeric code assigned to a staff member by a school, school system, a state, or other agency or entity.",
+          "items": {
+            "$ref": "staffIdentificationCode"
+          }
+        },
+        "identificationDocuments": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffIdentificationDocuments.  The documents presented as evident to verify one's personal identity; for example: drivers license, passport, birth certificate, etc.",
+          "items": {
+            "$ref": "staffIdentificationDocument"
+          }
+        },
+        "internationalAddresses": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffInternationalAddresses.  The set of elements that describes an international address.",
+          "items": {
+            "$ref": "staffInternationalAddress"
+          }
+        },
+        "languages": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffLanguages.  The language(s) the individual uses to communicate.",
+          "items": {
+            "$ref": "staffLanguage"
+          }
+        },
+        "otherNames": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffOtherNames.  Other names (e.g., alias, nickname, previous legal name) associated with a person.",
+          "items": {
+            "$ref": "staffOtherName"
+          }
+        },
+        "races": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffRaces.  The general racial category which most clearly reflects the individual's recognition of his or her community or with which the individual most identifies. The way this data element is listed, it must allow for multiple entries so that each individual can specify all appropriate races.",
+          "items": {
+            "$ref": "staffRace"
+          }
+        },
+        "telephones": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffTelephones.  The 10-digit telephone number, including the area code, for the person.",
+          "items": {
+            "$ref": "staffTelephone"
+          }
+        },
+        "visas": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffVisas.  An indicator of a non-US citizen's Visa type.",
+          "items": {
+            "$ref": "staffVisa"
+          }
+        },
+        "_etag": {
+          "type": "string",
+          "required": false,
+          "description": "A unique system-generated value that identifies the version of the resource."
+        }
+      }
+    },
+    "staffAddress": {
+      "id": "staffAddress",
+      "properties": {
+        "addressType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of address listed for an individual or organization.    For example:  Physical Address, Mailing Address, Home Address, etc.)"
+        },
+        "stateAbbreviationType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The abbreviation for the state (within the United States) or outlying area in which an address is located."
+        },
+        "streetNumberName": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The street number and street name or post office box number of an address."
+        },
+        "apartmentRoomSuiteNumber": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The apartment, room, or suite number of an address."
+        },
+        "buildingSiteNumber": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The number of the building on the site, if more than one building shares the same address."
+        },
+        "city": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name of the city in which an address is located."
+        },
+        "postalCode": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The five or nine digit zip code or overseas postal code portion of an address."
+        },
+        "nameOfCounty": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The name of the county, parish, borough, or comparable unit (within a state) in                         'which an address is located."
+        },
+        "countyFIPSCode": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The Federal Information Processing Standards (FIPS) numeric code for the county issued by the National Institute of Standards and Technology (NIST). Counties are considered to be the \"first-order subdivisions\" of each State and statistically equivalent entity, regardless of their local designations (county, parish, borough, etc.) Counties in different States will have the same code. A unique county number is created when combined with the 2-digit FIPS State Code."
+        },
+        "latitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic latitude of the physical address."
+        },
+        "longitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic longitude of the physical address."
+        },
+        "beginDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The first date the address is valid. For physical addresses, the date the person moved to that address."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The last date the address is valid. For physical addresses, this would be the date the person moved from that address."
+        }
+      }
+    },
+    "staffCredential": {
+      "id": "staffCredential",
+      "properties": {
+        "credentialFieldDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The field of certification for the certificate (e.g., Mathematics, Music)."
+        },
+        "credentialType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "An indication of the category of credential an individual holds."
+        },
+        "levelDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The grade level(s) certified for teaching."
+        },
+        "teachingCredentialDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "An indication of the category of a legal document giving authorization to perform teaching assignment services."
+        },
+        "credentialIssuanceDate": {
+          "type": "string",
+          "format": "date",
+          "required": true,
+          "description": "The month, day, and year on which an active credential was issued to an individual."
+        },
+        "stateOfIssueStateAbbreviationType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The abbreviation for the name of the state (within the United States) or extra-state jurisdiction in which a license/credential was issued."
+        },
+        "teachingCredentialBasisType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An indication of the pre-determined criteria for granting the teaching credential that an individual holds."
+        },
+        "credentialExpirationDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The month, day, and year on which an active credential held by an individual will expire."
+        }
+      }
+    },
+    "staffElectronicMail": {
+      "id": "staffElectronicMail",
+      "properties": {
+        "electronicMailType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of email listed for an individual or organization. For example: Home/Personal, Work, etc.)"
+        },
+        "electronicMailAddress": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The electronic mail (e-mail) address listed for an individual or organization."
+        },
+        "primaryEmailAddressIndicator": {
+          "type": "boolean",
+          "format": "",
+          "required": false,
+          "description": "An indication that the electronic mail address should be used as the principal electronic mail address for an individual or organization."
+        }
+      }
+    },
+    "staffIdentificationCode": {
+      "id": "staffIdentificationCode",
+      "properties": {
+        "staffIdentificationSystemDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A coding scheme that is used for identification and record-keeping purposes by schools, social services, or other agencies to refer to a staff member."
+        },
+        "identificationCode": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique number or alphanumeric code assigned to a staff member by a school, school system, a state, or other agency or entity."
+        },
+        "assigningOrganizationIdentificationCode": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The organization code or name assigning the staff Identification Code."
+        }
+      }
+    },
+    "staffIdentificationDocument": {
+      "id": "staffIdentificationDocument",
+      "properties": {
+        "identificationDocumentUseType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The primary function of the document used for establishing identity."
+        },
+        "personalInformationVerificationType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The category of the document relative to its purpose."
+        },
+        "issuerCountryDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Country of origin of the document."
+        },
+        "documentTitle": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The title of the document given by the issuer."
+        },
+        "documentExpirationDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The day when the document  expires, if null then never expires."
+        },
+        "issuerDocumentIdentificationCode": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The unique identifier on the issuer's identification system."
+        },
+        "issuerName": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Name of the entity or institution that issued the document."
+        }
+      }
+    },
+    "staffInternationalAddress": {
+      "id": "staffInternationalAddress",
+      "properties": {
+        "addressType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of address listed for an individual or organization. For example:  Physical Address, Mailing Address, Home Address, etc.)"
+        },
+        "countryDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name of the country."
+        },
+        "addressLine1": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The first line of the address."
+        },
+        "addressLine2": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The second line of the address."
+        },
+        "addressLine3": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The third line of the address."
+        },
+        "addressLine4": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The fourth line of the address."
+        },
+        "latitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic latitude of the physical address."
+        },
+        "longitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic longitude of the physical address."
+        },
+        "beginDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The first date the address is valid. For physical addresses, the date the person moved to that address."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The last date the address is valid. For physical addresses, this would be the date the person moved from that address."
+        }
+      }
+    },
+    "staffLanguage": {
+      "id": "staffLanguage",
+      "properties": {
+        "languageDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A specification of which written or spoken communication is being used."
+        },
+        "uses": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of staffLanguageUses.  A description of how the language is used (e.g. Home Language, Native Language, Spoken Language).",
+          "items": {
+            "$ref": "staffLanguageUse"
+          }
+        }
+      }
+    },
+    "staffOtherName": {
+      "id": "staffOtherName",
+      "properties": {
+        "otherNameType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The types of alternate names for a person."
+        },
+        "personalTitlePrefix": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A prefix used to denote the title, degree, position, or seniority of the person."
+        },
+        "firstName": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A name given to an individual at birth, baptism, or during another naming ceremony, or through legal change."
+        },
+        "middleName": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A secondary name given to an individual at birth, baptism, or during another naming ceremony."
+        },
+        "lastSurname": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name borne in common by members of a family."
+        },
+        "generationCodeSuffix": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An appendage, if any, used to denote an individual's generation in his family (e.g., Jr., Sr., III)."
+        }
+      }
+    },
+    "staffRace": {
+      "id": "staffRace",
+      "properties": {
+        "raceType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The general racial category which most clearly reflects the individual's recognition of his or her community or with which the individual most identifies. The way this data element is listed, it must allow for multiple entries so that each individual can specify all appropriate races."
+        }
+      }
+    },
+    "staffTelephone": {
+      "id": "staffTelephone",
+      "properties": {
+        "telephoneNumberType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of communication number listed for an individual or organization."
+        },
+        "telephoneNumber": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The telephone number including the area code, and extension, if applicable."
+        },
+        "orderOfPriority": {
+          "type": "integer",
+          "format": "int32",
+          "required": false,
+          "description": "The order of priority assigned to telephone numbers to define which number to attempt first, second, etc."
+        },
+        "textMessageCapabilityIndicator": {
+          "type": "boolean",
+          "format": "",
+          "required": false,
+          "description": "An indication that the telephone number is technically capable of sending and receiving Short Message Service (SMS) text messages."
+        }
+      }
+    },
+    "staffVisa": {
+      "id": "staffVisa",
+      "properties": {
+        "visaType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "An indicator of a non-US citizen's Visa type."
+        }
+      }
+    },
+    "staffLanguageUse": {
+      "id": "staffLanguageUse",
+      "properties": {
+        "languageUseType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A description of how the language is used (e.g. Home Language, Native Language, Spoken Language)."
+        }
+      }
+    },
+    "webServiceError": {
+      "id": "webServiceError",
+      "properties": {
+        "message": {
+          "type": "string",
+          "required": false,
+          "description": "The \"user-friendly\" error message."
+        },
+        "exceptionMessage": {
+          "type": "string",
+          "required": false,
+          "description": "The system-generated exception message."
+        },
+        "exceptionType": {
+          "type": "string",
+          "required": false,
+          "description": "The type of the exception."
+        },
+        "stackTrace": {
+          "type": "string",
+          "required": false,
+          "description": "The server-side stack trace (only available in DEBUG builds)."
+        }
+      }
+    },
+    "link": {
+      "id": "link",
+      "properties": {
+        "rel": {
+          "type": "string",
+          "required": false,
+          "description": "Describes the nature of the relationship to the referenced resource."
+        },
+        "href": {
+          "type": "string",
+          "required": false,
+          "description": "The URL to the related resource."
+        }
+      }
+    }
+  }
+}

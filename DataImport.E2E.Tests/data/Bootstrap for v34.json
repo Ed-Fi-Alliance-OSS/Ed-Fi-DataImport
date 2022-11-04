@@ -1,0 +1,71 @@
+{
+  "title": "Automation - Student Assessment",
+  "description": "Automated Test Data for Student Assessments",
+  "apiVersion": "3.4.0",
+  "template": {
+    "maps": [],
+    "bootstraps": [
+      {
+        "name": "Automated - SA Bootstrap for 3.4.0",
+        "resourcePath": "/ed-fi/assessments",
+        "data": {
+          "educationOrganizationReference": {
+            "educationOrganizationId": 255901
+          },
+          "assessmentIdentifier": "DI-TEST-2021",
+          "assessmentTitle": "Data Import 2021 Test Assessment",
+          "namespace": "uri://ed-fi.org/Assessment/Assessment.xml",
+          "assessedGradeLevels": [
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#First grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Second grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Third grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Fourth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Fifth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Sixth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Seventh grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Eighth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Ninth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Tenth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Eleventh grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Twelfth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Ungraded"
+            }
+          ],
+          "academicSubjects": [
+            {
+              "academicSubjectDescriptor": "uri://ed-fi.org/AcademicSubjectDescriptor#Reading"
+            }
+          ]
+        }
+      }
+    ],
+    "lookups": [],
+    "supplementalInformation": null,
+    "preprocessors": []
+  }
+}

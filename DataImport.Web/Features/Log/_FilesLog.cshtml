@@ -1,0 +1,67 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Models
+@using DataImport.Web.Features.Log
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Log.LogViewModel
+
+<div style="margin-top: 20px;">
+    @await Html.PartialAsync("_SelectApiServerPartial", Model)
+</div>
+
+<table id="tblFiles" class="table table-hover table-bordered table-responsive logTable">
+    <thead>
+        <tr>
+            <th>Agent Name</th>
+            <th>File Name</th>
+            <th>API Connection</th>
+            <th>Status</th>
+            <th>Rows</th>
+            <th>Created Date</th>
+            <th>Updated Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model.Files.Items)
+        {
+            <tr class="parentrow">
+                <td><span class="sign" style="margin-right: 5px"></span>@m.AgentName</td>
+                <td>@m.FileName</td>
+                <td>@m.ApiConnection</td>
+                <td>@m.Status</td>
+                <td>@m.NumberOfRows</td>
+                <td>@m.CreateDate</td>
+                <td>@m.UpdateDate</td>
+                <td>
+                    @if (m.Status.CanBeRetried())
+                    {
+                        @Html.ActionLink("Retry", "Retry", new { m.Id }, new { @class = "btn btn-primary ajax-submit-link" })
+                    }
+
+                    @if (m.Status.CanBeCanceled())
+                    {
+                        @Html.ActionLink("Cancel", "Cancel", new { m.Id }, new { @class = "btn btn-default ajax-submit-link" })
+                    }
+                </td>
+            </tr>
+            <tr class="childContent">
+                <td colspan="8">
+                    <table class="footable-details table table-striped table-hover table-bordered table-responsive">
+                        <tbody><tr><th>Message</th><td style="display: table-cell;">@m.Message</td></tr></tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var previousUrl = Url.Action("FilesLog", "Log", new FilesLog.Query { PageNumber = Model.Files.PageNumber - 1, ApiServerId = Model.ApiServerId });
+    var nextUrl = Url.Action("FilesLog", "Log", new FilesLog.Query { PageNumber = Model.Files.PageNumber + 1, ApiServerId = Model.ApiServerId });
+}
+@Html.PagingControl(previousUrl, nextUrl, Model.Files)

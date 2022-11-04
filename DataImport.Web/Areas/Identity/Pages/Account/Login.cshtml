@@ -1,0 +1,62 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@page
+@using DataImport.Web.Services
+@using Microsoft.Extensions.Options
+@model DataImport.Web.Areas.Identity.Pages.Account.LoginModel
+@inject IConfigurationService _configurationService
+@inject IOptions<DataImport.Web.AppSettings> appSettings
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-8">
+        <section id="loginForm">
+            <form id="account" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="Input.RememberMe">
+                            <input asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                </div>
+                <div class="form-group">
+
+                    @if (_configurationService.AllowUserRegistrations())
+                    {
+                    <p>
+                        Don't have an account? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register.</a>
+                    </p>
+                    }
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

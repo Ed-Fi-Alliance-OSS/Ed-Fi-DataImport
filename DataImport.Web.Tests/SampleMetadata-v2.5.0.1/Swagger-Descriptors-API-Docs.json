@@ -1,0 +1,226 @@
+{
+  "apiVersion": "2.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://test-ods-v2.5.0.1.example.com/metadata/descriptors/api-docs",
+  "apis": [
+    {
+      "path": "/academicSubjectDescriptors",
+      "description": "This descriptor holds the description of the content or subject area (e.g., arts, mathematics, reading, stenography, or a foreign language)."
+    },
+    {
+      "path": "/accommodationDescriptors",
+      "description": "This descriptor defines variations used in how an assessment is presented or taken."
+    },
+    {
+      "path": "/accountCodeDescriptors",
+      "description": "This descriptor holds the set of account codes defined for the education accounting system organized by account code type (e.g., fund, function, object)."
+    },
+    {
+      "path": "/achievementCategoryDescriptors",
+      "description": "This descriptor defines the category of achievement attributed to the learner."
+    },
+    {
+      "path": "/administrativeFundingControlDescriptors",
+      "description": "This descriptor holds the type of education institution as classified by its funding source (e.g., public or private)."
+    },
+    {
+      "path": "/assessmentCategoryDescriptors",
+      "description": "This descriptor holds the category of an assessment based on format and content."
+    },
+    {
+      "path": "/assessmentIdentificationSystemDescriptors",
+      "description": "This descriptor holds a coding scheme that is used for identification and record-keeping purposes by schools, social services or other agencies to refer to an assessment."
+    },
+    {
+      "path": "/assessmentPeriodDescriptors",
+      "description": "This descriptor holds the period of time window in which an assessment is supposed to be administered (e.g., Beginning of Year, Middle of Year, End of Year)."
+    },
+    {
+      "path": "/attendanceEventCategoryDescriptors",
+      "description": "This descriptor holds the category of the attendance event (e.g., tardy). The map to known enumeration values is required."
+    },
+    {
+      "path": "/behaviorDescriptors",
+      "description": "This descriptor holds the categories of behavior describing a discipline incident."
+    },
+    {
+      "path": "/calendarEventDescriptors",
+      "description": "This descriptor holds the types of scheduled or unscheduled event for the day (e.g., Instructional day, Teacher only day, Holiday, Make-up day, Weather day, Student late arrival/early dismissal day)."
+    },
+    {
+      "path": "/classroomPositionDescriptors",
+      "description": "This descriptor defines the type of position the staff member holds in a specific class/section."
+    },
+    {
+      "path": "/competencyLevelDescriptors",
+      "description": "This descriptor defines various levels for assessed competencies."
+    },
+    {
+      "path": "/continuationOfServicesReasonDescriptors",
+      "description": "In the Migrant Education program, a provision allows continuation of services after a child is no longer considered migratory for certain reasons. This descriptor holds the reasons prescribed in the statute. The mapping of descriptor values to known Ed-Fi enumeration values is required."
+    },
+    {
+      "path": "/countryDescriptors",
+      "description": "This descriptor defines the name and code of the country."
+    },
+    {
+      "path": "/courseIdentificationSystemDescriptors",
+      "description": "This descriptor defines a standard code that identifies the organization of subject matter and related learning experiences provided for the instruction of students."
+    },
+    {
+      "path": "/credentialFieldDescriptors",
+      "description": "This descriptor defines the fields of certification that the state education agency offers to teachers."
+    },
+    {
+      "path": "/diagnosisDescriptors",
+      "description": "This descriptor defines diagnoses that interventions are intended to target."
+    },
+    {
+      "path": "/disabilityDescriptors",
+      "description": "This descriptor defines a student's impairment."
+    },
+    {
+      "path": "/disciplineDescriptors",
+      "description": "This descriptor defines the type of action or removal from the classroom used to discipline the student involved as a perpetrator in a discipline incident."
+    },
+    {
+      "path": "/educationOrganizationIdentificationSystemDescriptors",
+      "description": "This descriptor defines the originating record system and code that is used for record-keeping purposes by education organizations."
+    },
+    {
+      "path": "/employmentStatusDescriptors",
+      "description": "This descriptor defines the type of employment or contract."
+    },
+    {
+      "path": "/entryTypeDescriptors",
+      "description": "This descriptor defines the process by which a student enters a school during a given academic session."
+    },
+    {
+      "path": "/exitWithdrawTypeDescriptors",
+      "description": "This descriptor defines the circumstances under which the student exited from membership in an educational institution."
+    },
+    {
+      "path": "/gradeLevelDescriptors",
+      "description": "This descriptor defines the set of grade levels. The map to known Ed-Fi enumeration values is required."
+    },
+    {
+      "path": "/gradingPeriodDescriptors",
+      "description": "This descriptor defines the name of the period for which grades are reported. The mapping of descriptor values to known Ed-Fi enumeration values is required."
+    },
+    {
+      "path": "/graduationPlanTypeDescriptors",
+      "description": "This descriptor defines the set of graduation plan types."
+    },
+    {
+      "path": "/languageDescriptors",
+      "description": "This descriptor defines the language(s) that are spoken or written."
+    },
+    {
+      "path": "/levelDescriptors",
+      "description": "This descriptor defines the grade level(s) certified for teaching."
+    },
+    {
+      "path": "/levelOfEducationDescriptors",
+      "description": "This descriptor defines the different levels of education achievable."
+    },
+    {
+      "path": "/limitedEnglishProficiencyDescriptors",
+      "description": "This descriptor defines the indications that the student has been identified as limited English proficient by the Language Proficiency Assessment Committee (LPAC), or English proficient. The mapping of descriptor values to known Ed-Fi enumeration values is required."
+    },
+    {
+      "path": "/performanceLevelDescriptors",
+      "description": "This descriptor defines various levels or thresholds for performance on the assessment."
+    },
+    {
+      "path": "/programAssignmentDescriptors",
+      "description": "This descriptor defines the name of the education program for which a teacher is assigned to a school."
+    },
+    {
+      "path": "/programCharacteristicDescriptors",
+      "description": "This descriptor defines important characteristics of the Program, such as categories or particular indications."
+    },
+    {
+      "path": "/reasonExitedDescriptors",
+      "description": "This descriptor defines the reason a student exited a program."
+    },
+    {
+      "path": "/reporterDescriptionDescriptors",
+      "description": "This descriptor defines the type of individual who reported an incident."
+    },
+    {
+      "path": "/residencyStatusDescriptors",
+      "description": "This descriptor defines indications of the location of a person's legal residence relative to (within or outside of) the boundaries of the public school attended and its administrative unit."
+    },
+    {
+      "path": "/responsibilityDescriptors",
+      "description": "This descriptor defines types of responsibility an education organization may have for a student (e.g., accountability, attendance, funding)."
+    },
+    {
+      "path": "/schoolFoodServicesEligibilityDescriptors",
+      "description": "This descriptor defines indications of a student's level of eligibility for breakfast, lunch, snack, supper, and milk programs."
+    },
+    {
+      "path": "/sectionCharacteristicDescriptors",
+      "description": "This descriptor defines characteristics of a Section, such as whether attendance is taken and the Section is graded."
+    },
+    {
+      "path": "/separationReasonDescriptors",
+      "description": "This descriptor defines the reasons for terminating the employment."
+    },
+    {
+      "path": "/serviceDescriptors",
+      "description": "This descriptor defines the services provided by an education organization to populations of students associated with a program."
+    },
+    {
+      "path": "/specialEducationSettingDescriptors",
+      "description": "This descriptor defines the major instructional setting (more than 50 percent of a student's special education program)."
+    },
+    {
+      "path": "/staffClassificationDescriptors",
+      "description": "This descriptor defines an individual's title of employment, official status or rank."
+    },
+    {
+      "path": "/staffIdentificationSystemDescriptors",
+      "description": "This descriptor defines the originating record system and code that is used for record-keeping purposes of the staff."
+    },
+    {
+      "path": "/studentCharacteristicDescriptors",
+      "description": "This descriptor defines the set of important characteristics of the student."
+    },
+    {
+      "path": "/studentIdentificationSystemDescriptors",
+      "description": "This descriptor defines the originating record system and code that is used for record-keeping purposes of the student."
+    },
+    {
+      "path": "/teachingCredentialDescriptors",
+      "description": "This descriptor defines an indication of the category of a legal document giving authorization to perform teaching assignment services."
+    },
+    {
+      "path": "/termDescriptors",
+      "description": "This descriptor defines the term of a session during the school year (e.g., Fall Semester)."
+    },
+    {
+      "path": "/weaponDescriptors",
+      "description": "This descriptor defines the types of weapon used during an incident."
+    }
+  ],
+  "info": {
+    "title": "Ed-Fi Operational Data Store API",
+    "description": "The Ed-Fi ODS API enables applications to read and write education data stored in an Ed-Fi ODS through a secure REST interface. The Ed-Fi ODS API supports both transactional and bulk modes of operation.",
+    "termsOfServiceUrl": "",
+    "contact": "",
+    "license": "",
+    "licenseUrl": "http://www.ed-fi.org/license/"
+  },
+  "schemes": [
+    "http"
+  ],
+  "authorizations": {
+    "edfi": {
+      "type": "edfi",
+      "description": "Ed-Fi Authorization uses a key and secret to secure student data.",
+      "authUrl": "http://test-ods-v2.5.0.1.example.com/oauth/authorize",
+      "tokenUrl": "http://test-ods-v2.5.0.1.example.com/oauth/token"
+    }
+  }
+}

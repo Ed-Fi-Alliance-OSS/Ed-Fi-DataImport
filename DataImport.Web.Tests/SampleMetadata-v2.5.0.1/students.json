@@ -1,0 +1,1545 @@
+
+{
+  "apiVersion": "2.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019",
+  "resourcePath": "/students",
+  "produces": [
+    "application/json"
+  ],
+  "apis": [
+    {
+      "path": "/students",
+      "description": "This entity represents an individual for whom instruction, services, and/or care are provided in an early childhood, elementary, or secondary educational program under the jurisdiction of a school, education agency or other institution or program. A student is a person who has been enrolled in a school or other educational institution.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getStudentsAll",
+          "type": "array",
+          "items": {
+            "$ref": "student"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources based with paging capabilities (using the \"Get All\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get All\" pattern. In this version of the API there is support for paging.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The matching resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "student"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getStudentsByExample",
+          "type": "array",
+          "items": {
+            "$ref": "student"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            },
+            {
+              "paramType": "query",
+              "name": "studentUniqueId",
+              "description": "A unique alphanumeric code assigned to a student.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "citizenshipStatusType",
+              "description": "An indicator of whether or not the person is a U.S. citizen.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "birthCountryDescriptor",
+              "description": "The country in which an individual is born.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limitedEnglishProficiencyDescriptor",
+              "description": "An indication that the student has been identified as limited English proficient by the Language Proficiency Assessment Committee (LPAC), or English proficient.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "oldEthnicityType",
+              "description": "Previous definition of Ethnicity combining Hispanic/Latino and race:          1 - American Indian or Alaskan Native          2 - Asian or Pacific Islander          3 - Black, not of Hispanic origin          4 - Hispanic          5 - White, not of Hispanic origin.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "schoolFoodServicesEligibilityDescriptor",
+              "description": "An indication of a student's level of eligibility for breakfast, lunch, snack, supper, and milk programs.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "sexType",
+              "description": "A person's gender.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "birthStateAbbreviationType",
+              "description": "The abbreviation for the name of the state (within the United States) or extra-state jurisdiction in which an individual was born.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "personalTitlePrefix",
+              "description": "A prefix used to denote the title, degree, position, or seniority of the person.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "firstName",
+              "description": "A name given to an individual at birth, baptism, or during another naming ceremony, or through legal change.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "middleName",
+              "description": "A secondary name given to an individual at birth, baptism, or during another naming ceremony.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "lastSurname",
+              "description": "The name borne in common by members of a family.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "generationCodeSuffix",
+              "description": "An appendage, if any, used to denote an individual's generation in his family (e.g., Jr., Sr., III).",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "maidenName",
+              "description": "The person's maiden name.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "birthDate",
+              "description": "The month, day, and year on which an individual was born.",
+              "type": "string",
+              "format": "date",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "birthCity",
+              "description": "The city the student was born in.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "birthInternationalProvince",
+              "description": "For students born outside of the U.S., the Province or jurisdiction in which an individual is born.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "dateEnteredUS",
+              "description": "For students born outside of the U.S., the date the student entered the U.S.",
+              "type": "string",
+              "format": "date",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "multipleBirthStatus",
+              "description": "Indicator of whether the student was born with other siblings (i.e., twins, triplets, etc.)",
+              "type": "boolean",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "profileThumbnail",
+              "description": "Locator for the student photo.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "hispanicLatinoEthnicity",
+              "description": "An indication that the individual traces his or her origin or descent to Mexico, Puerto Rico, Cuba, Central, and South America, and other Spanish cultures, regardless of race. The term, \"Spanish origin,\" can be used in addition to \"Hispanic or Latino.\"",
+              "type": "boolean",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "economicDisadvantaged",
+              "description": "An indication of inadequate financial condition of an individual's family, as determined by family income, number of family members/dependents, participation in public assistance programs, and/or other characteristics considered relevant by federal, state, and local policy.",
+              "type": "boolean",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "displacementStatus",
+              "description": "Indicates a state health or weather related event that displaces a group of students, and may require additional funding, educational, or social services.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "loginId",
+              "description": "The login ID for the user; used for security access control interface.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "id",
+              "description": "",
+              "type": "string",
+              "format": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources matching values of an example resource (using the \"Get By Example\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Example\" search pattern.  The values of any properties of the resource that are specified will be used to return all matching results (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "student"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getStudentByKey",
+          "type": "student",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "studentUniqueId",
+              "description": "A unique alphanumeric code assigned to a student.",
+              "type": "string",
+              "format": "",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the values of the resource's natural key (using the \"Get By Key\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Key\" search pattern. The values of the natural key of the resource must be fully specified, and the service will return the matching result (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "student"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "POST",
+          "nickname": "postStudents",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "body",
+              "name": "student",
+              "description": "The JSON representation of the \"student\" resource to be created or updated.",
+              "type": "student",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Creates or updates resources based on the natural key values of the supplied resource.",
+          "notes": "The POST operation can be used to create or update resources. In database terms, this is often referred to as an \"upsert\" operation (insert + update).  Clients should NOT include the resource \"id\" in the JSON body because it will result in an error (you must use a PUT operation to update a resource by \"id\"). The web service will identify whether the resource already exists based on the natural key values provided, and update or create the resource appropriately.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/students/{id}",
+      "description": "This entity represents an individual for whom instruction, services, and/or care are provided in an early childhood, elementary, or secondary educational program under the jurisdiction of a school, education agency or other institution or program. A student is a person who has been enrolled in a school or other educational institution.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getStudentsById",
+          "type": "student",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be retrieved.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the resource's identifier (using the \"Get By Id\" pattern).",
+          "notes": "This GET operation retrieves a resource by the specified resource identifier.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "student"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "PUT",
+          "nickname": "putStudent",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be updated.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the PUT from updating a resource modified by another consumer.",
+              "type": "string",
+              "required": false
+            },
+            {
+              "paramType": "body",
+              "name": "student",
+              "description": "The JSON representation of the \"student\" resource to be updated.",
+              "type": "student",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Updates or creates a resource based on the resource identifier.",
+          "notes": "The PUT operation is used to update or create a resource by identifier.  If the resource doesn't exist, the resource will be created using that identifier.  Additionally, natural key values cannot be changed using this operation, and will not be modified in the database.  If the resource \"id\" is provided in the JSON body, it will be ignored as well.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "DELETE",
+          "nickname": "deleteStudentById",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be deleted.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the DELETE from removing a resource modified by another consumer.",
+              "type": "string",
+              "required": false,
+              "allowMultiple": false
+            }
+          ],
+          "summary": "Deletes an existing resource using the resource identifier.",
+          "notes": "The DELETE operation is used to delete an existing resource by identifier.  If the resource doesn't exist, an error will result (the resource will not be found).",
+          "responseMessages": [
+            {
+              "code": 202,
+              "message": "The request has accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was successfully deleted."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {
+    "student": {
+      "id": "student",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "description": "The unique identifier of the resource."
+        },
+        "birthCity": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The city the student was born in."
+        },
+        "birthCountryDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The country in which an individual is born."
+        },
+        "birthDate": {
+          "type": "string",
+          "format": "date",
+          "required": true,
+          "description": "The month, day, and year on which an individual was born."
+        },
+        "birthInternationalProvince": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "For students born outside of the U.S., the Province or jurisdiction in which an individual is born."
+        },
+        "birthStateAbbreviationType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The abbreviation for the name of the state (within the United States) or extra-state jurisdiction in which an individual was born."
+        },
+        "citizenshipStatusType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An indicator of whether or not the person is a U.S. citizen."
+        },
+        "dateEnteredUS": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "For students born outside of the U.S., the date the student entered the U.S."
+        },
+        "displacementStatus": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Indicates a state health or weather related event that displaces a group of students, and may require additional funding, educational, or social services."
+        },
+        "economicDisadvantaged": {
+          "type": "boolean",
+          "format": "",
+          "required": false,
+          "description": "An indication of inadequate financial condition of an individual's family, as determined by family income, number of family members/dependents, participation in public assistance programs, and/or other characteristics considered relevant by federal, state, and local policy."
+        },
+        "firstName": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A name given to an individual at birth, baptism, or during another naming ceremony, or through legal change."
+        },
+        "generationCodeSuffix": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An appendage, if any, used to denote an individual's generation in his family (e.g., Jr., Sr., III)."
+        },
+        "hispanicLatinoEthnicity": {
+          "type": "boolean",
+          "format": "",
+          "required": true,
+          "description": "An indication that the individual traces his or her origin or descent to Mexico, Puerto Rico, Cuba, Central, and South America, and other Spanish cultures, regardless of race. The term, \"Spanish origin,\" can be used in addition to \"Hispanic or Latino.\""
+        },
+        "lastSurname": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name borne in common by members of a family."
+        },
+        "limitedEnglishProficiencyDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An indication that the student has been identified as limited English proficient by the Language Proficiency Assessment Committee (LPAC), or English proficient."
+        },
+        "loginId": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The login ID for the user; used for security access control interface."
+        },
+        "maidenName": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The person's maiden name."
+        },
+        "middleName": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A secondary name given to an individual at birth, baptism, or during another naming ceremony."
+        },
+        "multipleBirthStatus": {
+          "type": "boolean",
+          "format": "",
+          "required": false,
+          "description": "Indicator of whether the student was born with other siblings (i.e., twins, triplets, etc.)"
+        },
+        "oldEthnicityType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Previous definition of Ethnicity combining Hispanic/Latino and race:          1 - American Indian or Alaskan Native          2 - Asian or Pacific Islander          3 - Black, not of Hispanic origin          4 - Hispanic          5 - White, not of Hispanic origin."
+        },
+        "personalTitlePrefix": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A prefix used to denote the title, degree, position, or seniority of the person."
+        },
+        "profileThumbnail": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Locator for the student photo."
+        },
+        "schoolFoodServicesEligibilityDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An indication of a student's level of eligibility for breakfast, lunch, snack, supper, and milk programs."
+        },
+        "sexType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A person's gender."
+        },
+        "studentUniqueId": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique alphanumeric code assigned to a student."
+        },
+        "learningStyle": {
+          "type": "studentLearningStyle",
+          "required": false,
+          "description": "The student's relative preference to visual, auditory, and tactile learning expressed as percentages."
+        },
+        "addresses": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentAddresses.  The set of elements that describes an address, including the street address, city, state, and ZIP code.",
+          "items": {
+            "$ref": "studentAddress"
+          }
+        },
+        "characteristics": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentCharacteristics.  Reflects important characteristics of the student's home situation:          Displaced Homemaker, Immigrant, Migratory, Military Parent, Pregnant Teen, Single Parent, and Unaccompanied Youth.",
+          "items": {
+            "$ref": "studentCharacteristic"
+          }
+        },
+        "cohortYears": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentCohortYears.  The type and year of a cohort (e.g., 9th grade) the student belongs to as determined by the year that student entered a specific grade.",
+          "items": {
+            "$ref": "studentCohortYear"
+          }
+        },
+        "disabilities": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentDisabilities.  The disability condition(s) that best describes an individual's impairment.",
+          "items": {
+            "$ref": "studentDisability"
+          }
+        },
+        "electronicMails": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentElectronicMails.  The numbers, letters, and symbols used to identify an electronic mail (e-mail) user within the network to which the individual or organization belongs.",
+          "items": {
+            "$ref": "studentElectronicMail"
+          }
+        },
+        "identificationCodes": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentIdentificationCodes.  A coding scheme that is used for identification and record-keeping purposes by schools, social services, or other agencies to refer to a student.",
+          "items": {
+            "$ref": "studentIdentificationCode"
+          }
+        },
+        "identificationDocuments": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentIdentificationDocuments.  The documents presented as evident to verify one's personal identity; for example: drivers license, passport, birth certificate, etc.",
+          "items": {
+            "$ref": "studentIdentificationDocument"
+          }
+        },
+        "indicators": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentIndicators.  Indicator(s) or metric(s) computed for the student (e.g., at risk) to influence more effective education or direct specific interventions.",
+          "items": {
+            "$ref": "studentIndicator"
+          }
+        },
+        "internationalAddresses": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentInternationalAddresses.  The set of elements that describes an international address.",
+          "items": {
+            "$ref": "studentInternationalAddress"
+          }
+        },
+        "languages": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentLanguages.  The language(s) the individual uses to communicate.",
+          "items": {
+            "$ref": "studentLanguage"
+          }
+        },
+        "otherNames": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentOtherNames.  Other names (e.g., alias, nickname, previous legal name) associated with a person.",
+          "items": {
+            "$ref": "studentOtherName"
+          }
+        },
+        "programParticipations": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentProgramParticipations.  Key programs the student is participating in or receives services from.",
+          "items": {
+            "$ref": "studentProgramParticipation"
+          }
+        },
+        "races": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentRaces.  The general racial category which most clearly reflects the individual's recognition of his or her community or with which the individual most identifies. The data model allows for multiple entries so that each individual can specify all appropriate races.",
+          "items": {
+            "$ref": "studentRace"
+          }
+        },
+        "telephones": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentTelephones.  The 10-digit telephone number, including the area code, for the person.",
+          "items": {
+            "$ref": "studentTelephone"
+          }
+        },
+        "visas": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentVisas.  An indicator of a non-US citizen's Visa type.",
+          "items": {
+            "$ref": "studentVisa"
+          }
+        },
+        "_etag": {
+          "type": "string",
+          "required": false,
+          "description": "A unique system-generated value that identifies the version of the resource."
+        }
+      }
+    },
+    "studentAddress": {
+      "id": "studentAddress",
+      "properties": {
+        "addressType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of address listed for an individual or organization.    For example:  Physical Address, Mailing Address, Home Address, etc.)"
+        },
+        "stateAbbreviationType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The abbreviation for the state (within the United States) or outlying area in which an address is located."
+        },
+        "streetNumberName": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The street number and street name or post office box number of an address."
+        },
+        "apartmentRoomSuiteNumber": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The apartment, room, or suite number of an address."
+        },
+        "buildingSiteNumber": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The number of the building on the site, if more than one building shares the same address."
+        },
+        "city": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name of the city in which an address is located."
+        },
+        "postalCode": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The five or nine digit zip code or overseas postal code portion of an address."
+        },
+        "nameOfCounty": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The name of the county, parish, borough, or comparable unit (within a state) in                         'which an address is located."
+        },
+        "countyFIPSCode": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The Federal Information Processing Standards (FIPS) numeric code for the county issued by the National Institute of Standards and Technology (NIST). Counties are considered to be the \"first-order subdivisions\" of each State and statistically equivalent entity, regardless of their local designations (county, parish, borough, etc.) Counties in different States will have the same code. A unique county number is created when combined with the 2-digit FIPS State Code."
+        },
+        "latitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic latitude of the physical address."
+        },
+        "longitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic longitude of the physical address."
+        },
+        "beginDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The first date the address is valid. For physical addresses, the date the person moved to that address."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The last date the address is valid. For physical addresses, this would be the date the person moved from that address."
+        }
+      }
+    },
+    "studentCharacteristic": {
+      "id": "studentCharacteristic",
+      "properties": {
+        "descriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The characteristic designated for the Student."
+        },
+        "beginDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The date the characteristic was designated."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The date the characteristic was removed."
+        },
+        "designatedBy": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The person, organization, or department that designated the characteristic."
+        }
+      }
+    },
+    "studentCohortYear": {
+      "id": "studentCohortYear",
+      "properties": {
+        "schoolYearTypeReference": {
+          "type": "schoolYearTypeReference",
+          "required": true,
+          "description": "A reference to the related SchoolYearType resource."
+        },
+        "cohortYearType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of cohort year (9th grade, graduation)."
+        }
+      }
+    },
+    "studentDisability": {
+      "id": "studentDisability",
+      "properties": {
+        "disabilityDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A disability category that describes a child's impairment."
+        },
+        "disabilityDeterminationSourceType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The source that provided the disability determination."
+        },
+        "disabilityDiagnosis": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A description of the disability diagnosis."
+        },
+        "orderOfDisability": {
+          "type": "integer",
+          "format": "int32",
+          "required": false,
+          "description": "The order by severity of student's disabilities: 1- Primary, 2 -  Secondary, 3 - Tertiary, etc."
+        }
+      }
+    },
+    "studentElectronicMail": {
+      "id": "studentElectronicMail",
+      "properties": {
+        "electronicMailType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of email listed for an individual or organization. For example: Home/Personal, Work, etc.)"
+        },
+        "electronicMailAddress": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The electronic mail (e-mail) address listed for an individual or organization."
+        },
+        "primaryEmailAddressIndicator": {
+          "type": "boolean",
+          "format": "",
+          "required": false,
+          "description": "An indication that the electronic mail address should be used as the principal electronic mail address for an individual or organization."
+        }
+      }
+    },
+    "studentIdentificationCode": {
+      "id": "studentIdentificationCode",
+      "properties": {
+        "studentIdentificationSystemDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A coding scheme that is used for identification and record-keeping purposes by schools, social services, or other agencies to refer to a student."
+        },
+        "assigningOrganizationIdentificationCode": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The organization code or name assigning the StudentIdentificationCode."
+        },
+        "identificationCode": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique number or alphanumeric code assigned to a student by a school, school system, a state, or other agency or entity."
+        }
+      }
+    },
+    "studentIdentificationDocument": {
+      "id": "studentIdentificationDocument",
+      "properties": {
+        "identificationDocumentUseType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The primary function of the document used for establishing identity."
+        },
+        "personalInformationVerificationType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The category of the document relative to its purpose."
+        },
+        "issuerCountryDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Country of origin of the document."
+        },
+        "documentTitle": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The title of the document given by the issuer."
+        },
+        "documentExpirationDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The day when the document  expires, if null then never expires."
+        },
+        "issuerDocumentIdentificationCode": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The unique identifier on the issuer's identification system."
+        },
+        "issuerName": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Name of the entity or institution that issued the document."
+        }
+      }
+    },
+    "studentIndicator": {
+      "id": "studentIndicator",
+      "properties": {
+        "indicatorName": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name of the indicator or metric."
+        },
+        "indicatorGroup": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The name for a group of indicators."
+        },
+        "indicator": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The value of the indicator or metric."
+        },
+        "beginDate": {
+          "type": "string",
+          "format": "date-time",
+          "required": false,
+          "description": "The date when the indicator was assigned or computed."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time",
+          "required": false,
+          "description": "The date the indicator or metric was sunset or removed."
+        },
+        "designatedBy": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The person, organization, or department that designated the program association."
+        }
+      }
+    },
+    "studentInternationalAddress": {
+      "id": "studentInternationalAddress",
+      "properties": {
+        "addressType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of address listed for an individual or organization. For example:  Physical Address, Mailing Address, Home Address, etc.)"
+        },
+        "countryDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name of the country."
+        },
+        "addressLine1": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The first line of the address."
+        },
+        "addressLine2": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The second line of the address."
+        },
+        "addressLine3": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The third line of the address."
+        },
+        "addressLine4": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The fourth line of the address."
+        },
+        "latitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic latitude of the physical address."
+        },
+        "longitude": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The geographic longitude of the physical address."
+        },
+        "beginDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The first date the address is valid. For physical addresses, the date the person moved to that address."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "The last date the address is valid. For physical addresses, this would be the date the person moved from that address."
+        }
+      }
+    },
+    "studentLanguage": {
+      "id": "studentLanguage",
+      "properties": {
+        "languageDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A specification of which written or spoken communication is being used."
+        },
+        "uses": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentLanguageUses.  A description of how the language is used (e.g. Home Language, Native Language, Spoken Language).",
+          "items": {
+            "$ref": "studentLanguageUse"
+          }
+        }
+      }
+    },
+    "studentOtherName": {
+      "id": "studentOtherName",
+      "properties": {
+        "otherNameType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The types of alternate names for a person."
+        },
+        "personalTitlePrefix": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A prefix used to denote the title, degree, position, or seniority of the person."
+        },
+        "firstName": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A name given to an individual at birth, baptism, or during another naming ceremony, or through legal change."
+        },
+        "middleName": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A secondary name given to an individual at birth, baptism, or during another naming ceremony."
+        },
+        "lastSurname": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The name borne in common by members of a family."
+        },
+        "generationCodeSuffix": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An appendage, if any, used to denote an individual's generation in his family (e.g., Jr., Sr., III)."
+        }
+      }
+    },
+    "studentProgramParticipation": {
+      "id": "studentProgramParticipation",
+      "properties": {
+        "programType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of program."
+        },
+        "beginDate": {
+          "type": "string",
+          "format": "date-time",
+          "required": false,
+          "description": "The date the Student was associated with the Program or service."
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time",
+          "required": false,
+          "description": "The date the Program participation ended."
+        },
+        "designatedBy": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The person, organization, or department that designated the program association."
+        },
+        "programCharacteristics": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of studentProgramParticipationProgramCharacteristics.  Reflects important characteristics of the Program, such as categories or particular indications.",
+          "items": {
+            "$ref": "studentProgramParticipationProgramCharacteristic"
+          }
+        }
+      }
+    },
+    "studentRace": {
+      "id": "studentRace",
+      "properties": {
+        "raceType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The general racial category which most clearly reflects the individual's recognition of his or her community or with which the individual most identifies. The data model allows for multiple entries so that each individual can specify all appropriate races."
+        }
+      }
+    },
+    "studentTelephone": {
+      "id": "studentTelephone",
+      "properties": {
+        "telephoneNumberType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of communication number listed for an individual or organization."
+        },
+        "telephoneNumber": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The telephone number including the area code, and extension, if applicable."
+        },
+        "orderOfPriority": {
+          "type": "integer",
+          "format": "int32",
+          "required": false,
+          "description": "The order of priority assigned to telephone numbers to define which number to attempt first, second, etc."
+        },
+        "textMessageCapabilityIndicator": {
+          "type": "boolean",
+          "format": "",
+          "required": false,
+          "description": "An indication that the telephone number is technically capable of sending and receiving Short Message Service (SMS) text messages."
+        }
+      }
+    },
+    "studentVisa": {
+      "id": "studentVisa",
+      "properties": {
+        "visaType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "An indicator of a non-US citizen's Visa type."
+        }
+      }
+    },
+    "studentLanguageUse": {
+      "id": "studentLanguageUse",
+      "properties": {
+        "languageUseType": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A description of how the language is used (e.g. Home Language, Native Language, Spoken Language)."
+        }
+      }
+    },
+    "studentProgramParticipationProgramCharacteristic": {
+      "id": "studentProgramParticipationProgramCharacteristic",
+      "properties": {
+        "programCharacteristicDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "Reflects important characteristics of the Program, such as categories or particular indications."
+        }
+      }
+    },
+    "studentLearningStyle": {
+      "id": "studentLearningStyle",
+      "properties": {
+        "visualLearning": {
+          "type": "number",
+          "format": "double",
+          "required": true,
+          "description": "The student's relative preference expressed as a percent to visual learning."
+        },
+        "auditoryLearning": {
+          "type": "number",
+          "format": "double",
+          "required": true,
+          "description": "The student's relative preference expressed as a percent to auditory learning."
+        },
+        "tactileLearning": {
+          "type": "number",
+          "format": "double",
+          "required": true,
+          "description": "The student's relative preference expressed as a percent to kinesthetic or tactile learning."
+        }
+      }
+    },
+    "schoolYearTypeReference": {
+      "id": "schoolYearTypeReference",
+      "properties": {
+        "schoolYear": {
+          "type": "integer",
+          "format": "int32",
+          "required": true,
+          "description": "Key for School Year"
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related schoolYearType resource."
+        }
+      }
+    },
+    "webServiceError": {
+      "id": "webServiceError",
+      "properties": {
+        "message": {
+          "type": "string",
+          "required": false,
+          "description": "The \"user-friendly\" error message."
+        },
+        "exceptionMessage": {
+          "type": "string",
+          "required": false,
+          "description": "The system-generated exception message."
+        },
+        "exceptionType": {
+          "type": "string",
+          "required": false,
+          "description": "The type of the exception."
+        },
+        "stackTrace": {
+          "type": "string",
+          "required": false,
+          "description": "The server-side stack trace (only available in DEBUG builds)."
+        }
+      }
+    },
+    "link": {
+      "id": "link",
+      "properties": {
+        "rel": {
+          "type": "string",
+          "required": false,
+          "description": "Describes the nature of the relationship to the referenced resource."
+        },
+        "href": {
+          "type": "string",
+          "required": false,
+          "description": "The URL to the related resource."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,783 @@
+
+{
+  "apiVersion": "2.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019",
+  "resourcePath": "/disciplineActions",
+  "produces": [
+    "application/json"
+  ],
+  "apis": [
+    {
+      "path": "/disciplineActions",
+      "description": "This event entity represents actions taken by an education organization after a disruptive event that is recorded as a discipline incident.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getDisciplineActionsAll",
+          "type": "array",
+          "items": {
+            "$ref": "disciplineAction"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources based with paging capabilities (using the \"Get All\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get All\" pattern. In this version of the API there is support for paging.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The matching resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "disciplineAction"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getDisciplineActionsByExample",
+          "type": "array",
+          "items": {
+            "$ref": "disciplineAction"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            },
+            {
+              "paramType": "query",
+              "name": "identifier",
+              "description": "Identifier assigned by the education organization to the DisciplineAction.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "disciplineDate",
+              "description": "The date of the DisciplineAction.",
+              "type": "string",
+              "format": "date",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "studentUniqueId",
+              "description": "A unique alphanumeric code assigned to a student.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "responsibilitySchoolId",
+              "description": "The identifier assigned to a school by the State Education Agency (SEA).",
+              "type": "integer",
+              "format": "int32",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "assignmentSchoolId",
+              "description": "The identifier assigned to a school by the State Education Agency (SEA).",
+              "type": "integer",
+              "format": "int32",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "lengthDifferenceReasonType",
+              "description": "Indicates the reason for the difference, if any, between the official and actual lengths of a student's disciplinary assignment.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "length",
+              "description": "The length of time in school days for the DisciplineAction (e.g. removal, detention), if applicable.",
+              "type": "integer",
+              "format": "int32",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "actualDisciplineActionLength",
+              "description": "Indicates the actual length in school days of a student's disciplinary assignment.",
+              "type": "integer",
+              "format": "int32",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "relatedToZeroTolerancePolicy",
+              "description": "An indication of whether or not this disciplinary action taken against a student was imposed as a consequence of state or local zero tolerance policies.",
+              "type": "boolean",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "id",
+              "description": "",
+              "type": "string",
+              "format": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources matching values of an example resource (using the \"Get By Example\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Example\" search pattern.  The values of any properties of the resource that are specified will be used to return all matching results (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "disciplineAction"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getDisciplineActionByKey",
+          "type": "disciplineAction",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "identifier",
+              "description": "Identifier assigned by the education organization to the DisciplineAction.",
+              "type": "string",
+              "format": "",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "disciplineDate",
+              "description": "The date of the DisciplineAction.",
+              "type": "string",
+              "format": "date",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "studentUniqueId",
+              "description": "A unique alphanumeric code assigned to a student.",
+              "type": "string",
+              "format": "",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the values of the resource's natural key (using the \"Get By Key\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Key\" search pattern. The values of the natural key of the resource must be fully specified, and the service will return the matching result (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "disciplineAction"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "POST",
+          "nickname": "postDisciplineActions",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "body",
+              "name": "disciplineAction",
+              "description": "The JSON representation of the \"disciplineAction\" resource to be created or updated.",
+              "type": "disciplineAction",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Creates or updates resources based on the natural key values of the supplied resource.",
+          "notes": "The POST operation can be used to create or update resources. In database terms, this is often referred to as an \"upsert\" operation (insert + update).  Clients should NOT include the resource \"id\" in the JSON body because it will result in an error (you must use a PUT operation to update a resource by \"id\"). The web service will identify whether the resource already exists based on the natural key values provided, and update or create the resource appropriately.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/disciplineActions/{id}",
+      "description": "This event entity represents actions taken by an education organization after a disruptive event that is recorded as a discipline incident.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getDisciplineActionsById",
+          "type": "disciplineAction",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be retrieved.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the resource's identifier (using the \"Get By Id\" pattern).",
+          "notes": "This GET operation retrieves a resource by the specified resource identifier.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "disciplineAction"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "PUT",
+          "nickname": "putDisciplineAction",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be updated.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the PUT from updating a resource modified by another consumer.",
+              "type": "string",
+              "required": false
+            },
+            {
+              "paramType": "body",
+              "name": "disciplineAction",
+              "description": "The JSON representation of the \"disciplineAction\" resource to be updated.",
+              "type": "disciplineAction",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Updates or creates a resource based on the resource identifier.",
+          "notes": "The PUT operation is used to update or create a resource by identifier.  If the resource doesn't exist, the resource will be created using that identifier.  Additionally, natural key values cannot be changed using this operation, and will not be modified in the database.  If the resource \"id\" is provided in the JSON body, it will be ignored as well.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "DELETE",
+          "nickname": "deleteDisciplineActionById",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be deleted.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the DELETE from removing a resource modified by another consumer.",
+              "type": "string",
+              "required": false,
+              "allowMultiple": false
+            }
+          ],
+          "summary": "Deletes an existing resource using the resource identifier.",
+          "notes": "The DELETE operation is used to delete an existing resource by identifier.  If the resource doesn't exist, an error will result (the resource will not be found).",
+          "responseMessages": [
+            {
+              "code": 202,
+              "message": "The request has accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was successfully deleted."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {
+    "disciplineAction": {
+      "id": "disciplineAction",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "description": "The unique identifier of the resource."
+        },
+        "responsibilitySchoolReference": {
+          "type": "schoolReference",
+          "required": true,
+          "description": "A reference to the related School resource."
+        },
+        "assignmentSchoolReference": {
+          "type": "schoolReference",
+          "required": false,
+          "description": "A reference to the related School resource."
+        },
+        "studentReference": {
+          "type": "studentReference",
+          "required": true,
+          "description": "A reference to the related Student resource."
+        },
+        "actualDisciplineActionLength": {
+          "type": "integer",
+          "format": "int32",
+          "required": false,
+          "description": "Indicates the actual length in school days of a student's disciplinary assignment."
+        },
+        "identifier": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "Identifier assigned by the education organization to the DisciplineAction."
+        },
+        "length": {
+          "type": "integer",
+          "format": "int32",
+          "required": false,
+          "description": "The length of time in school days for the DisciplineAction (e.g. removal, detention), if applicable."
+        },
+        "lengthDifferenceReasonType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Indicates the reason for the difference, if any, between the official and actual lengths of a student's disciplinary assignment."
+        },
+        "disciplineDate": {
+          "type": "string",
+          "format": "date",
+          "required": true,
+          "description": "The date of the DisciplineAction."
+        },
+        "relatedToZeroTolerancePolicy": {
+          "type": "boolean",
+          "format": "",
+          "required": false,
+          "description": "An indication of whether or not this disciplinary action taken against a student was imposed as a consequence of state or local zero tolerance policies."
+        },
+        "disciplines": {
+          "type": "array",
+          "required": true,
+          "description": "An unordered collection of disciplineActionDisciplines.  Type of action, such as removal from the classroom, used to discipline the student involved as a perpetrator in a discipline incident.",
+          "items": {
+            "$ref": "disciplineActionDiscipline"
+          }
+        },
+        "disciplineIncidents": {
+          "type": "array",
+          "required": true,
+          "description": "An unordered collection of disciplineActionDisciplineIncidents.  Reference to the DisciplineIncident associated with the DisciplineAction.",
+          "items": {
+            "$ref": "disciplineActionDisciplineIncident"
+          }
+        },
+        "staffs": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of disciplineActionStaffs.  The staff responsible for enforcing the DisciplineAction.",
+          "items": {
+            "$ref": "disciplineActionStaff"
+          }
+        },
+        "_etag": {
+          "type": "string",
+          "required": false,
+          "description": "A unique system-generated value that identifies the version of the resource."
+        }
+      }
+    },
+    "schoolReference": {
+      "id": "schoolReference",
+      "properties": {
+        "schoolId": {
+          "type": "integer",
+          "format": "int32",
+          "required": true,
+          "description": "The identifier assigned to a school by the State Education Agency (SEA)."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related school resource."
+        }
+      }
+    },
+    "studentReference": {
+      "id": "studentReference",
+      "properties": {
+        "studentUniqueId": {
+          "type": "string",
+          "format": "int32",
+          "required": true,
+          "description": "A unique alphanumeric code assigned to a student."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related student resource."
+        }
+      }
+    },
+    "disciplineActionDiscipline": {
+      "id": "disciplineActionDiscipline",
+      "properties": {
+        "disciplineDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "Type of action, such as removal from the classroom, used to discipline the student involved as a perpetrator in a discipline incident."
+        }
+      }
+    },
+    "disciplineActionDisciplineIncident": {
+      "id": "disciplineActionDisciplineIncident",
+      "properties": {
+        "disciplineIncidentReference": {
+          "type": "disciplineIncidentReference",
+          "required": true,
+          "description": "A reference to the related DisciplineIncident resource."
+        }
+      }
+    },
+    "disciplineActionStaff": {
+      "id": "disciplineActionStaff",
+      "properties": {
+        "staffReference": {
+          "type": "staffReference",
+          "required": true,
+          "description": "A reference to the related Staff resource."
+        }
+      }
+    },
+    "disciplineIncidentReference": {
+      "id": "disciplineIncidentReference",
+      "properties": {
+        "incidentIdentifier": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A locally assigned unique identifier (within the school or school district) to identify each specific DisciplineIncident or occurrence. The same identifier should be used to document the entire DisciplineIncident even if it included multiple offenses and multiple offenders."
+        },
+        "schoolId": {
+          "type": "integer",
+          "format": "int32",
+          "required": true,
+          "description": "The identifier assigned to a school by the State Education Agency (SEA)."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related disciplineIncident resource."
+        }
+      }
+    },
+    "staffReference": {
+      "id": "staffReference",
+      "properties": {
+        "staffUniqueId": {
+          "type": "string",
+          "format": "int32",
+          "required": true,
+          "description": "A unique alphanumeric code assigned to a staff."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related staff resource."
+        }
+      }
+    },
+    "webServiceError": {
+      "id": "webServiceError",
+      "properties": {
+        "message": {
+          "type": "string",
+          "required": false,
+          "description": "The \"user-friendly\" error message."
+        },
+        "exceptionMessage": {
+          "type": "string",
+          "required": false,
+          "description": "The system-generated exception message."
+        },
+        "exceptionType": {
+          "type": "string",
+          "required": false,
+          "description": "The type of the exception."
+        },
+        "stackTrace": {
+          "type": "string",
+          "required": false,
+          "description": "The server-side stack trace (only available in DEBUG builds)."
+        }
+      }
+    },
+    "link": {
+      "id": "link",
+      "properties": {
+        "rel": {
+          "type": "string",
+          "required": false,
+          "description": "Describes the nature of the relationship to the referenced resource."
+        },
+        "href": {
+          "type": "string",
+          "required": false,
+          "description": "The URL to the related resource."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "title": "Automation - Student Assessment",
+  "description": "Automated Test Data for Student Assessments",
+  "apiVersion": "5.3",
+  "template": {
+    "maps": [
+      {
+        "name": "Automated - SA Map for 5.3",
+        "resourcePath": "/ed-fi/studentAssessments",
+        "attribute": null,
+        "columnHeaders": [
+          "adminyear",
+          "DistrictNumber",
+          "DistrictName",
+          "SchoolNumber",
+          "SchoolName",
+          "sasid",
+          "listeningss_adj",
+          "speakingss_adj",
+          "readingss_adj",
+          "writingss_adj",
+          "comprehensionss_adj",
+          "oralss_adj",
+          "literacyss_adj",
+          "Overallss_adj"
+        ],
+        "customFileProcessor": null,
+        "map": {
+          "studentAssessmentIdentifier": {
+            "Column": "sasid"
+          },
+          "assessmentReference": {
+            "assessmentIdentifier": "DI-TEST-2021",
+            "namespace": "uri://ed-fi.org/Assessment/Assessment.xml"
+          },
+          "schoolYearTypeReference": {
+            "schoolYear": 2021
+          },
+          "studentReference": {
+            "studentUniqueId": {
+              "Column": "sasid"
+            }
+          },
+          "administrationDate": "01-01-2021",
+          "scoreResults": [
+            {
+              "assessmentReportingMethodDescriptor": "uri://ed-fi.org/AssessmentReportingMethodDescriptor#Scale score",
+              "resultDatatypeTypeDescriptor": "uri://ed-fi.org/ResultDatatypeTypeDescriptor#Integer",
+              "result": {
+                "Column": "Overallss_adj"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "bootstraps": [
+      {
+        "name": "Automated - SA Bootstrap for 5.3",
+        "resourcePath": "/ed-fi/assessments",
+        "data": {
+          "educationOrganizationReference": {
+            "educationOrganizationId": 255901
+          },
+          "assessmentIdentifier": "DI-TEST-2021",
+          "assessmentTitle": "Data Import 2021 Test Assessment",
+          "namespace": "uri://ed-fi.org/Assessment/Assessment.xml",
+          "assessedGradeLevels": [
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#First grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Second grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Third grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Fourth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Fifth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Sixth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Seventh grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Eighth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Ninth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Tenth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Eleventh grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Twelfth grade"
+            },
+            {
+              "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Ungraded"
+            }
+          ],
+          "academicSubjects": [
+            {
+              "academicSubjectDescriptor": "uri://ed-fi.org/AcademicSubjectDescriptor#Reading"
+            }
+          ]
+        }
+      }
+    ],
+    "lookups": [],
+    "supplementalInformation": null,
+    "preprocessors": []
+  }
+}

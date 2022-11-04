@@ -1,0 +1,42 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Features.School
+@model SchoolDetails.Detail
+
+@{
+    ViewBag.Title = "School Details";
+}
+
+<h2>@Model.Name</h2>
+
+<ul class="nav nav-tabs">
+    <li id="liStudent" class="active"><a data-toggle="tab" href="#divStudent">Student</a></li>
+    <li id="liStaff"><a data-toggle="tab" href="#divStaff">Staff</a></li>
+    <li id="liSection"><a data-toggle="tab" href="#divSection">Section</a></li>
+</ul>
+<div class="tab-content">
+    <div id="divStudent" class="tab-pane fade in active ajax-content">
+        @await Html.PartialAsync("_StudentDetails")
+    </div>
+    <div id="divStaff" class="tab-pane fade ajax-content">
+        @await Html.PartialAsync("_StaffDetails")
+    </div>
+    <div id="divSection" class="tab-pane fade ajax-content">
+        @await Html.PartialAsync("_SectionDetails")
+    </div>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        $(function ($) {
+            $('#tblStudents').footable();
+            $('#tblStaves').footable();
+            $('#tblSections').footable();
+        });
+    </script>
+}

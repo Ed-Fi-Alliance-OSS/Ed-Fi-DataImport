@@ -1,0 +1,956 @@
+
+{
+  "apiVersion": "2.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019",
+  "resourcePath": "/courses",
+  "produces": [
+    "application/json"
+  ],
+  "apis": [
+    {
+      "path": "/courses",
+      "description": "This educational entity represents the organization of subject matter and related learning experiences provided for the instruction of students on a regular or systematic basis.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getCoursesAll",
+          "type": "array",
+          "items": {
+            "$ref": "course"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources based with paging capabilities (using the \"Get All\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get All\" pattern. In this version of the API there is support for paging.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The matching resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "course"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getCoursesByExample",
+          "type": "array",
+          "items": {
+            "$ref": "course"
+          },
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "offset",
+              "description": "Indicates how many items should be skipped before returning results.",
+              "type": "integer",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "limit",
+              "description": "Indicates the maximum number of items that should be returned in the results (defaults to 25).",
+              "type": "integer",
+              "required": false,
+              "minimum": 1,
+              "maximum": 250
+            },
+            {
+              "paramType": "query",
+              "name": "code",
+              "description": "A unique alphanumeric code assigned to a course.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "educationOrganizationId",
+              "description": "The identifier assigned to an education agency by the State Education Agency (SEA).  Also known as the State LEA ID.",
+              "type": "integer",
+              "format": "int32",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "academicSubjectDescriptor",
+              "description": "The intended major subject area of the course.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "careerPathwayType",
+              "description": "Indicates the career cluster or pathway the course is associated with as part of a CTE curriculum.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "definedByType",
+              "description": "Specifies whether the course was defined by the SEA, LEA, School, or national organization.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "gpaApplicabilityType",
+              "description": "An indicator of whether or not the course being described is included in the computation of the student's Grade Point Average, and if so, if it is weighted differently from regular courses.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "minimumAvailableCreditType",
+              "description": "The type of credits or units of value awarded for the completion of a course.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "maximumAvailableCreditType",
+              "description": "The type of credits or units of value awarded for the completion of a course.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "title",
+              "description": "The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts).",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "numberOfParts",
+              "description": "The number of parts identified for a course.",
+              "type": "integer",
+              "format": "int32",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "description",
+              "description": "A description of the content standards and goals covered in the course. Reference may be made to state or national content standards.",
+              "type": "string",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "timeRequiredForCompletion",
+              "description": "The actual or estimated number of clock minutes required for class completion.  This number is especially important for career and technical education classes and may represent (in minutes) the clock hour requirement of the class.",
+              "type": "integer",
+              "format": "int32",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "dateCourseAdopted",
+              "description": "Date the course was adopted by the education agency.",
+              "type": "string",
+              "format": "date",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "highSchoolCourseRequirement",
+              "description": "An indication that this course may satisfy high school graduation requirements in the course's subject area.",
+              "type": "boolean",
+              "format": "",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "minimumAvailableCredits",
+              "description": "The value of credits or units of value awarded for the completion of a course.",
+              "type": "number",
+              "format": "double",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "minimumAvailableCreditConversion",
+              "description": "Conversion factor that when multiplied by the number of credits is equivalent to Carnegie units.",
+              "type": "number",
+              "format": "double",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "maximumAvailableCredits",
+              "description": "The value of credits or units of value awarded for the completion of a course.",
+              "type": "number",
+              "format": "double",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "maximumAvailableCreditConversion",
+              "description": "Conversion factor that when multiplied by the number of credits is equivalent to Carnegie units.",
+              "type": "number",
+              "format": "double",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "id",
+              "description": "",
+              "type": "string",
+              "format": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves resources matching values of an example resource (using the \"Get By Example\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Example\" search pattern.  The values of any properties of the resource that are specified will be used to return all matching results (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource(s) were successfully retrieved.  If no instances are found will return an empty collection.",
+              "responseModel": "array",
+              "items": {
+                "$ref": "course"
+              }
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors.  This will typically be an issue with the query parameters or their values."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "GET",
+          "nickname": "getCourseByKey",
+          "type": "course",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "code",
+              "description": "A unique alphanumeric code assigned to a course.",
+              "type": "string",
+              "format": "",
+              "required": true
+            },
+            {
+              "paramType": "query",
+              "name": "educationOrganizationId",
+              "description": "The identifier assigned to an education agency by the State Education Agency (SEA).  Also known as the State LEA ID.",
+              "type": "integer",
+              "format": "int32",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the values of the resource's natural key (using the \"Get By Key\" pattern).",
+          "notes": "This GET operation provides access to resources using the \"Get by Key\" search pattern. The values of the natural key of the resource must be fully specified, and the service will return the matching result (if it exists).",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "course"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "POST",
+          "nickname": "postCourses",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "body",
+              "name": "course",
+              "description": "The JSON representation of the \"course\" resource to be created or updated.",
+              "type": "course",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Creates or updates resources based on the natural key values of the supplied resource.",
+          "notes": "The POST operation can be used to create or update resources. In database terms, this is often referred to as an \"upsert\" operation (insert + update).  Clients should NOT include the resource \"id\" in the JSON body because it will result in an error (you must use a PUT operation to update a resource by \"id\"). The web service will identify whether the resource already exists based on the natural key values provided, and update or create the resource appropriately.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/courses/{id}",
+      "description": "This educational entity represents the organization of subject matter and related learning experiences provided for the instruction of students on a regular or systematic basis.",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getCoursesById",
+          "type": "course",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be retrieved.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-None-Match",
+              "description": "The previously returned ETag header value, used here to prevent the unnecessary data transfer of an unchanged resource.",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Retrieves a specific resource using the resource's identifier (using the \"Get By Id\" pattern).",
+          "notes": "This GET operation retrieves a resource by the specified resource identifier.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "The resource was successfully retrieved.",
+              "responseModel": "course"
+            },
+            {
+              "code": 304,
+              "message": "The resource's current server-side ETag value matched the If-None-Match header value supplied with the request indicating the resource has not been modified."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "PUT",
+          "nickname": "putCourse",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be updated.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the PUT from updating a resource modified by another consumer.",
+              "type": "string",
+              "required": false
+            },
+            {
+              "paramType": "body",
+              "name": "course",
+              "description": "The JSON representation of the \"course\" resource to be updated.",
+              "type": "course",
+              "required": true
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "summary": "Updates or creates a resource based on the resource identifier.",
+          "notes": "The PUT operation is used to update or create a resource by identifier.  If the resource doesn't exist, the resource will be created using that identifier.  Additionally, natural key values cannot be changed using this operation, and will not be modified in the database.  If the resource \"id\" is provided in the JSON body, it will be ignored as well.",
+          "responseMessages": [
+            {
+              "code": 201,
+              "message": "The resource was created.  An ETag value is available in the ETag header, and the location of the resource is available in the Location header of the response."
+            },
+            {
+              "code": 202,
+              "message": "The resource has been validated and accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was updated.  An updated ETag value is available in the ETag header of the response."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        },
+        {
+          "method": "DELETE",
+          "nickname": "deleteCourseById",
+          "type": "void",
+          "parameters": [
+            {
+              "paramType": "path",
+              "name": "id",
+              "description": "A resource identifier specifying the resource to be deleted.",
+              "type": "string",
+              "required": true
+            },
+            {
+              "paramType": "header",
+              "name": "If-Match",
+              "description": "The ETag header value used to prevent the DELETE from removing a resource modified by another consumer.",
+              "type": "string",
+              "required": false,
+              "allowMultiple": false
+            }
+          ],
+          "summary": "Deletes an existing resource using the resource identifier.",
+          "notes": "The DELETE operation is used to delete an existing resource by identifier.  If the resource doesn't exist, an error will result (the resource will not be found).",
+          "responseMessages": [
+            {
+              "code": 202,
+              "message": "The request has accepted by the service, but processing has not yet completed due to current system load. Processing may still fail due to violation of referential integrity requirements."
+            },
+            {
+              "code": 204,
+              "message": "The resource was successfully deleted."
+            },
+            {
+              "code": 400,
+              "message": "Bad Request.  The request was invalid and cannot be completed.  See the response body for specific validation errors."
+            },
+            {
+              "code": 401,
+              "message": "Unauthorized.  The request requires authentication.  The OAuth bearer token was either not provided or is invalid.  The operation may succeed once authenication has been successfully completed."
+            },
+            {
+              "code": 403,
+              "message": "Forbidden.  The request cannot be completed in the current authorization context.  Contact your administrator if you believe this operation should be allowed."
+            },
+            {
+              "code": 404,
+              "message": "The resource could not be found."
+            },
+            {
+              "code": 409,
+              "message": "Conflict.  The request cannot be completed because it would result in an invalid state.  See the response body for details."
+            },
+            {
+              "code": 412,
+              "message": "The resource's current server-side ETag value does not match the supplied If-Match header value in the request.  This indicates the resource has been modified by another consumer."
+            },
+            {
+              "code": 500,
+              "message": "An unhandled error occurred on the server. See the response body for details.",
+              "responseModel": "webServiceError"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "models": {
+    "course": {
+      "id": "course",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "description": "The unique identifier of the resource."
+        },
+        "educationOrganizationReference": {
+          "type": "educationOrganizationReference",
+          "required": true,
+          "description": "A reference to the related EducationOrganization resource."
+        },
+        "academicSubjectDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The intended major subject area of the course."
+        },
+        "careerPathwayType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Indicates the career cluster or pathway the course is associated with as part of a CTE curriculum."
+        },
+        "code": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique alphanumeric code assigned to a course."
+        },
+        "definedByType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "Specifies whether the course was defined by the SEA, LEA, School, or national organization."
+        },
+        "description": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "A description of the content standards and goals covered in the course. Reference may be made to state or national content standards."
+        },
+        "gpaApplicabilityType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "An indicator of whether or not the course being described is included in the computation of the student's Grade Point Average, and if so, if it is weighted differently from regular courses."
+        },
+        "title": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts)."
+        },
+        "dateCourseAdopted": {
+          "type": "string",
+          "format": "date",
+          "required": false,
+          "description": "Date the course was adopted by the education agency."
+        },
+        "highSchoolCourseRequirement": {
+          "type": "boolean",
+          "format": "",
+          "required": false,
+          "description": "An indication that this course may satisfy high school graduation requirements in the course's subject area."
+        },
+        "maximumAvailableCreditConversion": {
+          "type": "number",
+          "format": "double",
+          "required": false,
+          "description": "Conversion factor that when multiplied by the number of credits is equivalent to Carnegie units."
+        },
+        "maximumAvailableCredits": {
+          "type": "number",
+          "format": "double",
+          "required": false,
+          "description": "The value of credits or units of value awarded for the completion of a course."
+        },
+        "maximumAvailableCreditType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The type of credits or units of value awarded for the completion of a course."
+        },
+        "minimumAvailableCreditConversion": {
+          "type": "number",
+          "format": "double",
+          "required": false,
+          "description": "Conversion factor that when multiplied by the number of credits is equivalent to Carnegie units."
+        },
+        "minimumAvailableCredits": {
+          "type": "number",
+          "format": "double",
+          "required": false,
+          "description": "The value of credits or units of value awarded for the completion of a course."
+        },
+        "minimumAvailableCreditType": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The type of credits or units of value awarded for the completion of a course."
+        },
+        "numberOfParts": {
+          "type": "integer",
+          "format": "int32",
+          "required": true,
+          "description": "The number of parts identified for a course."
+        },
+        "timeRequiredForCompletion": {
+          "type": "integer",
+          "format": "int32",
+          "required": false,
+          "description": "The actual or estimated number of clock minutes required for class completion.  This number is especially important for career and technical education classes and may represent (in minutes) the clock hour requirement of the class."
+        },
+        "competencyLevels": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of courseCompetencyLevels.  The competency levels defined to rate the student for the course.",
+          "items": {
+            "$ref": "courseCompetencyLevel"
+          }
+        },
+        "identificationCodes": {
+          "type": "array",
+          "required": true,
+          "description": "An unordered collection of courseIdentificationCodes.  The code that identifies the organization of subject matter and related learning experiences provided for the instruction of students.",
+          "items": {
+            "$ref": "courseIdentificationCode"
+          }
+        },
+        "learningObjectives": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of courseLearningObjectives.  Learning Objectives to be mastered in the course.",
+          "items": {
+            "$ref": "courseLearningObjective"
+          }
+        },
+        "learningStandards": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of courseLearningStandards.  Learning Standard(s) to be taught by the course.",
+          "items": {
+            "$ref": "courseLearningStandard"
+          }
+        },
+        "levelCharacteristics": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of courseLevelCharacteristics.  The type of specific program or designation with which the course is associated (e.g., AP, IB, Dual Credit, CTE).",
+          "items": {
+            "$ref": "courseLevelCharacteristic"
+          }
+        },
+        "offeredGradeLevels": {
+          "type": "array",
+          "required": false,
+          "description": "An unordered collection of courseOfferedGradeLevels.  The grade levels in which the course is offered.",
+          "items": {
+            "$ref": "courseOfferedGradeLevel"
+          }
+        },
+        "_etag": {
+          "type": "string",
+          "required": false,
+          "description": "A unique system-generated value that identifies the version of the resource."
+        }
+      }
+    },
+    "educationOrganizationReference": {
+      "id": "educationOrganizationReference",
+      "properties": {
+        "educationOrganizationId": {
+          "type": "integer",
+          "format": "int32",
+          "required": true,
+          "description": "The identifier assigned to an education agency by the State Education Agency (SEA).  Also known as the State LEA ID."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related educationOrganization resource."
+        }
+      }
+    },
+    "courseCompetencyLevel": {
+      "id": "courseCompetencyLevel",
+      "properties": {
+        "competencyLevelDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The competency levels defined to rate the student for the course."
+        }
+      }
+    },
+    "courseIdentificationCode": {
+      "id": "courseIdentificationCode",
+      "properties": {
+        "courseIdentificationSystemDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A system that is used to identify the organization of subject matter and related learning experiences provided for the instruction of students."
+        },
+        "identificationCode": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "A unique number or alphanumeric code assigned to a course by a school, school system, state, or other agency or entity. For multi-part course codes, concatenate the parts separated by a \"/\". For example, consider the following SCED code-    subject = 20 Math    course = 272 Geometry    level = G General    credits = 1.00   course sequence 1 of 1- would be entered as 20/272/G/1.00/1 of 1."
+        },
+        "assigningOrganizationIdentificationCode": {
+          "type": "string",
+          "format": "",
+          "required": false,
+          "description": "The organization code or name assigning the staff Identification Code."
+        }
+      }
+    },
+    "courseLearningObjective": {
+      "id": "courseLearningObjective",
+      "properties": {
+        "learningObjectiveReference": {
+          "type": "learningObjectiveReference",
+          "required": true,
+          "description": "A reference to the related LearningObjective resource."
+        }
+      }
+    },
+    "courseLearningStandard": {
+      "id": "courseLearningStandard",
+      "properties": {
+        "learningStandardReference": {
+          "type": "learningStandardReference",
+          "required": true,
+          "description": "A reference to the related LearningStandard resource."
+        }
+      }
+    },
+    "courseLevelCharacteristic": {
+      "id": "courseLevelCharacteristic",
+      "properties": {
+        "type": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The type of specific program or designation with which the course is associated (e.g., AP, IB, Dual Credit, CTE)."
+        }
+      }
+    },
+    "courseOfferedGradeLevel": {
+      "id": "courseOfferedGradeLevel",
+      "properties": {
+        "gradeLevelDescriptor": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The grade levels in which the course is offered."
+        }
+      }
+    },
+    "learningObjectiveReference": {
+      "id": "learningObjectiveReference",
+      "properties": {
+        "learningObjectiveId": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The identifier for the specific learning objective in the context of a standard (e.g., 111.15.3.1.A)."
+        },
+        "namespace": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "Namespace for the LearningObjective."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related learningObjective resource."
+        }
+      }
+    },
+    "learningStandardReference": {
+      "id": "learningStandardReference",
+      "properties": {
+        "learningStandardId": {
+          "type": "string",
+          "format": "",
+          "required": true,
+          "description": "The identifier for the specific learning standard (e.g., 111.15.3.1.A)."
+        },
+        "link": {
+          "type": "link",
+          "required": false,
+          "description": "Represents a hyperlink to the related learningStandard resource."
+        }
+      }
+    },
+    "webServiceError": {
+      "id": "webServiceError",
+      "properties": {
+        "message": {
+          "type": "string",
+          "required": false,
+          "description": "The \"user-friendly\" error message."
+        },
+        "exceptionMessage": {
+          "type": "string",
+          "required": false,
+          "description": "The system-generated exception message."
+        },
+        "exceptionType": {
+          "type": "string",
+          "required": false,
+          "description": "The type of the exception."
+        },
+        "stackTrace": {
+          "type": "string",
+          "required": false,
+          "description": "The server-side stack trace (only available in DEBUG builds)."
+        }
+      }
+    },
+    "link": {
+      "id": "link",
+      "properties": {
+        "rel": {
+          "type": "string",
+          "required": false,
+          "description": "Describes the nature of the relationship to the referenced resource."
+        },
+        "href": {
+          "type": "string",
+          "required": false,
+          "description": "The URL to the related resource."
+        }
+      }
+    }
+  }
+}

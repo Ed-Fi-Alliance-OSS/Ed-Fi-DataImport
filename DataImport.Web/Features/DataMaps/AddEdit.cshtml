@@ -1,0 +1,667 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+
+@using DataImport.Web
+@using DataImport.Web.Features.DataMaps
+@using DataImport.Web.Infrastructure
+@using Microsoft.AspNetCore.Routing
+@using Newtonsoft.Json
+@using System.Data
+@model DataImport.Web.Features.DataMaps.AddEditDataMapViewModel
+
+@{ ViewBag.Title = "Data Mapper";
+
+    var isNew = Model.DataMapId == 0;
+    var apiServers = isNew ? Model.ApiServers : Model.ApiServers.Where(x => x.Group == null || x.Group.Name == Model.ApiVersion).ToList();
+    var apiVersions = apiServers.Select(x => x.Group?.Name).Distinct().OrderBy(x => x).ToList(); }
+
+<h2>@ViewBag.Title</h2>
+
+<style type="text/css">
+    .field-block input[type],
+    .field-block textarea,
+    .field-block select {
+        display: inline-block;
+        margin-bottom: 5px;
+        width: auto;
+    }
+
+    .field-block button {
+        display: inline-block;
+        margin-bottom: 3px;
+        width: auto;
+    }
+
+    .property-border {
+        border: #2fa4e7 thin solid;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+
+    #tblCsvDataPreview th, #tblCsvDataPreview td {
+        white-space: nowrap;
+        padding: 5px 5px;
+    }
+
+    #csvPreview {
+        max-width: 100%;
+        overflow: auto;
+    }
+
+    .required:after {
+        content: "*";
+        color: red;
+    }
+</style>
+
+<div id="validationSummary" class="alert alert-danger hidden"></div>
+
+@if (Model.MetadataIsIncompatible)
+{
+    @(Html.DataMapIncompatibleWithMetadataWarning(Model.ResourcePath))
+    @Html.HiddenFor(m => m.MetadataIsIncompatible)
+}
+
+<div id="column-stability-error" class="alert alert-danger hidden">
+    <p>
+        This data map contains references to CSV column header names that are not present in the currently uploaded CSV file.
+        In this state, you will not be able to use this data map to import data to the target ODS.
+    </p>
+    <p>
+        You will need to revise the following CSV header(s) referenced in this data map: <span id="unreferenced-headers"></span>
+    </p>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.CsvError))
+{
+    <div class="alert alert-danger">
+        <p class="warning">
+            An error has occurred while parsing the file: @Model.CsvError
+        </p>
+        <p class="warning">
+            Please verify that the file is a valid CSV file or
+            check the output of the processor if one is selected.
+        </p>
+    </div>
+}
+
+@using (Html.Form("UploadFile"))
+{
+    @Html.Input(m => m.MapName) 
+    if (ControllerAction(Context.Request.RouteValues) == "Add")
+    {
+        @Html.DropDown(m => m.ApiVersionId, Model.ApiVersions)
+        @Html.DropDown(m => m.ResourcePath, new List<SelectListItem>())
+        @Html.Hidden("initialResourcePath", Model.ResourcePath) 
+    }
+    else
+    {
+        @Html.HiddenFor(m => m.ApiVersionId)
+        @Html.Display(m => m.ApiVersion)
+        @Html.Display(m => m.ResourceName)
+        @Html.HiddenFor(m => m.ResourcePath) 
+    }
+
+    <div class="form-group">
+        <div class="col-xs-2">
+            @Html.LabelFor(x => x.PreprocessorId, new { @class = "control-label" })
+        </div>
+        <div class="col-xs-10">
+            <select name="@Html.NameFor(x=>x.PreprocessorId)"
+                    id="@Html.IdFor(x=>x.PreprocessorId)"
+                    class="form-control">
+                @foreach (var preprocessor in Model.Preprocessors)
+                {
+                    <option value="@preprocessor.Value" @(Model.PreprocessorId.HasValue && Model.PreprocessorId.Value.ToString() == preprocessor.Value ? "selected" : "")
+                            data-requiresApiConnection="@preprocessor.RequiresApiConnection.ToString().ToLowerInvariant()"
+                            data-requiresAttribute="@preprocessor.RequiresAttribute.ToString().ToLowerInvariant()">
+                        @preprocessor.Text
+                    </option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <fieldset>
+        <div id="attributeContainer" style="display:none;">
+            @Html.Input(x => x.Attribute, new { placeholder = "Preprocessor Attribute" }, Html.HelpSpan("This should be provided if the selected preprocessor is configured to require an attribute."))
+        </div>
+        <div class="form-group" id="apiServersContainer" style="display: none">
+            <div class="col-xs-2">
+                @Html.LabelFor(x => x.ApiServerId, new { @class = "control-label" })
+            </div>
+            <div class="col-xs-10">
+                <select name="ApiServerId"
+                        id="ApiServerId"
+                        class="form-control">
+                    @foreach (var apiVersion in apiVersions)
+                    {
+                        if (apiVersion != null)
+                        {
+                            <optgroup label="@apiVersion">
+                                @foreach (var b in apiServers.Where(x => x.Group?.Name == apiVersion))
+                                {
+                                    <option value="@b.Value" @(Model.ApiServerId.HasValue && Model.ApiServerId.Value.ToString() == b.Value ? "selected" : "")
+                                            data-apiVersion="@apiVersion">
+                                        @b.Text
+                                    </option>
+                                }
+                            </optgroup>
+                        }
+                        else
+                        {
+                            foreach (var b in apiServers.Where(x => x.Group == null))
+                            {
+                                <option value="@b.Value" @(Model.ApiServerId.HasValue && Model.ApiServerId.Value.ToString() == b.Value ? "selected" : "")
+                                        data-apiVersion="">
+                                    @b.Text
+                                </option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2">
+                @Html.Label("uploadSampleFile", "Sample Input File", new { @class = "control-label", @for = "uploadSampleFile" })
+            </div>
+            <div class="col-sm-8">
+                @Html.TextBox("uploadSampleFile", null, new { @class = "form-control", type = "file", required = "required", accept = ".csv" })
+                @Html.HiddenFor(x => x.DataMapId)
+            </div>
+            <div class="col-sm-2">
+                <button id="btnUpload" type="submit" class="btn btn-primary">Upload</button>
+            </div>
+        </div>
+    </fieldset>
+}
+
+@if (Model.PreprocessorLogMessages?.Count > 0)
+{
+    <div id="preprocessorLogs">
+        <h5>
+            <a href="#preprocessorLogsTable" data-toggle="collapse" class="collapsed"
+               aria-expanded="false" aria-controls="collapseExample">
+                Preprocessor Log Messages (@Model.PreprocessorLogMessages.Count)
+                <i class="fas fa-fw fa-chevron-right"></i>
+                <i class="fas fa-fw fa-chevron-down"></i>
+            </a>
+        </h5>
+        <div id="preprocessorLogsTable" class="collapse">
+            <table class="table table-striped table-hover table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                @foreach (var m in Model.PreprocessorLogMessages)
+                {
+                    <tr>
+                        <td>@m.Level</td>
+                        <td>@m.Message</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+}
+
+@if (Model.CsvPreviewDataTable != null)
+{
+<div id="csvPreview">
+    <table id="tblCsvDataPreview" class="table table-striped table-hover table-bordered table-responsive">
+        <thead>
+            <tr>
+                @foreach (DataColumn column in Model.CsvPreviewDataTable.Columns)
+                {
+<th>@column.ColumnName</th>
+}
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.CsvPreviewDataTable.Rows)
+            {
+<tr>
+    @for (var i = 0; i <= Model.CsvPreviewDataTable.Columns.Count - 1; i++)
+    {
+<td>
+    @row[i]
+</td>
+}
+</tr>
+           }
+        </tbody>
+    </table>
+</div>}
+
+@functions
+{ public static string ControllerAction(RouteValueDictionary routeValues)
+    {
+        if (routeValues.ContainsKey("action"))
+            return (string)routeValues["action"];
+
+        return "";
+    } }
+
+@if (!Model.ColumnHeaders.IsNullOrEmpty())
+{
+    using (Html.BeginForm(ControllerAction(Context.Request.RouteValues), "DataMaps", FormMethod.Post, new { @class = "form-horizontal", id = "frmDataMapper" }))
+    {
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div id="divCSVFields">
+                        @Html.Label("CSV Fields")
+                    </div>
+                    <div id="divModelFields" style="padding: 10px;">
+                        @await Html.PartialAsync("_PartialDataMapperFields", Model.FieldsViewModel)
+                    </div>
+                                                            @Html.Hidden("ColumnHeaders", JsonConvert.SerializeObject(Model.ColumnHeaders))
+                                                                                @Html.SubmitButton("Save Map", new { id = "btnSubmit" })}
+                                                                        }
+
+@section scripts{
+    <script type="text/javascript">
+        $(function($) {
+
+            var $apiVersionIdElem = $('#@Html.IdFor(m => m.ApiVersionId)');
+            var $resourcePathElem = $('#@Html.IdFor(m => m.ResourcePath)');
+
+            refreshResourcePathVisibility();
+            refreshAllControlVisibility();
+            ensureCsvHeaderStability();
+
+            function emptyToNull(s) {
+                return s === "" ? null : s;
+            }
+
+            function getMappingJson($container, depth) {
+                var dataMappers = [];
+
+                $container.find('.map-node[data-node-depth="' + depth + '"]')
+                    .filter(function() {
+                        //Filter out all descendants of .map-array-element-template
+                        return $(this).closest(".map-array-element-template").length === 0;
+                    })
+                    .each(function() {
+                        var $this = $(this);
+                        var name = $this.attr("data-node-name");
+                        var $mapPropertySelections = $this
+                            .find('.map-property-selections[data-node-depth="' + depth + '"]');
+
+                        var dataMapper = {
+                            Name: name,
+                            Source: emptyToNull($mapPropertySelections.find(".map-source-type").find(":selected").val()),
+                            SourceColumn: emptyToNull($mapPropertySelections.find(".map-source-column").find(":selected").val()),
+                            SourceTable: emptyToNull($mapPropertySelections.find(".map-source-table").find(":selected").val()),
+                            Value: emptyToNull($mapPropertySelections.find(".map-static-value").val()),
+                            Default: emptyToNull($mapPropertySelections.find(".map-default-value").val()),
+                            Children: getMappingJson($this, depth + 1)
+                        };
+
+                        dataMappers.push(dataMapper);
+                    });
+
+                return dataMappers;
+            }
+
+            function verifyFieldsAfterFileUpload() {
+                refreshAttributeVisibility();
+                var apiVersionId = $apiVersionIdElem.val();
+                if (apiVersionId) {
+                    IncludeAntiForgeryTokenInAjaxPosts(); // this is a workaround to missing anti forgery token in request.
+                    $apiVersionIdElem.change(); // trigger change event to populate the resources
+                }
+            }
+
+            function disableSubmitButton(disabled) {
+                var submitBtn = $(this).find('[type="submit"]');
+                submitBtn.prop('disabled', disabled);
+            }
+
+            function refreshResourcePathVisibility() {
+                var apiVersionId = $apiVersionIdElem.val();
+                var visible = apiVersionId !== '';
+                $resourcePathElem.closest('.form-group').toggle(visible);
+                $('#divCSVFields').toggle(visible);
+            }
+
+            $('#frmDataMapper').on('submit',
+                function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    disableSubmitButton(true);
+
+                    var $this = $(this);
+
+                    var mappingJson = getMappingJson($("#divModelFields"), 0);
+
+                    @if (ControllerAction(Context.Request.RouteValues) == "Add")
+                    {
+                        @: var resourcePath = emptyToNull($("#ResourcePath").find(":selected").val());
+                    }
+                    else
+                    {
+                        @: var resourcePath = emptyToNull($("#ResourcePath").val());
+                    }
+
+                    var dataObject = {
+                        apiVersionId: $apiVersionIdElem.val(),
+                        dataMapId: $('#@Html.IdFor(m => m.DataMapId)').val(),
+                        mapName: $('#@Html.IdFor(m => m.MapName)').val(),
+                        resourcePath: resourcePath,
+                        mappings: mappingJson,
+                        preprocessorId: $('#@Html.IdFor(m => m.PreprocessorId)').val(),
+                        attribute: $('#@Html.IdFor(m => m.Attribute)').val(),
+                        columnHeaders: JSON.parse($('#@Html.IdFor(m => m.ColumnHeaders)').val())
+                    };
+                    $.ajax({
+                        url: $this.attr('action'),
+                        type: 'post',
+                        data: dataObject,
+                        dataType: 'json',
+                        statusCode: {
+                            200: redirect
+                        },
+                        complete: function() {
+                            disableSubmitButton(false);
+                        }
+                    }).catch(handleAjaxErrors);
+
+                    return false;
+                });
+
+            $('#@Html.IdFor(m => m.PreprocessorId)').change(function() {
+                clearColumnsMetadata();
+                clearDataMapping();
+                invalidateAPIConnectionVisibility();
+                refreshAttributeVisibility();
+            });
+
+            $apiVersionIdElem.change(function() {
+                clearValidationSummary();
+
+                var apiVersionId = $(this).val();
+                var apiVersionName = $("#@Html.IdFor(m => m.ApiVersionId) option:selected").text();
+                invalidateApiConnectionsByApiVersion(apiVersionId ? apiVersionName : null);
+
+                if (!apiVersionId) {
+                    refreshResourcePathVisibility();
+                    return;
+                }
+                disableSubmitButton(true);
+                // In the Edit mode, there is no resource dropdown so no need to load it.
+                var isEditMode = $('#initialResourcePath').length === 0;
+                if (isEditMode){
+                    return;
+                }
+                var $resourcePathDropdown = $('#@Html.IdFor(m => m.ResourcePath)');
+                loadResourcesDropdown(apiVersionId,
+                    $resourcePathDropdown,
+                    function() {
+                        refreshResourcePathVisibility();
+                        disableSubmitButton(false);
+
+                        var initialValue = $('#initialResourcePath').val();
+                        if (initialValue) {
+                            $resourcePathDropdown.val(initialValue);
+                            $resourcePathDropdown.change();
+                            $('#initialResourcePath').val('');
+                        } else {
+                            // clear mappings if they are available
+                            clearDataMapping();
+                        }
+                    });
+            });
+
+            $("#ResourcePath").change(function() {
+                var resourcePath = $(this).val();
+                var columnHeadersJson = $('#ColumnHeaders').val();
+                if (!columnHeadersJson) {
+                    return; // File was not uploaded
+                }
+
+                var columnHeaders = JSON.parse(columnHeadersJson);
+                var formData = {
+                    apiVersionId: $apiVersionIdElem.val(),
+                    columnHeaders: columnHeaders,
+                    resourcePath: resourcePath
+                };
+
+                disableSubmitButton(true);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AddModelFields", "DataMaps")',
+                    data: $.param(formData),
+                    success: function(data) {
+                        $('#divModelFields').html(data);
+                        refreshAllControlVisibility();
+                    },
+                    error: function(data) {
+                        log(data);
+                        toastr.error("Unable to determine fields for resource '" + resourcePath + "'.");
+                    },
+                    complete: function() {
+                        disableSubmitButton(false);
+                    }
+                });
+            });
+
+            $("#btnUpload").click(function(e) {
+                if (!$("#uploadSampleFile").val()) {
+                    e.preventDefault();
+                    toastr.info("Please select a file to upload");
+                }
+
+                if (isApiConnectionRequired() && !$('#@Html.IdFor(m => m.ApiServerId)').val()) {
+                    e.preventDefault();
+                    toastr.info("Please select API Connection.");
+                }
+
+                if (isAttributeRequired() && !$('#@Html.IdFor(m => m.Attribute)').val()) {
+                    e.preventDefault();
+                    toastr.info("Please enter attribute value for the preprocessor.");
+                }
+            });
+
+            $(document).on("change",
+                ".map-source-column",
+                function() {
+                    ensureCsvHeaderStability();
+                });
+
+            $(document).on("change",
+                ".map-source-type",
+                function() {
+                    var $mapSourceType = $(this);
+                    refreshControlVisibility($mapSourceType);
+                });
+
+            $(document).on("click",
+                ".map-add-array-element",
+                function() {
+                    var $button = $(this);
+                    var $template = $button.next(".map-array-element-template");
+                    $button.before($template.clone(true).html());
+                });
+
+            $(document).on("click",
+                ".map-delete-array-element",
+                function() {
+                    $(this).closest(".map-node").remove();
+                });
+
+            function refreshControlVisibility($mapSourceType) {
+                var $sourceColumn = $mapSourceType.siblings(".map-source-column");
+                var $sourceTable = $mapSourceType.siblings(".map-source-table");
+                var $staticValue = $mapSourceType.siblings(".map-static-value");
+                var $defaultValue = $mapSourceType.siblings(".map-default-value");
+                var $descriptorLookupBtn = $mapSourceType.siblings(".descriptor-lookup-btn");
+
+                if ($mapSourceType.val() === "@Sources.LookupTable") {
+                    $sourceColumn.show();
+                    $sourceTable.show();
+                    hideAndClear($staticValue);
+                    $defaultValue.show();
+                    $descriptorLookupBtn.attr('disabled', false);
+                } else if ($mapSourceType.val() === "@Sources.Static") {
+                    hideAndClear($sourceColumn);
+                    hideAndClear($sourceTable);
+                    $staticValue.show();
+                    hideAndClear($defaultValue);
+                    $descriptorLookupBtn.attr('disabled', false);
+                } else if ($mapSourceType.val() === "@Sources.Column") {
+                    $sourceColumn.show();
+                    hideAndClear($sourceTable);
+                    hideAndClear($staticValue);
+                    $defaultValue.show();
+                    $descriptorLookupBtn.attr('disabled', false);
+                } else {
+                    hideAndClear($sourceColumn);
+                    hideAndClear($sourceTable);
+                    hideAndClear($staticValue);
+                    hideAndClear($defaultValue);
+                    $descriptorLookupBtn.attr('disabled', true);
+                }
+            }
+
+            function hideAndClear($input) {
+                $input.val("").change().hide();
+            }
+
+            function refreshAllControlVisibility() {
+                $(".map-source-type").each(function() {
+                    var $mapSourceType = $(this);
+                    refreshControlVisibility($mapSourceType);
+                });
+            }
+
+            function ensureCsvHeaderStability() {
+                if (!$('#ColumnHeaders').length) {
+                    return;
+                }
+
+                var csvColumns = JSON.parse($('#ColumnHeaders').val());
+                var selectedColumns = $('.map-source-column').map(function() {
+                    return $(this).val() === "" ? null : $(this).val();
+                }).get();
+                var unreferencedColumns = [];
+
+                selectedColumns.forEach(function(column) {
+                    if (jQuery.inArray(column, csvColumns) === -1) {
+                        unreferencedColumns.push(column);
+                    }
+                });
+
+                if (unreferencedColumns.length === 0) {
+                    $('#column-stability-error').addClass('hidden');
+                    $('#unreferenced-headers').empty();
+                } else {
+                    $('#unreferenced-headers').text(unreferencedColumns.join(", "));
+                    $('#column-stability-error').removeClass('hidden');
+                }
+            }
+
+            function clearColumnsMetadata() {
+                $('#ColumnHeaders').val('');
+                $('#csvPreview').html('');
+                $('#preprocessorLogs').html('');
+            }
+
+            function clearDataMapping() {
+                $('#divModelFields').html('');
+                refreshAllControlVisibility();
+                $('#btnSubmit').hide();
+            }
+
+            function invalidateApiConnectionsByApiVersion(apiVersion) {
+                var availableItems = $('#@Html.IdFor(m => m.ApiServerId)').find('option');
+                var selectedValue = $('#@Html.IdFor(m => m.ApiServerId)').val();
+                var isSelectedHidden = false;
+                if (availableItems) {
+                    availableItems.each(function(i, apiServer) {
+
+                        if (apiServer.value === '') {
+                            return;
+                        }
+
+                        var hide = apiVersion && $(apiServer).attr('data-apiVersion') !== apiVersion;
+                        if (hide) {
+                            $(apiServer).hide();
+
+                            if (selectedValue === apiServer.value) {
+                                isSelectedHidden = true;
+                            }
+
+                        } else {
+                            $(apiServer).show();
+                        }
+                    });
+                }
+
+                if (isSelectedHidden) {
+                    $('#@Html.IdFor(m => m.ApiServerId)').val('');
+                }
+
+                var groups = $('#@Html.IdFor(m => m.ApiServerId)').find('optgroup');
+                if (groups) {
+                    groups.each(function(i, optGroup) {
+                        var hide = true;
+                        // Note that $(optGroup).children(':visible') not working in Chrome
+                        $(optGroup).children().each(function(i, child) {
+                            if ($(child).css('display') !== 'none') {
+                                hide = false;
+                            }
+                        });
+                        if (hide) {
+                            $(optGroup).hide();
+                        } else {
+                            $(optGroup).show();
+                        }
+                    });
+                }
+            }
+
+            function invalidateAPIConnectionVisibility() {
+                if (isApiConnectionRequired()) {
+                    $('#apiServersContainer').show();
+                } else {
+                    $('#apiServersContainer').hide();
+                    $('#@Html.IdFor(x => x.ApiServerId)').val('');
+                }
+            }
+
+            function isApiConnectionRequired() {
+                return $("#@Html.IdFor(m => m.PreprocessorId) option:selected").data('requiresapiconnection');
+            }
+
+            function isAttributeRequired() {
+                return $("#@Html.IdFor(m => m.PreprocessorId) option:selected").data('requiresattribute');
+            }
+
+            function isPreprecessorSelected() {
+                return !!$("#@Html.IdFor(m => m.PreprocessorId)").val();
+            }
+
+            function refreshAttributeVisibility() {
+                if (isPreprecessorSelected()) {
+                    $('#attributeContainer').show();
+                } else {
+                    $('#attributeContainer').hide();
+                }
+            }
+
+            invalidateAPIConnectionVisibility();
+            verifyFieldsAfterFileUpload();
+        });
+    </script>
+}

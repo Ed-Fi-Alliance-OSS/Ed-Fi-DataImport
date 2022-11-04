@@ -1,0 +1,128 @@
+{
+    "title": "Student Assessments Demo - Fixed Width",
+    "description": "A bootstrap for assessments, with a data map for student assessments.",
+    "apiVersion": "5.2",
+    "template": {
+        "maps": [
+            {
+                "name": "Student Assessments Map (Fixed Width)",
+                "resourcePath": "/ed-fi/studentAssessments",
+                "columnHeaders": [
+                    "adminyear",
+                    "DistrictNumber",
+                    "DistrictName",
+                    "SchoolNumber",
+                    "SchoolName",
+                    "sasid",
+                    "listeningss_adj",
+                    "speakingss_adj",
+                    "readingss_adj",
+                    "writingss_adj",
+                    "comprehensionss_adj",
+                    "oralss_adj",
+                    "literacyss_adj",
+                    "Overallss_adj"
+                ],
+                "map": {
+                    "studentAssessmentIdentifier": {
+                        "Column": "sasid"
+                    },
+                    "assessmentReference": {
+                        "assessmentIdentifier": "DI-TEST-2018",
+                        "namespace": "uri://ed-fi.org/Assessment/Assessment.xml"
+                    },
+                    "schoolYearTypeReference": {
+                        "schoolYear": 2018
+                    },
+                    "studentReference": {
+                        "studentUniqueId": {
+                            "Column": "sasid"
+                        }
+                    },
+                    "administrationDate": "08-01-2018",
+                    "scoreResults": [
+                        {
+                            "assessmentReportingMethodDescriptor": "uri://ed-fi.org/AssessmentReportingMethodDescriptor#Scale score",
+                            "resultDatatypeTypeDescriptor": "uri://ed-fi.org/ResultDatatypeTypeDescriptor#Integer",
+                            "result": {
+                                "Column": "Overallss_adj"
+                            }
+                        }
+                    ]
+                },
+                "customFileProcessor": "Fixed-Width Student Assessments to CSV Conversion",
+                "attribute": null
+            }
+        ],
+        "bootstraps": [
+            {
+                "name": "Assessments Bootstrap (Fixed Width)",
+                "resourcePath": "/ed-fi/assessments",
+                "data": {
+                    "educationOrganizationReference": {
+                        "educationOrganizationId": 255901
+                    },
+                    "assessmentIdentifier": "DI-TEST-2018",
+                    "assessmentTitle": "Data Import 2018 Test Assessment",
+                    "namespace": "uri://ed-fi.org/Assessment/Assessment.xml",
+                    "assessedGradeLevels": [
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#First grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Second grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Third grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Fourth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Fifth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Sixth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Seventh grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Eighth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Ninth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Tenth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Eleventh grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Twelfth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Ungraded"
+                        }
+                    ],
+                    "academicSubjects": [
+                        {
+                            "academicSubjectDescriptor": "uri://ed-fi.org/AcademicSubjectDescriptor#Reading"
+                        }
+                    ]
+                }
+            }
+        ],
+        "lookups": [],
+        "supplementalInformation": null,
+        "preprocessors": [
+            {
+                "name": "Fixed-Width Student Assessments to CSV Conversion",
+                "scriptContent": "[CmdletBinding()]\r\nParam( \r\n    [Parameter(Mandatory = $true, ValueFromPipeline = $true)][string]$line\r\n)\r\n\r\nBegin {\r\n     Write-Host \"Converting fixed-width fields to commas\"\r\n\r\n     # Zero-based start position of each fixed-width column\r\n     $fieldMap = @(\r\n        0 # adminyear\r\n        11 # DistrictNumber\r\n        26 # DistrictName\r\n        44 # SchoolNumber\r\n        58 # SchoolName\r\n        89 # sasid\r\n        97 # listeningss_adj\r\n        114 # speakingss_adj\r\n        130 # readingss_adj\r\n        145 # writingss_adj\r\n        160 # comprehensionss_adj\r\n        181 # oralss_adj\r\n        193 # literacyss_adj\r\n        209 # Overallss_adj\r\n    )\r\n \r\n    Write-Host \"Using zero-based fixed-width field start positions: $(($fieldMap | %{ $_ }) -join \",\")\"\r\n}\r\n\r\nProcess {\r\n    $fieldsFromLine = ConvertFrom-FixedWidth -FixedWidthString $line -FieldMap $fieldMap\r\n    \r\n    $formattedFields = @($fieldsFromLine | % { \"`\"\" + $_.Replace(\"`\"\", \"`\"`\"\") + \"`\"\"  })\r\n\r\n    Write-Output ([System.String]::Join(\",\", $formattedFields))\r\n}\r\n \r\nEnd {\r\n    Write-Host \"Finished converting fixed-width fields to commas\"\r\n}",
+                "requireOdsApiAccess": false,
+                "hasAttribute": false
+            }
+        ]
+    }
+}

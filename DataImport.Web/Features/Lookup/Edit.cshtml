@@ -1,0 +1,24 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Lookup.EditLookup.Command
+
+@{
+    ViewBag.Title = "Edit Lookup";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.AjaxForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.Input(m => m.SourceTable)
+    @Html.Input(m => m.Key)
+    @Html.Input(m => m.Value, new { style = "width:95%; display:inline-block" }, Html.DescriptorLookupButton(null, new { style = "margin-left:7px; margin-bottom:3px;" }))
+    @Html.SubmitButton("Save Lookup", new { id = "btnSubmit" })
+}

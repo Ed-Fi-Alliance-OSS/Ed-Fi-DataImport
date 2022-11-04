@@ -1,0 +1,77 @@
+// SPDX-License-Identifier: Apache-2.0
+// Licensed to the Ed-Fi Alliance under one or more agreements.
+// The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+// See the LICENSE and NOTICES files in the project root for more information.
+
+namespace DataImport.Web.Tests
+{
+    using System;
+    using System.IO;
+    using System.Threading.Tasks;
+    using DataImport.Web.Services.Swagger;
+    using NUnit.Framework;
+    using File = System.IO.File;
+
+    public class StubSwaggerWebClient : ISwaggerWebClient
+    {
+        private const string OdsDomainV25 = "http://test-ods-v2.5.0.1.example.com";
+        private const string OdsDomainV311 = "http://test-ods-v3.1.1.example.com";
+
+        public const string ApiServerUrlV25 = OdsDomainV25 + "/api/v2.0/2019";
+        public const string ApiServerUrlV311 = OdsDomainV311 + "/data/v3";
+
+        public async Task<string> DownloadString(string url)
+        {
+            const string swaggerResourcesV25 = OdsDomainV25 + "/metadata/resources/api-docs";
+            const string swaggerDescriptorsV25 = OdsDomainV25 + "/metadata/descriptors/api-docs";
+
+            const string swaggerResourcesV311 = OdsDomainV311 + "/metadata/data/v3/resources/swagger.json";
+            const string swaggerDescriptorsV311 = OdsDomainV311 + "/metadata/data/v3/descriptors/swagger.json";
+
+            if (url == swaggerResourcesV25)
+                return await SampleSwaggerResponseV25("Swagger-Resources-API-Docs.json");
+
+            if (url == swaggerDescriptorsV25)
+                return await SampleSwaggerResponseV25("Swagger-Descriptors-API-Docs.json");
+
+            if (url.StartsWith(swaggerResourcesV25 + "/"))
+            {
+                var resource = url.Substring(swaggerResourcesV25.Length + 1);
+
+                return await SampleSwaggerResponseV25(resource + ".json");
+            }
+
+            if (url.StartsWith(swaggerDescriptorsV25 + "/"))
+            {
+                var descriptor = url.Substring(swaggerDescriptorsV25.Length + 1);
+
+                return await SampleSwaggerResponseV25(descriptor + ".json");
+            }
+
+            if (url == swaggerResourcesV311)
+                return await SampleSwaggerResponseV311("Swagger-Resources-API-Docs.json");
+
+            if (url == swaggerDescriptorsV311)
+                return await SampleSwaggerResponseV311("Swagger-Descriptors-API-Docs.json");
+
+            if (url == OdsDomainV311)
+                return await SampleSwaggerResponseV311("Swagger-Base-API-Response.json");
+
+            throw new Exception(GetType().Name + " cannot simulate a request to url " + url);
+        }
+
+        private static Task<string> SampleSwaggerResponseV25(string filename)
+            => Task.FromResult(File.ReadAllText(
+                Path.Combine(
+                    TestContext.CurrentContext.TestDirectory,
+                    "SampleMetadata-v2.5.0.1",
+                    filename)));
+
+        private static Task<string> SampleSwaggerResponseV311(string filename)
+            => Task.FromResult(File.ReadAllText(
+                Path.Combine(
+                    TestContext.CurrentContext.TestDirectory,
+                    "SampleMetadata-v3.1.1",
+                    filename)));
+    }
+}

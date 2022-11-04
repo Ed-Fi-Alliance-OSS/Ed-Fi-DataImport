@@ -1,0 +1,128 @@
+{
+    "title": "Student Assessments Demo - Metadata and ODS API Calls",
+    "description": "A bootstrap for assessments, with a data map for student assessments.",
+    "apiVersion": "5.2",
+    "template": {
+        "maps": [
+            {
+                "name": "Student Assessments Map (Metadata and ODS API Calls)",
+                "resourcePath": "/ed-fi/studentAssessments",
+                "columnHeaders": [
+                    "adminyear",
+                    "DistrictNumber",
+                    "DistrictName",
+                    "SchoolNumber",
+                    "SchoolName",
+                    "sasid",
+                    "listeningss_adj",
+                    "speakingss_adj",
+                    "readingss_adj",
+                    "writingss_adj",
+                    "comprehensionss_adj",
+                    "oralss_adj",
+                    "literacyss_adj",
+                    "Overallss_adj"
+                ],
+                "map": {
+                    "studentAssessmentIdentifier": {
+                        "Column": "sasid"
+                    },
+                    "assessmentReference": {
+                        "assessmentIdentifier": "DI-TEST-2018",
+                        "namespace": "uri://ed-fi.org/Assessment/Assessment.xml"
+                    },
+                    "schoolYearTypeReference": {
+                        "schoolYear": 2018
+                    },
+                    "studentReference": {
+                        "studentUniqueId": {
+                            "Column": "sasid"
+                        }
+                    },
+                    "administrationDate": "08-01-2018",
+                    "scoreResults": [
+                        {
+                            "assessmentReportingMethodDescriptor": "uri://ed-fi.org/AssessmentReportingMethodDescriptor#Scale score",
+                            "resultDatatypeTypeDescriptor": "uri://ed-fi.org/ResultDatatypeTypeDescriptor#Integer",
+                            "result": {
+                                "Column": "Overallss_adj"
+                            }
+                        }
+                    ]
+                },
+                "customFileProcessor": "Metadata and ODS API Calls",
+                "attribute": "Example Attribute"
+            }
+        ],
+        "bootstraps": [
+            {
+                "name": "Assessments Bootstrap (Metadata and ODS API Calls)",
+                "resourcePath": "/ed-fi/assessments",
+                "data": {
+                    "educationOrganizationReference": {
+                        "educationOrganizationId": 255901
+                    },
+                    "assessmentIdentifier": "DI-TEST-2018",
+                    "assessmentTitle": "Data Import 2018 Test Assessment",
+                    "namespace": "uri://ed-fi.org/Assessment/Assessment.xml",
+                    "assessedGradeLevels": [
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#First grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Second grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Third grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Fourth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Fifth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Sixth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Seventh grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Eighth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Ninth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Tenth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Eleventh grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Twelfth grade"
+                        },
+                        {
+                            "gradeLevelDescriptor": "uri://ed-fi.org/GradeLevelDescriptor#Ungraded"
+                        }
+                    ],
+                    "academicSubjects": [
+                        {
+                            "academicSubjectDescriptor": "uri://ed-fi.org/AcademicSubjectDescriptor#Reading"
+                        }
+                    ]
+                }
+            }
+        ],
+        "lookups": [],
+        "supplementalInformation": null,
+        "preprocessors": [
+            {
+                "name": "Metadata and ODS API Calls",
+                "scriptContent": "[CmdletBinding()]\r\nParam( \r\n    [Parameter(Mandatory = $true, ValueFromPipeline = $true)][string]$line\r\n)\r\n \r\nBegin {\r\n\r\n    # This demonstrates some of the contextual information and\r\n    # API-calling capabilities of PowerShell scripting.\r\n\r\n    # Scripts have access to contextual information:\r\n    Write-Host \"Map Attribute: $($DataImport.MapAttribute)\"\r\n    Write-Host \"Preview Flag (true during previews in the Data Map editor): $($DataImport.PreviewFlag)\"\r\n    Write-Host \"Filename: $($DataImport.Filename)\"\r\n    Write-Host \"API Version: $($DataImport.ApiVersion)\"\r\n\r\n    # Scripts can perform API calls against the ODS:\r\n   \r\n    try {\r\n        Write-Host \"Attempting an API call that we expect to fail due to 404 (File Not Found)\"\r\n        $response = Invoke-OdsApiRequest -RequestPath \"/missing-extension/missing-resource\"\r\n    } catch {\r\n        Write-Host \"The API call failed: $_\"\r\n        Write-Host \"Since this failure was expected, we allow execution to continue...\"\r\n    }\r\n\r\n    Write-Host \"Using Invoke-OdsApiRequest to fetch preexisting GradeLevelDescriptors...\"\r\n    $continue = $true\r\n    $offset = 0\r\n    $limit = 10\r\n    $descriptorNumber=0\r\n    while ($continue) { \r\n        Write-Host \"Fetching GradeLevelDescriptors with offset=$($offset) and limit=$($limit)...\"\r\n\r\n        try {\r\n            $response = Invoke-OdsApiRequest -RequestPath \"/ed-fi/gradeLevelDescriptors?offset=$offset&limit=$limit\"\r\n        } catch {\r\n            # At this point we are in an unexpected situation, and throw in order to halt execution.\r\n            Write-Error \"Halting execution. An API call failed unexpectedly: $_\"\r\n            throw $_\r\n        }\r\n\r\n        Write-Host \"HTTP Status Code: $($response.StatusCode)\"\r\n\r\n        foreach ($key in $response.Headers.Keys) {\r\n            Write-Host \"HTTP Header '$key': $($response.Headers[$key])\"\r\n        }\r\n\r\n        $descriptors = ConvertFrom-Json $response\r\n\r\n        if ($descriptors.Count -gt 0) {\r\n            Write-Host \"Received $($descriptors.Count) GradeLevelDescriptors for this request:\"\r\n            foreach ($descriptor in $descriptors) {\r\n                    $descriptorNumber = $descriptorNumber + 1\r\n                    Write-Host \"$($descriptorNumber): $($descriptor.namespace)#$($descriptor.CodeValue)\"\r\n            }\r\n        }\r\n        else {\r\n            Write-Host \"Received 0 GradeLevelDescriptors for this request, indicating the end of paged fetching.\"\r\n            $continue = $false\r\n        }\r\n        $offset += $limit\r\n    }\r\n\r\n    Write-Host \"Using Invoke-OdsApiRestMethod to fetch preexisting GradeLevelDescriptors...\"\r\n    $continue = $true\r\n    $offset = 0\r\n    $limit = 10\r\n    $descriptorNumber=0\r\n    while ($continue) { \r\n        Write-Host \"Fetching GradeLevelDescriptors with offset=$($offset) and limit=$($limit)...\"\r\n\r\n        try {\r\n            $descriptors = Invoke-OdsApiRestMethod -RequestPath \"/ed-fi/gradeLevelDescriptors?offset=$offset&limit=$limit\"\r\n        } catch {\r\n            # At this point we are in an unexpected situation, and throw in order to halt execution.\r\n            Write-Error \"Halting execution. An API call failed unexpectedly: $_\"\r\n            throw $_\r\n        }\r\n\r\n        if ($descriptors.Count -gt 0) {\r\n            Write-Host \"Received $($descriptors.Count) GradeLevelDescriptors for this request:\"\r\n            foreach ($descriptor in $descriptors) {\r\n                    $descriptorNumber = $descriptorNumber + 1\r\n                    Write-Host \"$($descriptorNumber): $($descriptor.namespace)#$($descriptor.CodeValue)\"\r\n            }\r\n        }\r\n        else {\r\n            Write-Host \"Received 0 GradeLevelDescriptors for this request, indicating the end of paged fetching.\"\r\n            $continue = $false\r\n        }\r\n        $offset += $limit\r\n    }\r\n\r\n}\r\n \r\nProcess {\r\n    # This script makes no changes to the file content itself. Its purpose is entirely to demonstrate the\r\n    # behaviors used in the \"Begin\" section above.\r\n\r\n    Write-Output $line\r\n}",
+                "requireOdsApiAccess": true,
+                "hasAttribute": true
+            }
+        ]
+    }
+}

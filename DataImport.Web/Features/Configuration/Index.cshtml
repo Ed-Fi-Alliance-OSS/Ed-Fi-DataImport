@@ -1,0 +1,46 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Infrastructure
+@using DataImport.Web.Infrastructure.Security
+@using Microsoft.Extensions.Options
+@model DataImport.Web.Features.Configuration.EditConfiguration.ViewModel
+
+@inject IOptions<IdentitySettings> IdentitySettings
+
+@{
+    ViewBag.Title = "Configuration";
+    var AllowUserConfig = IdentitySettings.Value.Type.Equals(IdentitySettingsConstants.EntityFrameworkIdentityType);
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (Model.ConfigurationFailureMsg != null)
+{
+    <div class="alert alert-danger">@Model.ConfigurationFailureMsg</div>
+}
+
+<div id="validationSummary" class="alert alert-danger hidden"></div>
+@using (Html.BeginForm("Index", "Configuration", FormMethod.Post, new { id = "configurationForm" }))
+{
+    <h4>Manage API Connections</h4>
+    @Html.ActionLink("Ed-Fi API Connections", "Index", "ApiServers", routeValues: null, htmlAttributes: new { @class = "btn btn-default", style = "margin-bottom:20px" })
+    <br />
+
+
+    if (AllowUserConfig)
+    {
+        <h4>User Management</h4>
+        <div class="row">
+            @Html.Input(m => m.InstanceAllowUserRegistration, new { @class = "" })
+        </div>
+    }
+
+    <br />
+    <br />
+    @Html.SubmitButton("Update Configuration")
+}

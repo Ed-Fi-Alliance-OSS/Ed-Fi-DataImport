@@ -1,0 +1,50 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Features.School
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.School.Index.ViewModel
+
+@{ ViewBag.Title = "Schools";
+    ViewBag.ShowLoadingIndicatorWhenChangingApiConnection = true; }
+
+<h2>@ViewBag.Title</h2>
+
+@await Html.PartialAsync("_SelectApiServerPartial", Model)
+
+@if (Model.ApiServerId.HasValue)
+{
+    <table id="tblSchools" class="table table-striped table-hover table-bordered table-responsive">
+        <thead>
+            <tr>
+                <th>School</th>
+                <th>Abbreviation</th>
+                <th>District</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in Model.Schools.Items)
+            {
+                <tr>
+                    <td>@Html.ActionLink(s.Name, "Details", new { s.Id, ApiServerId = Model.ApiServerId.Value })</td>
+                    <td>@s.Abbreviation</td>
+                    <td>@s.District</td>
+                </tr>
+}
+        </tbody>
+    </table> 
+    var previousUrl = Url.Action("Index", "School", new DataImport.Web.Features.School.Index.Query { PageNumber = Model.Schools.PageNumber - 1, ApiServerId = Model.ApiServerId });
+    var nextUrl = Url.Action("Index", "School", new DataImport.Web.Features.School.Index.Query { PageNumber = Model.Schools.PageNumber + 1, ApiServerId = Model.ApiServerId });
+    @Html.PagingControl(previousUrl, nextUrl, Model.Schools, behaviorOverrideName: "full-page-load")
+
+    @section scripts{
+        <script type="text/javascript">
+            $(function ($) {
+                $('#tblSchools').footable();
+            });
+        </script>
+    }}

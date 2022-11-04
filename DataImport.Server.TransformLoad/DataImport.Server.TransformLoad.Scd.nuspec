@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DataImport.Server.TransformLoad.Win64</id>
+    <version>$version$</version>
+    <title>Ed-Fi DataImport</title>
+    <authors>Ed-Fi Alliance</authors>
+    <projectUrl>https://github.com/Ed-Fi-Alliance/Ed-Fi-DataImport</projectUrl>
+    <copyright>Copyright © 2021, Ed-Fi Alliance, LLC.</copyright>
+    <summary>Ed-Fi DataImport</summary>
+    <description>Ed-Fi DataImport</description>
+    <license type="expression">edfi</license>
+  </metadata>
+  <files>
+       <file src="publish\scd\**\*.*" target="" />
+  </files>
+</package>

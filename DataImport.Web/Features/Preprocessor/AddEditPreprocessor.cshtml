@@ -1,0 +1,81 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Models
+@using DataImport.Web.Infrastructure
+@using Humanizer
+@model DataImport.Web.Features.Preprocessor.AddEditPreprocessorViewModel
+
+@{
+
+    ViewBag.Title = (!Model.Id.HasValue ? "Add" : "Edit") + " Preprocessor";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div id="validationSummary" class="alert alert-danger hidden"></div>
+
+@using (Html.AjaxForm())
+{
+    @Html.Input(m => m.Name)
+
+    if (Model.Id.HasValue)
+    {
+        @Html.Readonly(m => m.ScriptType, Model.ScriptType.Humanize(), null, null, Html.PreprocessorScriptTypeHelpModalButton())
+    }
+    else
+    {
+        @Html.DropDown(x => x.ScriptType, Model.ScriptTypes, null, null, Html.PreprocessorScriptTypeHelpModalButton())
+    }
+
+    @if (Model.ExternalPreprocessorsEnabled || (Model.Id.HasValue && Model.ScriptType.Value.IsExternal()))
+    {
+        @Html.Input(m => m.ExecutablePath)
+        @Html.Input(m => m.ExecutableArguments)
+    }
+
+    @Html.Input(m => m.ScriptContent, new { placeholder = "PowerShell Script", style = "height:500px;" })
+    @Html.Input(m => m.RequireOdsApiAccess, "Script uses Invoke-OdsApiRequest for ODS API access")
+    <div id="hasAttributeContainer" @{if (!Model.ScriptType.HasValue || Model.ScriptType.Value != ScriptType.CustomFileProcessor) { <text> style="display: none;" </text>  } }>
+        @Html.Input(m => m.HasAttribute, "Script expects a data map attribute to be supplied")
+    </div>
+    @Html.HiddenFor(m => m.Id)
+
+
+    @Html.SubmitButton("Save Preprocessor", new { id = "btnSubmit" })
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        @{if (!Model.ScriptType.HasValue || Model.ScriptType.Value != ScriptType.CustomFileProcessor ) {
+          <text>
+              $(function ($) {
+
+                  refreshHasAttributeVisibility();
+
+                  $('#@Html.IdFor(m => m.ScriptType)').change(function() {
+                      refreshHasAttributeVisibility();
+                  });
+
+                  function refreshHasAttributeVisibility() {
+                      var scriptType = $('#@Html.IdFor(m => m.ScriptType)').val();
+                      var hasAttributeElement = $('#@Html.IdFor(m => m.HasAttribute)');
+                      var hasAttributeContainer = $('#hasAttributeContainer');
+                      if (scriptType === '0') {
+                          hasAttributeContainer.show();
+                      } else {
+                          hasAttributeElement.prop("checked", false);
+                          hasAttributeContainer.hide();
+                      }
+                  }
+              });
+          </text>
+          }
+        }
+    </script>
+}

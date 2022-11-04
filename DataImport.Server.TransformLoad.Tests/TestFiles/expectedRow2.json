@@ -1,0 +1,19 @@
+{
+  "assessmentReference": {
+    "identifier": "LAB-ASSESSMENT-2018",
+    "namespace": "http://ed-fi.org/Assessment/Assessment.xml"
+  },
+  "studentReference": {
+    "studentUniqueId": "604826"
+  },
+  "administrationDate": "08-01-2018",
+  "customRegistrationFee": 10.00,
+  "identifier": "LAB-ASSESSMENT-2018",
+  "scoreResults": [
+    {
+      "assessmentReportingMethodType": "Raw score",
+      "resultDatatypeType": "Integer",
+      "result": "174"
+    }
+  ]
+}

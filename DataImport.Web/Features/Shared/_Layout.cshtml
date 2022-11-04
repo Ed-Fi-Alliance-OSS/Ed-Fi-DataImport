@@ -1,0 +1,476 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using Version = DataImport.Common.Version
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")" />
+    <title>@ViewBag.Title - Data Import</title>
+    <link href="@Url.Content("~/css/bootstrap.css")" rel="stylesheet" type="text/css" />
+    <link href="/content/dataimport.min.css" rel="stylesheet" type="text/css" />
+    <link href="/content/toastr.min.css" rel="stylesheet" type="text/css" />
+    <script src="/bundles/modernizr.min.js"></script>
+    <script src="/bundles/lodash.min.js"></script>
+    <link href="@Url.Content("~/lib/fontawesome/css/fontawesome.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/lib/fontawesome/css/solid.min.css")" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div id="AntiForgeryToken">@Html.AntiForgeryToken()</div>
+    @await Html.PartialAsync("_SimpleModal")
+    @if (TempData.ContainsKey("ToastMessage"))
+    {
+        @Html.Hidden("toast", Html.Encode(TempData["ToastMessage"]), new { datatype = TempData["ToastType"] })
+    }
+
+    <div class="loading-indicator">
+    </div>
+
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Data Import Admin", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                @if (User?.Identity?.IsAuthenticated ?? false)
+                {
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Activity", "Index", "Activity")</li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Data Browser
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Assessments", "Index", "Assessment")</li>
+                                <li>@Html.ActionLink("Schools", "Index", "School")</li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Configure
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Agents", "Index", "Agent")</li>
+                                <li>@Html.ActionLink("Maps", "Index", "DataMaps")</li>
+                                <li>@Html.ActionLink("Lookups", "Index", "Lookup")</li>
+                                <li>@Html.ActionLink("Preprocessors", "Index", "Preprocessor")</li>
+                                <li>@Html.ActionLink("Bootstrap Data", "Index", "BootstrapData")</li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Admin
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Logs", "Index", "Log")</li>
+                                <li>@Html.ActionLink("Configuration", "Index", "Configuration")</li>
+                                <li>@Html.ActionLink("Import / Export", "FileIndex", "Share")</li>
+                            </ul>
+                        </li>
+                    </ul>
+                }
+                @await Html.PartialAsync("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <div class="row">
+                <div class="col-md-12 text-center" style="margin-top: 15px">
+                    <img src="~/images/edfi-logo.png" alt="ed-fi alliance" title="ed-fi alliance"
+                         style="width: 100px; margin-right: 15px;" />
+                    <span title="Build @Version.InternalVersion">Data Import @Version.ProductVersion</span>
+                </div>
+            </div>
+        </footer>
+        <div class="help-block" style="clear: both;">@ViewBag.DevText</div>
+    </div>
+    <script src="/bundles/jquery.min.js"></script>
+    <script src="/bundles/bootstrap.min.js"></script>
+    <script src="/bundles/toastr.min.js"></script>
+    @await RenderSectionAsync("scripts", required: false)
+    <script type="text/javascript">
+        var $descriptorLookupModalTarget = null;
+
+        function log(content) {
+            window.console && console.log(content);
+        }
+
+        function seconds(durationInSeconds) {
+            return durationInSeconds * 1000;
+        }
+
+        function saveFile(content, fileName, contentType) {
+            var a = document.createElement("a");
+            var file = new Blob([content], { type: contentType });
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+        }
+
+        function timestamp() {
+            var d = new Date(),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear(),
+                hour = '' + (d.getHours() % 12),
+                minute = '' + d.getMinutes();
+
+            var suffix = d.getHours() >= 12 ? "PM" : "AM";
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+            if (hour.length < 2) hour = '0' + hour;
+            if (minute.length < 2) minute = '0' + minute;
+
+            return [year, month, day, hour + minute + suffix].join('-');
+        }
+
+        var replacePagedContent = function (event) {
+            event.preventDefault();
+
+            var $btn = $(this),
+                url = $btn.attr('href');
+
+            $.ajax(url).done(function (data) {
+                $btn.closest('.ajax-content').html(data);
+            });
+        };
+
+        function handleAjaxErrors(xhr) {
+            try {
+                if (xhr.status >= 500 && xhr.status <= 599) {
+                    toastr.error("The server encountered an unexpected error. Check the Application Log for troubleshooting information.");
+                    return;
+                }
+
+                var data = JSON.parse(xhr.responseText);
+                showValidationSummary(data);
+                window.scrollTo(0, 0);
+            } catch (exception) {
+                log(exception);
+            }
+        };
+
+        function showValidationSummary(response) {
+            $('#validationSummary').empty().removeClass('hidden');
+
+            var verboseErrors = _.flatten(_.map(response, 'Errors')),
+                errors = [];
+
+            _.each(verboseErrors, function (error) {
+                errors.push(error.ErrorMessage);
+            });
+
+            var $ul = $('#validationSummary').append('<ul></ul>');
+
+            _.each(errors, function (error) {
+                var $li = $('<li></li>').text(error);
+                $li.appendTo($ul);
+            });
+
+            $.each(response, function (propName, val) {
+                var nameSelector = '[name = "' + propName.replace(/(:|\.|\[|\])/g, "\\$1") + '"]',
+                    idSelector = '#' + propName.replace(/(:|\.|\[|\])/g, "\\$1");
+                var $el = $(nameSelector) || $(idSelector);
+
+                if (val.Errors.length > 0) {
+                    $el.closest('.form-group').addClass('has-error');
+                }
+            });
+        };
+
+        function clearValidationSummary() {
+            $('#validationSummary').empty().addClass('hidden');
+            $('.form-group').removeClass('has-error');
+        }
+
+        function redirect(data) {
+            if (data.redirect) {
+                window.location = data.redirect;
+            } else {
+                window.scrollTo(0, 0);
+                window.location.reload();
+            }
+        };
+
+        function ajaxPostFromHref() {
+            var $this = $(this);
+
+            var shouldPost = true;
+            var optionalConfirmationPrompt = $this.attr('data-confirm');
+            if (optionalConfirmationPrompt) {
+                shouldPost = confirm(optionalConfirmationPrompt);
+            }
+
+            if (!shouldPost) {
+                return false;
+            }
+
+            $.ajax({
+                url: $this.attr('href'),
+                type: 'post',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                dataType: 'json',
+                statusCode: {
+                    200: redirect
+                }
+            }).catch(handleAjaxErrors);
+
+            return false;
+        }
+
+        function AttachDefaultPagingBehavior() {
+            $(document).on('click', '.navigate-previous-page', replacePagedContent);
+            $(document).on('click', '.navigate-next-page', replacePagedContent);
+        }
+
+        function IncludeAntiForgeryTokenInAjaxPosts() {
+            $(document).ajaxSend(function (event, xhr, options) {
+                if (options.type.toUpperCase() === "POST") {
+                    var token = $("#AntiForgeryToken input[name=__RequestVerificationToken]").val();
+                    xhr.setRequestHeader("__RequestVerificationToken", token);
+                }
+            });
+        };
+
+        function InferEnctypeForFileUploadForms() {
+            $('input[type="file"]').closest("form").attr("enctype", "multipart/form-data");
+        }
+
+        function loadDescriptorLookupModal(header, apiServerId, apiVersionId) {
+            var params = { DescriptorName: header, ApiServerId: apiServerId, ApiVersionId: apiVersionId }
+            $('#tblDescriptors').footable();
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("RetrieveDescriptors", "DataMaps")',
+                data: params,
+                dataType: 'html',
+                success: function (data, status, httpResponse) {
+
+                    if (handleAjaxGetRedirect(data, httpResponse)) {
+                        return;
+                    }
+
+                    $("#SimpleModal .modal-body").html(data);
+                },
+                error: function (data) {
+                    log(data);
+                    toastr.error("Unable to retrieve descriptors for '" + header + "'.");
+                    $('#SimpleModal').modal('hide');
+                }
+            });
+
+            var descriptorName = header ? getFormattedDescriptorName(header) : "Descriptor";
+            $('#SimpleModal .modal-title').text(`Select '${descriptorName}'`);
+        }
+
+        function loadResourcesDropdown(apiVersionId, $resourcePathDropDown, completeCallback) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("RetrieveResources", "Common")',
+                data: {
+                    apiVersionId: apiVersionId
+                },
+                success: function (data) {
+                    groupDropDownListItems($resourcePathDropDown, data.resources);
+                },
+                error: function (data) {
+                    log(data);
+                    toastr.error('Unable to determine resources.');
+                },
+                complete: completeCallback
+            });
+        }
+
+        function groupDropDownListItems($dropDown, data) {
+            $dropDown.empty();
+
+            if (!data) {
+                return;
+            }
+
+            var groupedItems = data.reduce(function (r, a) {
+                var groupName = a.group ? a.group.name : '';
+                r[groupName] = r[groupName] || [];
+                r[groupName].push(a);
+                return r;
+            }, Object.create(null));
+
+            $.each(groupedItems,
+                function (groupName, items) {
+
+                    var elementToAppendOptions = $dropDown;
+                    if (groupName) {
+                        elementToAppendOptions = $('<optgroup />').prop('label', groupName);
+                        $dropDown.append(elementToAppendOptions);
+                    }
+
+                    $.each(items,
+                        function (i, item) {
+                            elementToAppendOptions.append($('<option></option>').attr('value', item.value).text(item.text));
+                        });
+                });
+        }
+
+        function getFormattedDescriptorName(path) {
+            path = path.split("/").pop();
+            var result = path.replace(/([A-Z])/g, " $1");
+            var finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+            var lastChar = finalResult.slice(-1);
+            if (lastChar === 's') {
+                finalResult = finalResult.slice(0, -1);
+            }
+            return finalResult;
+        }
+
+        function Toast() {
+            var $toast = $('#toast');
+            if ($toast.val() != null) {
+                toastr[$toast.attr("datatype")]($toast.val());
+            }
+        }
+
+        function handleAjaxGetRedirect(data, response) {
+            if (!data) {
+                var redirectUrl = response.getResponseHeader("redirect_location");
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function refreshElement(selector, url, delay) {
+            function loadElement() {
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: 'html',
+                    success: function (data, status, response) {
+                        if (handleAjaxGetRedirect(data, response)) {
+                            return;
+                        }
+
+                        $(selector).html(data);
+                        setTimeout(loadElement, delay);
+                    },
+                    error: function (data) {
+                        log(data);
+                        toastr.error("Information displayed may be out of date.");
+                    }
+                });
+            }
+
+            loadElement();
+        }
+
+        function populateStaticModal(button) {
+            $('#SimpleModal .modal-title').text(button.data('title'));
+            $('#SimpleModal .modal-body').html(button.data('body'));
+        }
+
+        $(function ($) {
+            IncludeAntiForgeryTokenInAjaxPosts();
+            InferEnctypeForFileUploadForms();
+            AttachDefaultPagingBehavior();
+            Toast();
+
+            $(".ajax-submit-link").on('click', ajaxPostFromHref);
+
+            $('form[method=post]').filter('.opt-in-ajax').on('submit', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                var submitBtn = $(this).find('[type="submit"]');
+
+                submitBtn.prop('disabled', true);
+
+                var $this = $(this),
+                    formData = $this.serialize();
+
+                clearValidationSummary();
+
+                var callback = $this.attr("data-callback");
+
+                $.ajax({
+                    url: $this.attr('action'),
+                    type: 'post',
+                    data: formData,
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    dataType: 'json',
+                    statusCode: {
+                        200: function (data) {
+                            window[callback](data);
+                        }
+                    },
+                    complete: function () {
+                        submitBtn.prop('disabled', false);
+                    }
+                }).catch(handleAjaxErrors);
+
+                return false;
+            });
+
+            var showDescriptorModalLoadingMessage = function () {
+                $("#SimpleModal .modal-body").html("<h4>Loading...</h4>");
+            }
+
+            $(document).on('click', ".descriptor-lookup-btn", function (event) {
+                showDescriptorModalLoadingMessage();
+                $descriptorLookupModalTarget = $(event.currentTarget).siblings("input:visible").first();
+                var selectedApiServer = $("#ApiServerId").find(":selected").val();
+                var apiVersionId = $("#ApiVersionId").val();
+                loadDescriptorLookupModal($(this).data('header'), selectedApiServer, apiVersionId);
+            });
+
+            $(document).on('click', "#searchDescriptorBtn", function () {
+                var selectedDescriptor = $("#DescriptorName").find(":selected").val();
+                var selectedApiServer = $("#ApiServerId").find(":selected").val();
+                var apiVersionId = $("#ApiVersionId").val();
+                showDescriptorModalLoadingMessage();
+                loadDescriptorLookupModal(selectedDescriptor, selectedApiServer, apiVersionId);
+            });
+
+            $(document).on("click", ".select-descriptor-btn", function () {
+                var descriptorValue = $(this).val();
+                $descriptorLookupModalTarget.val(descriptorValue);
+                $('#SimpleModal').modal('hide');
+            });
+
+            $(document).on("click", "#manualDescriptorSearchLink", function () {
+                var selectedApiServer = $("#ApiServerId").val();
+                var apiVersionId = $("#ApiVersionId").val();
+                showDescriptorModalLoadingMessage();
+                loadDescriptorLookupModal(null, selectedApiServer, apiVersionId);
+            });
+
+            $(document).on("click", ".static-modal-btn", function () {
+                populateStaticModal($(this));
+            });
+        });
+
+    </script>
+</body>
+
+</html>

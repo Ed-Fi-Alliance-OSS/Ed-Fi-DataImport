@@ -1,0 +1,73 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using Humanizer
+@model DataImport.Web.Features.Preprocessor.PreprocessorIndex.ViewModel
+@inject DataImport.Web.Services.IHtmlHelperService htmlHelperService
+
+@{ ViewBag.Title = "Preprocessors"; }
+
+<h2>@ViewBag.Title</h2>
+
+<div style="padding-bottom: 10px;">
+    @htmlHelperService.NavigationButton(Html, "Add Preprocessor", "Add")
+</div>
+<table id="tblPreprocessor" class="table table-striped table-hover table-bordered table-responsive" data-paging="true" data-paging-size="20">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Script Type</th>
+            <th>Used By</th>
+            <th data-sortable="false" data-filterable="false" class="actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model.Preprocessors)
+        {
+            <tr>
+                <td>@m.Name</td>
+                <td>@m.ScriptType.Humanize()</td>
+                <td>
+                    @{ var groupName = m.UsedBy.FirstOrDefault()?.Group.Name; }
+                    @if (!string.IsNullOrEmpty(groupName))
+                    {
+                        @groupName
+                        <ul>
+                            @foreach (var d in m.UsedBy)
+                            {
+                                if (d.Group.Name == "Data Maps")
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Edit", "DataMaps", new { Id = d.Value })" title="Edit">@d.Text</a>
+                                    </li>
+                                }
+                                else if (d.Group.Name == "Agents")
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Edit", "Agent", new { Id = d.Value })" title="Edit">@d.Text</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    }
+                </td>
+                <td class="actions">
+                    <a href="@Url.Action("Edit", new { m.Id })" title="Edit"><i class="fas fa-fw fa-pencil-alt"></i></a>
+                    <a href="@Url.Action("Delete", new { m.Id })" title="Delete" class="ajax-submit-link" data-confirm="Are you sure you want to delete this preprocessor?"><i class="fas fa-fw fa-trash-alt"></i></a>
+                </td>
+            </tr>
+}
+    </tbody>
+</table>
+@section scripts
+{
+    <script type="text/javascript">
+        $(function ($) {
+            $('#tblPreprocessor').footable().on('click', '.ajax-submit-link', ajaxPostFromHref);
+        });
+    </script>
+}

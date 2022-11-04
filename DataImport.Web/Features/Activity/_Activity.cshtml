@@ -1,0 +1,74 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Models
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Activity.GetActivity.ViewModel
+
+@if (Model.Health.Warning)
+{
+    @Html.Warning(Model.Health.Message)
+}
+else
+{
+    @Html.Info(Model.Health.Message)
+}
+
+@if (Model.HasRecentFiles)
+{
+    @await Html.PartialAsync("_SelectApiServerPartial", Model)
+}
+
+<div class="text-right">@Html.ActionLink("View Complete File History", "Index", "Log", new { Model.ApiServerId }, null)</div>
+
+@if (Model.Files.Any())
+{
+    <table class="table table-hover table-bordered table-responsive">
+        <thead>
+            <tr>
+                <th>Agent</th>
+                <th>File</th>
+                <th>API Connection</th>
+                <th>Created</th>
+                <th>Rows</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model.Files)
+            {
+                <tr>
+                    <td>@m.AgentName</td>
+                    <td>@m.FileName</td>
+                    <td>@m.ApiConnection</td>
+                    <td>@(m.CreateDate?.ToString("yyyy-MM-dd hh:mm tt"))</td>
+                    <td>@m.Rows</td>
+                    <td>
+                        @if (m.Status == FileStatus.ErrorLoading ||
+                           m.Status == FileStatus.ErrorTransform ||
+                           m.Status == FileStatus.ErrorUploaded)
+                        {
+                            <span class="traffic-red">&nbsp;⬤</span>
+                        }
+                        else if (m.Status == FileStatus.Loading ||
+                                 m.Status == FileStatus.Transforming ||
+                                 m.Status == FileStatus.Uploaded ||
+                                 m.Status == FileStatus.Retry)
+                        {
+                            <span class="traffic-yellow">&nbsp;⬤</span>
+                        }
+                        else if (m.Status == FileStatus.Loaded)
+                        {
+                            <span class="traffic-green">&nbsp;⬤</span>
+                        }
+                        @m.Status
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

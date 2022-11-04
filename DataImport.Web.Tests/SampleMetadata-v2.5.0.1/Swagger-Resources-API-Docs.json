@@ -1,0 +1,350 @@
+{
+  "apiVersion": "2.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://test-ods-v2.5.0.1.example.com/metadata/resources/api-docs",
+  "apis": [
+    {
+      "path": "/academicWeeks",
+      "description": "This entity represents the academic weeks for a school year, optionally captured to support analyses."
+    },
+    {
+      "path": "/accounts",
+      "description": "This financial entity represents a funding source combined with its purpose and type of transaction. It provides a formal record of the debits and credits relating to the specific account."
+    },
+    {
+      "path": "/accountabilityRatings",
+      "description": "An accountability rating for a school or district."
+    },
+    {
+      "path": "/actuals",
+      "description": "This financial entity represents the sum of the financial transactions to date relating to a specific account."
+    },
+    {
+      "path": "/assessments",
+      "description": "This entity represents a tool, instrument, process, or exhibition composed of a systematic sampling of behavior for measuring a student's competence, knowledge,skills, or behavior. An assessment can be used to measure differences inindividuals or groups and changes in performance from one occasion to the next."
+    },
+    {
+      "path": "/assessmentFamilies",
+      "description": "This entity represents a logical grouping or association of assessments that share a common purpose, heritage or content standard. There may be hierarchiesof assessment families, characteristics (e.g., Academic Subject) specified for assessment families, by convention, are inherited by the Assessments associated with the AssessmentFamily."
+    },
+    {
+      "path": "/assessmentItems",
+      "description": "This entity represents one of many single measures that make up an assessment."
+    },
+    {
+      "path": "/bellSchedules",
+      "description": "This entity represents the schedule of class period meeting times."
+    },
+    {
+      "path": "/budgets",
+      "description": "This financial entity represents the amount of monies allocated to be spent or received by an education organization as related to a specific account."
+    },
+    {
+      "path": "/calendarDates",
+      "description": "This entity represents a day in the school calendar."
+    },
+    {
+      "path": "/classPeriods",
+      "description": "This entity represents the designation of a regularly scheduled series of class meetings at designated times and days of the week."
+    },
+    {
+      "path": "/cohorts",
+      "description": "This entity represents any type of list of designated students for tracking, analysis, or intervention."
+    },
+    {
+      "path": "/competencyObjectives",
+      "description": "This entity holds additional competencies for student achievement that are not associated with specific learning objectives (e.g., paying attention in class)."
+    },
+    {
+      "path": "/contractedStaffs",
+      "description": "This financial entity represents the sum of the financial transactions to date for contracted staff. ContractedStaff includes \"contractors\" or \"consultants\" who perform services for an agreed upon fee, or an employee of a management service contracted to work on site."
+    },
+    {
+      "path": "/courses",
+      "description": "This educational entity represents the organization of subject matter and related learning experiences provided for the instruction of students on a regular or systematic basis."
+    },
+    {
+      "path": "/courseOfferings",
+      "description": "This entity represents an entry in the course catalog of available courses offered by the school during a session."
+    },
+    {
+      "path": "/courseTranscripts",
+      "description": "This entity is the final record of a student's performance in their courses at the end of a semester or school year."
+    },
+    {
+      "path": "/disciplineActions",
+      "description": "This event entity represents actions taken by an education organization after a disruptive event that is recorded as a discipline incident."
+    },
+    {
+      "path": "/disciplineIncidents",
+      "description": "This event entity represents an occurrence of an infraction ranging from a minor heavioral problem that disrupts the orderly functioning of a school or classroom (such as tardiness) to a criminal act that results in the involvement of a law enforcement official (such as robbery). A single event (e.g., a fight) is one incident regardless of how many perpetrators or victims are involved. Discipline incidents are events classified as warranting discipline action."
+    },
+    {
+      "path": "/educationContents",
+      "description": "This entity represents materials for students or teachers that can be used for teaching, learning, research, and more. Education content includes full courses, course materials, modules, intervention descriptions, textbooks, streaming videos, tests, software, and any other tools, materials, or techniques used to support access to knowledge."
+    },
+    {
+      "path": "/educationOrganizationInterventionPrescriptionAssociations",
+      "description": "This association indicates interventions made available by an education organization. Often, a district-level education organization purchases a set of intervention prescriptions and makes them available to its schools for use on demand."
+    },
+    {
+      "path": "/educationOrganizationNetworks",
+      "description": "This entity is a self-organized membership network of peer-level education organizations intended to provide shared services or collective procurement."
+    },
+    {
+      "path": "/educationOrganizationNetworkAssociations",
+      "description": "Properties of the association between the EducationOrganization and its network(s)."
+    },
+    {
+      "path": "/educationOrganizationPeerAssociations",
+      "description": "The association from an education organization to its peers."
+    },
+    {
+      "path": "/educationServiceCenters",
+      "description": "This entity represents a regional, multi-services public agency authorized by state law to develop, manage and provide services, programs, or other support options (e.g., construction, food services, and technology services) to LEAs."
+    },
+    {
+      "path": "/feederSchoolAssociations",
+      "description": "The association from feeder school to the receiving school."
+    },
+    {
+      "path": "/grades",
+      "description": "This educational entity represents an overall score or assessment tied to a course over a period of time (i.e., the grading period). Student grades are usually a compilation of marks and other scores."
+    },
+    {
+      "path": "/gradebookEntries",
+      "description": "This entity represents an assignment, homework, or classroom assessment to be recorded in a gradebook."
+    },
+    {
+      "path": "/gradingPeriods",
+      "description": "This entity represents the time span for which grades are reported."
+    },
+    {
+      "path": "/graduationPlans",
+      "description": "This entity is a plan outlining the required credits, credits by subject,credits by course, and other criteria required for graduation. A graduation plan may be one or more standard plans defined by an education organization and/or individual plans for some or all students."
+    },
+    {
+      "path": "/interventions",
+      "description": "An implementation of an instructional approach focusing on the specific techniques and materials used to teach a given subject."
+    },
+    {
+      "path": "/interventionPrescriptions",
+      "description": "This entity represents a formal prescription of an instructional approach focusing on the specific techniques and materials used to teach a given subject. This can be prescribed by academic research, an interventions vendor, or another entity."
+    },
+    {
+      "path": "/interventionStudies",
+      "description": "An experimental or quasi-experimental study of an intervention technique."
+    },
+    {
+      "path": "/learningObjectives",
+      "description": "This entity represents identified learning objectives for courses in specific grades."
+    },
+    {
+      "path": "/learningStandards",
+      "description": "This entity is a sub-element of a learning objective consisting of a precise statement of the expectation of a student's proficiency."
+    },
+    {
+      "path": "/leaveEvents",
+      "description": "This event entity represents the recording of the dates of staff leave (e.g., sick leave, personal time, vacation)."
+    },
+    {
+      "path": "/localEducationAgencies",
+      "description": "This entity represents an administrative unit at the local level which exists primarily to operate schools or to contract for educational services. It includes school districts, charter schools, charter management organizations, or other local administrative organizations."
+    },
+    {
+      "path": "/locations",
+      "description": "This entity represents the physical space where students gather for a particular class/section. The Location may be an indoor or outdoor area designated for the purpose of meeting the educational needs of students."
+    },
+    {
+      "path": "/objectiveAssessments",
+      "description": "This entity represents subtests that assess specific learning objectives."
+    },
+    {
+      "path": "/openStaffPositions",
+      "description": "This entity represents an open staff position that the education organization is seeking to fill."
+    },
+    {
+      "path": "/parents",
+      "description": "This entity represents a parent or guardian of a student, such as mother, father, or caretaker."
+    },
+    {
+      "path": "/payrolls",
+      "description": "This financial entity represents the sum of the financial transactions to date for employee compensation. An \"employee\" who performs services under the direction of the employing institution or agency, is compensated for such services by the employer and is eligible for employee benefits and wage or salary tax withholdings."
+    },
+    {
+      "path": "/postSecondaryEvents",
+      "description": "This entity captures significant postsecondary events during a student's high school tenure (e.g., FAFSA application or college application, acceptance, and enrollment) or during a student's enrollment at a post-secondary institution."
+    },
+    {
+      "path": "/programs",
+      "description": "This entity represents any program designed to work in conjunction with, or as a supplement to, the main academic program. Programs may provide instruction, training, services, or benefits through federal, state, or local agencies. Programs may also include organized extracurricular activities for students."
+    },
+    {
+      "path": "/reportCards",
+      "description": "This educational entity represents the collection of student grades for courses taken during a grading period."
+    },
+    {
+      "path": "/restraintEvents",
+      "description": "This event entity represents the instances where a special education student was physically or mechanically restrained due to imminent serious physical harm to themselves or others, imminent serious property destruction or a combination of both imminent serious physical harm to themselves or others and imminent serious property destruction."
+    },
+    {
+      "path": "/schools",
+      "description": "This entity represents an educational organization that includes staff and students who participate in classes and educational activity groups."
+    },
+    {
+      "path": "/schoolYearTypes",
+      "description": "Identifier for a school year."
+    },
+    {
+      "path": "/sections",
+      "description": "This entity represents a setting in which organized instruction of course content is provided, in-person or otherwise, to one or more students for a given period of time. A course offering may be offered to more than one section."
+    },
+    {
+      "path": "/sectionAttendanceTakenEvents",
+      "description": "Captures attendance taken event for given section."
+    },
+    {
+      "path": "/sessions",
+      "description": "This entity represents the prescribed span of time when an education institution is open, instruction is provided and students are under the direction and guidance of teachers and/or education institution administration. A session may be interrupted by one or more vacations."
+    },
+    {
+      "path": "/staffs",
+      "description": "This entity represents an individual who performs specified activities for any public or private education institution or agency that provides instructional and/or support services to students or staff at the early childhood level through high school completion. For example, this includes:      1. An \"employee\" who performs services under the direction of the employing institution or agency is compensated for such services by the employer and is eligible for employee benefits and wage or salary tax withholdings      2. A \"contractor\" or \"consultant\" who performs services for an agreed upon fee or an employee of a management service contracted to work on site      3. A \"volunteer\" who performs services on a voluntary and uncompensated basis      4. An in-kind service provider      5. An independent contractor or businessperson working at a school site."
+    },
+    {
+      "path": "/staffCohortAssociations",
+      "description": "This association indicates the Staff associated with a cohort of students."
+    },
+    {
+      "path": "/staffEducationOrganizationAssignmentAssociations",
+      "description": "This association indicates the education organization to which a staff member provides services; also known as school of service."
+    },
+    {
+      "path": "/staffEducationOrganizationEmploymentAssociations",
+      "description": "This association indicates the EducationOrganization an employee, contractor, volunteer, or other service provider is formally associated with typically indicated by which organization the staff member has a services contract with or receives compensation from."
+    },
+    {
+      "path": "/staffProgramAssociations",
+      "description": "This association indicates the Staff associated with a program."
+    },
+    {
+      "path": "/staffSchoolAssociations",
+      "description": "This association indicates the School(s) to which a staff member provides instructional services."
+    },
+    {
+      "path": "/staffSectionAssociations",
+      "description": "This association indicates the class sections to which a staff member is assigned."
+    },
+    {
+      "path": "/stateEducationAgencies",
+      "description": "This entity represents the agency of the state charged with the primary responsibility for coordinating and supervising public instruction, including the setting of standards for elementary and secondary instructional programs."
+    },
+    {
+      "path": "/students",
+      "description": "This entity represents an individual for whom instruction, services, and/or care are provided in an early childhood, elementary, or secondary educational program under the jurisdiction of a school, education agency or other institution or program. A student is a person who has been enrolled in a school or other educational institution."
+    },
+    {
+      "path": "/studentAcademicRecords",
+      "description": "This educational entity represents the cumulative record of academic achievement for a student."
+    },
+    {
+      "path": "/studentAssessments",
+      "description": "This entity represents the analysis or scoring of a student's response on an assessment. The analysis results in a value that represents a student's performance on a set of items on a test."
+    },
+    {
+      "path": "/studentCohortAssociations",
+      "description": "This association represents the Cohort(s) for which a student is designated."
+    },
+    {
+      "path": "/studentCompetencyObjectives",
+      "description": "This entity represents the competency assessed or evaluated for the student against a specific learning  objective."
+    },
+    {
+      "path": "/studentCTEProgramAssociations",
+      "description": "This association represents the career and technical education (CTE) program that a student participates in. The association is an extension of the StudentProgramAssociation particular for CTE programs."
+    },
+    {
+      "path": "/studentDisciplineIncidentAssociations",
+      "description": "This association indicates those students who were victims, perpetrators, witnesses, and reporters for a discipline incident."
+    },
+    {
+      "path": "/studentEducationOrganizationAssociations",
+      "description": "This association indicates any relationship between a student and an education organization other than how the state views enrollment. Enrollment relationship semantics are covered by StudentSchoolAssociation."
+    },
+    {
+      "path": "/studentGradebookEntries",
+      "description": "This entity holds a student's grade or competency level for a gradebook entry."
+    },
+    {
+      "path": "/studentInterventionAssociations",
+      "description": "This association indicates the students participating in an intervention."
+    },
+    {
+      "path": "/studentInterventionAttendanceEvents",
+      "description": "This event entity represents the recording of whether a student is in attendance for an intervention service."
+    },
+    {
+      "path": "/studentLearningObjectives",
+      "description": "This entity represents the competency assessed or evaluated for the student against a specific LearningObjective."
+    },
+    {
+      "path": "/studentMigrantEducationProgramAssociations",
+      "description": "This association represents the migrant education program(s) that a student participates in or receives services from. The association is an extension of the StudentProgramAssociation with added elements particular to migrant education programs."
+    },
+    {
+      "path": "/studentParentAssociations",
+      "description": "This association relates students to their parents, guardians, or caretakers."
+    },
+    {
+      "path": "/studentProgramAssociations",
+      "description": "This association represents the Program(s) that a student participates in or is served by."
+    },
+    {
+      "path": "/studentProgramAttendanceEvents",
+      "description": "This event entity represents the recording of whether a student is in attendance to receive or participate in program services."
+    },
+    {
+      "path": "/studentSchoolAssociations",
+      "description": "This association represents the School in which a student is enrolled. The semantics of enrollment may differ slightly by state. Non-enrollment relationships between a student and an education organization may be described using the StudentEducationOrganizationAssociation."
+    },
+    {
+      "path": "/studentSchoolAttendanceEvents",
+      "description": "This event entity represents the recording of whether a student is in attendance for a school day."
+    },
+    {
+      "path": "/studentSectionAssociations",
+      "description": "This association indicates the course sections to which a student is assigned."
+    },
+    {
+      "path": "/studentSectionAttendanceEvents",
+      "description": "This event entity represents the recording of whether a student is in attendance for a section."
+    },
+    {
+      "path": "/studentSpecialEducationProgramAssociations",
+      "description": "This association represents the special education program(s) that a student participates in or receives services from. The association is an extension of the StudentProgramAssociation particular for special education programs."
+    },
+    {
+      "path": "/studentTitleIPartAProgramAssociations",
+      "description": "This association represents the Title I Part A program(s) that a student participates in or from which the Student receives services. The association is an extension of the StudentProgramAssociation particular for Title I Part A programs."
+    }
+  ],
+  "info": {
+    "title": "Ed-Fi Operational Data Store API",
+    "description": "The Ed-Fi ODS API enables applications to read and write education data stored in an Ed-Fi ODS through a secure REST interface. The Ed-Fi ODS API supports both transactional and bulk modes of operation.",
+    "termsOfServiceUrl": "",
+    "contact": "",
+    "license": "",
+    "licenseUrl": "http://www.ed-fi.org/license/"
+  },
+  "schemes": [
+    "http"
+  ],
+  "authorizations": {
+    "edfi": {
+      "type": "edfi",
+      "description": "Ed-Fi Authorization uses a key and secret to secure student data.",
+      "authUrl": "http://test-ods-v2.5.0.1.example.com/oauth/authorize",
+      "tokenUrl": "http://test-ods-v2.5.0.1.example.com/oauth/token"
+    }
+  }
+}

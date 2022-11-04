@@ -1,0 +1,16 @@
+﻿{
+  "version": "3.1.1",
+  "informationalVersion": "3.1.1",
+  "build": "3.1.1.3888",
+  "apiMode": "Sandbox",
+  "dataModels": [
+    {
+      "name": "Ed-Fi",
+      "version": "3.1.0"
+    },
+    {
+      "name": "GrandBend",
+      "version": "1.0.0"
+    }
+  ]
+}

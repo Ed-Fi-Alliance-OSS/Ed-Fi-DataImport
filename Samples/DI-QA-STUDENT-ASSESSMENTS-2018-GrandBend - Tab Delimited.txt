@@ -1,0 +1,11 @@
+adminyear	DistrictNumber	DistrictName	SchoolNumber	SchoolName	sasid	listeningss_adj	speakingss_adj	readingss_adj	writingss_adj	comprehensionss_adj	oralss_adj	literacyss_adj	Overallss_adj
+2018	255901	Grand Bend ISD	255901107	Grand Bend Elementary School	604825	333	349	270	246	289	341	258	283
+2018	255901	Grand Bend ISD	255901107	Grand Bend Elementary School	604826	303	392	100	100	161	348	100	174
+2018	255901	Grand Bend ISD	255901107	Grand Bend Elementary School	604835	363	230	152	202	215	297	177	213
+2018	255901	Grand Bend ISD	255901107	Grand Bend Elementary School	604864	294	262	251	263	264	278	257	263
+2018	255901	Grand Bend ISD	255901107	Grand Bend Elementary School	604870	209	237	269	277	251	223	273	258
+2018	255901	Grand Bend ISD	255901107	Grand Bend Elementary School	604888	270	237	296	251	288	254	274	268
+2018	255901	Grand Bend ISD	255901107	Grand Bend Elementary School	604890	270	262	289	242	283	266	266	266
+2018	255901	Grand Bend ISD	255901107	Grand Bend Elementary School	604904	934	948	932	926	933	941	929	933
+2018	255901	Grand Bend ISD	255901107	Grand Bend Elementary School	604902	939	939	928	930	931	939	929	932
+2018	255901	Grand Bend ISD	255901107	Grand Bend Elementary School	604876	938	925	929	916	932	932	923	925

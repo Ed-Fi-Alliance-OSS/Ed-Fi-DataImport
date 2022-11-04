@@ -1,0 +1,360 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Common.Enums
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Agent.AddEditAgentViewModel
+
+@{
+    ViewBag.Title = "Agent";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.AjaxForm())
+{
+    @await Html.PartialAsync("_PartialAgentForm", Model)
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(function($) {
+            var agentType = "@Model.AgentTypeCode";
+
+            agentWork(agentType);
+
+            invalidateAvailableBootstrapDatas();
+
+            $(document).on("change",
+                "#AgentTypeCode",
+                function(e) {
+                    var agentType = $("#AgentTypeCode").val();
+
+                    agentWork(agentType);
+                });
+
+            function agentWork(agentType) {
+
+                if (agentType === "@AgentTypeCodeEnum.SFTP" || agentType === "@AgentTypeCodeEnum.FTPS") {
+                    enableSection(".ftp-agents-only");
+                    if (agentType === "@AgentTypeCodeEnum.SFTP") {
+                        $("#Port").attr("placeholder", "If no custom port is specified, the default SFTP port (@AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.SFTP)) will be used.");
+                    } else {
+                        $("#Port").attr("placeholder", "If no custom port is specified, the default FTPS port (@AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.FTPS)) will be used.");
+                    }
+                } else {
+                    disableSection(".ftp-agents-only");
+                }
+
+                if (agentType === "@AgentTypeCodeEnum.SFTP" || agentType === "@AgentTypeCodeEnum.FTPS" || agentType === "@AgentTypeCodeEnum.PowerShell") {
+                    enableSection(".scheduled-agents-only");
+                } else {
+                    disableSection(".scheduled-agents-only");
+                }
+
+                if (agentType === "@AgentTypeCodeEnum.PowerShell") {
+                    enableSection(".powershell-agents-only");
+                } else {
+                    disableSection(".powershell-agents-only");
+                }
+
+                resetPreprocessors(agentType);
+
+                if (agentType !== "@AgentTypeCodeEnum.PowerShell") {
+                    enableSection(".non-powershell-agents-only");
+                } else {
+                    disableSection(".non-powershell-agents-only");
+                }
+            }
+
+            function resetPreprocessors(agentType) {
+                if (agentType !== "@AgentTypeCodeEnum.PowerShell") {
+                    $("#FileGeneratorId").val('');
+                } else {
+                    $("#RowProcessorId").val('');
+                }
+            }
+
+            function enableSection(divSelector) {
+                $(divSelector).find('input').prop('disabled', false);
+                $(divSelector).show();
+            }
+
+            function disableSection(divSelector) {
+                $(divSelector).hide();
+                $(divSelector).find('input').prop('disabled', true);
+            }
+
+            $("#btnSubmit").click(function() { $("#encryption-error").remove(); });
+
+            $("#btnTest").click(function() {
+                $("#btnTest").attr("disabled", true);
+
+                var url = $("#Url").val();
+                var port = $("#Port").val();
+                var userName = $("#Username").val();
+                var password = $("#Password").val();
+                var directory = $("#Directory").val();
+                var filePattern = $("#FilePattern").val();
+
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        url: url,
+                        port: port,
+                        username: userName,
+                        password: password,
+                        directory: directory,
+                        filePattern: filePattern,
+                        agentTypeCode: $("#AgentTypeCode").val()
+                    },
+                    dataType: "json",
+                    url: '@Url.Action("TestAgentConnection", "Agent")',
+                    success: function(data) {
+                        if (data.errorMessage) {
+                            $("#SimpleModal").modal();
+                            $("#SimpleModal .modal-body")
+                                .text("Unable to connect to the agent. Error: " + data.errorMessage);
+                            $("#SimpleModal .modal-title").text("Agent Test Results");
+                            $("#btnTest").attr("disabled", false);
+                        } else {
+                            $("#SimpleModal").modal();
+                            $("#SimpleModal .modal-body").html("");
+                            $("#SimpleModal .modal-body").append($("<h4>").text("Connection to Agent successful! Found " + data.fileNames.length + " file(s)."));
+                            $.each(data.fileNames,
+                                function(i, name) {
+                                    $("#SimpleModal .modal-body").append($("<div>").text(name));
+                                });
+                            $("#SimpleModal .modal-title").text("Agent Test Results");
+                            $("#btnTest").attr("disabled", false);
+                        }
+                    },
+                    error: function(data) {
+                        $("#SimpleModal").modal();
+                        $("#SimpleModal .modal-body")
+                            .text("Unable to connect to the agent.");
+                        $("#SimpleModal .modal-title").text("Agent Test Results");
+                        $("#btnTest").attr("disabled", false);
+                    }
+                });
+            });
+
+            $("#btnAddMap").click(function() {
+                var dataMapList = $('#ddlDataMap');
+                var selectedDataMapId = dataMapList.val();
+                if (selectedDataMapId === '') {
+                    return;
+                }
+                var selectedDataMapName = $(dataMapList).find(":selected").text();
+
+                var selectedDataMap = JSON.stringify({
+                    "DataMapId": selectedDataMapId
+                });
+
+                $("#tblAgentDataMaps").find('tbody')
+                    .append($('<tr>')
+                        .append($('<td>')
+                            .text(selectedDataMapName)
+                            .append($('<input>')
+                                .attr({
+                                    type: 'hidden',
+                                    name: 'ddlDataMaps',
+                                    value: selectedDataMap
+                                })
+                            )
+                        )
+                        .append($('<td>')
+                            .attr('class', 'processing-order')
+                        )
+                        .append($('<td>')
+                            .append($('<a>')
+                                .attr({
+                                    'title': 'Delete',
+                                    'style': "cursor: pointer",
+                                    'class': "delete-row"
+                                }).append($('<i class="fas fa-fw fa-trash-alt"></i>'))
+                            )
+                            .attr('style', "text-align: center;")
+                        )
+                    );
+
+                resetProcessingOrderForDataMaps();
+                dataMapList.find("option[value=\"\"]").prop('selected', true);
+            });
+
+            $("#btnAddBootstrapData").click(function() {
+                var bootstraps = $('#ddlBootstrapDatas');
+                var selectedBootstrap = bootstraps.val();
+                if (selectedBootstrap === '') {
+                    return;
+                }
+
+                var selectedBootstrapDropDownItem = $(bootstraps).find(":selected");
+
+                var selectedBootstrapDataName = selectedBootstrapDropDownItem.text();
+                var resource = selectedBootstrapDropDownItem.data("resource");
+
+                var selectedAgentBootstrapData = JSON.stringify({
+                    "BootstrapDataId": selectedBootstrap
+                });
+
+                $("#tblAgentBootstrapDatas").find('tbody')
+                    .append($('<tr>')
+                        .append($('<td>')
+                            .text(selectedBootstrapDataName)
+                            .append($('<input>')
+                                .attr({
+                                    type: 'hidden',
+                                    name: 'ddlBootstrapDatas',
+                                    value: selectedAgentBootstrapData
+                                })
+                            )
+                        )
+                        .append($('<td>')
+                            .text(resource)
+                        )
+                        .append($('<td>')
+                            .attr('class', 'processing-order')
+                        )
+                        .append($('<td>')
+                            .append($('<a>')
+                                .attr({
+                                    'title': 'Delete',
+                                    'style': "cursor: pointer",
+                                    'class': "delete-row"
+                                }).append($('<i class="fas fa-fw fa-trash-alt"></i>'))
+                            )
+                            .attr('style', "text-align: center;")
+                        )
+                    );
+
+                resetProcessingOrderForBootstrapDataDefinitions();
+                bootstraps.find("option[value=\"\"]").prop('selected', true);
+
+                invalidateAvailableBootstrapDatas();
+            });
+
+            function invalidateAvailableBootstrapDatas() {
+
+                var selectedBootstrapDatas = $("#tblAgentBootstrapDatas").find('tbody').find('input').map(function(i, input) {
+                    return JSON.parse(input.value);
+                }).get();
+
+                var availableItems = $('#ddlBootstrapDatas').find("option");
+                if (availableItems) {
+                    availableItems.each(function (i, bootstrapDataOption) {
+                        if (bootstrapDataOption.value === '') {
+                            return;
+                        }
+
+                        var selected = selectedBootstrapDatas.find(function (b) {
+                            // Strict comparison is not used here in purpose since b.BootstrapDataId could be number or string depending how it was generated.
+                            return b.BootstrapDataId == bootstrapDataOption.value;
+                        });
+
+                        if (selected) {
+                            $(bootstrapDataOption).hide();
+                        } else {
+                            $(bootstrapDataOption).show();
+                        }
+                    });
+                }
+            }
+
+            $("#btnAddSchedule").click(function() {
+                var ddlDay = $('#ddlDay');
+                var ddlHour = $('#ddlHour');
+                var ddlMinute = $('#ddlMinute');
+
+                var dayId = ddlDay.val();
+                var hourId = ddlHour.val();
+                var minuteId = ddlMinute.val();
+
+                if (!(dayId && hourId && minuteId)) {
+                    return;
+                }
+
+                var dayName = $(ddlDay).find(":selected").text();
+                var selectedSchedule = JSON.stringify({
+                    "Day": dayId,
+                    "Hour": hourId,
+                    "Minute": minuteId
+                });
+
+                $("#tblAgentSchedule").find('tbody')
+                    .append($('<tr>')
+                        .append($('<input>')
+                            .attr({
+                                type: 'hidden',
+                                name: 'ddlSchedules',
+                                value: selectedSchedule
+                            })
+                        )
+                        .append($('<td>')
+                            .text(dayName)
+                        )
+                        .append($('<td>')
+                            .text(hourId)
+                        )
+                        .append($('<td>')
+                            .text(minuteId)
+                        )
+                        .append($('<td>')
+                            .append($('<a>')
+                                .attr({
+                                    'title': 'Delete',
+                                    'style': "cursor: pointer",
+                                    'class': "delete-row"
+                                }).append($('<i class="fas fa-fw fa-trash-alt"></i>'))
+                            )
+                            .attr('style', "text-align: center;")
+                        )
+                    );
+
+                ddlDay.find("option[value=\"\"]").prop('selected', true);
+                ddlHour.find("option[value=\"\"]").prop('selected', true);
+                ddlMinute.find("option[value=\"\"]").prop('selected', true);
+            });
+
+            $('#tblAgentSchedule, #tblAgentDataMaps').on('click',
+                '.delete-row',
+                function() {
+                    var isDataMapTable = $(this).closest("table").attr('id') === 'tblAgentDataMaps';
+                    $(this).closest("tr").remove();
+                    if (isDataMapTable)
+                        resetProcessingOrderForDataMaps();
+                });
+
+            $('#tblAgentBootstrapDatas').on('click', '.delete-row',
+                function () {
+                    $(this).closest("tr").remove();
+                    invalidateAvailableBootstrapDatas();
+                    resetProcessingOrderForBootstrapDataDefinitions();
+                });
+
+            function resetProcessingOrderForDataMaps() {
+                resetProcessingOrderForEntity('tblAgentDataMaps', 'ddlDataMaps');
+            }
+
+            function resetProcessingOrderForBootstrapDataDefinitions() {
+                resetProcessingOrderForEntity('tblAgentBootstrapDatas', 'ddlBootstrapDatas');
+            }
+
+            function resetProcessingOrderForEntity(tableId, dropdownListId) {
+                $('#' + tableId).find('tbody').find('tr').each(function (i, row) {
+                    var input = $(row).find('input[name="' + dropdownListId + '"]');
+                    var entityObject = JSON.parse(input.val());
+                    var currentOrderNumber = i + 1;
+
+                    entityObject['ProcessingOrder'] = currentOrderNumber;
+                    input.attr('value', JSON.stringify(entityObject));
+                    $(row).find('.processing-order').text(currentOrderNumber);
+                });
+            }
+        });
+    </script>
+}

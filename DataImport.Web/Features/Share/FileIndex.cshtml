@@ -1,0 +1,44 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Share.FileImport.FileUploadForm
+@inject DataImport.Web.Services.IHtmlHelperService htmlHelperService
+
+@{
+    ViewBag.Title = "Import / Export Templates";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-lg-10">
+        <p>
+            Data Import allows users to define templates, which map data sources to an Ed-Fi ODS / API.
+            These configuration templates contain metadata information for the mapping of CSV files to
+            Ed-Fi API endpoint(s), value replacement lookup tables, and Ed-Fi API bootstrap data necessary
+            before import jobs.
+        </p>
+        <h3>Template Sharing</h3>
+        <p style="padding-bottom: 2em;">
+            The tools on this page provide users the ability to import or export files shared on the
+            <a style="font-weight: bold" href="https://github.com/Ed-Fi-Exchange-OSS/DataImport-Templates">
+                DataImport-Templates repository
+            </a> in the Ed-Fi Exchange GitHub. More information about usage and sharing can be found there.
+        </p>
+
+        @using (Html.Form("FileImportUpload"))
+        {
+            @Html.Input(x => x.File)
+            @Html.SubmitButton("Import")
+            <div style="margin:50px"></div>
+
+            @Html.FormGroup("Export Template", htmlHelperService.NavigationButton(Html, "Export", "FileExport"))
+        }
+
+    </div>
+</div>

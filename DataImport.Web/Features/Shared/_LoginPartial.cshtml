@@ -1,0 +1,51 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Infrastructure.Security
+@using Microsoft.Extensions.Options
+
+@inject IOptions<IdentitySettings> IdentitySettings
+
+@{
+    var controllerName = IdentitySettings.Value.ControllerName;
+    var hasUserManagementLink = IdentitySettings.Value.Type.Equals(IdentitySettingsConstants.OpenIdIdentityType, StringComparison.CurrentCultureIgnoreCase)
+                             && !string.IsNullOrWhiteSpace(IdentitySettings.Value.OpenIdSettings.UserProfileUri);
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+    using (Html.BeginForm("Logout", controllerName, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    @User.Identity.Name
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    @if (hasUserManagementLink)
+                    {
+                        <li>
+                            @Html.ActionLink("Manage", "Manage", controllerName, null, new { title = "Manage" })
+                        </li>
+                    }
+                    <li>
+                        <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Log in", "Login", controllerName, null, new { id = "loginLink" })</li>
+    </ul>
+}
