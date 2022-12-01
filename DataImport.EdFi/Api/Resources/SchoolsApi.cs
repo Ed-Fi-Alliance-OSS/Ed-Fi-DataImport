@@ -9,9 +9,9 @@ using DataImport.Common.ExtensionMethods;
 using DataImport.EdFi.Models.Resources;
 using RestSharp;
 
-namespace DataImport.EdFi.Api.Resources 
+namespace DataImport.EdFi.Api.Resources
 {
-    public class SchoolsApi 
+    public class SchoolsApi
     {
         private readonly IRestClient _client;
         private readonly string _apiVersion;
@@ -47,8 +47,8 @@ namespace DataImport.EdFi.Api.Resources
             request.RequestFormat = DataFormat.Json;
 
             request.AddUrlSegment("id", id);
-            if (id == null ) 
-               throw new ArgumentException("API method call is missing required parameters");
+            if (id == null)
+                throw new ArgumentException("API method call is missing required parameters");
             request.AddHeader("Accept", "application/json");
             var response = _client.Execute<School>(request);
 

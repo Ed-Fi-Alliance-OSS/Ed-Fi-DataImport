@@ -5,9 +5,9 @@
 
 using System.Collections.Generic;
 
-namespace DataImport.EdFi.ModelsV25.Resources 
+namespace DataImport.EdFi.ModelsV25.Resources
 {
-    public class Assessment 
+    public class Assessment
     {
         public string Id { get; set; }
 

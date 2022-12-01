@@ -13,7 +13,7 @@ using RestSharp;
 
 namespace DataImport.EdFi.Api.Resources
 {
-    public class AssessmentsApi 
+    public class AssessmentsApi
     {
         private readonly IRestClient _client;
         private readonly string _apiVersion;
@@ -25,8 +25,8 @@ namespace DataImport.EdFi.Api.Resources
             _apiVersion = apiVersion;
             _mapper = mapper;
         }
-      
-        public List<Assessment> GetAllAssessments(int? offset= null, int? limit= null)
+
+        public List<Assessment> GetAllAssessments(int? offset = null, int? limit = null)
         {
             var request = _apiVersion.IsOdsV2()
                 ? new RestRequest("/assessments", Method.GET)
@@ -53,8 +53,8 @@ namespace DataImport.EdFi.Api.Resources
             request.RequestFormat = DataFormat.Json;
 
             request.AddUrlSegment("id", id);
-            if (id == null ) 
-               throw new ArgumentException("API method call is missing required parameters");
+            if (id == null)
+                throw new ArgumentException("API method call is missing required parameters");
             request.AddHeader("Accept", "application/json");
 
             return _apiVersion.IsOdsV2()

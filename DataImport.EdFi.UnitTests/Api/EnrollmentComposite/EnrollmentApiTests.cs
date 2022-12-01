@@ -45,10 +45,10 @@ namespace DataImport.EdFi.UnitTests.Api.EnrollmentComposite
             restClient.BaseUrl.ToString().ShouldBe($"{initialUrl}/");
         }
 
-        [TestCase( "3.1.1", "2129", "/composites/v1/2129/")]
-        [TestCase( "3.1.1", null, "/composites/v1/")]
-        [TestCase( "5.1.0", "2129", "/composites/v1/2129/")]
-        [TestCase( "5.1.0", null, "/composites/v1/")]
+        [TestCase("3.1.1", "2129", "/composites/v1/2129/")]
+        [TestCase("3.1.1", null, "/composites/v1/")]
+        [TestCase("5.1.0", "2129", "/composites/v1/2129/")]
+        [TestCase("5.1.0", null, "/composites/v1/")]
         public void Given_suite_3_then_should_modify_the_url(string apiVersion, string year, string expectedCompositePath)
         {
             // Arrange

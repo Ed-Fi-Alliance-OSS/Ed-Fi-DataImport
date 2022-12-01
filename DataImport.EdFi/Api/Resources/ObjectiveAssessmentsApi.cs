@@ -10,7 +10,7 @@ using RestSharp;
 
 namespace DataImport.EdFi.Api.Resources
 {
-    public class ObjectiveAssessmentsApi 
+    public class ObjectiveAssessmentsApi
     {
         private readonly IRestClient _client;
         private readonly string _apiVersion;

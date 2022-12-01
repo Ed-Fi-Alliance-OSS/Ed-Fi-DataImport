@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using DataImport.Common.ExtensionMethods;
 using DataImport.EdFi.Models;
 using RestSharp;
 
@@ -21,7 +20,7 @@ namespace DataImport.EdFi.Api
             _client = client;
         }
 
-        public List<Descriptor> GetAllDescriptors(string descriptorPath, int? offset= null, int? limit = null)
+        public List<Descriptor> GetAllDescriptors(string descriptorPath, int? offset = null, int? limit = null)
         {
             var request = new RestRequest($"/{descriptorPath}", Method.GET) { RequestFormat = DataFormat.Json };
 
@@ -32,7 +31,7 @@ namespace DataImport.EdFi.Api
             request.AddHeader("Accept", "application/json");
 
             var response = _client.Execute<List<Descriptor>>(request);
-            if(response.StatusCode == HttpStatusCode.NotFound)
+            if (response.StatusCode == HttpStatusCode.NotFound)
                 throw new DescriptorNotFoundException(new Exception($"Descriptor '{descriptorPath}' could not be found."));
 
             return response.Data;
