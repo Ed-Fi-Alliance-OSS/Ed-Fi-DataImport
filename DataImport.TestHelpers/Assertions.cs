@@ -6,11 +6,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using static DataImport.TestHelpers.TestHelpers;
 
 namespace DataImport.TestHelpers
 {
-    using static TestHelpers;
-
     public static class Assertions
     {
         public static void ShouldMatch<T>(this IEnumerable<T> actual, params T[] expected)

@@ -28,7 +28,7 @@ namespace DataImport.TestHelpers
         {
             var location = Assembly.GetExecutingAssembly().Location;
 
-            if(!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 return Path.GetDirectoryName(location);
 
             var uri = new UriBuilder(location);
