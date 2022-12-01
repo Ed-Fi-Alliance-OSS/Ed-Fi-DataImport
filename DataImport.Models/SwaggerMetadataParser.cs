@@ -150,10 +150,10 @@ namespace DataImport.Models
             }
         }
 
-        private static readonly string[] IgnoredFields = { "id", "link", "_etag" };
+        private static readonly string[] _ignoredFields = { "id", "link", "_etag" };
         private static bool IsApplicableField(ResourceMetadata field)
         {
-            return !IgnoredFields.Contains(field.Name);
+            return !_ignoredFields.Contains(field.Name);
         }
 
         private static string GetReferenceName(JToken reference)

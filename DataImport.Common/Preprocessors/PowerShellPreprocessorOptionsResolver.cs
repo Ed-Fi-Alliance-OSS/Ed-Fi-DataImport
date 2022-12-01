@@ -21,7 +21,7 @@ namespace DataImport.Common.Preprocessors
         {
             var powerShellPreprocessorOptions = new PowerShellPreprocessorOptions();
 
-            var psOptions = _dataImportDbContext.Configurations.Select(x => new { x.AvailableCmdlets, x.ImportPSModules }).SingleOrDefault();
+            var psOptions = _dataImportDbContext.Configurations.Select(x => new { x.AvailableCmdlets, ImportPSModules = x.ImportPsModules }).SingleOrDefault();
             if (psOptions != null)
             {
                 powerShellPreprocessorOptions.MergeOptions(psOptions.AvailableCmdlets, psOptions.ImportPSModules);

@@ -105,12 +105,12 @@ namespace DataImport.Web.Services.Swagger
 
         public async Task<string> InferOdsApiVersion(string apiUrl)
         {
-            const string odsV2Default = "2.5+";
+            const string OdsV2Default = "2.5+";
             var (isOdsV3, apiVersion) = await IsOdsV3(apiUrl);
             if (isOdsV3)
                 return apiVersion;
             var (isOdsV2, _) = await IsOdsV2(apiUrl);
-            return isOdsV2 ? odsV2Default : null;
+            return isOdsV2 ? OdsV2Default : null;
         }
 
         private async Task<(bool isOdsV3, string apiVersion)> IsOdsV3(string apiUrl)

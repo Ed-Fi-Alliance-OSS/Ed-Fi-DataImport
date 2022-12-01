@@ -58,8 +58,8 @@ namespace DataImport.Server.TransformLoad.Tests
             {
                 return key switch
                 {
-                    AgentTypeCodeEnum.FTPS => serviceProvider.GetRequiredService<TestFtpsServer>(),
-                    AgentTypeCodeEnum.SFTP => serviceProvider.GetRequiredService<TestSftpServer>(),
+                    AgentTypeCodeEnum.Ftps => serviceProvider.GetRequiredService<TestFtpsServer>(),
+                    AgentTypeCodeEnum.Sftp => serviceProvider.GetRequiredService<TestSftpServer>(),
                     _ => throw new KeyNotFoundException(),
                 };
             });

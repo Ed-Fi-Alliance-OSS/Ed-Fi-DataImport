@@ -78,8 +78,8 @@ namespace DataImport.Server.TransformLoad.Tests.Features
         [Test]
         public void ConvertPathToUri()
         {
-            const string testPath = @"C:\Temp\fileName12345.log";
-            var result = Common.Helpers.UrlUtility.ConvertLocalPathToUri(testPath);
+            const string TestPath = @"C:\Temp\fileName12345.log";
+            var result = Common.Helpers.UrlUtility.ConvertLocalPathToUri(TestPath);
 
             // Assert
             result.ShouldBe("file:///C:/Temp/fileName12345.log");

@@ -176,9 +176,9 @@ namespace DataImport.Common.Tests
         [Test]
         public void ValidateThrowsExceptionForCompileError()
         {
-            const string scriptContent = "Process { Write-Output $_";
+            const string ScriptContent = "Process { Write-Output $_";
 
-            Should.Throw<PowerShellValidateException>(() => _service.ValidateScript(scriptContent));
+            Should.Throw<PowerShellValidateException>(() => _service.ValidateScript(ScriptContent));
         }
 
         [TestCase("Process { Write-Output $_ }", Description = "ValidateSucceedsForValidScript")]

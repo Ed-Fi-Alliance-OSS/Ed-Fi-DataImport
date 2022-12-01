@@ -22,36 +22,36 @@ namespace DataImport.Web.Tests
 
         public async Task<string> DownloadString(string url)
         {
-            const string swaggerResourcesV25 = OdsDomainV25 + "/metadata/resources/api-docs";
-            const string swaggerDescriptorsV25 = OdsDomainV25 + "/metadata/descriptors/api-docs";
+            const string SwaggerResourcesV25 = OdsDomainV25 + "/metadata/resources/api-docs";
+            const string SwaggerDescriptorsV25 = OdsDomainV25 + "/metadata/descriptors/api-docs";
 
-            const string swaggerResourcesV311 = OdsDomainV311 + "/metadata/data/v3/resources/swagger.json";
-            const string swaggerDescriptorsV311 = OdsDomainV311 + "/metadata/data/v3/descriptors/swagger.json";
+            const string SwaggerResourcesV311 = OdsDomainV311 + "/metadata/data/v3/resources/swagger.json";
+            const string SwaggerDescriptorsV311 = OdsDomainV311 + "/metadata/data/v3/descriptors/swagger.json";
 
-            if (url == swaggerResourcesV25)
+            if (url == SwaggerResourcesV25)
                 return await SampleSwaggerResponseV25("Swagger-Resources-API-Docs.json");
 
-            if (url == swaggerDescriptorsV25)
+            if (url == SwaggerDescriptorsV25)
                 return await SampleSwaggerResponseV25("Swagger-Descriptors-API-Docs.json");
 
-            if (url.StartsWith(swaggerResourcesV25 + "/"))
+            if (url.StartsWith(SwaggerResourcesV25 + "/"))
             {
-                var resource = url.Substring(swaggerResourcesV25.Length + 1);
+                var resource = url.Substring(SwaggerResourcesV25.Length + 1);
 
                 return await SampleSwaggerResponseV25(resource + ".json");
             }
 
-            if (url.StartsWith(swaggerDescriptorsV25 + "/"))
+            if (url.StartsWith(SwaggerDescriptorsV25 + "/"))
             {
-                var descriptor = url.Substring(swaggerDescriptorsV25.Length + 1);
+                var descriptor = url.Substring(SwaggerDescriptorsV25.Length + 1);
 
                 return await SampleSwaggerResponseV25(descriptor + ".json");
             }
 
-            if (url == swaggerResourcesV311)
+            if (url == SwaggerResourcesV311)
                 return await SampleSwaggerResponseV311("Swagger-Resources-API-Docs.json");
 
-            if (url == swaggerDescriptorsV311)
+            if (url == SwaggerDescriptorsV311)
                 return await SampleSwaggerResponseV311("Swagger-Descriptors-API-Docs.json");
 
             if (url == OdsDomainV311)

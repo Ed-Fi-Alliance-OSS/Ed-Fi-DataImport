@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataImport.Models.Migrations.SqlServer
 {
-    public partial class netcore_migration_drift : Migration
+    public partial class NetcoreMigrationDrift : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

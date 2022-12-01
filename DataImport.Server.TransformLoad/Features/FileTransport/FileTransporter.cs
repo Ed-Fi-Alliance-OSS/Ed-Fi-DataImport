@@ -41,8 +41,8 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
                     .Include(agent => agent.AgentSchedules)
                     .Where(agent => agent.ApiServerId == request.ApiServerId &&
                         agent.Enabled && agent.Archived == false &&
-                        (agent.AgentTypeCode == AgentTypeCodeEnum.SFTP ||
-                         agent.AgentTypeCode == AgentTypeCodeEnum.FTPS))
+                        (agent.AgentTypeCode == AgentTypeCodeEnum.Sftp ||
+                         agent.AgentTypeCode == AgentTypeCodeEnum.Ftps))
                     .OrderBy(agent => agent.RunOrder == null)
                     .ThenBy(agent => agent.RunOrder)
                     .ThenBy(agent => agent.Id)

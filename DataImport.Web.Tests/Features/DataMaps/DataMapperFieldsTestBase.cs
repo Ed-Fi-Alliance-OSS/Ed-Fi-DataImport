@@ -20,7 +20,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
     {
         protected ApiVersion ApiVersion;
 
-        protected readonly List<SelectListItem> _dataSources = new List<SelectListItem>
+        protected readonly List<SelectListItem> DataSources = new List<SelectListItem>
         {
             new SelectListItem { Text = "Select Data Source", Value = "" },
             new SelectListItem { Text = "column", Value = "column" },
@@ -28,7 +28,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
             new SelectListItem { Text = "static", Value = "static" },
         };
 
-        protected readonly List<SelectListItem> _emptySourceColumns = new List<SelectListItem>
+        protected readonly List<SelectListItem> EmptySourceColumns = new List<SelectListItem>
         {
             new SelectListItem { Text = "Select Source Column", Value = "" }
         };
@@ -58,9 +58,9 @@ namespace DataImport.Web.Tests.Features.DataMaps
             {
                 ResourceMetadata = new List<ResourceMetadata>(),
                 Mappings = new List<DataMapper>(),
-                DataSources = _dataSources,
+                DataSources = DataSources,
                 SourceTables = populatedLookups,
-                SourceColumns = _emptySourceColumns
+                SourceColumns = EmptySourceColumns
             });
         }
 

@@ -45,7 +45,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
         public class GetDescriptorPath
         {
             [TestFixture]
-            public class Given_suite_2_version_260 : TestFixture
+            public class GivenSuite2Version260 : TestFixture
             {
                 protected string InjectedApiVersion => "2.6.0";
 
@@ -61,7 +61,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
             }
 
             [TestFixture]
-            public class Given_suite_3_version_311 : TestFixture
+            public class GivenSuite3Version311 : TestFixture
             {
                 protected string InjectedApiVersion => "3.1.1";
 
@@ -77,7 +77,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
             }
 
             [TestFixture]
-            public class Given_suite_3_version_510 : TestFixture
+            public class GivenSuite3Version510 : TestFixture
             {
                 protected string InjectedApiVersion => "5.1.0";
 

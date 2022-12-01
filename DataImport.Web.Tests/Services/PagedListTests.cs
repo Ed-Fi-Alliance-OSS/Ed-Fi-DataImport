@@ -45,29 +45,29 @@ namespace DataImport.Web.Tests.Services
         [Test]
         public void ShouldCalculateOffsetCorrectlyForFirstPage()
         {
-            const int pageNumber = 0;
-            const int configuredPageSize = 30;
+            const int PageNumber = 0;
+            const int ConfiguredPageSize = 30;
 
             Page<object>.Fetch((offset, size) =>
             {
                 offset.ShouldBe(0);
 
                 return ListOfObjects;
-            }, pageNumber);
+            }, PageNumber);
 
             Page<object>.Fetch((offset, size) =>
             {
                 offset.ShouldBe(0);
 
                 return ListOfObjects;
-            }, pageNumber, configuredPageSize);
+            }, PageNumber, ConfiguredPageSize);
         }
 
         [Test]
         public void ShouldCalculateOffsetCorrectlyForNPage()
         {
             var pageNumber = 2;
-            const int configuredPageSize = 25;
+            const int ConfiguredPageSize = 25;
 
             Page<object>.Fetch((offset, size) =>
             {
@@ -87,12 +87,12 @@ namespace DataImport.Web.Tests.Services
 
             Page<object>.Fetch((offset, size) =>
             {
-                var calculatedOffSet = (pageNumber - 1) * configuredPageSize;
+                var calculatedOffSet = (pageNumber - 1) * ConfiguredPageSize;
 
                 offset.ShouldBe(calculatedOffSet);
 
                 return ListOfObjects;
-            }, pageNumber, configuredPageSize);
+            }, pageNumber, ConfiguredPageSize);
         }
 
         [Test]
@@ -105,40 +105,40 @@ namespace DataImport.Web.Tests.Services
                 return ListOfObjects;
             }, 0);
 
-            const int configuredPageSize = 50;
+            const int ConfiguredPageSize = 50;
 
             Page<object>.Fetch((offset, size) =>
             {
                 size.ShouldBe(51);
 
                 return ListOfObjects;
-            }, 0, configuredPageSize);
+            }, 0, ConfiguredPageSize);
         }
 
         [Test]
         public void ShouldDetectIfNextPageHasResults()
         {
-            const int configuredPageSize = 50;
+            const int ConfiguredPageSize = 50;
             var pageNumber = 1;
 
-            var pagedObjects = FetchPagedObjects(pageNumber, configuredPageSize);
+            var pagedObjects = FetchPagedObjects(pageNumber, ConfiguredPageSize);
             pagedObjects.NextPageHasResults.ShouldBeTrue();
 
             pageNumber = 2;
 
-            pagedObjects = FetchPagedObjects(pageNumber, configuredPageSize);
+            pagedObjects = FetchPagedObjects(pageNumber, ConfiguredPageSize);
             pagedObjects.NextPageHasResults.ShouldBeFalse();
         }
 
         [Test]
         public void ShouldReturnSameAmountOfItemsAsPageSize()
         {
-            const int configuredPageSize = 10;
-            const int pageNumber = 1;
+            const int ConfiguredPageSize = 10;
+            const int PageNumber = 1;
 
-            var pagedObjects = FetchPagedObjects(pageNumber, configuredPageSize);
+            var pagedObjects = FetchPagedObjects(PageNumber, ConfiguredPageSize);
 
-            pagedObjects.Items.Count().ShouldBe(configuredPageSize);
+            pagedObjects.Items.Count().ShouldBe(ConfiguredPageSize);
         }
 
         [Test]

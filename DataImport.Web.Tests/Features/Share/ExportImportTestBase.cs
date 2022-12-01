@@ -498,7 +498,7 @@ namespace DataImport.Web.Tests.Features.Share
                 }}
             }}";
 
-            const string submitter = @"{
+            const string Submitter = @"{
                     ""name"": ""Test Smith"",
                     ""organization"": ""Test Organization"",
                     ""email"": ""test.smith @example.com""
@@ -507,7 +507,7 @@ namespace DataImport.Web.Tests.Features.Share
             var command = new ImportBase.Command
             {
                 Import = SharingModel.Deserialize(template),
-                Submitter = SharingContact.Deserialize(submitter)
+                Submitter = SharingContact.Deserialize(Submitter)
             };
 
             return command;

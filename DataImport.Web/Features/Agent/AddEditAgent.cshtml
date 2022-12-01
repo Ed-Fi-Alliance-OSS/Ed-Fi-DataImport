@@ -39,18 +39,18 @@ See the LICENSE and NOTICES files in the project root for more information.
 
             function agentWork(agentType) {
 
-                if (agentType === "@AgentTypeCodeEnum.SFTP" || agentType === "@AgentTypeCodeEnum.FTPS") {
+                if (agentType === "@AgentTypeCodeEnum.Sftp" || agentType === "@AgentTypeCodeEnum.Ftps") {
                     enableSection(".ftp-agents-only");
-                    if (agentType === "@AgentTypeCodeEnum.SFTP") {
-                        $("#Port").attr("placeholder", "If no custom port is specified, the default SFTP port (@AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.SFTP)) will be used.");
+                    if (agentType === "@AgentTypeCodeEnum.Sftp") {
+                        $("#Port").attr("placeholder", "If no custom port is specified, the default SFTP port (@AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.Sftp)) will be used.");
                     } else {
-                        $("#Port").attr("placeholder", "If no custom port is specified, the default FTPS port (@AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.FTPS)) will be used.");
+                        $("#Port").attr("placeholder", "If no custom port is specified, the default FTPS port (@AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.Ftps)) will be used.");
                     }
                 } else {
                     disableSection(".ftp-agents-only");
                 }
 
-                if (agentType === "@AgentTypeCodeEnum.SFTP" || agentType === "@AgentTypeCodeEnum.FTPS" || agentType === "@AgentTypeCodeEnum.PowerShell") {
+                if (agentType === "@AgentTypeCodeEnum.Sftp" || agentType === "@AgentTypeCodeEnum.Ftps" || agentType === "@AgentTypeCodeEnum.PowerShell") {
                     enableSection(".scheduled-agents-only");
                 } else {
                     disableSection(".scheduled-agents-only");

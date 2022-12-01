@@ -70,7 +70,7 @@ namespace DataImport.Web.Features.DataMaps
 
                     var csvDataTable = new DataTable();
 
-                    const int linesToRead = 5;
+                    const int LinesToRead = 5;
                     var linesRead = 1;
 
                     string[] columnHeaders;
@@ -104,7 +104,7 @@ namespace DataImport.Web.Features.DataMaps
 
                                 linesRead++;
 
-                            } while (csvHelper.Read() && linesRead <= linesToRead);
+                            } while (csvHelper.Read() && linesRead <= LinesToRead);
                         }
                     }
 

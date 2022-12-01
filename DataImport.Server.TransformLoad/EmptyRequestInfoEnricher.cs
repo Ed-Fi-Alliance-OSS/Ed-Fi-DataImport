@@ -16,13 +16,13 @@ namespace DataImport.Server.TransformLoad
         {
             if (logEvent == null) throw new ArgumentNullException(nameof(logEvent));
 
-            const string notAvailable = "NOT AVAILABLE";
+            const string NotAvailable = "NOT AVAILABLE";
 
-            logEvent.AddProperty(LoggingConstants.ServerNameProp, notAvailable);
-            logEvent.AddProperty(LoggingConstants.ServerPortProp, notAvailable);
-            logEvent.AddProperty(LoggingConstants.UrlProp, notAvailable);
-            logEvent.AddProperty(LoggingConstants.LocalAddress, notAvailable);
-            logEvent.AddProperty(LoggingConstants.RemoteAddress, notAvailable);
+            logEvent.AddProperty(LoggingConstants.ServerNameProp, NotAvailable);
+            logEvent.AddProperty(LoggingConstants.ServerPortProp, NotAvailable);
+            logEvent.AddProperty(LoggingConstants.UrlProp, NotAvailable);
+            logEvent.AddProperty(LoggingConstants.LocalAddress, NotAvailable);
+            logEvent.AddProperty(LoggingConstants.RemoteAddress, NotAvailable);
             logEvent.AddProperty(LoggingConstants.UserName, null);
         }
     }

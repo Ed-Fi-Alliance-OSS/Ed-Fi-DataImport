@@ -25,7 +25,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
     {
         private Agent _ftpsAgent;
         private int _agentId;
-        private IFileHelper fileHelper;
+        private IFileHelper _fileHelper;
 
         [SetUp]
         public void Init()
@@ -37,7 +37,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
             _ftpsAgent = new Agent
             {
                 Name = ftpsAgentName,
-                AgentTypeCode = AgentTypeCodeEnum.FTPS,
+                AgentTypeCode = AgentTypeCodeEnum.Ftps,
                 Url = "127.0.0.1",
                 Username = "username",
                 Password = "password",
@@ -57,24 +57,24 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
             _ftpsAgent.Enabled = true;
             _ftpsAgent.AgentSchedules = agentSchedules;
             _agentId = AddAgent(_ftpsAgent);
-            fileHelper = Services.GetService<IFileHelper>();
+            _fileHelper = Services.GetService<IFileHelper>();
         }
 
         [Test]
         public async Task Should_Log_Files_Successfully_For_FTPS_Agent()
         {
-            const string fileName = "FtpsFile1";
+            const string FileName = "FtpsFile1";
 
             var localFilePath = Path.Combine(GetAssemblyPath(), "TestFiles/testing.csv");
             var url = new Uri(localFilePath).AbsoluteUri;
 
-            await fileHelper.LogFileAsync(fileName, _agentId, url, FileStatus.Uploaded, 10);
+            await _fileHelper.LogFileAsync(FileName, _agentId, url, FileStatus.Uploaded, 10);
             var result = GetLoggedAgentFiles(_agentId).ToList();
 
             // Assert
             result.ShouldNotBeNull();
             result.Count.ShouldBe(1);
-            result[0].FileName.ShouldBe(fileName);
+            result[0].FileName.ShouldBe(FileName);
             result[0].Url.ShouldBe(url);
             result[0].Status.ShouldBe(FileStatus.Uploaded);
             result[0].Rows.ShouldBe(10);
@@ -83,45 +83,45 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
         [Test]
         public async Task Should_DoesFileExistInLog_For_Existing_Files_Returns_True()
         {
-            const string fileName = "FtpsFile1";
+            const string FileName = "FtpsFile1";
             bool doesFileExist = false;
 
             var localFilePath = Path.Combine(GetAssemblyPath(), "TestFiles/testing.csv");
             var url = new Uri(localFilePath).AbsoluteUri;
 
-            await fileHelper.LogFileAsync(fileName, _agentId, url, FileStatus.Uploaded, 10);
+            await _fileHelper.LogFileAsync(FileName, _agentId, url, FileStatus.Uploaded, 10);
 
             var result = GetLoggedAgentFiles(_agentId).ToList();
 
             using (var scope = Services.CreateScope())
             {
                 using var dbContext = scope.ServiceProvider.GetService<DataImportDbContext>();
-                doesFileExist = await Helper.DoesFileExistInLog(dbContext, _agentId, fileName);
+                doesFileExist = await Helper.DoesFileExistInLog(dbContext, _agentId, FileName);
             }
 
             // Assert
             result.ShouldNotBeNull();
             result.Count.ShouldBe(1);
-            result[0].FileName.ShouldBe(fileName);
+            result[0].FileName.ShouldBe(FileName);
             doesFileExist.ShouldBeTrue();
         }
 
         [Test]
         public async Task Should_DoesFileExistInLog_For_No_Existing_Files_Returns_False()
         {
-            const string fileName = "FtpsFile1";
-            const string notExistingFileName = "FtpsFile2";
+            const string FileName = "FtpsFile1";
+            const string NotExistingFileName = "FtpsFile2";
             bool doesFileExist = false;
 
             var localFilePath = Path.Combine(GetAssemblyPath(), "TestFiles/testing.csv");
             var url = new Uri(localFilePath).AbsoluteUri;
 
-            await fileHelper.LogFileAsync(fileName, _agentId, url, FileStatus.Uploaded, 10);
+            await _fileHelper.LogFileAsync(FileName, _agentId, url, FileStatus.Uploaded, 10);
 
             using (var scope = Services.CreateScope())
             {
                 using var dbContext = scope.ServiceProvider.GetService<DataImportDbContext>();
-                doesFileExist = await Helper.DoesFileExistInLog(dbContext, _agentId, notExistingFileName);
+                doesFileExist = await Helper.DoesFileExistInLog(dbContext, _agentId, NotExistingFileName);
             }
 
             // Assert

@@ -7,7 +7,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 
 @using DataImport.Common.Enums
 @model DataImport.Web.Features.Agent.AgentIndex.ViewModel
-@inject DataImport.Web.Services.IHtmlHelperService htmlHelperService
+@inject DataImport.Web.Services.IHtmlHelperService HtmlHelperService
 
 @{
     ViewBag.Title = "Agents";
@@ -16,7 +16,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 <h2>@ViewBag.Title</h2>
 
 <div style="padding-bottom: 10px;">
-    @htmlHelperService.NavigationButton(Html, "Add Agent", "Add")
+    @HtmlHelperService.NavigationButton(Html, "Add Agent", "Add")
 </div>
 <table id="tblAgents" class="table table-striped table-hover table-bordered table-responsive" data-paging="true" data-paging-size="20">
     <thead>

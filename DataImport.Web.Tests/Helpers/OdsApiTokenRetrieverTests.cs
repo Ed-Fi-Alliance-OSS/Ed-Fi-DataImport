@@ -80,15 +80,15 @@ namespace DataImport.Web.Tests.Helpers
             public void Given_setup_for_suite2_version260_then_use_access_code_to_get_bearer_token()
             {
                 // Arrange
-                const string accessCode = "access code";
-                const string bearerToken = "bearer token";
+                const string AccessCode = "access code";
+                const string BearerToken = "bearer token";
 
                 A.CallTo(() => _oAuthRequestWrapper.GetAccessCode(_apiServer, EncryptionKey))
-                    .Returns(accessCode);
+                    .Returns(AccessCode);
 
                 A.CallTo(() =>
-                        _oAuthRequestWrapper.GetBearerToken(_apiServer, EncryptionKey, accessCode))
-                    .Returns(bearerToken);
+                        _oAuthRequestWrapper.GetBearerToken(_apiServer, EncryptionKey, AccessCode))
+                    .Returns(BearerToken);
 
                 _apiServer.ApiVersion.Version = "2.6.0";
 
@@ -96,17 +96,17 @@ namespace DataImport.Web.Tests.Helpers
                 var actual = _systemUnderTest.ObtainNewBearerToken();
 
                 // Assert
-                actual.ShouldBe(bearerToken);
+                actual.ShouldBe(BearerToken);
             }
 
             [Test]
             public void Given_setup_for_suite3_version311_then_do_not_need_access_code_for_bearer_token_request()
             {
                 // Arrange
-                const string bearerToken = "bearer token";
+                const string BearerToken = "bearer token";
 
                 A.CallTo(() => _oAuthRequestWrapper.GetBearerToken(_apiServer, EncryptionKey))
-                    .Returns(bearerToken);
+                    .Returns(BearerToken);
 
                 _apiServer.ApiVersion.Version = "3.1.1";
 
@@ -114,17 +114,17 @@ namespace DataImport.Web.Tests.Helpers
                 var actual = _systemUnderTest.ObtainNewBearerToken();
 
                 // Assert
-                actual.ShouldBe(bearerToken);
+                actual.ShouldBe(BearerToken);
             }
 
             [Test]
             public void Given_setup_for_suite3_version510_then_do_not_need_access_code_for_bearer_token_request()
             {
                 // Arrange
-                const string bearerToken = "bearer token";
+                const string BearerToken = "bearer token";
 
                 A.CallTo(() => _oAuthRequestWrapper.GetBearerToken(_apiServer, EncryptionKey))
-                    .Returns(bearerToken);
+                    .Returns(BearerToken);
 
                 _apiServer.ApiVersion.Version = "5.1.0";
 
@@ -132,7 +132,7 @@ namespace DataImport.Web.Tests.Helpers
                 var actual = _systemUnderTest.ObtainNewBearerToken();
 
                 // Assert
-                actual.ShouldBe(bearerToken);
+                actual.ShouldBe(BearerToken);
             }
         }
     }

@@ -24,7 +24,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
         {
             var undefinedCsv = await GetDataMapperFields("/ed-fi/students");
 
-            undefinedCsv.SourceColumns.ShouldMatch(_emptySourceColumns);
+            undefinedCsv.SourceColumns.ShouldMatch(EmptySourceColumns);
 
             var definedCsv = await GetDataMapperFields("/ed-fi/students", new[] { "Header1", "Header2", "Header3" });
 

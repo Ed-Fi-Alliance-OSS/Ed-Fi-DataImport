@@ -69,7 +69,7 @@ namespace DataImport.Web.Features.DataMaps
                     };
                 }
 
-                const int pageSize = 10;
+                const int PageSize = 10;
 
                 var pageNumber = request.PageNumber == 0 ? 1 : request.PageNumber;
 
@@ -90,7 +90,7 @@ namespace DataImport.Web.Features.DataMaps
                 {
                     var descriptorPath = GetDescriptorPath(request.DescriptorName, apiServer.ApiVersion.Version);
 
-                    var pagedDescriptors = await Page<Descriptor>.FetchAsync(async (offset, limit) => await _edFiServiceManager.GetDescriptors(apiServer.Id, descriptorPath, offset, limit), pageNumber, pageSize);
+                    var pagedDescriptors = await Page<Descriptor>.FetchAsync(async (offset, limit) => await _edFiServiceManager.GetDescriptors(apiServer.Id, descriptorPath, offset, limit), pageNumber, PageSize);
 
                     return new ViewModel
                     {

@@ -6,14 +6,14 @@ See the LICENSE and NOTICES files in the project root for more information.
 *@
 
 @model DataImport.Web.Features.Lookup.LookupIndex.ViewModel
-@inject DataImport.Web.Services.IHtmlHelperService htmlHelperService
+@inject DataImport.Web.Services.IHtmlHelperService HtmlHelperService
 
 @{ ViewBag.Title = "Lookups"; }
 
 <h2>@ViewBag.Title</h2>
 
 <div style="padding-bottom: 10px;">
-    @htmlHelperService.NavigationButton(Html, "Add Lookup", "Add")
+    @HtmlHelperService.NavigationButton(Html, "Add Lookup", "Add")
 </div>
 <div id="validationSummary" class="alert alert-danger hidden"></div>
 <table id="tblLookups" class="table table-striped table-hover table-bordered table-responsive">

@@ -14,7 +14,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 
 @{
     ViewBag.Title = "Configuration";
-    var AllowUserConfig = IdentitySettings.Value.Type.Equals(IdentitySettingsConstants.EntityFrameworkIdentityType);
+    var allowUserConfig = IdentitySettings.Value.Type.Equals(IdentitySettingsConstants.EntityFrameworkIdentityType);
 }
 
 <h2>@ViewBag.Title</h2>
@@ -32,7 +32,7 @@ See the LICENSE and NOTICES files in the project root for more information.
     <br />
 
 
-    if (AllowUserConfig)
+    if (allowUserConfig)
     {
         <h4>User Management</h4>
         <div class="row">

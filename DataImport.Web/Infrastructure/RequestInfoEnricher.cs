@@ -26,13 +26,13 @@ namespace DataImport.Web.Infrastructure
 
             var httpContext = _httpContextAccessor.HttpContext;
 
-            const string notAvailable = "NOT AVAILABLE";
+            const string NotAvailable = "NOT AVAILABLE";
 
-            var serverName = httpContext?.Request.Host.Host ?? notAvailable;
-            var serverPort = httpContext?.Request.Host.Port?.ToString() ?? notAvailable;
-            var url = httpContext?.Request.Path.Value ?? notAvailable;
-            var localAddress = httpContext?.Connection.LocalIpAddress?.ToString() ?? notAvailable;
-            var remoteAddress = httpContext?.Connection.RemoteIpAddress?.ToString() ?? notAvailable;
+            var serverName = httpContext?.Request.Host.Host ?? NotAvailable;
+            var serverPort = httpContext?.Request.Host.Port?.ToString() ?? NotAvailable;
+            var url = httpContext?.Request.Path.Value ?? NotAvailable;
+            var localAddress = httpContext?.Connection.LocalIpAddress?.ToString() ?? NotAvailable;
+            var remoteAddress = httpContext?.Connection.RemoteIpAddress?.ToString() ?? NotAvailable;
             var userName = httpContext?.User.Identity?.Name;
 
             logEvent.AddProperty(LoggingConstants.ServerNameProp, serverName);

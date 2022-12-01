@@ -31,8 +31,8 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
 
         public async Task TransferFileToStorage(Agent agent, string fileName)
         {
-            const string fileContent = "ftps file content";
-            var byteArray = Encoding.ASCII.GetBytes(fileContent);
+            const string FileContent = "ftps file content";
+            var byteArray = Encoding.ASCII.GetBytes(FileContent);
             using (var stream = new MemoryStream(byteArray))
             {
                 await _fileService.Transfer(stream, fileName, agent);
@@ -57,8 +57,8 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
 
         public async Task TransferFileToStorage(Agent agent, string fileName)
         {
-            const string fileContent = "sftp file content";
-            var byteArray = Encoding.ASCII.GetBytes(fileContent);
+            const string FileContent = "sftp file content";
+            var byteArray = Encoding.ASCII.GetBytes(FileContent);
             using (var stream = new MemoryStream(byteArray))
             {
                 await _fileService.Transfer(stream, fileName, agent);

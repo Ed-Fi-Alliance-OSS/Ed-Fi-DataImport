@@ -39,7 +39,7 @@ namespace DataImport.Web
 
     public class Startup
     {
-        private IConfiguration configuration;
+        private IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
@@ -48,10 +48,10 @@ namespace DataImport.Web
 
         public IConfiguration Configuration
         {
-            get { return configuration; }
+            get { return _configuration; }
             set
             {
-                configuration = value;
+                _configuration = value;
                 var connectionStrings = Configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>();
                 var connectionStringsOptions = Options.Create(connectionStrings);
                 Common.ExtensionMethods.FileExtensions.SetConnectionStringsOptions(connectionStringsOptions);
@@ -67,7 +67,7 @@ namespace DataImport.Web
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.Configure<IdentitySettings>(Configuration.GetSection("IdentitySettings"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
-            services.Configure<ExternalPreprocessorOptions>(configuration.GetSection("ExternalPreprocessors"));
+            services.Configure<ExternalPreprocessorOptions>(_configuration.GetSection("ExternalPreprocessors"));
             services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(sp => sp.GetService<ILogger<NoLoggingCategoryPlaceHolder>>());
             services.AddTransient<IFileSettings>(sp => sp.GetService<IOptions<AppSettings>>().Value);
             services.AddTransient<IPowerShellPreprocessSettings>(sp => sp.GetService<IOptions<AppSettings>>().Value);

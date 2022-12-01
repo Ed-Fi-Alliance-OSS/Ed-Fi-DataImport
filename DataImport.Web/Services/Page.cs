@@ -12,19 +12,19 @@ namespace DataImport.Web.Services
 {
     public class Page<T>
     {
-        private readonly Func<int, int, Task<IReadOnlyList<T>>> GetApiRecordsAsync;
-        private readonly Func<int, int, IEnumerable<T>> GetApiRecords;
+        private readonly Func<int, int, Task<IReadOnlyList<T>>> _getApiRecordsAsync;
+        private readonly Func<int, int, IEnumerable<T>> _getApiRecords;
 
         public static readonly int DefaultPageSize = 20;
 
         private Page(Func<int, int, Task<IReadOnlyList<T>>> getApiRecordsAsync)
         {
-            GetApiRecordsAsync = getApiRecordsAsync;
+            _getApiRecordsAsync = getApiRecordsAsync;
         }
 
         public Page(Func<int, int, IEnumerable<T>> getApiRecords)
         {
-            GetApiRecords = getApiRecords;
+            _getApiRecords = getApiRecords;
         }
 
         public static async Task<PagedList<T>> FetchAsync(Func<int, int, Task<IReadOnlyList<T>>> getApiRecords, int pageNumber) => await FetchAsync(getApiRecords, pageNumber, DefaultPageSize);
@@ -47,7 +47,7 @@ namespace DataImport.Web.Services
 
             var recordsToOffset = (humanPageNumber - 1) * pageSize;
 
-            var records = await GetApiRecordsAsync(recordsToOffset, pageSize + 1);
+            var records = await _getApiRecordsAsync(recordsToOffset, pageSize + 1);
 
             return new PagedList<T>
             {
@@ -80,7 +80,7 @@ namespace DataImport.Web.Services
 
             var recordsToOffset = (humanPageNumber - 1) * pageSize;
 
-            var records = GetApiRecords(recordsToOffset, pageSize + 1);
+            var records = _getApiRecords(recordsToOffset, pageSize + 1);
 
             return new PagedList<T>
             {

@@ -77,7 +77,7 @@ namespace DataImport.Web.Features.Assessment
                     return new AssessmentDetail();
                 }
 
-                const int pageNumber = 1;
+                const int PageNumber = 1;
 
                 var id = request.Id;
 
@@ -85,7 +85,7 @@ namespace DataImport.Web.Features.Assessment
 
                 var assessmentDetail = _mapper.Map<AssessmentDetail>(assessment);
                 assessmentDetail.ObjectiveAssessments = await Page<ObjectiveAssessment>.FetchAsync(async (offset, limit) => await _edFiServiceManager.GetObjectiveAssessmentsByAssessment(request.ApiServerId.Value, assessment, offset, limit),
-                    pageNumber, 10);
+                    PageNumber, 10);
 
                 return assessmentDetail;
             }

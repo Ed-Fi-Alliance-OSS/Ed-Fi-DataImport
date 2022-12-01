@@ -50,7 +50,7 @@ namespace DataImport.Web.Features.School
                     return new Detail();
                 }
 
-                const int pageNumber = 1;
+                const int PageNumber = 1;
 
                 var id = request.Id;
 
@@ -58,15 +58,15 @@ namespace DataImport.Web.Features.School
 
                 var pagedStudents =
                     await Page<Student>.FetchAsync(async (offset, limit) => await _edFiServiceManager.GetStudentsBySchoolId(request.ApiServerId.Value, id, offset, limit),
-                        pageNumber);
+                        PageNumber);
 
                 var pagedStaves =
                     await Page<Staff>.FetchAsync(async (offset, limit) => await _edFiServiceManager.GetStaffBySchoolId(request.ApiServerId.Value, id, offset, limit),
-                        pageNumber);
+                        PageNumber);
 
                 var pagedSections =
                     await Page<Section>.FetchAsync(async (offset, limit) => await _edFiServiceManager.GetSectionsBySchoolId(request.ApiServerId.Value, id, offset, limit),
-                        pageNumber);
+                        PageNumber);
 
                 return new Detail
                 {

@@ -118,13 +118,13 @@ namespace DataImport.Web.Tests.Features.Agent
         {
             var existingName = SampleString();
             var apiServer = GetDefaultApiServer();
-            const int runOrder = 1;
+            const int RunOrder = 1;
 
             await Send(new AddAgent.Command
-            { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder } });
+            { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = RunOrder } });
 
-            new AddEditAgentViewModel { Name = "New Agent", AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder }
-                .ShouldNotValidate($"An Agent with the run order {runOrder} already exists. Please provide a distinct run order.");
+            new AddEditAgentViewModel { Name = "New Agent", AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = RunOrder }
+                .ShouldNotValidate($"An Agent with the run order {RunOrder} already exists. Please provide a distinct run order.");
         }
 
         [Test]
@@ -132,10 +132,10 @@ namespace DataImport.Web.Tests.Features.Agent
         {
             var existingName = SampleString();
             var apiServer = GetDefaultApiServer();
-            const int runOrder = 1;
+            const int RunOrder = 1;
 
             await Send(new AddAgent.Command
-            { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder } });
+            { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = RunOrder } });
 
             new AddEditAgentViewModel { Name = "New Agent", AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = 0 }
                 .ShouldValidate();
@@ -149,10 +149,10 @@ namespace DataImport.Web.Tests.Features.Agent
         {
             var existingName = SampleString();
             var apiServer = GetDefaultApiServer();
-            const int runOrder = 1;
+            const int RunOrder = 1;
 
             await Send(new AddAgent.Command
-            { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder } });
+            { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = RunOrder } });
 
             new AddEditAgentViewModel { Name = "New Agent", AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = null }
                 .ShouldValidate();
@@ -164,14 +164,14 @@ namespace DataImport.Web.Tests.Features.Agent
             var name = SampleString();
             var apiServer = GetDefaultApiServer();
             var rowProcessor = await AddPreprocessor(ScriptType.CustomRowProcessor);
-            const int initialRunOrder = 1;
+            const int InitialRunOrder = 1;
 
             var viewModel = new AddEditAgentViewModel
             {
                 AgentTypeCode = "Manual",
                 Name = name,
                 Enabled = true,
-                RunOrder = initialRunOrder,
+                RunOrder = InitialRunOrder,
                 RowProcessorId = rowProcessor.Id,
                 ApiServerId = apiServer.Id
             };
@@ -185,7 +185,7 @@ namespace DataImport.Web.Tests.Features.Agent
                 AgentTypeCode = "Manual",
                 Name = name,
                 Enabled = true,
-                RunOrder = initialRunOrder,
+                RunOrder = InitialRunOrder,
                 RowProcessorId = rowProcessor.Id,
                 RowProcessors = editForm.RowProcessors,
                 FileGenerators = editForm.FileGenerators,
@@ -230,7 +230,7 @@ namespace DataImport.Web.Tests.Features.Agent
             var name = SampleString();
             var apiServer = GetDefaultApiServer();
             var fileGenerator = await AddPreprocessor(ScriptType.CustomFileGenerator);
-            const int initialRunOrder = 1;
+            const int InitialRunOrder = 1;
 
             var viewModel = new AddEditAgentViewModel
             {
@@ -239,7 +239,7 @@ namespace DataImport.Web.Tests.Features.Agent
                 Enabled = true,
                 FileGeneratorId = fileGenerator.Id,
                 ApiServerId = apiServer.Id,
-                RunOrder = initialRunOrder
+                RunOrder = InitialRunOrder
             };
 
             var agentId = (await Send(new AddAgent.Command { ViewModel = viewModel })).AgentId;
@@ -251,7 +251,7 @@ namespace DataImport.Web.Tests.Features.Agent
                 AgentTypeCode = "PowerShell",
                 Name = name,
                 Enabled = true,
-                RunOrder = initialRunOrder,
+                RunOrder = InitialRunOrder,
                 FileGeneratorId = fileGenerator.Id,
                 RowProcessors = editForm.RowProcessors,
                 FileGenerators = editForm.FileGenerators,
@@ -296,7 +296,7 @@ namespace DataImport.Web.Tests.Features.Agent
             var name = SampleString();
             var apiServer = GetDefaultApiServer();
             var fileGenerator = await AddPreprocessor(ScriptType.ExternalFileGenerator);
-            const int initialRunOrder = 1;
+            const int InitialRunOrder = 1;
 
             var viewModel = new AddEditAgentViewModel
             {
@@ -305,7 +305,7 @@ namespace DataImport.Web.Tests.Features.Agent
                 Enabled = true,
                 FileGeneratorId = fileGenerator.Id,
                 ApiServerId = apiServer.Id,
-                RunOrder = initialRunOrder
+                RunOrder = InitialRunOrder
             };
 
             var agentId = (await Send(new AddAgent.Command { ViewModel = viewModel })).AgentId;
@@ -317,7 +317,7 @@ namespace DataImport.Web.Tests.Features.Agent
                 AgentTypeCode = "PowerShell",
                 Name = name,
                 Enabled = true,
-                RunOrder = initialRunOrder,
+                RunOrder = InitialRunOrder,
                 FileGeneratorId = fileGenerator.Id,
                 RowProcessors = editForm.RowProcessors,
                 FileGenerators = editForm.FileGenerators,
@@ -357,14 +357,14 @@ namespace DataImport.Web.Tests.Features.Agent
         }
 
         [Test]
-        [TestCase(AgentTypeCodeEnum.SFTP, null)]
-        [TestCase(AgentTypeCodeEnum.SFTP, 123)]
-        [TestCase(AgentTypeCodeEnum.FTPS, null)]
-        [TestCase(AgentTypeCodeEnum.FTPS, 234)]
+        [TestCase(AgentTypeCodeEnum.Sftp, null)]
+        [TestCase(AgentTypeCodeEnum.Sftp, 123)]
+        [TestCase(AgentTypeCodeEnum.Ftps, null)]
+        [TestCase(AgentTypeCodeEnum.Ftps, 234)]
         public async Task ShouldSuccessfullyAddFtpAgent(string agentTypeCode, int? port)
         {
             var apiServer = GetDefaultApiServer();
-            const int initialRunOrder = 1;
+            const int InitialRunOrder = 1;
 
             var viewModel = new AddEditAgentViewModel
             {
@@ -377,7 +377,7 @@ namespace DataImport.Web.Tests.Features.Agent
                 Directory = SampleString(),
                 FilePattern = SampleString(),
                 ApiServerId = apiServer.Id,
-                RunOrder = initialRunOrder
+                RunOrder = InitialRunOrder
             };
 
             var response = await Send(new AddAgent.Command { ViewModel = viewModel });
@@ -396,14 +396,14 @@ namespace DataImport.Web.Tests.Features.Agent
         }
 
         [Test]
-        [TestCase(AgentTypeCodeEnum.SFTP, null)]
-        [TestCase(AgentTypeCodeEnum.SFTP, 456)]
-        [TestCase(AgentTypeCodeEnum.FTPS, null)]
-        [TestCase(AgentTypeCodeEnum.FTPS, 567)]
+        [TestCase(AgentTypeCodeEnum.Sftp, null)]
+        [TestCase(AgentTypeCodeEnum.Sftp, 456)]
+        [TestCase(AgentTypeCodeEnum.Ftps, null)]
+        [TestCase(AgentTypeCodeEnum.Ftps, 567)]
         public async Task ShouldSuccessfullyEditFtpAgent(string agentTypeCode, int? port)
         {
             var apiServer = GetDefaultApiServer();
-            const int initialRunOrder = 1;
+            const int InitialRunOrder = 1;
 
             var viewModel = new AddEditAgentViewModel
             {
@@ -416,7 +416,7 @@ namespace DataImport.Web.Tests.Features.Agent
                 Directory = SampleString(),
                 FilePattern = SampleString(),
                 ApiServerId = apiServer.Id,
-                RunOrder = initialRunOrder
+                RunOrder = InitialRunOrder
             };
 
             var agentId = (await Send(new AddAgent.Command { ViewModel = viewModel })).AgentId;

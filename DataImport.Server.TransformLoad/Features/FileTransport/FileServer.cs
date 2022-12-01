@@ -92,21 +92,21 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
 
         private int Port(Agent agent)
         {
-            return agent.Port ?? AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.FTPS);
+            return agent.Port ?? AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.Ftps);
         }
     }
 
     public class SftpServer : IFileServer
     {
         private readonly ILogger<SftpServer> _logger;
-        private readonly AppSettings appSettings;
+        private readonly AppSettings _appSettings;
         private readonly IFileService _fileService;
 
         public SftpServer(ILogger<SftpServer> logger, IOptions<AppSettings> options, ResolveFileService fileServices)
         {
             _logger = logger;
-            appSettings = options.Value;
-            _fileService = fileServices(appSettings.FileMode);
+            _appSettings = options.Value;
+            _fileService = fileServices(_appSettings.FileMode);
         }
 
         public async Task<IEnumerable<string>> GetFileList(Agent sftpAgent)
@@ -149,12 +149,12 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
         private SftpClient CreateClient(Agent agent)
         {
             return new SftpClient(agent.Url, Port(agent), agent.Username,
-                Encryption.Decrypt(agent.Password, appSettings.EncryptionKey));
+                Encryption.Decrypt(agent.Password, _appSettings.EncryptionKey));
         }
 
         private static int Port(Agent agent)
         {
-            return agent.Port ?? AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.SFTP);
+            return agent.Port ?? AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.Sftp);
         }
     }
 }

@@ -82,19 +82,19 @@ namespace DataImport.Web.Features.Activity
             {
                 var jobStatus = _database.EnsureSingle<JobStatus>();
 
-                const string job = "The Transform / Load process";
+                const string Job = "The Transform / Load process";
 
                 if (jobStatus.Started == null)
-                    return Warn($"{job} has not yet executed.");
+                    return Warn($"{Job} has not yet executed.");
 
                 var duration = (_clock.Now - jobStatus.Started.Value).ToReadableDuration();
 
                 if (jobStatus.Completed == null)
-                    return Ok($"{job} has been running for {duration}.");
+                    return Ok($"{Job} has been running for {duration}.");
 
                 duration = (jobStatus.Completed.Value - jobStatus.Started.Value).ToReadableDuration();
 
-                return Ok($"{job} started at {Time(jobStatus.Started)} and ran for {duration}.");
+                return Ok($"{Job} started at {Time(jobStatus.Started)} and ran for {duration}.");
             }
 
             private FileModel[] Files(int? apiServerId)

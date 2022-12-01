@@ -16,7 +16,7 @@ namespace DataImport.Models.Migrations.SqlServer
 {
     [DbContext(typeof(SqlDataImportDbContext))]
     [Migration("20211004235404_netcore_migration_drift")]
-    partial class netcore_migration_drift
+    partial class NetcoreMigrationDrift
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

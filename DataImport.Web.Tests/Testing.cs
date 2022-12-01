@@ -35,7 +35,7 @@ namespace DataImport.Web.Tests
     public static class Testing
     {
         public static readonly IServiceProvider Services;
-        private static readonly Random Random = new();
+        private static readonly Random _random = new();
 
         public const string OdsApiV25 = "2.5+";
         public const string OdsApiV311 = "3.1.1";
@@ -335,7 +335,7 @@ namespace DataImport.Web.Tests
         {
             var count = items.Length;
 
-            var skip = Random.Next(maxValue: count);
+            var skip = _random.Next(maxValue: count);
 
             return items.Skip(skip).Take(1).Single();
         }
@@ -351,7 +351,7 @@ namespace DataImport.Web.Tests
             {
                 var count = database.Resources.Count(x => x.ApiVersionId == apiVersionId);
 
-                var skip = Random.Next(maxValue: count);
+                var skip = _random.Next(maxValue: count);
 
                 return database.Resources.Where(x => x.ApiVersionId == apiVersionId).OrderBy(x => x.Id).Skip(skip).Take(1).Single();
             });

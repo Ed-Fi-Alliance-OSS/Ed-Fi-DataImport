@@ -30,19 +30,19 @@ namespace DataImport.EdFi.UnitTests.Api.EnrollmentComposite
         public void Given_suite2_version260_then_should_not_reset_client_url()
         {
             // Arrange
-            const string apiVersion = "2.6.0";
-            const string year = "2199";
+            const string ApiVersion = "2.6.0";
+            const string Year = "2199";
 
-            const string initialUrl = "https://example.com";
+            const string InitialUrl = "https://example.com";
             var restClient = A.Fake<IRestClient>();
-            restClient.BaseUrl = new Uri(initialUrl);
+            restClient.BaseUrl = new Uri(InitialUrl);
 
             // Act
-            var _ = new EnrollmentApiTss(restClient, apiVersion, year);
+            var _ = new EnrollmentApiTss(restClient, ApiVersion, Year);
 
             // Assert
             restClient.BaseUrl.ShouldNotBeNull();
-            restClient.BaseUrl.ToString().ShouldBe($"{initialUrl}/");
+            restClient.BaseUrl.ToString().ShouldBe($"{InitialUrl}/");
         }
 
         [TestCase("3.1.1", "2129", "/composites/v1/2129/")]
@@ -52,18 +52,18 @@ namespace DataImport.EdFi.UnitTests.Api.EnrollmentComposite
         public void Given_suite_3_then_should_modify_the_url(string apiVersion, string year, string expectedCompositePath)
         {
             // Arrange
-            const string initialUrl = "https://example.com/v3/data/";
-            const string expectedUrl = "https://example.com/v3";
+            const string InitialUrl = "https://example.com/v3/data/";
+            const string ExpectedUrl = "https://example.com/v3";
 
             var restClient = A.Fake<IRestClient>();
-            restClient.BaseUrl = new Uri(initialUrl);
+            restClient.BaseUrl = new Uri(InitialUrl);
 
             // Act
             var _ = new EnrollmentApiTss(restClient, apiVersion, year);
 
             // Assert
             restClient.BaseUrl.ShouldNotBeNull();
-            restClient.BaseUrl.ToString().ShouldBe(expectedUrl);
+            restClient.BaseUrl.ToString().ShouldBe(ExpectedUrl);
         }
     }
 }

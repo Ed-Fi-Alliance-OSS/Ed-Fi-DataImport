@@ -118,8 +118,8 @@ namespace DataImport.Web.Features.Agent
         }
 
         private bool SftpOrFtpsAgentType(AddEditAgentViewModel vm) =>
-            !string.IsNullOrWhiteSpace(vm.AgentTypeCode) && (vm.AgentTypeCode.Equals(AgentTypeCodeEnum.SFTP) ||
-            vm.AgentTypeCode.Equals(AgentTypeCodeEnum.FTPS));
+            !string.IsNullOrWhiteSpace(vm.AgentTypeCode) && (vm.AgentTypeCode.Equals(AgentTypeCodeEnum.Sftp) ||
+            vm.AgentTypeCode.Equals(AgentTypeCodeEnum.Ftps));
 
         private bool PowerShellAgentType(AddEditAgentViewModel vm) =>
             !string.IsNullOrWhiteSpace(vm.AgentTypeCode) && (vm.AgentTypeCode.Equals(AgentTypeCodeEnum.PowerShell));

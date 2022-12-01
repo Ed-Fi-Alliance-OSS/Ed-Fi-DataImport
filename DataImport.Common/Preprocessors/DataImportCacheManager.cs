@@ -9,23 +9,23 @@ namespace DataImport.Common.Preprocessors
 {
     public class DataImportCacheManager
     {
-        private static readonly Dictionary<string, Dictionary<string, object>> Caches = new Dictionary<string, Dictionary<string, object>>();
+        private static readonly Dictionary<string, Dictionary<string, object>> _caches = new Dictionary<string, Dictionary<string, object>>();
 
-        private static readonly object SyncRoot = new object();
+        private static readonly object _syncRoot = new object();
 
         private DataImportCacheManager() { }
 
         public static Dictionary<string, object> ResolveCache(string cacheIdentifier)
         {
-            lock (SyncRoot)
+            lock (_syncRoot)
             {
-                if (Caches.ContainsKey(cacheIdentifier))
+                if (_caches.ContainsKey(cacheIdentifier))
                 {
-                    return Caches[cacheIdentifier];
+                    return _caches[cacheIdentifier];
                 }
 
                 var cache = new Dictionary<string, object>();
-                Caches[cacheIdentifier] = cache;
+                _caches[cacheIdentifier] = cache;
 
                 return cache;
             }
@@ -33,11 +33,11 @@ namespace DataImport.Common.Preprocessors
 
         public static void DestroyCache(string cacheIdentifier)
         {
-            lock (SyncRoot)
+            lock (_syncRoot)
             {
-                if (Caches.ContainsKey(cacheIdentifier))
+                if (_caches.ContainsKey(cacheIdentifier))
                 {
-                    Caches[cacheIdentifier] = null;
+                    _caches[cacheIdentifier] = null;
                 }
             }
         }

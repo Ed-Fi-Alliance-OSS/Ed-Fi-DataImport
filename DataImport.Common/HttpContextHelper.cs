@@ -16,7 +16,7 @@ namespace Microsoft.AspNetCore.Http
     /// </summary>
     internal static class HttpContextHelper
     {
-        private static readonly HttpContextAccessor HttpContextAccessor = new HttpContextAccessor();
+        private static readonly HttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
 
         /// <summary>
         /// Gets the current <see cref="HttpContext"/>. Returns <c>null</c> if there is no current <see cref="HttpContext"/>.
@@ -24,6 +24,6 @@ namespace Microsoft.AspNetCore.Http
 #if NET5_0_OR_GREATER
         [Obsolete("Prefer accessing HttpContext via injection", error: false, DiagnosticId = "HttpContextCurrent", UrlFormat = "https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-context")]
 #endif
-        public static HttpContext Current => HttpContextAccessor.HttpContext;
+        public static HttpContext Current => _httpContextAccessor.HttpContext;
     }
 }

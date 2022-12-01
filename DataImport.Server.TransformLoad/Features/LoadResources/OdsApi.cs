@@ -29,7 +29,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
 
         //HttpClient instances are meant to be long-lived and shared, so we only
         //have separate instances when they would be configured differently.
-        private static readonly HttpClient UnauthenticatedHttpClient = new();
+        private static readonly HttpClient _unauthenticatedHttpClient = new();
         private readonly ILogger _logger;
 
         private Lazy<HttpClient> AuthenticatedHttpClient { get; set; }
@@ -80,7 +80,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
 
             _logger.LogInformation("Retrieving auth code from {url}", authorizeUrl);
 
-            var response = await UnauthenticatedHttpClient.PostAsync(authorizeUrl, contentParams);
+            var response = await _unauthenticatedHttpClient.PostAsync(authorizeUrl, contentParams);
 
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception("Failed to get Authorization Code. HTTP Status Code: " + response.StatusCode);
@@ -112,11 +112,11 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 });
 
                 var encodedKeySecret = Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}");
-                UnauthenticatedHttpClient.DefaultRequestHeaders.Authorization =
+                _unauthenticatedHttpClient.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Basic", Convert.ToBase64String(encodedKeySecret));
             }
 
-            var response = await UnauthenticatedHttpClient.PostAsync(accessTokenUrl, contentParams);
+            var response = await _unauthenticatedHttpClient.PostAsync(accessTokenUrl, contentParams);
 
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new Exception("Failed to get Access Token. HTTP Status Code: " + response.StatusCode);
@@ -143,11 +143,11 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
         {
             await Authenticate();
 
-            const int retryAttempts = 3;
+            const int RetryAttempts = 3;
             var currentAttempt = 0;
             HttpResponseMessage response = null;
 
-            while (retryAttempts > currentAttempt)
+            while (RetryAttempts > currentAttempt)
             {
                 var strContent = new StringContent(content);
                 strContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");

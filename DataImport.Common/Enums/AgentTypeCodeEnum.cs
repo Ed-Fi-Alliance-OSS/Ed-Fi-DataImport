@@ -11,21 +11,21 @@ namespace DataImport.Common.Enums
 {
     public static class AgentTypeCodeEnum
     {
-        public const string SFTP = "SFTP";
-        public const string FTPS = "FTPS";
+        public const string Sftp = "SFTP";
+        public const string Ftps = "FTPS";
         public const string Manual = "Manual";
 
         [Display(Name = "File System / PowerShell")]
         public const string PowerShell = "PowerShell";
 
-        public static List<string> ToList() => new List<string>() { Manual, SFTP, FTPS, PowerShell };
+        public static List<string> ToList() => new List<string>() { Manual, Sftp, Ftps, PowerShell };
 
         public static int DefaultPort(string agentType)
         {
-            if (agentType == SFTP)
+            if (agentType == Sftp)
                 return 22;
 
-            if (agentType == FTPS)
+            if (agentType == Ftps)
                 return 990;
 
             throw new Exception($"There is no default port number for '{agentType}' Agents.");

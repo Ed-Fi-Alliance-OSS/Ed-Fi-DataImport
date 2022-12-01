@@ -18,7 +18,7 @@ namespace DataImport.Web.Features.Agent
 {
     public class AgentFiles
     {
-        private static bool AllowTestCertificates;
+        private static bool _allowTestCertificates;
 
         public class QueryResult
         {
@@ -44,7 +44,7 @@ namespace DataImport.Web.Features.Agent
             public QueryHandler(ILogger<AgentFiles> logger, IOptions<AppSettings> options)
             {
                 _logger = logger;
-                AllowTestCertificates = options.Value.AllowTestCertificates;
+                _allowTestCertificates = options.Value.AllowTestCertificates;
             }
 
             protected override QueryResult Handle(Query request)
@@ -73,16 +73,16 @@ namespace DataImport.Web.Features.Agent
 
             private static void OnValidateFtpsCertificate(FtpClient control, FtpSslValidationEventArgs e)
             {
-                if (AllowTestCertificates)
+                if (_allowTestCertificates)
                     e.Accept = true;
             }
 
             private static IEnumerable<string> GetAgentFiles(string url, int? port, string username, string password, string directory, string filePattern, string agentType)
             {
-                if (agentType == AgentTypeCodeEnum.FTPS)
+                if (agentType == AgentTypeCodeEnum.Ftps)
                 {
                     if (port == null)
-                        port = AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.FTPS);
+                        port = AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.Ftps);
 
                     using (var ftpsClient = new FtpClient(url, port.Value, username, password))
                     {
@@ -97,7 +97,7 @@ namespace DataImport.Web.Features.Agent
                 else
                 {
                     if (port == null)
-                        port = AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.SFTP);
+                        port = AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.Sftp);
 
                     using (var sftpClient = new SftpClient(new ConnectionInfo(url, port.Value, username,
                         new PasswordAuthenticationMethod(username, password))))

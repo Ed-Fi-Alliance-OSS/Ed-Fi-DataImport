@@ -15,16 +15,16 @@ namespace DataImport.Models.Tests
     {
         private readonly Resource _resource;
 
-        private const string empty = "{}";
+        private const string Empty = "{}";
 
-        private const string partial = @"{
+        private const string Partial = @"{
                     ""propertyA"": ""A"",
                     ""complexProperty"": {
                         ""nestedPropertyF"": ""F""
                     }
                 }";
 
-        private const string statics = @"{
+        private const string Statics = @"{
                     ""propertyA"": ""A"",
                     ""propertyB"": 2,
                     ""propertyC"": ""C"",
@@ -39,7 +39,7 @@ namespace DataImport.Models.Tests
                     ]
                 }";
 
-        private const string columns = @"{
+        private const string Columns = @"{
                     ""propertyA"": { ""Column"": ""ColumnA"" },
                     ""propertyB"": { ""Column"": ""ColumnB"" },
                     ""propertyC"": { ""Column"": ""ColumnC"", ""Default"": ""Default C"" },
@@ -54,7 +54,7 @@ namespace DataImport.Models.Tests
                     ]
                 }";
 
-        private const string arbitraryKeyOrder = @"{
+        private const string ArbitraryKeyOrder = @"{
                     ""arrayProperty"": [
                         { ""key"": ""G"" },
                         { ""key"": ""H"" }
@@ -69,7 +69,7 @@ namespace DataImport.Models.Tests
                     ""propertyC"": ""C""
                 }";
 
-        private const string unexpectedKey = @"{
+        private const string UnexpectedKey = @"{
                     ""propertyA"": ""A"",
                     ""complexProperty"": {
                         ""nestedPropertyF"": ""F""
@@ -77,16 +77,16 @@ namespace DataImport.Models.Tests
                     ""unexpectedProperty"": ""!?"",
                 }";
 
-        private const string unexpectedStringLiteral = @"{
+        private const string UnexpectedStringLiteral = @"{
                     ""propertyB"": ""2"",
                 }";
 
-        private const string expectedObject = @"{
+        private const string ExpectedObject = @"{
                     ""propertyA"": ""A"",
                     ""complexProperty"": ""!?""
                 }";
 
-        private const string expectedArray = @"{
+        private const string ExpectedArray = @"{
                     ""propertyA"": ""A"",
                     ""complexProperty"": {
                         ""nestedPropertyF"": ""F""
@@ -124,17 +124,17 @@ namespace DataImport.Models.Tests
         [Test]
         public void ShouldRecognizeValidJsonObjectsAsCompatibleWithTheirIntendedResource()
         {
-            IsCompatible(empty, MetadataCompatibilityLevel.DataMap);
-            IsCompatible(partial, MetadataCompatibilityLevel.DataMap);
-            IsCompatible(statics, MetadataCompatibilityLevel.DataMap);
-            IsCompatible(columns, MetadataCompatibilityLevel.DataMap);
-            IsCompatible(arbitraryKeyOrder, MetadataCompatibilityLevel.DataMap);
+            IsCompatible(Empty, MetadataCompatibilityLevel.DataMap);
+            IsCompatible(Partial, MetadataCompatibilityLevel.DataMap);
+            IsCompatible(Statics, MetadataCompatibilityLevel.DataMap);
+            IsCompatible(Columns, MetadataCompatibilityLevel.DataMap);
+            IsCompatible(ArbitraryKeyOrder, MetadataCompatibilityLevel.DataMap);
 
-            IsCompatible(empty, MetadataCompatibilityLevel.Bootstrap);
-            IsCompatible(partial, MetadataCompatibilityLevel.Bootstrap);
-            IsCompatible(statics, MetadataCompatibilityLevel.Bootstrap);
-            IsNotCompatible(columns, MetadataCompatibilityLevel.Bootstrap, "Bootstrap JSON cannot include column references.");
-            IsCompatible(arbitraryKeyOrder, MetadataCompatibilityLevel.Bootstrap);
+            IsCompatible(Empty, MetadataCompatibilityLevel.Bootstrap);
+            IsCompatible(Partial, MetadataCompatibilityLevel.Bootstrap);
+            IsCompatible(Statics, MetadataCompatibilityLevel.Bootstrap);
+            IsNotCompatible(Columns, MetadataCompatibilityLevel.Bootstrap, "Bootstrap JSON cannot include column references.");
+            IsCompatible(ArbitraryKeyOrder, MetadataCompatibilityLevel.Bootstrap);
 
             //Single value type mismatches are permitted by DataMapSerializer, so unexpectedStringLiteral
             //is still treated as compatible as far as Data Import is concerned. The type of individual values
@@ -142,8 +142,8 @@ namespace DataImport.Models.Tests
             //at will until they are satisfied with their work. Besides, no amount of up front type checking
             //for single values would be sufficient, because an arbitrary CSV cell could still be the wrong
             //type, and we can't check for *that* until TransformLoad time.
-            IsCompatible(unexpectedStringLiteral, MetadataCompatibilityLevel.DataMap);
-            IsCompatible(unexpectedStringLiteral, MetadataCompatibilityLevel.Bootstrap);
+            IsCompatible(UnexpectedStringLiteral, MetadataCompatibilityLevel.DataMap);
+            IsCompatible(UnexpectedStringLiteral, MetadataCompatibilityLevel.Bootstrap);
         }
 
         [Test]
@@ -151,14 +151,14 @@ namespace DataImport.Models.Tests
         {
             foreach (MetadataCompatibilityLevel level in Enum.GetValues(typeof(MetadataCompatibilityLevel)))
             {
-                IsNotCompatible(unexpectedKey, level,
+                IsNotCompatible(UnexpectedKey, level,
                     "Cannot deserialize mappings from JSON, because the key 'unexpectedProperty' " +
                     "should not exist according to the metadata for resource '/testResource'.");
 
-                IsNotCompatible(expectedObject, level,
+                IsNotCompatible(ExpectedObject, level,
                     "Cannot deserialize mappings from JSON, because an object literal was expected. Instead, found: \"!?\"");
 
-                IsNotCompatible(expectedArray, level,
+                IsNotCompatible(ExpectedArray, level,
                     "Cannot deserialize mappings from JSON, because an array literal was expected. Instead, found: \"!?\"");
             }
         }
@@ -166,42 +166,42 @@ namespace DataImport.Models.Tests
         [Test]
         public void ShouldRecognizeTopLevelArraysAsIncompatibleForAnyDataMap()
         {
-            const string unexpectedTopLevelArray =
+            const string UnexpectedTopLevelArray =
                 "A single data map object for a single '/testResource' resource" +
                 " was expected, but an array of objects was provided.";
 
-            IsNotCompatible(JsonArray(empty), MetadataCompatibilityLevel.DataMap, unexpectedTopLevelArray);
-            IsNotCompatible(JsonArray(partial), MetadataCompatibilityLevel.DataMap, unexpectedTopLevelArray);
-            IsNotCompatible(JsonArray(statics), MetadataCompatibilityLevel.DataMap, unexpectedTopLevelArray);
-            IsNotCompatible(JsonArray(columns), MetadataCompatibilityLevel.DataMap, unexpectedTopLevelArray);
-            IsNotCompatible(JsonArray(arbitraryKeyOrder), MetadataCompatibilityLevel.DataMap, unexpectedTopLevelArray);
-            IsNotCompatible(JsonArray(unexpectedKey), MetadataCompatibilityLevel.DataMap, unexpectedTopLevelArray);
-            IsNotCompatible(JsonArray(unexpectedStringLiteral), MetadataCompatibilityLevel.DataMap, unexpectedTopLevelArray);
-            IsNotCompatible(JsonArray(expectedObject), MetadataCompatibilityLevel.DataMap, unexpectedTopLevelArray);
-            IsNotCompatible(JsonArray(expectedArray), MetadataCompatibilityLevel.DataMap, unexpectedTopLevelArray);
+            IsNotCompatible(JsonArray(Empty), MetadataCompatibilityLevel.DataMap, UnexpectedTopLevelArray);
+            IsNotCompatible(JsonArray(Partial), MetadataCompatibilityLevel.DataMap, UnexpectedTopLevelArray);
+            IsNotCompatible(JsonArray(Statics), MetadataCompatibilityLevel.DataMap, UnexpectedTopLevelArray);
+            IsNotCompatible(JsonArray(Columns), MetadataCompatibilityLevel.DataMap, UnexpectedTopLevelArray);
+            IsNotCompatible(JsonArray(ArbitraryKeyOrder), MetadataCompatibilityLevel.DataMap, UnexpectedTopLevelArray);
+            IsNotCompatible(JsonArray(UnexpectedKey), MetadataCompatibilityLevel.DataMap, UnexpectedTopLevelArray);
+            IsNotCompatible(JsonArray(UnexpectedStringLiteral), MetadataCompatibilityLevel.DataMap, UnexpectedTopLevelArray);
+            IsNotCompatible(JsonArray(ExpectedObject), MetadataCompatibilityLevel.DataMap, UnexpectedTopLevelArray);
+            IsNotCompatible(JsonArray(ExpectedArray), MetadataCompatibilityLevel.DataMap, UnexpectedTopLevelArray);
         }
 
         [Test]
         public void ShouldRecognizeTopLevelArraysAsCompatibleForBootstrapsIfAndOnlyIfTheItemsAreAllIndividuallyCompatible()
         {
-            IsCompatible(JsonArray(empty, partial, statics, arbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap);
+            IsCompatible(JsonArray(Empty, Partial, Statics, ArbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap);
 
-            IsNotCompatible(JsonArray(empty, partial, statics, columns, arbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap,
+            IsNotCompatible(JsonArray(Empty, Partial, Statics, Columns, ArbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap,
                 "Bootstrap JSON cannot include column references.");
 
-            IsNotCompatible(JsonArray(empty, partial, statics, unexpectedKey, arbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap,
+            IsNotCompatible(JsonArray(Empty, Partial, Statics, UnexpectedKey, ArbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap,
                 "Cannot deserialize mappings from JSON, because the key 'unexpectedProperty' " +
                 "should not exist according to the metadata for resource '/testResource'.");
 
             //Single value type mismatches are permitted by DataMapSerializer, so the presence of
             //unexpectedStringLiteral in this array is still treated as compatible as far as Data Import
             //is concerned. As with Data Maps, the type of individual values is only a concern at POST time.
-            IsCompatible(JsonArray(empty, partial, statics, unexpectedStringLiteral, arbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap);
+            IsCompatible(JsonArray(Empty, Partial, Statics, UnexpectedStringLiteral, ArbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap);
 
-            IsNotCompatible(JsonArray(empty, partial, statics, expectedObject, arbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap,
+            IsNotCompatible(JsonArray(Empty, Partial, Statics, ExpectedObject, ArbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap,
                 "Cannot deserialize mappings from JSON, because an object literal was expected. Instead, found: \"!?\"");
 
-            IsNotCompatible(JsonArray(empty, partial, statics, expectedArray, arbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap,
+            IsNotCompatible(JsonArray(Empty, Partial, Statics, ExpectedArray, ArbitraryKeyOrder), MetadataCompatibilityLevel.Bootstrap,
                 "Cannot deserialize mappings from JSON, because an array literal was expected. Instead, found: \"!?\"");
         }
 

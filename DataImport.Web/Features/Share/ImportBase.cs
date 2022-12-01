@@ -49,10 +49,10 @@ namespace DataImport.Web.Features.Share
             public SharingModelValidator(ILogger logger, DataImportDbContext database, IPowerShellPreprocessorService powerShellPreprocessorService,
                 IJsonValidator jsonValidator, bool overwritePreprocessors = false)
             {
-                const string missing = "This template is missing its expected {0}.";
-                RuleFor(x => x.Title).NotNull().WithMessage(string.Format(missing, "title"));
-                RuleFor(x => x.Description).NotNull().WithMessage(string.Format(missing, "description"));
-                RuleFor(x => x.ApiVersion).NotNull().WithMessage(string.Format(missing, "API version"));
+                const string Missing = "This template is missing its expected {0}.";
+                RuleFor(x => x.Title).NotNull().WithMessage(string.Format(Missing, "title"));
+                RuleFor(x => x.Description).NotNull().WithMessage(string.Format(Missing, "description"));
+                RuleFor(x => x.ApiVersion).NotNull().WithMessage(string.Format(Missing, "API version"));
 
                 RuleForEach(x => x.Template.Bootstraps)
                     .SafeCustom(logger, (bootstrap, context) =>

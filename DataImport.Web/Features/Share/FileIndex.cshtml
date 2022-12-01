@@ -7,7 +7,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 
 @using DataImport.Web.Infrastructure
 @model DataImport.Web.Features.Share.FileImport.FileUploadForm
-@inject DataImport.Web.Services.IHtmlHelperService htmlHelperService
+@inject DataImport.Web.Services.IHtmlHelperService HtmlHelperService
 
 @{
     ViewBag.Title = "Import / Export Templates";
@@ -37,7 +37,7 @@ See the LICENSE and NOTICES files in the project root for more information.
             @Html.SubmitButton("Import")
             <div style="margin:50px"></div>
 
-            @Html.FormGroup("Export Template", htmlHelperService.NavigationButton(Html, "Export", "FileExport"))
+            @Html.FormGroup("Export Template", HtmlHelperService.NavigationButton(Html, "Export", "FileExport"))
         }
 
     </div>
