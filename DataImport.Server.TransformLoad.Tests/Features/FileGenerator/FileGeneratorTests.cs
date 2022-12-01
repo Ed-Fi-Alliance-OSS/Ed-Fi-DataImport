@@ -8,7 +8,6 @@ using DataImport.Common.Helpers;
 using DataImport.Common.Preprocessors;
 using DataImport.Models;
 using FakeItEasy;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -19,13 +18,12 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using static DataImport.Server.TransformLoad.Tests.Testing;
 
 namespace DataImport.Server.TransformLoad.Tests.Features.FileGenerator
 {
-    using static Testing;
-
     [TestFixture]
-    class FileGeneratorTests
+    internal class FileGeneratorTests
     {
         [Test]
         public async Task ShouldCorrectlyGenerateFile()
@@ -169,10 +167,10 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileGenerator
                 ScriptContent = $"Write-Output {tempFile}"
             });
 
-            var enabledAgentName = "EnabledAgentName"; 
+            var enabledAgentName = "EnabledAgentName";
             var enabledAgentId = AddScheduledAgentForScript(enabledAgentName, apiServer.Id, enabledAgentScriptId, 1);
-            
-            var disabledAgentName = "DisabledAgentName"; 
+
+            var disabledAgentName = "DisabledAgentName";
             var disabledAgentId = AddScheduledAgentForScript(disabledAgentName, apiServer.Id, disabledAgentScriptId, 2, false);
 
             await commandHandler.Execute(new TransformLoad.Features.FileGeneration.FileGenerator.Command
@@ -195,7 +193,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileGenerator
             System.IO.File.Delete(tempFile);
         }
 
-        private int AddScheduledAgentForScript(string agentName, int apiServerId, int scriptId, int? agentOrder = null, bool enabled = true) 
+        private int AddScheduledAgentForScript(string agentName, int apiServerId, int scriptId, int? agentOrder = null, bool enabled = true)
         {
             var agentId = AddAgent(new Agent
             {
@@ -211,7 +209,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileGenerator
             Add(new AgentSchedule
             {
                 AgentId = agentId,
-                Day = (int)schedule.DayOfWeek,
+                Day = (int) schedule.DayOfWeek,
                 Hour = schedule.Hour,
                 Minute = schedule.Minute
             });

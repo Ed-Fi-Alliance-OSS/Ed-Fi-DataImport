@@ -178,7 +178,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     var parallelOptions = new ParallelOptions();
                     if (_concurrencySettings.LimitConcurrentApiPosts)
                         parallelOptions.MaxDegreeOfParallelism = _concurrencySettings.MaxConcurrentApiPosts;
-                    
+
                     await Parallel.ForEachAsync(importRows, parallelOptions, async (row, token) =>
                     {
                         if (row.Number == 1)
@@ -187,7 +187,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         _logger.LogDebug("Transforming {path} row {row}", dataMap.ResourcePath, row.Number);
                         var (rowPostResponse, log) = await MapAndPostCsvRow(odsApi, row.Content, dataMap, row.Number, file);
 
-                        if(log != null)
+                        if (log != null)
                             ingestionLogs.Add(log);
 
                         if (rowPostResponse == RowResult.Success)
@@ -228,7 +228,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                                   $"File has {file.Rows} rows, API calls processed:  " +
                                   $"Success: {successCount}, " +
                                   $"Exists: {existsCount}, " +
-                                  $"Error: {errorCount+1}",
+                                  $"Error: {errorCount + 1}",
                     };
 
                     AddOrUpdateFileResponses(file, fileResponse);
@@ -358,7 +358,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
 
                 return mappedRow == null
-                    ? Task.FromResult((RowResult.Error, (IngestionLogMarker)null))
+                    ? Task.FromResult((RowResult.Error, (IngestionLogMarker) null))
                     : PostMappedRow(odsApi, mappedRow, map.ResourcePath);
             }
 
@@ -462,7 +462,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 var agentIds = markers.Select(m => m.MappedResource.AgentId)
                     .Distinct()
                     .ToList();
-                
+
                 var agents = _dbContext.Agents.Where(x => agentIds.Contains(x.Id)).Select(x => new
                 {
                     AgentId = x.Id,
@@ -474,7 +474,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 var logs = markers.Select(marker =>
                 {
                     agents.TryGetValue(marker.MappedResource.AgentId ?? -1, out var agent);
-                    
+
                     return new IngestionLog
                     {
                         Date = marker.Date,
@@ -516,7 +516,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
         public class ImportRow
         {
             public int Number { get; set; }
-            public Dictionary<string,string> Content { get; set; }
+            public Dictionary<string, string> Content { get; set; }
         }
 
         public class IngestionLogMarker

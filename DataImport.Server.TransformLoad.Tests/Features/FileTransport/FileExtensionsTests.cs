@@ -7,7 +7,6 @@ using DataImport.Common.Enums;
 using DataImport.Common.Helpers;
 using DataImport.Models;
 using DataImport.Server.TransformLoad.Features;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Shouldly;
@@ -17,11 +16,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using static DataImport.TestHelpers.TestHelpers;
+using static DataImport.Server.TransformLoad.Tests.Testing;
 
 namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
 {
-    using static Testing;
-
     [TestFixture]
     public class FileExtensionsTests
     {
@@ -94,7 +92,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
             await fileHelper.LogFileAsync(fileName, _agentId, url, FileStatus.Uploaded, 10);
 
             var result = GetLoggedAgentFiles(_agentId).ToList();
-           
+
             using (var scope = Services.CreateScope())
             {
                 using var dbContext = scope.ServiceProvider.GetService<DataImportDbContext>();
@@ -113,7 +111,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
         {
             const string fileName = "FtpsFile1";
             const string notExistingFileName = "FtpsFile2";
-            bool doesFileExist = false;           
+            bool doesFileExist = false;
 
             var localFilePath = Path.Combine(GetAssemblyPath(), "TestFiles/testing.csv");
             var url = new Uri(localFilePath).AbsoluteUri;

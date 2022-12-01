@@ -50,9 +50,9 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
                     client.ValidateCertificate += OnValidateFtpsCertificate;
                     await client.ConnectAsync();
 
-                    list.AddRange(from file in  await client.GetListingAsync(ftpsAgent.Directory)
-                        where file.Type == FtpFileSystemObjectType.File && file.Name.IsLike(ftpsAgent.FilePattern)
-                        select file.FullName);
+                    list.AddRange(from file in await client.GetListingAsync(ftpsAgent.Directory)
+                                  where file.Type == FtpFileSystemObjectType.File && file.Name.IsLike(ftpsAgent.FilePattern)
+                                  select file.FullName);
                 }
             }
             catch (Exception ex)
@@ -123,8 +123,8 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
 
                     var fileList = client.ListDirectory(sftpAgent.Directory);
                     list.AddRange(from file in fileList
-                        where file.Name.IsLike(sftpAgent.FilePattern)
-                        select file.FullName);
+                                  where file.Name.IsLike(sftpAgent.FilePattern)
+                                  select file.FullName);
                 }
             }
             catch (Exception ex)

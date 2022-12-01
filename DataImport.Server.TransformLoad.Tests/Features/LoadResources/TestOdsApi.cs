@@ -23,12 +23,12 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
         public List<SimulatedPost> PostedBootstrapData { get; }
 
         public ApiConfig Config { get; set; } = new ApiConfig
-            { ApiUrl = "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019" };
+        { ApiUrl = "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019" };
 
         public Task<OdsResponse> PostBootstrapData(string endpointUrl, string dataToInsert)
         {
             PostedBootstrapData.Add(new SimulatedPost(endpointUrl, dataToInsert));
-            
+
             return Task.FromResult(new OdsResponse(HttpStatusCode.OK, string.Empty));
         }
 

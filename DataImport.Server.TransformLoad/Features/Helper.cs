@@ -34,7 +34,7 @@ namespace DataImport.Server.TransformLoad.Features
             var shouldRun = false;
 
             if (agent.AgentSchedules.Count <= 0) return false;
-            var nowDay = (int)nowDate.Value.DayOfWeek;
+            var nowDay = (int) nowDate.Value.DayOfWeek;
             var nowHour = nowDate.Value.Hour;
             var nowMinute = nowDate.Value.Minute;
 
@@ -45,7 +45,7 @@ namespace DataImport.Server.TransformLoad.Features
             foreach (AgentSchedule schedule in sortedSchedule)
             {
                 var scheduleDateTime = DateTime.Parse(nowDate.Value.Date.ToShortDateString() + " " + schedule.Hour + ":" + schedule.Minute);
-                scheduleDateTime = scheduleDateTime.AddDays(-((int)nowDate.Value.DayOfWeek - schedule.Day));
+                scheduleDateTime = scheduleDateTime.AddDays(-((int) nowDate.Value.DayOfWeek - schedule.Day));
 
                 if (!agent.LastExecuted.HasValue || scheduleDateTime > agent.LastExecuted)
                 {

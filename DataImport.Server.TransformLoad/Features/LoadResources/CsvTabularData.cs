@@ -36,7 +36,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             var headers = _reader.HeaderRecord;
 
             while (_reader.Read())
-                yield return headers.ToDictionary(singleHeader => singleHeader, singleHeader => _reader[(string)singleHeader]);
+                yield return headers.ToDictionary(singleHeader => singleHeader, singleHeader => _reader[(string) singleHeader]);
         }
 
         public void Dispose()

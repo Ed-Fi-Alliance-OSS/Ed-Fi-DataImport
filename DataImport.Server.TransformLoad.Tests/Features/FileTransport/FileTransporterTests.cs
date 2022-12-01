@@ -6,7 +6,6 @@
 using DataImport.Common.Enums;
 using DataImport.Models;
 using DataImport.Server.TransformLoad.Features.FileTransport;
-using DataImport.TestHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
@@ -89,7 +88,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
             var agentId = AddAgent(_ftpsAgent);
 
             _ftpsAgent.ApiServerId.ShouldNotBeNull();
-            await Send(new FileTransporter.Command {  ApiServerId = _ftpsAgent.ApiServerId.Value });
+            await Send(new FileTransporter.Command { ApiServerId = _ftpsAgent.ApiServerId.Value });
 
             var result = GetLoggedAgentFiles(agentId).ToList();
 
@@ -129,7 +128,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
             var agentId = AddAgent(_ftpsAgent);
 
             _sftpAgent.ApiServerId.ShouldNotBeNull();
-            await Send(new FileTransporter.Command {ApiServerId = _sftpAgent.ApiServerId.Value });
+            await Send(new FileTransporter.Command { ApiServerId = _sftpAgent.ApiServerId.Value });
             var result = GetLoggedAgentFiles(agentId).ToList();
 
             // Assert
@@ -150,7 +149,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
             _ftpsAgent.AgentSchedules = null;
 
             var agentId = AddAgent(_ftpsAgent);
-            await Send(new FileTransporter.Command ());
+            await Send(new FileTransporter.Command());
 
             var result = GetLoggedAgentFiles(agentId).ToList();
 

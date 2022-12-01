@@ -106,7 +106,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     if (convertedPayload.Type == JTokenType.Array)
                     {
                         // There are multiple payloads as part of an array. Post each payload.
-                        foreach (var singleElement in (JArray)convertedPayload)
+                        foreach (var singleElement in (JArray) convertedPayload)
                         {
                             var dataToInsert = singleElement.ToString();
                             OdsResponse response = null;

@@ -240,7 +240,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     throw new TypeConversionException(node, nodeMetadata.DataType);
 
                 default:
-                    throw new TypeConversionException(node, nodeMetadata.DataType, typeIsUnsupported:true);
+                    throw new TypeConversionException(node, nodeMetadata.DataType, typeIsUnsupported: true);
             }
         }
 

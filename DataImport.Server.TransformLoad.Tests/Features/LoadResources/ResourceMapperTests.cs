@@ -37,7 +37,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                 MapStatic("PropertyC", "static value 3")
                 );
 
-            var csvRow = new Dictionary<string, string> { {"Col1", "value1"} };
+            var csvRow = new Dictionary<string, string> { { "Col1", "value1" } };
 
             var mapper = ResourceMapper(resourceMetadata, jsonMap, lookups);
 
@@ -320,7 +320,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                     MapObject("arrayItem", MapStatic("title", "static value"))
                 ));
 
-            var csvRow = new Dictionary<string, string> { {"Col1", "value1"}, {"Col2", "value2"} };
+            var csvRow = new Dictionary<string, string> { { "Col1", "value1" }, { "Col2", "value2" } };
 
             var mapper = ResourceMapper(resourceMetadata, jsonMap, lookups);
 
@@ -469,7 +469,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                 MapColumn("ChildProperty", "Col4")
             ));
 
-            var csvRow = new Dictionary<string, string> { {"Col1", "value1"}, {"Col2", "value2"}, {"Col3", "value3"}, {"Col4", "value4" } };
+            var csvRow = new Dictionary<string, string> { { "Col1", "value1" }, { "Col2", "value2" }, { "Col3", "value3" }, { "Col4", "value4" } };
 
             var mapper = ResourceMapper(resourceMetadata, jsonMap, lookups);
 
@@ -858,7 +858,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
         {
             var studentAssessmentMetadata = Metadata(
 
-                #region assessmentReference
+            #region assessmentReference
 
                 Object("assessmentReference", "assessmentReference",
                     Property("title", "string"),
@@ -866,30 +866,30 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                     Property("academicSubjectDescriptor", "string"),
                     Property("version", "integer"))
 
-                #endregion
+            #endregion
                 ,
-                #region studentReference
+            #region studentReference
 
                 Object("studentReference", "studentReference",
                     Property("studentUniqueId", "string"))
 
-                #endregion
+            #endregion
                 ,
-                #region administrationDate
+            #region administrationDate
 
                 Property("administrationDate", "date-time")
 
-                #endregion
+            #endregion
                 ,
-                #region performanceLevels
+            #region performanceLevels
 
                 Array("performanceLevels",
                     Object("studentAssessmentPerformanceLevel", "studentAssessmentPerformanceLevel",
                         Property("performanceLevelDescriptor", "string")))
 
-                #endregion
+            #endregion
                 ,
-                #region scoreResults
+            #region scoreResults
 
                 Array("scoreResults",
                     Object("studentAssessmentScoreResult", "studentAssessmentScoreResult",
@@ -897,10 +897,10 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                         Property("result", "string"),
                         Property("resultDatatypeType", "string")))
 
-                #endregion
+            #endregion
                 ,
                 Array("studentObjectiveAssessments",
-                    #region Item Metadata
+            #region Item Metadata
                     Object(
                         "studentAssessmentStudentObjectiveAssessment",
                         "studentAssessmentStudentObjectiveAssessment",
@@ -926,12 +926,12 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                                 Property("assessmentReportingMethodType", "string"),
                                 Property("result", "string"),
                                 Property("resultDatatypeType", "string"))))
-                    #endregion
+            #endregion
                 )
             );
             var studentAssessmentMap = JsonMap(
 
-                    #region assessmentReference
+            #region assessmentReference
 
                     MapObject("assessmentReference",
                         MapColumn("title", "Assessment"),
@@ -939,31 +939,31 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                         MapStatic("academicSubjectDescriptor", "Reading"),
                         MapStatic("version", "1"))
 
-                    #endregion
+            #endregion
                     ,
-                    #region studentReference
+            #region studentReference
 
                     MapObject("studentReference",
                         MapColumn("studentUniqueId", "Primary ID - Student ID (State ID)"))
 
-                    #endregion
+            #endregion
                     ,
-                    #region administrationDate
+            #region administrationDate
 
                     MapLookup("administrationDate", "Benchmark Period", "mclass-testdate")
 
-                    #endregion
+            #endregion
                     ,
-                    #region performanceLevels
+            #region performanceLevels
 
                     MapArray("performanceLevels",
                         MapObject("studentAssessmentPerformanceLevel",
                             MapColumn("performanceLevelDescriptor",
                                 "Assessment Measure-Composite Score-Levels")))
 
-                    #endregion
+            #endregion
                     ,
-                    #region scoreResults
+            #region scoreResults
 
                     MapArray("scoreResults",
                         MapObject("studentAssessmentScoreResult",
@@ -971,10 +971,10 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                             MapColumn("result", "Assessment Measure-Composite Score-Score"),
                             MapStatic("resultDatatypeType", "Integer")))
 
-                    #endregion
+            #endregion
                     ,
                     MapArray("studentObjectiveAssessments",
-                        #region [0]
+            #region [0]
                         MapObject(
                             "studentAssessmentStudentObjectiveAssessment",
                             MapObject("objectiveAssessmentReference",
@@ -995,9 +995,9 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                                     MapStatic("assessmentReportingMethodType", "Number score"),
                                     MapColumn("result", "Assessment Measure-FSF-Score"),
                                     MapStatic("resultDatatypeType", "Integer"))))
-                        #endregion
+            #endregion
                         ,
-                        #region [1]
+            #region [1]
                         MapObject(
                             "studentAssessmentStudentObjectiveAssessment",
                             MapObject(
@@ -1019,9 +1019,9 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                                     MapStatic("assessmentReportingMethodType", "Number score"),
                                     MapColumn("result", "Assessment Measure-LNF-Score"),
                                     MapStatic("resultDatatypeType", "Integer"))))
-                        #endregion
+            #endregion
                         ,
-                        #region [2]
+            #region [2]
                         MapObject(
                             "studentAssessmentStudentObjectiveAssessment",
                             MapObject(
@@ -1046,9 +1046,9 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                                     MapStatic("assessmentReportingMethodType", "Number score"),
                                     MapColumn("result", "Assessment Measure-PSF-Score"),
                                     MapStatic("resultDatatypeType", "Integer"))))
-                        #endregion
+            #endregion
                         ,
-                        #region [3]
+            #region [3]
                         MapObject(
                             "studentAssessmentStudentObjectiveAssessment",
                             MapObject(
@@ -1073,9 +1073,9 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                                     MapStatic("assessmentReportingMethodType", "Number score"),
                                     MapColumn("result", "Assessment Measure-NWF (CLS)-Score"),
                                     MapStatic("resultDatatypeType", "Integer"))))
-                        #endregion
+            #endregion
                         ,
-                        #region [4]
+            #region [4]
                         MapObject(
                             "studentAssessmentStudentObjectiveAssessment",
                             MapObject(
@@ -1098,7 +1098,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                                     MapStatic("assessmentReportingMethodType", "Number score"),
                                     MapColumn("result", "Assessment Measure-NWF (WWR)-Score"),
                                     MapStatic("resultDatatypeType", "Integer"))))
-                        #endregion
+            #endregion
                     )
                 );
 

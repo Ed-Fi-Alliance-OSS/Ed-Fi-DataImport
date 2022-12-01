@@ -51,7 +51,7 @@ namespace DataImport.Server.TransformLoad
             services.AddSingleton<ILogger>(sp => sp.GetService<ILogger<NoLoggingCategoryPlaceHolder>>());
             var databaseEngine = configuration.GetSection("AppSettings")["DatabaseEngine"];
 
-            if(DatabaseEngineEnum.Parse(databaseEngine).Equals(DatabaseEngineEnum.PostgreSql))
+            if (DatabaseEngineEnum.Parse(databaseEngine).Equals(DatabaseEngineEnum.PostgreSql))
             {
                 services.AddDbContext<DataImportDbContext, PostgreSqlDataImportDbContext>((s, options) =>
                  options.UseNpgsql(
@@ -64,7 +64,7 @@ namespace DataImport.Server.TransformLoad
                   options.UseSqlServer(
                           s.GetRequiredService<IOptions<ConnectionStrings>>()
                               .Value.DefaultConnection));
-            }     
+            }
 
             services.AddHttpContextAccessor();
 

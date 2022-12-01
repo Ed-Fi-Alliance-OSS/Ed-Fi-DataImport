@@ -116,7 +116,7 @@ namespace DataImport.Server.TransformLoad.Tests
         {
             using (var scope = Services.CreateScope())
             {
-              await scope.ServiceProvider.GetRequiredService<IMediator>().Send(message);
+                await scope.ServiceProvider.GetRequiredService<IMediator>().Send(message);
             }
         }
 

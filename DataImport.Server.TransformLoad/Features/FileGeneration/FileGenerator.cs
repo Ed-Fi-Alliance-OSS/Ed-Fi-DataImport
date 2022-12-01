@@ -45,7 +45,7 @@ namespace DataImport.Server.TransformLoad.Features.FileGeneration
             }
 
             protected override async Task Handle(Command request, CancellationToken cancellationToken)
-            {               
+            {
                 var agents = await _dbContext.Agents
                     .Include(agent => agent.AgentSchedules)
                     .Include(x => x.FileGenerator)
