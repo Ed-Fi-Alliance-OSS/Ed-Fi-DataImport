@@ -68,7 +68,7 @@ namespace DataImport.Models.Tests
             lookups.SourceTables().ShouldContain("Table A");
             lookups.SourceTables().ShouldContain("Table B");
         }
-    
+
         private int _id;
         private Lookup Lookup(string sourceTable, string key, string value)
         {

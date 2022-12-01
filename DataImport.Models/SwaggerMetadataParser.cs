@@ -38,7 +38,7 @@ namespace DataImport.Models
         {
             foreach (var propertyToken in resourceJson["models"][model]["properties"])
             {
-                var property = (JProperty)propertyToken;
+                var property = (JProperty) propertyToken;
                 var field = new ResourceMetadata
                 {
                     Name = property.Name
@@ -46,7 +46,7 @@ namespace DataImport.Models
 
                 foreach (var detailToken in property)
                 {
-                    var detail = (JObject)detailToken;
+                    var detail = (JObject) detailToken;
 
                     if (detail["required"].ToString() == "True")
                         field.Required = true;
@@ -99,7 +99,7 @@ namespace DataImport.Models
 
             foreach (var propertyToken in resourceJson["properties"])
             {
-                var property = (JProperty)propertyToken;
+                var property = (JProperty) propertyToken;
                 var field = new ResourceMetadata
                 {
                     Name = property.Name,
@@ -108,7 +108,7 @@ namespace DataImport.Models
 
                 foreach (var detailToken in property)
                 {
-                    var detail = (JObject)detailToken;
+                    var detail = (JObject) detailToken;
                     field.DataType = detail["$ref"] != null
                         ? GetReferenceName(detail["$ref"])
                         : detail["type"].ToString();
@@ -125,7 +125,7 @@ namespace DataImport.Models
                         {
                             Name = GetFormattedModelName(subModel),
                             DataType = subModel,
-                            Children = GetFieldsForModelFromV2Swagger((JObject)subModelJson, fullResourceJson).ToList()
+                            Children = GetFieldsForModelFromV2Swagger((JObject) subModelJson, fullResourceJson).ToList()
                         });
                     }
                     else
@@ -141,7 +141,7 @@ namespace DataImport.Models
                         bool fieldTypeHasModelDefinition = subTypeJson != null;
 
                         if (fieldTypeHasModelDefinition)
-                            field.Children = GetFieldsForModelFromV2Swagger((JObject)subTypeJson, fullResourceJson).ToList();
+                            field.Children = GetFieldsForModelFromV2Swagger((JObject) subTypeJson, fullResourceJson).ToList();
                     }
                 }
 

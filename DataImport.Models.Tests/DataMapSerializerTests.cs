@@ -148,7 +148,7 @@ namespace DataImport.Models.Tests
             //each key appears in the mappings to serialize is not meaningful, but is preserved
             //as the most natural behavior.
 
-            var emptyMappings = new DataMapper[]{};
+            var emptyMappings = new DataMapper[] { };
             Serialize(_resourceMetadata, emptyMappings).ShouldMatch("{}");
 
             var partialMappings = new[]

@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System.IO;
 using System.Reflection;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
 
 namespace DataImport.Models.Tests
 {
@@ -34,7 +33,7 @@ namespace DataImport.Models.Tests
                     .AddConsole();
             });
             var logger = loggerFactory.CreateLogger<SetUpFixture>();
-            var dbContextLogger = loggerFactory.CreateLogger<DataImportDbContext>();  
+            var dbContextLogger = loggerFactory.CreateLogger<DataImportDbContext>();
 
             var connectionStrings = configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>();
             var optionsBuilder = new DbContextOptionsBuilder<SqlDataImportDbContext>();

@@ -4,7 +4,6 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
@@ -19,7 +18,7 @@ namespace DataImport.Models
 {
     public class DataImportDbContext : IdentityDbContext<ApplicationUser>
     {
-        private readonly ILogger _logger;       
+        private readonly ILogger _logger;
         private IDbContextTransaction _currentTransaction;
         protected readonly string ConnectionString;
 

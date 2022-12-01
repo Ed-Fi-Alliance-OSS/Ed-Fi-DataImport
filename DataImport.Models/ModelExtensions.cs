@@ -32,7 +32,7 @@ namespace DataImport.Models
             return MetadataIsIncompatible(entity.Data, entity.ResourcePath, database, MetadataCompatibilityLevel.Bootstrap, entity.ApiVersionId, out errorDetails);
         }
 
-        private static bool MetadataIsIncompatible(string json, string resourcePath, DataImportDbContext database, MetadataCompatibilityLevel level,  int apiVersionId, out string errorDetails)
+        private static bool MetadataIsIncompatible(string json, string resourcePath, DataImportDbContext database, MetadataCompatibilityLevel level, int apiVersionId, out string errorDetails)
         {
             var resource = database.Resources.SingleOrDefault(x => x.Path == resourcePath && x.ApiVersionId == apiVersionId);
 

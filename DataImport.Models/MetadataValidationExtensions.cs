@@ -25,7 +25,7 @@ namespace DataImport.Models
                 {
                     foreach (var singleResource in (JArray) jsonToken)
                     {
-                        var singleResult = IsObjectCompatibleWithResource((JObject)singleResource, resource, level, out errorMessage);
+                        var singleResult = IsObjectCompatibleWithResource((JObject) singleResource, resource, level, out errorMessage);
 
                         if (!singleResult)
                             return false;
@@ -42,7 +42,7 @@ namespace DataImport.Models
                 }
             }
 
-            return IsObjectCompatibleWithResource((JObject)jsonToken, resource, level, out errorMessage);
+            return IsObjectCompatibleWithResource((JObject) jsonToken, resource, level, out errorMessage);
         }
 
         private static bool IsObjectCompatibleWithResource(this JObject jsonMap, Resource resource, MetadataCompatibilityLevel level, out string exceptionMessage)

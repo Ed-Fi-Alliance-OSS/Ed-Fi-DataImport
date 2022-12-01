@@ -24,7 +24,7 @@ namespace DataImport.Models.Design
             var dbType = DatabaseType(args);
 
             if (dbType.StartsWith("PostgreSql", StringComparison.InvariantCultureIgnoreCase))
-            {  
+            {
                 var optionsBuilder = new DbContextOptionsBuilder<PostgreSqlDataImportDbContext>();
                 optionsBuilder.UseNpgsql(args[0]);
                 return new PostgreSqlDataImportDbContext(Logger(), optionsBuilder.Options);
@@ -48,7 +48,7 @@ namespace DataImport.Models.Design
             {
                 var optionsBuilder = new DbContextOptionsBuilder<SqlDataImportDbContext>();
                 optionsBuilder.UseSqlServer(args[0]);
-                return new SqlDataImportDbContext(Logger(), optionsBuilder.Options);               
+                return new SqlDataImportDbContext(Logger(), optionsBuilder.Options);
             }
             else
             {
@@ -80,7 +80,7 @@ namespace DataImport.Models.Design
 
         protected void Validate(string[] args)
         {
-            var dbTypes = new List<string>{ "sqlserver", "postgresql" };
+            var dbTypes = new List<string> { "sqlserver", "postgresql" };
 
             if (args.Length == 0)
                 throw new ArgumentException("A connection string and database type must be provided");

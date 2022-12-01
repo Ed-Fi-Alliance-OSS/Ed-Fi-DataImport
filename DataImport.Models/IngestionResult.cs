@@ -8,6 +8,6 @@ namespace DataImport.Models
     public enum IngestionResult
     {
         Success = 1,
-        Error = 2 
+        Error = 2
     }
 }

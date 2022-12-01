@@ -39,7 +39,7 @@ namespace DataImport.Models.Tests
             FileStatus.Canceled.CanBeRetried().ShouldBe(false);
 
             //Unexpected values are untrusted.
-            Action unanswerableQuestion = () => ((FileStatus)(-1)).CanBeRetried();
+            Action unanswerableQuestion = () => ((FileStatus) (-1)).CanBeRetried();
             unanswerableQuestion.ShouldThrow<ArgumentOutOfRangeException>()
                 .Message.ShouldStartWith("Cannot determine whether files with status -1 can be retried.");
         }

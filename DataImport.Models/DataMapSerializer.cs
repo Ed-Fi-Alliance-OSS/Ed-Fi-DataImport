@@ -270,7 +270,7 @@ namespace DataImport.Models
 
             if (token is JObject)
             {
-                var columnSource = (JObject)token;
+                var columnSource = (JObject) token;
                 return DeserializeColumnSource(metadata, columnSource);
             }
 

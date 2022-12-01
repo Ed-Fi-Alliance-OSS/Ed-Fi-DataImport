@@ -57,6 +57,6 @@ namespace DataImport.Models.Migrations.PostgreSql
                                             commit;
                                             end;$$";
 
-       
+
     }
 }
