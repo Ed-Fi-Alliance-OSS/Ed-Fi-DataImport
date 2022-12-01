@@ -14,7 +14,6 @@ using Shouldly;
 using System;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using static DataImport.Server.TransformLoad.Tests.Testing;
 using static DataImport.TestHelpers.TestHelpers;
@@ -60,18 +59,8 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
 
             testOdsApi.PostedContent
                 .ShouldMatch(
-                    new TestOdsApi.SimulatedPost("http://test-ods-v2.5.0.1.example.com/api/v2.0/2019/studentAssessments", NormalizeLineEndings(_expectedRow1)),
-                    new TestOdsApi.SimulatedPost("http://test-ods-v2.5.0.1.example.com/api/v2.0/2019/studentAssessments", NormalizeLineEndings(_expectedRow2)));
-
-            string NormalizeLineEndings(string content)
-            {
-                // The PostedContent expected data might only have \n depending on Git configuration.
-                // Normalize to have \r\n, on the assumption that the actual results are being
-                // generated on a Windows machine.
-                return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                    ? content.Replace("\n", "\r\n").Replace("\r\r", "\r")
-                    : content;
-            }
+                    new TestOdsApi.SimulatedPost("http://test-ods-v2.5.0.1.example.com/api/v2.0/2019/studentAssessments", _expectedRow1),
+                    new TestOdsApi.SimulatedPost("http://test-ods-v2.5.0.1.example.com/api/v2.0/2019/studentAssessments", _expectedRow2));
 
             var apiServer = Query(d => d.ApiServers.Include(x => x.ApiVersion).Single(x => x.Id == apiServerId));
             var ingestionLogs = Query(d => d.IngestionLogs.Where(x => x.AgentName == agentName).ToList());
