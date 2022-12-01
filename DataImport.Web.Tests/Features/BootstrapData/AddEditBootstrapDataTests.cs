@@ -366,7 +366,7 @@ namespace DataImport.Web.Tests.Features.BootstrapData
 
             var response = await Send(new DeleteBootstrapData.Command { BootstrapDataId = existingBootstrap.Id });
             response.AssertToast($"Bootstrap Data '{existingBootstrap.Name}' was deleted.");
-            Query<BootstrapData>(existingBootstrap.Id).ShouldBeNull();
+            Query<DataImport.Models.BootstrapData>(existingBootstrap.Id).ShouldBeNull();
         }
 
         [Test]
@@ -392,14 +392,14 @@ namespace DataImport.Web.Tests.Features.BootstrapData
 
             var response = await Send(new DeleteBootstrapData.Command { BootstrapDataId = bootstrapData.Id });
             response.AssertToast("Bootstrap Data cannot be deleted because it is used by one or more Agents.", false);
-            Query<BootstrapData>(bootstrapData.Id).ShouldNotBeNull();
+            Query<DataImport.Models.BootstrapData>(bootstrapData.Id).ShouldNotBeNull();
 
             viewModel = await Send(new EditAgent.Query { Id = addAgentResponse.AgentId });
             var editAgentResponse = await Send(new EditAgent.Command { ViewModel = viewModel });
 
             response = await Send(new DeleteBootstrapData.Command { BootstrapDataId = bootstrapData.Id });
             response.AssertToast($"Bootstrap Data '{bootstrapData.Name}' was deleted.");
-            Query<BootstrapData>(bootstrapData.Id).ShouldBeNull();
+            Query<DataImport.Models.BootstrapData>(bootstrapData.Id).ShouldBeNull();
         }
 
         [Test]

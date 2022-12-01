@@ -81,7 +81,7 @@ namespace DataImport.Web.Features.Configuration
                 var configuration = await _database.Configurations.SingleOrDefaultAsync(cancellationToken);
                 if (configuration == null)
                 {
-                    configuration = new Configuration();
+                    configuration = new DataImport.Models.Configuration();
 
                     _database.Configurations.Add(configuration);
                 }
