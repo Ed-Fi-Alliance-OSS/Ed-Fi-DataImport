@@ -74,7 +74,7 @@ namespace DataImport.Web.Features.School
                     .Where(x => x.LocalEducationAgency != null)
                     .Select(x => x.LocalEducationAgency.Id)
                     .Distinct();
-                
+
                 var districts = new List<LocalEducationAgency>();
                 foreach (var districtId in districtIds)
                 {

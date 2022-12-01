@@ -14,9 +14,9 @@ namespace DataImport.Web.Features
             where TController : Controller
         {
             return controller.JsonNet(new
-                {
-                    redirect = controller.Url.Action(action, controllerName)
-                }
+            {
+                redirect = controller.Url.Action(action, controllerName)
+            }
             );
         }
 
@@ -24,9 +24,9 @@ namespace DataImport.Web.Features
             where TController : Controller
         {
             return controller.JsonNet(new
-                {
-                    redirect = controller.Url.Action(action)
-                }
+            {
+                redirect = controller.Url.Action(action)
+            }
             );
         }
 

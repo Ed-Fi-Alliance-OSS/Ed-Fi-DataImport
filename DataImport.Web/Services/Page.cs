@@ -96,5 +96,5 @@ namespace DataImport.Web.Services
         public int PageNumber { get; set; }
         public bool NextPageHasResults { get; set; }
         public IEnumerable<T> Items { get; set; }
-    }   
+    }
 }

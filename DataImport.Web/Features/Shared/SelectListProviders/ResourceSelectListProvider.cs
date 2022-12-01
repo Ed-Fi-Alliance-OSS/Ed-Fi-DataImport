@@ -6,7 +6,6 @@
 using DataImport.Models;
 using DataImport.Web.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,7 +73,7 @@ namespace DataImport.Web.Features.Shared.SelectListProviders
                 .ToList();
         }
 
-        class ResourceSelection
+        private class ResourceSelection
         {
             public ApiSection ApiSection { set; get; }
             public string Value { get; set; }

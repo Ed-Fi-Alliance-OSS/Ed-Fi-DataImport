@@ -11,12 +11,12 @@ using DataImport.TestHelpers;
 using DataImport.Web.Features.Shared.SelectListProviders;
 using NUnit.Framework;
 using Shouldly;
+using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.Shared
 {
-    using static Testing;
     [TestFixture]
-    class PreprocessorSelectListProviderTests
+    internal class PreprocessorSelectListProviderTests
     {
         [Test]
         public async Task PreprocessorSelectListProviderTest()

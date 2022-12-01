@@ -17,7 +17,7 @@ using AddPreprocessor = DataImport.Web.Features.Preprocessor.AddPreprocessor;
 
 namespace DataImport.Web.Tests.Features.Agent
 {
-    class ArchiveAgentTests
+    internal class ArchiveAgentTests
     {
         [Test]
         public async Task ShouldSuccessfullyArchiveAgent()
@@ -154,8 +154,8 @@ namespace DataImport.Web.Tests.Features.Agent
                 AgentTypeCode = agentTypeCode,
                 Name = SampleString(agentTypeCode),
                 ApiServerId = apiServer.Id,
-                RowProcessorId = scriptType == ScriptType.CustomRowProcessor ? preprocessor.PreprocessorId : (int?)null,
-                FileGeneratorId = scriptType == ScriptType.CustomFileGenerator ? preprocessor.PreprocessorId : (int?)null
+                RowProcessorId = scriptType == ScriptType.CustomRowProcessor ? preprocessor.PreprocessorId : (int?) null,
+                FileGeneratorId = scriptType == ScriptType.CustomFileGenerator ? preprocessor.PreprocessorId : (int?) null
             };
 
             var agentId = (await Send(new AddAgent.Command { ViewModel = viewModel })).AgentId;

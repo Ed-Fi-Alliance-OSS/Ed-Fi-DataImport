@@ -30,12 +30,12 @@ namespace DataImport.Web.Features.Shared.SelectListProviders
             var preprocessors = _dbContext.Scripts
                 .Where(x => x.ScriptType == ScriptType.CustomFileProcessor || x.ScriptType == ScriptType.ExternalFileProcessor)
                 .Select(x => new PreprocessorDropDownItem
-            {
-                Text = x.Name,
-                Value = x.Id.ToString(CultureInfo.InvariantCulture),
-                RequiresApiConnection = x.RequireOdsApiAccess,
-                RequiresAttribute = x.HasAttribute
-            });
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString(CultureInfo.InvariantCulture),
+                    RequiresApiConnection = x.RequireOdsApiAccess,
+                    RequiresAttribute = x.HasAttribute
+                });
             selectList.AddRange(preprocessors);
 
             return selectList;

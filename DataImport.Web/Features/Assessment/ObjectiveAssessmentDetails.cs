@@ -16,7 +16,7 @@ namespace DataImport.Web.Features.Assessment
 {
     public class ObjectiveAssessmentDetails
     {
-        public class ViewModel: IApiServerListViewModel
+        public class ViewModel : IApiServerListViewModel
         {
             public string Id { get; set; }
             public PagedList<ObjectiveAssessment> ObjectiveAssessments { get; set; }

@@ -250,12 +250,12 @@ namespace DataImport.Web.Tests.Features.Share
 
         private string GetNameOfExpectedPreprocessorForMap(DataMap map)
         {
-                if (!map.FileProcessorScriptId.HasValue) return "null";
-                var name = map.Name == DataMapWithExternalPreprocessor.Name
-                    ? MapPreprocessorExternal.Name
-                    : MapPreprocessorPowerShell.Name;
+            if (!map.FileProcessorScriptId.HasValue) return "null";
+            var name = map.Name == DataMapWithExternalPreprocessor.Name
+                ? MapPreprocessorExternal.Name
+                : MapPreprocessorPowerShell.Name;
 
-                return $"\"{name}\"";
+            return $"\"{name}\"";
         }
 
         protected void AssertTemplatePreviewDuringExport(SharingModel result, string expectedSupplementalInformation = null)
@@ -284,7 +284,7 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[0].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[0])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[0].Attribute) ? "null" : $"\"{expectedMaps[0].Attribute}\"") }
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[0].Attribute) ? "null" : $"\"{expectedMaps[0].Attribute}\"")}
                         }},
                         {{
                             ""name"": ""{expectedMaps[1].Name}"",
@@ -296,7 +296,7 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[1].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[1])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[1].Attribute) ? "null" : $"\"{expectedMaps[1].Attribute}\"") }
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[1].Attribute) ? "null" : $"\"{expectedMaps[1].Attribute}\"")}
                         }},
                         {{
                             ""name"": ""{expectedMaps[2].Name}"",
@@ -308,7 +308,7 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[2].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[2])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[2].Attribute) ? "null" : $"\"{expectedMaps[2].Attribute}\"") }
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[2].Attribute) ? "null" : $"\"{expectedMaps[2].Attribute}\"")}
                         }},
                     ],
                     ""bootstraps"": [
@@ -349,19 +349,19 @@ namespace DataImport.Web.Tests.Features.Share
                     ""preprocessors"": [
                         {{
                             ""name"": ""{expectedPreprocessors[0].Name}"",
-                            ""scriptContent"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ScriptContent) ? "null" : $"\"{expectedPreprocessors[0].ScriptContent}\"") },
+                            ""scriptContent"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ScriptContent) ? "null" : $"\"{expectedPreprocessors[0].ScriptContent}\"")},
                             ""requireOdsApiAccess"": {expectedPreprocessors[0].RequireOdsApiAccess.ToString().ToLowerInvariant()},
                             ""hasAttribute"": {expectedPreprocessors[0].HasAttribute.ToString().ToLowerInvariant()},
-                            ""executablePath"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ExecutablePath) ? "null" : $"\"{expectedPreprocessors[0].ExecutablePath}\"") },
-                            ""executableArguments"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ExecutableArguments) ? "null" : $"\"{expectedPreprocessors[0].ExecutableArguments}\"") }
+                            ""executablePath"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ExecutablePath) ? "null" : $"\"{expectedPreprocessors[0].ExecutablePath}\"")},
+                            ""executableArguments"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ExecutableArguments) ? "null" : $"\"{expectedPreprocessors[0].ExecutableArguments}\"")}
                         }},
                         {{
                             ""name"": ""{expectedPreprocessors[1].Name}"",
-                            ""scriptContent"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ScriptContent) ? "null" : $"\"{expectedPreprocessors[1].ScriptContent}\"") },
+                            ""scriptContent"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ScriptContent) ? "null" : $"\"{expectedPreprocessors[1].ScriptContent}\"")},
                             ""requireOdsApiAccess"": {expectedPreprocessors[1].RequireOdsApiAccess.ToString().ToLowerInvariant()},
                             ""hasAttribute"": {expectedPreprocessors[1].HasAttribute.ToString().ToLowerInvariant()},
-                            ""executablePath"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ExecutablePath) ? "null" : $"\"{expectedPreprocessors[1].ExecutablePath}\"") },
-                            ""executableArguments"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ExecutableArguments) ? "null" : $"\"{expectedPreprocessors[1].ExecutableArguments}\"") }
+                            ""executablePath"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ExecutablePath) ? "null" : $"\"{expectedPreprocessors[1].ExecutablePath}\"")},
+                            ""executableArguments"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ExecutableArguments) ? "null" : $"\"{expectedPreprocessors[1].ExecutableArguments}\"")}
                         }}
                     ]
                 }}
@@ -415,7 +415,7 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[0].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[0])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[0].Attribute) ? "null" : $"\"{expectedMaps[0].Attribute}\"") }
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[0].Attribute) ? "null" : $"\"{expectedMaps[0].Attribute}\"")}
                         }},
                         {{
                             ""name"": ""{expectedMaps[1].Name}"",
@@ -427,7 +427,7 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[1].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[1])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[1].Attribute) ? "null" : $"\"{expectedMaps[1].Attribute}\"") }
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[1].Attribute) ? "null" : $"\"{expectedMaps[1].Attribute}\"")}
                         }},
                         {{
                             ""name"": ""{expectedMaps[2].Name}"",
@@ -439,7 +439,7 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[2].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[2])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[2].Attribute) ? "null" : $"\"{expectedMaps[2].Attribute}\"") }
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[2].Attribute) ? "null" : $"\"{expectedMaps[2].Attribute}\"")}
                         }},
                     ],
                     ""bootstraps"": [
@@ -480,19 +480,19 @@ namespace DataImport.Web.Tests.Features.Share
                     ""preprocessors"": [
                         {{
                             ""name"": ""{expectedPreprocessors[0].Name}"",
-                            ""scriptContent"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ScriptContent) ? "null" : $"\"{expectedPreprocessors[0].ScriptContent}\"") },
+                            ""scriptContent"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ScriptContent) ? "null" : $"\"{expectedPreprocessors[0].ScriptContent}\"")},
                             ""requireOdsApiAccess"": {expectedPreprocessors[0].RequireOdsApiAccess.ToString().ToLowerInvariant()},
                             ""hasAttribute"": {expectedPreprocessors[0].HasAttribute.ToString().ToLowerInvariant()},
-                            ""executablePath"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ExecutablePath) ? "null" : $"\"{expectedPreprocessors[0].ExecutablePath}\"") },
-                            ""executableArguments"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ExecutableArguments) ? "null" : $"\"{expectedPreprocessors[0].ExecutableArguments}\"") }
+                            ""executablePath"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ExecutablePath) ? "null" : $"\"{expectedPreprocessors[0].ExecutablePath}\"")},
+                            ""executableArguments"": {(string.IsNullOrEmpty(expectedPreprocessors[0].ExecutableArguments) ? "null" : $"\"{expectedPreprocessors[0].ExecutableArguments}\"")}
                         }},
                         {{
                             ""name"": ""{expectedPreprocessors[1].Name}"",
-                            ""scriptContent"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ScriptContent) ? "null" : $"\"{expectedPreprocessors[1].ScriptContent}\"") },
+                            ""scriptContent"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ScriptContent) ? "null" : $"\"{expectedPreprocessors[1].ScriptContent}\"")},
                             ""requireOdsApiAccess"": {expectedPreprocessors[1].RequireOdsApiAccess.ToString().ToLowerInvariant()},
                             ""hasAttribute"": {expectedPreprocessors[1].HasAttribute.ToString().ToLowerInvariant()},
-                            ""executablePath"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ExecutablePath) ? "null" : $"\"{expectedPreprocessors[1].ExecutablePath}\"") },
-                            ""executableArguments"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ExecutableArguments) ? "null" : $"\"{expectedPreprocessors[1].ExecutableArguments}\"") }
+                            ""executablePath"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ExecutablePath) ? "null" : $"\"{expectedPreprocessors[1].ExecutablePath}\"")},
+                            ""executableArguments"": {(string.IsNullOrEmpty(expectedPreprocessors[1].ExecutableArguments) ? "null" : $"\"{expectedPreprocessors[1].ExecutableArguments}\"")}
                         }}
                     ]
                 }}

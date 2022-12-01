@@ -26,7 +26,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
 
             undefinedCsv.SourceColumns.ShouldMatch(_emptySourceColumns);
 
-            var definedCsv = await GetDataMapperFields("/students", new []{"Header1", "Header2", "Header3"});
+            var definedCsv = await GetDataMapperFields("/students", new[] { "Header1", "Header2", "Header3" });
 
             definedCsv.SourceColumns.ShouldMatch(
                 new SelectListItem { Text = "Select Source Column", Value = "" },
@@ -34,7 +34,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
                 new SelectListItem { Text = "Header2", Value = "Header2" },
                 new SelectListItem { Text = "Header3", Value = "Header3" });
 
-            var complexCsv = await GetDataMapperFields("/students", new []{"Header 1", "Header 2", "Header 3 contains a comma, and extra whitespace"});
+            var complexCsv = await GetDataMapperFields("/students", new[] { "Header 1", "Header 2", "Header 3 contains a comma, and extra whitespace" });
 
             complexCsv.SourceColumns.ShouldMatch(
                 new SelectListItem { Text = "Select Source Column", Value = "" },

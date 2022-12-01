@@ -46,9 +46,11 @@ namespace DataImport.Web
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration {
-            get { return configuration; } 
-            set {
+        public IConfiguration Configuration
+        {
+            get { return configuration; }
+            set
+            {
                 configuration = value;
                 var connectionStrings = Configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>();
                 var connectionStringsOptions = Options.Create(connectionStrings);
@@ -56,7 +58,7 @@ namespace DataImport.Web
 
                 var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
                 ScriptExtensions.SetAppSettingsOptions(appSettings);
-            } 
+            }
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -155,9 +157,10 @@ namespace DataImport.Web
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(Features.Shared.ApiServerSpecificRequestHandler<,>));
             services
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(Features.Shared.ApiVersionSpecificRequestHandler<,>));
-            
+
             services.AddTransient<PowerShellPreprocessorOptionsResolver>();
-            services.AddScoped(ctx => {
+            services.AddScoped(ctx =>
+            {
                 var resolver = ctx.GetService<PowerShellPreprocessorOptionsResolver>();
                 return resolver.Resolve();
             });
@@ -171,7 +174,7 @@ namespace DataImport.Web
 
             services.AddMvc()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
-            
+
             services.AddWebOptimizer(pipeline =>
             {
                 var minifyJsSettings = new CodeSettings
@@ -179,18 +182,18 @@ namespace DataImport.Web
                     LocalRenaming = LocalRenaming.CrunchAll,
                     MinifyCode = true
                 };
-                
+
                 var minifyCssSettings = new CssSettings
                 {
                     MinifyExpressions = true
                 };
-                
+
                 pipeline.AddJavaScriptBundle("/bundles/jquery.min.js", minifyJsSettings, "/lib/jquery/dist/jquery.js");
                 pipeline.AddJavaScriptBundle("/bundles/jqueryval.min.js", minifyJsSettings, "/lib/**/jquery.validate*");
-                pipeline.AddJavaScriptBundle("/bundles/modernizr.min.js",  minifyJsSettings, "/js/modernizr-2.8.3.js");
+                pipeline.AddJavaScriptBundle("/bundles/modernizr.min.js", minifyJsSettings, "/js/modernizr-2.8.3.js");
                 pipeline.AddJavaScriptBundle("/bundles/bootstrap.min.js", minifyJsSettings, "/js/bootstrap.js", "/js/footable.js", "/js/respond.js");
                 pipeline.AddJavaScriptBundle("/bundles/lodash.min.js", minifyJsSettings, "/js/lodash.js");
-                pipeline.AddCssBundle("/content/dataimport.min.css", minifyCssSettings,"/css/footable.bootstrap.css", "/css/site.css");
+                pipeline.AddCssBundle("/content/dataimport.min.css", minifyCssSettings, "/css/footable.bootstrap.css", "/css/site.css");
                 pipeline.AddJavaScriptBundle("/bundles/toastr.min.js", minifyJsSettings, "/js/toastr.js");
                 pipeline.AddCssBundle("/content/toastr.min.css", "/css/toastr.min.css");
             });
@@ -215,7 +218,7 @@ namespace DataImport.Web
             app.UseStatusCodePages(ctx =>
             {
                 var response = ctx.HttpContext.Response;
-                if (response.StatusCode == (int)HttpStatusCode.Unauthorized || response.StatusCode == (int)HttpStatusCode.Forbidden)
+                if (response.StatusCode == (int) HttpStatusCode.Unauthorized || response.StatusCode == (int) HttpStatusCode.Forbidden)
                 {
                     var basePath = response.HttpContext.Request.PathBase;
                     var userUnauthorizedPath = "/Home/UserUnauthorized";
@@ -229,12 +232,12 @@ namespace DataImport.Web
             });
 
             Log.Logger.Information("Migrating database");
-            dataImportDbContext.Database.Migrate();            
+            dataImportDbContext.Database.Migrate();
 
             app.UseHttpsRedirection();
             app.UseWebOptimizer();
             app.UseStaticFiles();
-            
+
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

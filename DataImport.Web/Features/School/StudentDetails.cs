@@ -40,7 +40,7 @@ namespace DataImport.Web.Features.School
 
                 var id = request.SchoolId;
 
-                var pagedStudents = 
+                var pagedStudents =
                     await Page<Student>.FetchAsync(async (offset, limit) => await _edFiServiceManager.GetStudentsBySchoolId(request.ApiServerId.Value, id, offset, limit),
                         request.PageNumber);
 

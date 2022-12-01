@@ -18,7 +18,7 @@ namespace DataImport.Web.Infrastructure
     {
         private readonly ILogger<MvcTransactionFilter> _logger;
         private readonly DataImportDbContext _dbContext;
-        private readonly  LinkGenerator _generator;
+        private readonly LinkGenerator _generator;
 
         public MvcTransactionFilter(ILogger<MvcTransactionFilter> logger, DataImportDbContext dbContext, LinkGenerator generator)
         {
@@ -88,12 +88,12 @@ namespace DataImport.Web.Infrastructure
 
         private static void AjaxRedirect(ActionExecutedContext filterContext, RedirectToRouteResult result, LinkGenerator generator)
         {
-            var action = (string)result.RouteValues["action"];
-            var controller = (string)result.RouteValues["controller"];
+            var action = (string) result.RouteValues["action"];
+            var controller = (string) result.RouteValues["controller"];
             result.RouteValues.Remove("action");
             result.RouteValues.Remove("controller");
 
-            var redirectUrl = generator.GetUriByAction(action, controller, result.RouteValues, 
+            var redirectUrl = generator.GetUriByAction(action, controller, result.RouteValues,
                 filterContext.HttpContext.Request.Scheme, filterContext.HttpContext.Request.Host);
 
             // JSON response is not allowed in GET requests by default in ASP.NET MVC due to security concerns

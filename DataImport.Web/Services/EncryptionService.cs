@@ -15,7 +15,7 @@ namespace DataImport.Web.Services
         bool TryDecrypt(string encryptedText, string encryptionKey, out string decryptedText);
     }
 
-    public class EncryptionService: IEncryptionService
+    public class EncryptionService : IEncryptionService
     {
         private readonly ILogger _logger;
 

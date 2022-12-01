@@ -44,7 +44,7 @@ namespace DataImport.Web.Features.Lookup
                     .WithMessage(x => $"Lookup key '{x.Key}' already exists on the source table '{x.SourceTable}'. Please try different key.");
             }
 
-            private bool BeUniqueLookUpItem(Command lookUp) => ! _dbContext.Lookups.Any(x =>
+            private bool BeUniqueLookUpItem(Command lookUp) => !_dbContext.Lookups.Any(x =>
                     x.SourceTable == lookUp.SourceTable.Trim() && x.Key == lookUp.Key.Trim());
         }
 

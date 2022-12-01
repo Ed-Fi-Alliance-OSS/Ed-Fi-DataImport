@@ -70,7 +70,7 @@ namespace DataImport.Web.Tests.Features.Shared
                     yield return new DataMapper
                     {
                         Name = resourceMetadata.Name,
-                        Children = MapToAllProperties(new []
+                        Children = MapToAllProperties(new[]
                         {
                             arrayItemMetadata,
                             arrayItemMetadata

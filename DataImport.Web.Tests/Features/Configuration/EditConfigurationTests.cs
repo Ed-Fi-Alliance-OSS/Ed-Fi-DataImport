@@ -6,15 +6,14 @@
 using DataImport.TestHelpers;
 using DataImport.Web.Features.ApiServers;
 using Shouldly;
+using DataImport.Web.Features.Configuration;
+using NUnit.Framework;
+using System.Linq;
+using System.Threading.Tasks;
+using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.Configuration
 {
-    using DataImport.Web.Features.Configuration;
-    using NUnit.Framework;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using static Testing;
-
     public class EditConfigurationTests
     {
         [Test]

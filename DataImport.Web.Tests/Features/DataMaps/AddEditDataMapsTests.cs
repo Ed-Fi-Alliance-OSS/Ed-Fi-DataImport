@@ -17,7 +17,7 @@ using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.DataMaps
 {
-    class AddEditDataMapsTests
+    internal class AddEditDataMapsTests
     {
         [Test]
         public void ShouldRequireMinimumFields()

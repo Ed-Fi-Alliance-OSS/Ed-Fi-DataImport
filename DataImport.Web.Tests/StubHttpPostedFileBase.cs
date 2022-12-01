@@ -12,7 +12,7 @@ namespace DataImport.Web.Tests
     public class StubHttpPostedFileBase : FormFile
     {
         public StubHttpPostedFileBase(string fileName, string content)
-            : base(new MemoryStream(Encoding.UTF8.GetBytes(content)), 0, content.Length * sizeof(char), fileName, fileName )
+            : base(new MemoryStream(Encoding.UTF8.GetBytes(content)), 0, content.Length * sizeof(char), fileName, fileName)
         {
         }
     }

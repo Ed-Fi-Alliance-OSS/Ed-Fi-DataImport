@@ -3,15 +3,15 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using DataImport.Web.Services.Swagger;
+using NUnit.Framework;
+using File = System.IO.File;
+
 namespace DataImport.Web.Tests
 {
-    using System;
-    using System.IO;
-    using System.Threading.Tasks;
-    using DataImport.Web.Services.Swagger;
-    using NUnit.Framework;
-    using File = System.IO.File;
-
     public class StubSwaggerWebClient : ISwaggerWebClient
     {
         private const string OdsDomainV25 = "http://test-ods-v2.5.0.1.example.com";

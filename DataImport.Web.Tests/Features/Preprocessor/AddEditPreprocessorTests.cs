@@ -19,14 +19,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DataImport.Common.Preprocessors;
 using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.Preprocessor
 {
-    using static Testing;
-
     public class AddEditPreprocessorTests
     {
         [Test]
@@ -80,7 +78,7 @@ namespace DataImport.Web.Tests.Features.Preprocessor
             new AddEditPreprocessorViewModel { ScriptType = ScriptType.ExternalFileProcessor, Name = SampleString() }
                 .ShouldNotValidate("'Processor Path' must not be empty.");
 
-            new AddEditPreprocessorViewModel { ScriptType = ScriptType.ExternalFileGenerator, Name = SampleString(), ExecutablePath = "notreal"}
+            new AddEditPreprocessorViewModel { ScriptType = ScriptType.ExternalFileGenerator, Name = SampleString(), ExecutablePath = "notreal" }
                 .ShouldNotValidate("Processor not found. Verify the file exists and 'Processor Path' is correct.");
 
             new AddEditPreprocessorViewModel { ScriptType = ScriptType.ExternalFileGenerator, Name = SampleString(), ExecutablePath = Path.GetTempFileName() }
@@ -254,7 +252,7 @@ namespace DataImport.Web.Tests.Features.Preprocessor
                         continue;
                     }
 
-                    var preprocessor = await AddPreprocessor((ScriptType)int.Parse(selectListItem.Value));
+                    var preprocessor = await AddPreprocessor((ScriptType) int.Parse(selectListItem.Value));
                     Query<Script>(preprocessor.Id).ShouldNotBeNull();
                 }
             });

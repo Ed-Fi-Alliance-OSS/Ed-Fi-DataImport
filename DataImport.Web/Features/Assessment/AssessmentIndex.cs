@@ -18,7 +18,7 @@ namespace DataImport.Web.Features.Assessment
 {
     public class AssessmentIndex
     {
-        public class ViewModel: IApiServerListViewModel
+        public class ViewModel : IApiServerListViewModel
         {
             public PagedList<Assessment> Assessments { get; set; }
 

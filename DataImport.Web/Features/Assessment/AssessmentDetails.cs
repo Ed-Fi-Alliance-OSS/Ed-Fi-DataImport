@@ -25,7 +25,7 @@ namespace DataImport.Web.Features.Assessment
             public int? ApiVersionId { get; set; }
         }
 
-        public class AssessmentDetail: IApiServerListViewModel
+        public class AssessmentDetail : IApiServerListViewModel
         {
             public string Id { get; set; }
 

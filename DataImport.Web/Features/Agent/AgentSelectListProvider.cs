@@ -35,7 +35,7 @@ namespace DataImport.Web.Features.Agent
         {
             var field = typeof(AgentTypeCodeEnum)
                 .GetFields(BindingFlags.Static | BindingFlags.Public)
-                .Single(x => (string)x.GetValue(null) == value);
+                .Single(x => (string) x.GetValue(null) == value);
 
             var display = field.GetCustomAttribute<DisplayAttribute>();
 

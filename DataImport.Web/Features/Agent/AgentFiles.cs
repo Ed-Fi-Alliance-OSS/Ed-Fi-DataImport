@@ -60,14 +60,14 @@ namespace DataImport.Web.Features.Agent
                     if (string.IsNullOrEmpty(request.Password))
                         throw new Exception("'Password' must not be empty.");
 
-                    var files = GetAgentFiles(request.Url, request.Port, request.Username, request.Password, request.Directory, request.FilePattern , request.AgentTypeCode);
+                    var files = GetAgentFiles(request.Url, request.Port, request.Username, request.Password, request.Directory, request.FilePattern, request.AgentTypeCode);
 
-                    return new QueryResult {FileNames = files.Select(x => x)};
+                    return new QueryResult { FileNames = files.Select(x => x) };
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error retrieving agent files.");
-                    return new QueryResult {ErrorMessage = ex.Message};
+                    return new QueryResult { ErrorMessage = ex.Message };
                 }
             }
 
@@ -91,7 +91,7 @@ namespace DataImport.Web.Features.Agent
                         ftpsClient.Connect();
                         if (!ftpsClient.IsConnected) throw new Exception("Ftps Client Cannot Connect");
                         return ftpsClient.GetListing(directory).Where(x =>
-                            x.Type == FtpFileSystemObjectType.File && x.Name.IsLike(filePattern.Trim())).Select(x => x.Name).ToList(); 
+                            x.Type == FtpFileSystemObjectType.File && x.Name.IsLike(filePattern.Trim())).Select(x => x.Name).ToList();
                     }
                 }
                 else

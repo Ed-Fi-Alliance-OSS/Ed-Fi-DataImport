@@ -12,7 +12,7 @@ namespace DataImport.Web.Services.Swagger
             if (string.IsNullOrEmpty(swaggerReference)) return null;
 
             var swaggerEntityPath = swaggerReference.Split('/');
-            return swaggerEntityPath.Length >= 3 
+            return swaggerEntityPath.Length >= 3
                 ? swaggerEntityPath[2]
                 : swaggerReference;
         }

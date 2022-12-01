@@ -4,11 +4,10 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using DataImport.Models;
+using System;
 
 namespace DataImport.Web.Services
 {
-    using System;
-
     public class OdsApiServerException : Exception
     {
         public int? ApiServerId { get; set; }

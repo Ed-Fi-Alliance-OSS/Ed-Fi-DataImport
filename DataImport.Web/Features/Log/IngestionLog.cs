@@ -54,8 +54,8 @@ namespace DataImport.Web.Features.Log
                     if (filters.SelectedResult > 0)
                     {
                         logsByDateDesc =
-                            (IOrderedQueryable<DataImport.Models.IngestionLog>)logsByDateDesc.Where(x =>
-                                (int)x.Result == filters.SelectedResult);
+                            (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                                (int) x.Result == filters.SelectedResult);
                     }
                     if (filters.SelectedResponse > 0)
                     {
@@ -78,7 +78,7 @@ namespace DataImport.Web.Features.Log
                     }
                     if (!string.IsNullOrEmpty(filters.Filename))
                     {
-                        logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>)logsByDateDesc.Where(x =>
+                        logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
                             x.FileName.ToLower().Contains(filters.Filename));
                     }
                 }

@@ -112,7 +112,8 @@ namespace DataImport.Web.Features.Agent
         private bool NewNameDoesNotAlreadyExist(AddEditAgentViewModel model, string candidateName) =>
             _dbContext.Agents.FirstOrDefault(agent => agent.Name == candidateName && agent.Id != model.Id && !agent.Archived) == null;
 
-        private bool BeUnchangedOrUnusedRunOrder(AddEditAgentViewModel model, int? candidateRunOrder) {
+        private bool BeUnchangedOrUnusedRunOrder(AddEditAgentViewModel model, int? candidateRunOrder)
+        {
             return _dbContext.Agents.FirstOrDefault(agent => agent.RunOrder == candidateRunOrder && agent.Id != model.Id) == null;
         }
 

@@ -27,13 +27,13 @@ namespace DataImport.Web.Features.Shared.SelectListProviders
             var enums = new List<SelectListItem> { new SelectListItem { Text = "Select Type" } };
             foreach (var value in Enum.GetValues(typeof(ScriptType)))
             {
-                if(!_settings.Enabled && ((ScriptType)value).IsExternal())
+                if (!_settings.Enabled && ((ScriptType) value).IsExternal())
                     continue;
 
                 enums.Add(new SelectListItem
                 {
-                    Value = ((int)value).ToString(),
-                    Text = ((ScriptType)value).Humanize()
+                    Value = ((int) value).ToString(),
+                    Text = ((ScriptType) value).Humanize()
                 });
             }
 

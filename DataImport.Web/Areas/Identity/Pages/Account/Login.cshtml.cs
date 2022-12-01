@@ -22,7 +22,7 @@ namespace DataImport.Web.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, 
+        public LoginModel(SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<ApplicationUser> userManager,
             IOptions<AppSettings> appSettings)
@@ -77,34 +77,34 @@ namespace DataImport.Web.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                
+
                 //Note: This switch statement is the only modification from the scaffold.
                 switch (result)
                 {
-                    case {Succeeded : true} :
-                    {
-                        _logger.LogInformation("User logged in.");
-                        return LocalRedirect(returnUrl);
-                    }
-                    case {RequiresTwoFactor : true} :
-                    {
-                        return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                    }
-                    case {IsLockedOut : true} :
-                    {
-                        _logger.LogWarning("User account locked out.");
-                        return RedirectToPage("./Lockout");
-                    }
-                    case {IsNotAllowed : true} :
-                    {
-                        ModelState.AddModelError(string.Empty, "Invalid user state.");
-                        return Page();
-                    }
+                    case { Succeeded: true }:
+                        {
+                            _logger.LogInformation("User logged in.");
+                            return LocalRedirect(returnUrl);
+                        }
+                    case { RequiresTwoFactor: true }:
+                        {
+                            return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                        }
+                    case { IsLockedOut: true }:
+                        {
+                            _logger.LogWarning("User account locked out.");
+                            return RedirectToPage("./Lockout");
+                        }
+                    case { IsNotAllowed: true }:
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid user state.");
+                            return Page();
+                        }
                     default:
-                    {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                        return Page();
-                    }
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
                 }
             }
 

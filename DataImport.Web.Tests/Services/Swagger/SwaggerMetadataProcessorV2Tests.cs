@@ -49,11 +49,11 @@ namespace DataImport.Web.Tests.Services.Swagger
         {
             var sut = new SwaggerMetadataProcessorV2();
 
-            var document = (JObject)_testResourcesDocumentObject.DeepClone();
+            var document = (JObject) _testResourcesDocumentObject.DeepClone();
             document["swagger"] = "2.1";
             sut.CanHandle(document).ShouldBeFalse();
 
-            document = (JObject)_testDescriptorsDocumentObject.DeepClone();
+            document = (JObject) _testDescriptorsDocumentObject.DeepClone();
             document["swagger"] = "2.1";
             sut.CanHandle(document).ShouldBeFalse();
         }
@@ -63,11 +63,11 @@ namespace DataImport.Web.Tests.Services.Swagger
         {
             var sut = new SwaggerMetadataProcessorV2();
 
-            var document = (JObject)_testResourcesDocumentObject.DeepClone();
+            var document = (JObject) _testResourcesDocumentObject.DeepClone();
             document["swagger"] = "1.0";
             sut.CanHandle(document).ShouldBeFalse();
 
-            document = (JObject)_testDescriptorsDocumentObject.DeepClone();
+            document = (JObject) _testDescriptorsDocumentObject.DeepClone();
             document["swagger"] = "1.0";
             sut.CanHandle(document).ShouldBeFalse();
         }
@@ -77,11 +77,11 @@ namespace DataImport.Web.Tests.Services.Swagger
         {
             var sut = new SwaggerMetadataProcessorV2();
 
-            var document = (JObject)_testResourcesDocumentObject.DeepClone();
+            var document = (JObject) _testResourcesDocumentObject.DeepClone();
             document.Remove("swagger");
             sut.CanHandle(document).ShouldBeFalse();
 
-            document = (JObject)_testDescriptorsDocumentObject.DeepClone();
+            document = (JObject) _testDescriptorsDocumentObject.DeepClone();
             document.Remove("swagger");
             sut.CanHandle(document).ShouldBeFalse();
         }

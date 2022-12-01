@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace DataImport.Web.Infrastructure
 {
-    public class IdentityToRootPageRouteModelConvention: IPageRouteModelConvention
+    public class IdentityToRootPageRouteModelConvention : IPageRouteModelConvention
     {
         public void Apply(PageRouteModel model)
         {
-            if(model.RelativePath.StartsWith("/Areas/Identity"))
+            if (model.RelativePath.StartsWith("/Areas/Identity"))
             {
-                foreach(var selector in model.Selectors)
+                foreach (var selector in model.Selectors)
                 {
                     selector.AttributeRouteModel.Template = selector.AttributeRouteModel.Template.Replace("Identity", string.Empty);
                 }

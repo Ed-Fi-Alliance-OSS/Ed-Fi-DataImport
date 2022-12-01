@@ -12,11 +12,10 @@ using DataImport.Web.Features.Preprocessor;
 using DataImport.Web.Features.Share;
 using NUnit.Framework;
 using Shouldly;
+using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.Share
 {
-    using static Testing;
-
     [TestFixture]
     public class SharingPreprocessorValidationServiceTests
     {

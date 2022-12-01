@@ -57,10 +57,10 @@ namespace DataImport.Web.Features.Share
                 RuleForEach(x => x.Template.Bootstraps)
                     .SafeCustom(logger, (bootstrap, context) =>
                     {
-                        var apiVersion = database.ApiVersions.AsNoTracking().SingleOrDefault(x => x.Version == ((SharingModel)context.InstanceToValidate).ApiVersion);
+                        var apiVersion = database.ApiVersions.AsNoTracking().SingleOrDefault(x => x.Version == ((SharingModel) context.InstanceToValidate).ApiVersion);
                         if (apiVersion == null)
                         {
-                            context.AddFailure($"Could not resolve a bootstrap resource for unrecognized API Version' {((SharingModel)context.InstanceToValidate).ApiVersion}'.");
+                            context.AddFailure($"Could not resolve a bootstrap resource for unrecognized API Version' {((SharingModel) context.InstanceToValidate).ApiVersion}'.");
                             return;
                         }
 
@@ -128,10 +128,10 @@ namespace DataImport.Web.Features.Share
                 RuleForEach(x => x.Template.Maps)
                     .SafeCustom(logger, (map, context) =>
                     {
-                        var apiVersion = database.ApiVersions.AsNoTracking().SingleOrDefault(x => x.Version == ((SharingModel)context.InstanceToValidate).ApiVersion);
+                        var apiVersion = database.ApiVersions.AsNoTracking().SingleOrDefault(x => x.Version == ((SharingModel) context.InstanceToValidate).ApiVersion);
                         if (apiVersion == null)
                         {
-                            context.AddFailure($"This template contains a map for unrecognized API Version' {((SharingModel)context.InstanceToValidate).ApiVersion}'.");
+                            context.AddFailure($"This template contains a map for unrecognized API Version' {((SharingModel) context.InstanceToValidate).ApiVersion}'.");
                             return;
                         }
 
@@ -156,7 +156,7 @@ namespace DataImport.Web.Features.Share
                         List<string> errorMessages = new List<string>();
                         if (!string.IsNullOrEmpty(map.CustomFileProcessor) && string.IsNullOrEmpty(map.Attribute))
                         {
-                            var sharingModel = (SharingModel)context.InstanceToValidate;
+                            var sharingModel = (SharingModel) context.InstanceToValidate;
                             var preprocessor = sharingModel.Template.Preprocessors.Single(x => x.Name == map.CustomFileProcessor);
                             if (preprocessor.HasAttribute)
                             {
@@ -278,7 +278,7 @@ namespace DataImport.Web.Features.Share
                 {
                     foreach (var map in import.Template.Maps)
                     {
-                        var addMapResponse = await _mediator.Send(map.ToAddCommand(resources[map.ResourcePath], string.IsNullOrEmpty(map.CustomFileProcessor) ? (int?)null : preprocessors[map.CustomFileProcessor]));
+                        var addMapResponse = await _mediator.Send(map.ToAddCommand(resources[map.ResourcePath], string.IsNullOrEmpty(map.CustomFileProcessor) ? (int?) null : preprocessors[map.CustomFileProcessor]));
 
                         response.DataMapIds.Add(addMapResponse.DataMapId);
                     }

@@ -22,7 +22,7 @@ using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.Agent
 {
-    class AddEditAgentTests
+    internal class AddEditAgentTests
     {
         private readonly string _originalEncryptionKeyValue = Testing.Services.GetRequiredService<IOptions<AppSettings>>().Value.EncryptionKey;
 
@@ -121,7 +121,7 @@ namespace DataImport.Web.Tests.Features.Agent
             const int runOrder = 1;
 
             await Send(new AddAgent.Command
-                { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder } });
+            { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder } });
 
             new AddEditAgentViewModel { Name = "New Agent", AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder }
                 .ShouldNotValidate($"An Agent with the run order {runOrder} already exists. Please provide a distinct run order.");
@@ -135,7 +135,7 @@ namespace DataImport.Web.Tests.Features.Agent
             const int runOrder = 1;
 
             await Send(new AddAgent.Command
-                { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder } });
+            { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder } });
 
             new AddEditAgentViewModel { Name = "New Agent", AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = 0 }
                 .ShouldValidate();
@@ -152,7 +152,7 @@ namespace DataImport.Web.Tests.Features.Agent
             const int runOrder = 1;
 
             await Send(new AddAgent.Command
-                { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder } });
+            { ViewModel = new AddEditAgentViewModel { Name = existingName, AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = runOrder } });
 
             new AddEditAgentViewModel { Name = "New Agent", AgentTypeCode = "Manual", ApiServerId = apiServer.Id, RunOrder = null }
                 .ShouldValidate();
@@ -424,7 +424,7 @@ namespace DataImport.Web.Tests.Features.Agent
 
             agent.Username = SampleString("New Username");
             agent.Password = SampleString("New Password");
-            agent.Port = port == null ? 999 : (int?)null;
+            agent.Port = port == null ? 999 : (int?) null;
             agent.RunOrder = 2;
 
             var response = await Send(new EditAgent.Command { ViewModel = agent });

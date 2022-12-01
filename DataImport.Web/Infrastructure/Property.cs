@@ -13,7 +13,7 @@ namespace DataImport.Web.Infrastructure
     {
         public static PropertyInfo From<TModel, TValue>(Expression<Func<TModel, TValue>> expression)
         {
-            return (PropertyInfo)GetMember(expression);
+            return (PropertyInfo) GetMember(expression);
         }
 
         private static MemberInfo GetMember<TModel, TValue>(Expression<Func<TModel, TValue>> expression)
@@ -44,7 +44,7 @@ namespace DataImport.Web.Infrastructure
             if (body is UnaryExpression castToObject) // (object)x.Property
                 body = castToObject.Operand; // x.Property
 
-            return (MemberExpression)body; // x.Property
+            return (MemberExpression) body; // x.Property
         }
     }
 }

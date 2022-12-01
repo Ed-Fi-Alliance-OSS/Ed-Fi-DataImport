@@ -19,9 +19,7 @@ using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.BootstrapData
 {
-    using BootstrapData = DataImport.Models.BootstrapData;
-
-    class AddEditBootstrapDataTests
+    internal class AddEditBootstrapDataTests
     {
         [Test]
         public void ShouldRequireMinimumFields()

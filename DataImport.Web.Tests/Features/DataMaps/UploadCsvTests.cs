@@ -11,14 +11,13 @@ using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
 using Shouldly;
 using System.Threading.Tasks;
+using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.DataMaps
 {
-    using static Testing;
-
     [SetCulture("en-US")]
     [TestFixture]
-    class UploadCsvTests
+    internal class UploadCsvTests
     {
         [Test]
         public async Task ShouldReturnErrorMessageIfCsvIdIncorrect()
@@ -39,7 +38,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
             var result = await Send(new UploadCsvFile.Command { PreprocessorId = preprocessor.PreprocessorId, FileBase = fileBase });
             result.CsvError.ShouldBe("A column named 'duplicate_header' already belongs to this DataTable.");
         }
-        
+
         [Test]
         public async Task ShouldReturnErrorMessageIfFileIsEmpty()
         {

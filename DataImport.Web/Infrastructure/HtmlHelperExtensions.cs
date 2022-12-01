@@ -58,12 +58,12 @@ namespace DataImport.Web.Infrastructure
 
         private static string ActionName<TModel>(IHtmlHelper<TModel> html)
         {
-            return (string)html.ViewContext.RouteData.Values["action"];
+            return (string) html.ViewContext.RouteData.Values["action"];
         }
 
         private static string ControllerName<TModel>(IHtmlHelper<TModel> html)
         {
-            return (string)html.ViewContext.RouteData.Values["controller"];
+            return (string) html.ViewContext.RouteData.Values["controller"];
         }
 
         public static HtmlString ExternalLink<TModel>(this IHtmlHelper<TModel> html, string text, string url)
@@ -461,7 +461,7 @@ namespace DataImport.Web.Infrastructure
         public static HtmlString FormGroup(this IHtmlHelper html, IHtmlContent label, IHtmlContent content, string contentId = null)
         {
             var labelDiv = Tag("div", "col-sm-2", label);
-            var contentDiv = Tag("div", "col-sm-10", content);  
+            var contentDiv = Tag("div", "col-sm-10", content);
 
             if (!string.IsNullOrEmpty(contentId))
                 contentDiv.GenerateId(contentId, "_");
@@ -479,17 +479,17 @@ namespace DataImport.Web.Infrastructure
             foreach (var content in contents)
             {
                 if (content is string)
-                    tag.InnerHtml.AppendHtml((string)content);
+                    tag.InnerHtml.AppendHtml((string) content);
                 else if (content is TagBuilder builder)
                     tag.InnerHtml.AppendHtml(builder);
                 else if (content is HtmlString)
-                    tag.InnerHtml.AppendHtml((HtmlString)content);
+                    tag.InnerHtml.AppendHtml((HtmlString) content);
                 else if (content is StringHtmlContent)
-                    tag.InnerHtml.AppendHtml((StringHtmlContent)content);
+                    tag.InnerHtml.AppendHtml((StringHtmlContent) content);
                 else
                     throw new Exception("Unexpected tag content: " + content);
             }
-            
+
             return tag;
         }
 

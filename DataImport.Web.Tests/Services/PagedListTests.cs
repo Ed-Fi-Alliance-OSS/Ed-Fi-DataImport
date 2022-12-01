@@ -81,7 +81,7 @@ namespace DataImport.Web.Tests.Services
             Page<object>.Fetch((offset, size) =>
             {
                 offset.ShouldBe(180);
-                
+
                 return ListOfObjects;
             }, pageNumber);
 
@@ -94,7 +94,7 @@ namespace DataImport.Web.Tests.Services
                 return ListOfObjects;
             }, pageNumber, configuredPageSize);
         }
-        
+
         [Test]
         public void ShouldRequestOneAdditionalRecord()
         {

@@ -17,7 +17,7 @@ namespace DataImport.Web.Tests.Infrastructure
         {
             ReadableDuration(days: 5, hours: 4, minutes: 3, seconds: 2).ShouldBe("5 days, 4 hours, 3 minutes, and 2 seconds");
             ReadableDuration(days: 1, hours: 1, minutes: 1, seconds: 1).ShouldBe("1 day, 1 hour, 1 minute, and 1 second");
-            
+
             ReadableDuration(days: 0, hours: 4, minutes: 3, seconds: 2).ShouldBe("4 hours, 3 minutes, and 2 seconds");
             ReadableDuration(days: 5, hours: 0, minutes: 3, seconds: 2).ShouldBe("5 days, 3 minutes, and 2 seconds");
             ReadableDuration(days: 5, hours: 4, minutes: 0, seconds: 2).ShouldBe("5 days, 4 hours, and 2 seconds");

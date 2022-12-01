@@ -9,7 +9,6 @@ using DataImport.Web.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,7 +23,7 @@ namespace DataImport.Web.Features.School
             public int? ApiVersionId { get; set; }
         }
 
-        public class Detail: IApiServerListViewModel
+        public class Detail : IApiServerListViewModel
         {
             public string Id { get; set; }
             public string Name { get; set; }

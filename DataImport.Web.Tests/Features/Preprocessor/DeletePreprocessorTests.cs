@@ -11,11 +11,10 @@ using DataImport.Web.Features.Agent;
 using DataImport.Web.Features.Preprocessor;
 using NUnit.Framework;
 using Shouldly;
+using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.Preprocessor
 {
-    using static Testing;
-
     [TestFixture]
     public class DeletePreprocessorTests
     {

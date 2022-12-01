@@ -36,14 +36,14 @@ namespace DataImport.Web.Features.Log
                 var pagedIngestionLogs =
                     Page<LogViewModel.ApplicationLog>.Fetch(GetApplicationLogs, request.PageNumber);
 
-                return new LogViewModel{ ApplicationLogs = pagedIngestionLogs };
+                return new LogViewModel { ApplicationLogs = pagedIngestionLogs };
             }
 
             public IEnumerable<LogViewModel.ApplicationLog> GetApplicationLogs(int offset, int limit)
             {
                 var pagedList = _dataImportDbContext.ApplicationLogs
                     .OrderByDescending(x => x.Logged).Skip(offset).Take(limit).ToList();
-                   
+
                 return pagedList.Select(_mapper.Map<LogViewModel.ApplicationLog>);
             }
         }

@@ -33,7 +33,7 @@ namespace DataImport.Web.Infrastructure
             if (filterContext.Controller is ConfigurationController ||
                 filterContext.Controller is ApiServersController ||
                 filterContext.Controller is OpenIdConnectController ||
-                (filterContext.Controller is HomeController && (string)filterContext.RouteData.Values["action"] == "UserUnauthorized"))
+                (filterContext.Controller is HomeController && (string) filterContext.RouteData.Values["action"] == "UserUnauthorized"))
             {
                 return;
             }

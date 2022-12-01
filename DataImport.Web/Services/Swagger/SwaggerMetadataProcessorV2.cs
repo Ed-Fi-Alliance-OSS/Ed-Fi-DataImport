@@ -35,7 +35,7 @@ namespace DataImport.Web.Services.Swagger
             var swaggerVersion = GetSwaggerDocumentVersion(swaggerDocument);
 
             var apiOperations = swaggerDocument["paths"].ToObject<Dictionary<string, JObject>>();
-            
+
             foreach (var apiPath in apiOperations.Keys)
             {
                 var apiOperation = apiOperations[apiPath];

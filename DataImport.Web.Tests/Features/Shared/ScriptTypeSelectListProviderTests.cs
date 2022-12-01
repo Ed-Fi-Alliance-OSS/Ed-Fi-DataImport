@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 
 namespace DataImport.Web.Tests.Features.Shared
 {
-    class ScriptTypeSelectListProviderTests
+    internal class ScriptTypeSelectListProviderTests
     {
         [Test]
         public void ShouldSuccessfullyReturnScriptTypeSelectListItems()

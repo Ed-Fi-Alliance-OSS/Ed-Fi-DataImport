@@ -8,15 +8,14 @@ using System.Linq;
 using DataImport.Models;
 using DataImport.TestHelpers;
 using Shouldly;
+using DataImport.Web.Features.Lookup;
+using NUnit.Framework;
+using static DataImport.Web.Tests.Testing;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Tests.Features.Lookup
 {
-    using DataImport.Web.Features.Lookup;
-    using NUnit.Framework;
-    using static Testing;
-    using System.Threading.Tasks;
-
-    class AddEditDeleteLookupTests
+    internal class AddEditDeleteLookupTests
     {
         private int _notReferencedLookUpIdC;
         private int _notReferencedLookUpIdD;

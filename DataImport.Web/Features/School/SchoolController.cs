@@ -4,7 +4,6 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Threading.Tasks;
-using DataImport.Common;
 using DataImport.Web.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

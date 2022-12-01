@@ -13,10 +13,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.Preprocessor
 {
-    using static Testing;
     public class PreprocessorIndexTests
     {
         [Test]

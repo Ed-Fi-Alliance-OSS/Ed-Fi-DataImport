@@ -17,7 +17,7 @@ using static DataImport.TestHelpers.TestHelpers;
 
 namespace DataImport.Web.Tests.Features.DataMaps
 {
-    class DeleteDataMapTests
+    internal class DeleteDataMapTests
     {
         [Test]
         public async Task ShouldDeleteDataMapAndItsAgentAssociations()

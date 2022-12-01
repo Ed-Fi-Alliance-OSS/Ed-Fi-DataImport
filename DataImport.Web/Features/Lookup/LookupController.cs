@@ -4,7 +4,6 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Threading.Tasks;
-using DataImport.Common;
 using DataImport.Web.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +40,7 @@ namespace DataImport.Web.Features.Lookup
 
         public async Task<ActionResult> Edit(int id)
         {
-            return View(await _mediator.Send(new EditLookup.Query {Id = id}));
+            return View(await _mediator.Send(new EditLookup.Query { Id = id }));
         }
 
         [HttpPost]

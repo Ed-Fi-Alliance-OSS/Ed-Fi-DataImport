@@ -80,7 +80,7 @@ namespace DataImport.Web.Features.ApiServers
             private readonly IOAuthRequestWrapper _oAuthRequestWrapper;
             private readonly string _encryptionKey;
 
-            public QueryHandler(ILogger<TestApiServerConnection> logger, DataImportDbContext database, IEncryptionKeyResolver encryptionKeyResolver, 
+            public QueryHandler(ILogger<TestApiServerConnection> logger, DataImportDbContext database, IEncryptionKeyResolver encryptionKeyResolver,
                 IEncryptionService encryptionService, IConfigurationService configurationService, IOAuthRequestWrapper oAuthRequestWrapper)
             {
                 _logger = logger;
@@ -151,7 +151,7 @@ namespace DataImport.Web.Features.ApiServers
                     var api = new SchoolsApi(client, apiVersion);
                     var apiCall = api.GetAllSchoolsWithHttpResponse(0, 1);
 
-                    if(apiCall.IsSuccessful)
+                    if (apiCall.IsSuccessful)
                         return Response.Success();
 
                     var statusMessage = apiCall.StatusCode.IsSuccessStatusCode()

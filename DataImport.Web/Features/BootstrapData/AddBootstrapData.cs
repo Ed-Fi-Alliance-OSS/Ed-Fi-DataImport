@@ -19,8 +19,6 @@ using System.Linq;
 
 namespace DataImport.Web.Features.BootstrapData
 {
-    using BootstrapData = DataImport.Models.BootstrapData;
-
     public class AddBootstrapData
     {
         public class Query : IRequest<Command>

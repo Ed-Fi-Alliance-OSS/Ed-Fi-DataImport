@@ -13,7 +13,7 @@ using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.Shared
 {
-    class ResourceSelectListProviderTests
+    internal class ResourceSelectListProviderTests
     {
         [Test]
         public void ShouldHaveOptionPerKnownResource()

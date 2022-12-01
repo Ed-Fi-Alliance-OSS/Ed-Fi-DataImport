@@ -30,7 +30,7 @@ namespace DataImport.Web.Services
         public HtmlString NavigationButton<TModel>(IHtmlHelper<TModel> html, string text, string action = null, string controller = null)
         {
             if (controller == null)
-                controller = (string)html.ViewContext.RouteData.Values["controller"];
+                controller = (string) html.ViewContext.RouteData.Values["controller"];
 
             if (action == null)
                 action = text;

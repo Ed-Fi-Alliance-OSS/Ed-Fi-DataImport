@@ -74,8 +74,8 @@ namespace DataImport.Web.Features.Lookup
             private bool EditingExistingLookUpWithoutChangingValues(Command lookUp) => _dbContext.Lookups.Any(x => x.Id == lookUp.Id && x.Key == lookUp.Key &&
                                                                             x.SourceTable == lookUp.SourceTable);
 
-            private bool EditingLookUpItemWithDifferentIdButWithSameValues(Command lookUp) => _dbContext.Lookups.Any(x => x.Id != lookUp.Id && 
-                x.SourceTable == lookUp.SourceTable.Trim() && x.Key == lookUp.Key.Trim() );
+            private bool EditingLookUpItemWithDifferentIdButWithSameValues(Command lookUp) => _dbContext.Lookups.Any(x => x.Id != lookUp.Id &&
+                x.SourceTable == lookUp.SourceTable.Trim() && x.Key == lookUp.Key.Trim());
 
             private bool NotEditReferencedLookUpSourceTableName(Command editLookUp)
             {

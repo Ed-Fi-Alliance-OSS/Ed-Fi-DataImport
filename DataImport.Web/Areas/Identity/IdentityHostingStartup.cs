@@ -27,11 +27,12 @@ namespace DataImport.Web.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
-            builder.ConfigureServices((context, services) => {
+            builder.ConfigureServices((context, services) =>
+            {
                 var appSettings = context.Configuration.GetSection("AppSettings").Get<AppSettings>();
                 var identitySettings = context.Configuration.GetSection("IdentitySettings").Get<IdentitySettings>();
-                
-                if(identitySettings.Type.Equals(IdentitySettingsConstants.EntityFrameworkIdentityType))
+
+                if (identitySettings.Type.Equals(IdentitySettingsConstants.EntityFrameworkIdentityType))
                     ConfigureForEntityFrameworkIdentity(services, appSettings);
                 else if (identitySettings.Type.Equals(IdentitySettingsConstants.OpenIdIdentityType))
                     ConfigureForOpenIdConnectIdentity(services, identitySettings);
@@ -129,7 +130,7 @@ namespace DataImport.Web.Areas.Identity
                     if (oidcClaimType != diClaimType && claim != null && !string.IsNullOrEmpty(claim.Value))
                     {
                         claimsIdentity.AddClaim(new Claim(diClaimType, claim.Value));
-                        if(!IsReservedClaim(claim.Type))
+                        if (!IsReservedClaim(claim.Type))
                             claimsIdentity.RemoveClaim(claim);
                     }
                 }
@@ -141,7 +142,7 @@ namespace DataImport.Web.Areas.Identity
                     ReplaceClaimIfNotNull(openIdSettings.ClaimTypeMappings.EmailClaimType, ClaimTypes.Email);
 
                     var roleClaims = claimsIdentity.Claims.Where(m => m.Type == openIdSettings.ClaimTypeMappings.RoleClaimType).ToList();
-                    if(roleClaims.Any(r => r.Value == IdentitySettingsConstants.RoleClaimValue))
+                    if (roleClaims.Any(r => r.Value == IdentitySettingsConstants.RoleClaimValue))
                     {
                         foreach (var otherClaim in roleClaims) { claimsIdentity.RemoveClaim(otherClaim); }
                         claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, IdentitySettingsConstants.RoleClaimValue));

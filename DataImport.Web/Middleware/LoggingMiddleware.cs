@@ -7,7 +7,6 @@ using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,7 +52,7 @@ namespace DataImport.Web.Middleware
             var requestContent = Encoding.UTF8.GetString(buffer);
 
             //Reset stream
-            request.Body.Position = 0;  
+            request.Body.Position = 0;
 
             return requestContent;
         }

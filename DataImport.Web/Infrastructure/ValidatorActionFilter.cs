@@ -13,8 +13,8 @@ namespace DataImport.Web.Infrastructure
     {
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var viewData = ((Controller)filterContext.Controller).ViewData;
-            
+            var viewData = ((Controller) filterContext.Controller).ViewData;
+
             if (!viewData.ModelState.IsValid)
             {
                 if (filterContext.HttpContext.Request.Method == "GET")

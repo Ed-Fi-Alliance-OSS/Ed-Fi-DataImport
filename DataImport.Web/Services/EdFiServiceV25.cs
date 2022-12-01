@@ -8,7 +8,6 @@ using DataImport.Common.ExtensionMethods;
 using DataImport.Common.Helpers;
 using DataImport.EdFi;
 using DataImport.Models;
-using Microsoft.EntityFrameworkCore;
 using RestSharp;
 using System;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ namespace DataImport.Web.Services
         private readonly IOAuthRequestWrapper _oauthRequestWrapper;
         private readonly string _encryptionKey;
 
-        public EdFiServiceV25(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, IOAuthRequestWrapper oauthRequestWrapper) 
+        public EdFiServiceV25(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, IOAuthRequestWrapper oauthRequestWrapper)
             : base(mapper, dbContext)
         {
             _encryptionKey = encryptionKeyResolver.GetEncryptionKey();

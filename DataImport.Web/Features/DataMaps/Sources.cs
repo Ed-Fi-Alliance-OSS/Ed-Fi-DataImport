@@ -19,7 +19,7 @@ namespace DataImport.Web.Features.DataMaps
             return typeof(Sources)
                 .GetFields(BindingFlags.Public | BindingFlags.Static)
                 .Where(i => i.IsLiteral && !i.IsInitOnly && i.FieldType == typeof(string))
-                .Select(i => (string)i.GetRawConstantValue())
+                .Select(i => (string) i.GetRawConstantValue())
                 .ToArray();
         }
     }

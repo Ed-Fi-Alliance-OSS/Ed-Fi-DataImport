@@ -39,7 +39,7 @@ namespace DataImport.Web
         private static void Run(string[] args)
         {
             Log.Information("Building host");
-            var host = CreateHostBuilder(args).Build();       
+            var host = CreateHostBuilder(args).Build();
 
             Log.Information("Starting host");
             host.Run();
