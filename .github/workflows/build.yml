@@ -13,7 +13,7 @@ on:
 
 env:
   BUILD_VERSION: ${{ secrets.SEMANTIC_VERSION }}
-  DB_PASS: ${{ secrets.DB_PASSWORD }}
+  DB_PASS: ${{ secrets.DB_PASS }}
 
 jobs:
   build-and-test:
