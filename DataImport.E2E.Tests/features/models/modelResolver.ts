@@ -8,7 +8,6 @@ import { ActivityPage } from "./activityPage";
 import { ApiConnectionsPage } from "./apiConnectionsPage";
 import { DataImportPage } from "./dataImportPage";
 import { LoginPage } from "./loginPage";
-import { TemplateSharingPage } from "./templateSharingPage";
 import { ConfigurationPage } from "./configurationPage";
 import { ImportExportPage } from "./importExportPage";
 import { MapsPage } from "./mapsPage";
@@ -41,15 +40,6 @@ export class ModelResolver {
     let model = this.getModel<ActivityPage>(ActivityPage.name);
     if (!model) {
       model = new ActivityPage(this.page);
-      this.diPages.push(model);
-    }
-    return model;
-  }
-
-  public get templateSharingPage(): TemplateSharingPage {
-    let model = this.getModel<TemplateSharingPage>(TemplateSharingPage.name);
-    if (!model) {
-      model = new TemplateSharingPage(this.page);
       this.diPages.push(model);
     }
     return model;

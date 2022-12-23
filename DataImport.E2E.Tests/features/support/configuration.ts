@@ -73,7 +73,7 @@ Then(
   /^register option is (not )?present on login page/,
   async (content: string) => {
     await models.loginPage.logout();
-    validatePath(models.loginPage.path(), true);
+    validatePath(models.loginPage.pathLogout(), true);
     strictEqual(
       await models.loginPage.isRegisterOptionVisible(),
       !content,

@@ -17,7 +17,7 @@ Feature: Configuration
     When clicking on enable user registration
     And clicking on update configuration
     Then configuration option is enabled
-    And register option is present on login page
+    And register option is not present on login page
 
   #DI-1018
   Scenario: Disable User Registration
@@ -26,19 +26,3 @@ Feature: Configuration
     And clicking on update configuration
     Then configuration option is disabled
     And register option is not present on login page
-
-  #DI-1061
-  Scenario: Enable Product Improvement
-    Given product improvement is disabled
-    When clicking on enable product improvement
-    And clicking on update configuration
-    Then configuration option is enabled
-    And analytics tag is present
-
-  #DI-1062
-  Scenario: Disable Product Improvement
-    Given product improvement is enabled
-    When clicking on disable product improvement
-    And clicking on update configuration
-    Then configuration option is disabled
-    And analytics tag is not present

@@ -9,7 +9,7 @@ export class ConfigurationPage extends DataImportPage {
   templateSharingURLInput = "input#TemplateSharingApiUrl";
   allowUserRegistrationInput = "input#InstanceAllowUserRegistration";
   productImprovementInput = "input#EnableProductImprovement";
-  updateConfigurationBtn = "button#btnUpdate";
+  updateConfigurationBtn = "button:text('Update Configuration')";
   analyticsTag = "script[src='https://www.google-analytics.com/analytics.js']";
 
   messages = {
@@ -18,10 +18,6 @@ export class ConfigurationPage extends DataImportPage {
 
   path(): string {
     return `${this.url}/Configuration`;
-  }
-
-  getTemplateSharingURL(): Promise<string | null> {
-    return this.page.locator(this.templateSharingURLInput).inputValue();
   }
 
   async isUserRegistrationEnabled(): Promise<boolean> {
@@ -46,7 +42,6 @@ export class ConfigurationPage extends DataImportPage {
 
   async updateConfiguration(): Promise<void> {
     await Promise.all([
-      this.waitForResponse(this.path()),
       this.clickUpdateConfiguration(),
     ]);
   }

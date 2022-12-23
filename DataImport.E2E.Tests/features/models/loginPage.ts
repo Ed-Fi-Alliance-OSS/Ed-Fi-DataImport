@@ -27,6 +27,10 @@ export class LoginPage extends DataImportPage {
     return `${this.url}/Account/Login`;
   }
 
+  pathLogout(): string {
+    return `${this.url}/Account/Logout`
+  }
+
   async fillForm(username?: string, password?: string): Promise<void> {
     if (username && password) {
       await this.page.locator(this.emailInput).fill(username);
@@ -65,7 +69,7 @@ export class LoginPage extends DataImportPage {
   async logout(): Promise<void> {
     await this.page.locator(this.userDropdown).click();
     await Promise.all([
-      this.waitForResponse("/Account/LogOff", 302),
+      this.waitForResponse("/Account/Logout", 302),
       this.page.locator(this.logoutBtn).click(),
       this.page.waitForNavigation(),
     ]);
