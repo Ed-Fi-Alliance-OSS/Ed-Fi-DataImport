@@ -17,7 +17,7 @@ Feature: Configuration
     When clicking on enable user registration
     And clicking on update configuration
     Then configuration option is enabled
-    And register option is not present on login page
+    And register option is present on login page
 
   #DI-1018
   Scenario: Disable User Registration
