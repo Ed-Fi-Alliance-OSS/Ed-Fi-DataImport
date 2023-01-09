@@ -34,9 +34,6 @@ namespace transform_api_load_janitor.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DefaultEndpointsProtocol=https;AccountName=dataflow;AccountKey=xXC4GJaa2ZbkigVk3a" +
-            "4a38Ol+42KQ4AiezibfgijShtBMeEz+CHHr3mceufm7DA8p9jl1wgCzAHFGaXH3ydupA==;EndpointS" +
-            "uffix=core.windows.net")]
         public string StorageConnectionString {
             get {
                 return ((string)(this["StorageConnectionString"]));
