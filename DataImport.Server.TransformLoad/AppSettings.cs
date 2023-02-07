@@ -16,6 +16,7 @@ namespace DataImport.Server.TransformLoad
         public string FileMode { get; set; }
         public string ShareName { get; set; }
         public bool UsePowerShellWithNoRestrictions { get; set; }
+        public string MinimumLevelIngestionLog { get; set; }
     }
 
     public class ConcurrencySettings

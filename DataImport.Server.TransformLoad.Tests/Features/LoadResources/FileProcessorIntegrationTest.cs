@@ -78,6 +78,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
             ingestionLogs.ShouldNotBeEmpty();
             ingestionLogs.ShouldAllBe(x => x.ApiServerName == apiServer.Name);
             ingestionLogs.ShouldAllBe(x => x.ApiVersion == apiServer.ApiVersion.Version);
+            ingestionLogs.ShouldAllBe(x => x.Level == Common.Constants.IngestionLogLevel.Information);
         }
 
         [Test]
@@ -338,7 +339,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
             ingestionLogs.ShouldAllBe(x => x.ApiServerName == apiServer.Name);
             ingestionLogs.ShouldAllBe(x => x.ApiVersion == apiServer.ApiVersion.Version);
             var bootstrapLogs = ingestionLogs.Where(i => i.Operation == "PostBootstrapData").ToList();
-            bootstrapLogs.ShouldAllBe(b => b.Level == "ERROR");
+            bootstrapLogs.ShouldAllBe(b => b.Level == Common.Constants.IngestionLogLevel.Error);
             bootstrapLogs.ShouldAllBe(b => !string.IsNullOrEmpty(b.Data));
         }
 
