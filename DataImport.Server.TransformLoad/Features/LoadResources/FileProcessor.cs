@@ -4,7 +4,6 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using DataImport.Common;
-using DataImport.Common.Constants;
 using DataImport.Common.Preprocessors;
 using DataImport.Models;
 using MediatR;
@@ -74,7 +73,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 _alreadyProcessedResources = new ConcurrentBag<string>();
                 _fileResponses = new Dictionary<int, List<FileResponse>>();
                 _fileService = fileServices(options.Value.FileMode);
-                _ingestionLogLevels = IngestionLogLevel.GetValidList(options.Value.MinimumLevelIngestionLog);
+                _ingestionLogLevels = Common.Enums.LogLevel.GetValidList(options.Value.MinimumLevelIngestionLog);
             }
 
             protected override async Task Handle(Command request, CancellationToken cancellationToken)
@@ -401,18 +400,18 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "POST failed for resource: {url}, Row Number: {row}", endpointUrl, mappedRow.RowNumber);
-                    return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, IngestionLogLevel.Error, mappedRow, endpointUrl));
+                    return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, Common.Enums.LogLevel.Error, mappedRow, endpointUrl));
                 }
 
                 switch (odsResponse.StatusCode)
                 {
                     case HttpStatusCode.OK:
-                        return (RowResult.Exist, new IngestionLogMarker(IngestionResult.Success, IngestionLogLevel.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
+                        return (RowResult.Exist, new IngestionLogMarker(IngestionResult.Success, Common.Enums.LogLevel.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
                     case HttpStatusCode.Created:
-                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, IngestionLogLevel.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
+                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, Common.Enums.LogLevel.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
                     default:
                         _logger.LogError("POST returned unexpected HTTP status: {url}, Row Number: {row}, Status: {status}, Error: {error}", endpointUrl, mappedRow.RowNumber, odsResponse.StatusCode, odsResponse.Content);
-                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, IngestionLogLevel.Error, mappedRow, endpointUrl, odsResponse.StatusCode, odsResponse.Content));
+                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, Common.Enums.LogLevel.Error, mappedRow, endpointUrl, odsResponse.StatusCode, odsResponse.Content));
                 }
             }
 

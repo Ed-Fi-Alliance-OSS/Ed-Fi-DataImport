@@ -121,7 +121,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                             }
                             catch
                             {
-                                LogIngestion(IngestionResult.Error, Common.Constants.IngestionLogLevel.Error, singlePayload, endpointUrl,
+                                LogIngestion(IngestionResult.Error, Common.Enums.LogLevel.Error, singlePayload, endpointUrl,
                                     response?.StatusCode, response?.Content, dataToInsert);
                                 throw;
                             }
@@ -141,12 +141,12 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         }
                         catch
                         {
-                            LogIngestion(IngestionResult.Error, Common.Constants.IngestionLogLevel.Error, singlePayload, endpointUrl,
+                            LogIngestion(IngestionResult.Error, Common.Enums.LogLevel.Error, singlePayload, endpointUrl,
                                 response?.StatusCode, response?.Content);
                             throw;
                         }
 
-                        LogIngestion(IngestionResult.Success, Common.Constants.IngestionLogLevel.Information, singlePayload, endpointUrl);
+                        LogIngestion(IngestionResult.Success, Common.Enums.LogLevel.Information, singlePayload, endpointUrl);
 
                         // After updating the payload, stamp it so it doesn't run again in next cycle (unless it has been updated).
                         var bootstrapDataApiServer =

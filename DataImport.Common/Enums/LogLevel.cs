@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace DataImport.Common.Constants
+namespace DataImport.Common.Enums
 {
-    public static class IngestionLogLevel
+    public static class LogLevel
     {
         public const string Debug = "DEBUG";
         public const string Information = "INFORMATION";
@@ -24,8 +24,8 @@ namespace DataImport.Common.Constants
         /// Generates the list based on the filter
         /// For example, if filter is set to "WARNING" => you will see "WARNING", "ERROR", and "CRITICAL" 
         /// </summary>
-        /// <param name="filter">Valid values Constants IngestionLogLevel </param>
-        /// <returns>A string list with levels to be applied in the Ingestion Log</returns>
+        /// <param name="filter">Valid values Constants LogLevel </param>
+        /// <returns>A string list with levels to be applied in the Log</returns>
         public static List<string> GetValidList(string filter = Debug)
         {
             List<string> result = All.ToList();
@@ -34,11 +34,7 @@ namespace DataImport.Common.Constants
             {
                 result = result.Skip(result.IndexOf(filter.ToUpperInvariant())).ToList();
             }
-
             return result;
-
         }
-
-
     }
 }
