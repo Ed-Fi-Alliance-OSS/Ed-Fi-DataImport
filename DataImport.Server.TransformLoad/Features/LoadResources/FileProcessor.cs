@@ -22,6 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Environment;
 using File = DataImport.Models.File;
+using LogLevels = DataImport.Common.Enums.LogLevel;
 
 namespace DataImport.Server.TransformLoad.Features.LoadResources
 {
@@ -400,18 +401,18 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "POST failed for resource: {url}, Row Number: {row}", endpointUrl, mappedRow.RowNumber);
-                    return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, Common.Enums.LogLevel.Error, mappedRow, endpointUrl));
+                    return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl));
                 }
 
                 switch (odsResponse.StatusCode)
                 {
                     case HttpStatusCode.OK:
-                        return (RowResult.Exist, new IngestionLogMarker(IngestionResult.Success, Common.Enums.LogLevel.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
+                        return (RowResult.Exist, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
                     case HttpStatusCode.Created:
-                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, Common.Enums.LogLevel.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
+                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
                     default:
                         _logger.LogError("POST returned unexpected HTTP status: {url}, Row Number: {row}, Status: {status}, Error: {error}", endpointUrl, mappedRow.RowNumber, odsResponse.StatusCode, odsResponse.Content);
-                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, Common.Enums.LogLevel.Error, mappedRow, endpointUrl, odsResponse.StatusCode, odsResponse.Content));
+                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, odsResponse.StatusCode, odsResponse.Content));
                 }
             }
 
