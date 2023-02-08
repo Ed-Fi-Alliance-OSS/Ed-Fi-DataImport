@@ -74,7 +74,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 _alreadyProcessedResources = new ConcurrentBag<string>();
                 _fileResponses = new Dictionary<int, List<FileResponse>>();
                 _fileService = fileServices(options.Value.FileMode);
-                _ingestionLogLevels = Common.Enums.LogLevel.GetValidList(options.Value.MinimumLevelIngestionLog);
+                _ingestionLogLevels = LogLevels.GetValidList(options.Value.MinimumLevelIngestionLog);
             }
 
             protected override async Task Handle(Command request, CancellationToken cancellationToken)
