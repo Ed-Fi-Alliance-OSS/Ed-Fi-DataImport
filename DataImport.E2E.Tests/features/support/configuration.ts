@@ -74,6 +74,7 @@ Then(
   async (content: string) => {
     await models.loginPage.logout();
     validatePath(models.loginPage.pathLogout(), true);
+    await models.loginPage.clickOnLoginLink();
     strictEqual(
       await models.loginPage.isRegisterOptionVisible(),
       !content,

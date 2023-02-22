@@ -13,6 +13,7 @@ export class LoginPage extends DataImportPage {
   passwordValidation = ".field-validation-error #Input_Password-error";
   generalValidation = ".validation-summary-errors li";
   userDropdown = "ul.navbar-right a.dropdown-toggle";
+  loginBtn = '[id="loginLink"]'
   logoutBtn = "ul.dropdown-menu a:text('Log off')";
 
   messages = {
@@ -42,6 +43,10 @@ export class LoginPage extends DataImportPage {
 
   async login(): Promise<void> {
     await this.page.locator(this.submitBtn).click();
+  }
+
+  async clickOnLoginLink() {
+    await this.page.locator(this.loginBtn).click();
   }
 
   async emailValidationMessage(): Promise<string | null> {

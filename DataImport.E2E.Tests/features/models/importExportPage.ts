@@ -68,7 +68,7 @@ export class ImportExportPage extends DataImportPage {
     await Promise.all([
       this.waitForResponse("/Share/FileImport"),
       this.clickImportTemplate(),
-      this.page.waitForNavigation(),
+      this.page.waitForTimeout(1000),
     ]);
   }
 

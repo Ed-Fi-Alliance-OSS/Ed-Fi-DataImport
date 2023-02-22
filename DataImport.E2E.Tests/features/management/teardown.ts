@@ -83,13 +83,13 @@ async function rollbackConfiguration(steps: string[]) {
   await models.configurationPage.clickUpdateConfiguration();
 }
 
-async function cleanMap(version = API_Versions.Version52) {
+async function cleanMap(version = API_Versions.Version53) {
   await models.mapsPage
     .navigate()
     .then(async () => await models.mapsPage.deleteMap(version));
 }
 
-async function cleanBootstrap(version = API_Versions.Version52) {
+async function cleanBootstrap(version = API_Versions.Version53) {
   await models.bootstrapPage
     .navigate()
     .then(async () => await models.bootstrapPage.deleteBootstrap(version));

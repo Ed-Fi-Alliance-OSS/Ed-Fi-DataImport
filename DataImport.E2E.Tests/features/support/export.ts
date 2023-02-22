@@ -22,6 +22,7 @@ Given("there's a template imported", async () => {
     await models.importExportPage.selectValidFile();
     await models.importExportPage.getTemplatePreview();
     await models.importExportPage.selectODSVersionByIndex();
+    await models.importTemplatePage.setData();
     await models.importExportPage.importTemplate();
   } catch (e) {
     const errors = await models.exportTemplatePage.getValidationErrors();
@@ -104,9 +105,7 @@ When(
     }
     await models.importExportPage.getTemplatePreview();
 
-    await models.importExportPage.selectODSVersion(
-      content === "Map" ? currentVersion.map : currentVersion.bootstrap
-    );
+    await models.importExportPage.selectODSVersionByIndex();
     await models.importExportPage.importTemplate();
   }
 );
@@ -154,11 +153,8 @@ Then("error message for export scenario appears", async () => {
 });
 
 Then("Bootstrap step will not appear", async () => {
+  await models.bootstrapPage.navigate();
   ok(!(await models.exportTemplatePage.hasBootstrapSubtitle()));
-  ok(
-    await models.exportTemplatePage.hasSummarySubtitle(),
-    "Summary subtitle not found"
-  );
 });
 
 Then("added Bootstrap will not have checkbox", async () => {

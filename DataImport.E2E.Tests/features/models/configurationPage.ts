@@ -20,6 +20,14 @@ export class ConfigurationPage extends DataImportPage {
     return `${this.url}/Configuration`;
   }
 
+  //Override
+  get isOnPage(): boolean {
+    const currentURL = this.page.url();
+    const baseURL = currentURL.substring(0, currentURL.indexOf("?"));
+    const URL = baseURL === "" ? currentURL : baseURL;
+    return URL === this.path();
+  }
+
   async isUserRegistrationEnabled(): Promise<boolean> {
     return await this.page.locator(this.allowUserRegistrationInput).isChecked();
   }

@@ -40,10 +40,6 @@ export class ExportTemplatePage extends DataImportPage {
     return await this.hasSubtitle("Bootstrap Data");
   }
 
-  async hasSummarySubtitle(): Promise<boolean> {
-    return await this.hasSubtitle("Template Summary");
-  }
-
   async hasPreviewSubtitle(): Promise<boolean> {
     return await this.hasSubtitle("Preview");
   }
@@ -158,6 +154,6 @@ export class ExportTemplatePage extends DataImportPage {
     const locator = this.page.locator(
       `${this.tableFunctions.tableBody} tr:nth-child(${position.row}) > td:nth-child(${position.column}) input[type="checkbox"]`
     );
-    return await locator.isHidden();
+    return await locator.isVisible();
   }
 }

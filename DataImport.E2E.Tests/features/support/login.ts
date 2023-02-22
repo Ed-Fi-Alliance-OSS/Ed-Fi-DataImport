@@ -6,7 +6,7 @@
 import { Then, When } from "@cucumber/cucumber";
 import { strictEqual } from "assert";
 import { models } from "../management/setup";
-import { validatePath } from "../management/validators";
+import { ok } from "assert";
 
 let currentScenario: string;
 
@@ -45,10 +45,10 @@ When("user enters valid username and password", async () => {
 Then("login is successful", async () => {
   strictEqual(
     await models.activityPage.pageTitle(),
-    "Activity",
+    "Configuration",
     "Page Title does not match"
   );
-  validatePath(models.activityPage.path(), true);
+  ok(models.configurationPage.isOnPage, 'Configuration');
 });
 
 Then("login validation message appears", async () => {

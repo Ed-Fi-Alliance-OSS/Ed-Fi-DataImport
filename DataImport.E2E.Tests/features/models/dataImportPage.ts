@@ -11,7 +11,7 @@ export abstract class DataImportPage {
   tableFunctions: TableFunctions;
 
   title = ".container h2";
-  toast = "#toast-container";
+  toast = '[id="toast-container"]';
   loadingSelector = ".footable-loader";
   validationErrors = "div#validationSummary:not(.hidden)";
 

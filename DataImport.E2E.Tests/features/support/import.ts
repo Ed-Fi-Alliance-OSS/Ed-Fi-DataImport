@@ -12,6 +12,7 @@ let currentScenario: string;
 
 When("clicking import", async () => {
   await models.importExportPage.getTemplatePreview();
+  await models.importTemplatePage.setData();
 });
 
 When("clicking on Import Template", async () => {
