@@ -7,6 +7,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using DataImport.Models;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Globalization;
 using System.IO;
@@ -39,19 +40,15 @@ namespace DataImport.Common.ExtensionMethods
             {
                 if (isCsv)
                 {
-                    var configuration = new Configuration(CultureInfo.InvariantCulture)
+                    using (TextFieldParser csvParser = new TextFieldParser(stream))
                     {
-                        IgnoreBlankLines = true,
-                        TrimOptions = TrimOptions.Trim,
-                        ShouldSkipRecord = record => record.Record.All(string.IsNullOrWhiteSpace)
-                    };
-                    using (var csv = new CsvReader(r, configuration))
-                    {
-                        while (csv.Read())
+                        csvParser.SetDelimiters(new string[] { "," });
+                        csvParser.HasFieldsEnclosedInQuotes = false;
+                        csvParser.ReadLine();
+
+                        while (csvParser.ReadLine() != null)
                         {
-                            var record = csv.GetRecord<object>();
-                            if (record != null)
-                                totalLines++;
+                            totalLines++;
                         }
                     }
                 }
