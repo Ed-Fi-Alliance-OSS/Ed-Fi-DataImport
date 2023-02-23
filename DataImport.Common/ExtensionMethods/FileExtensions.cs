@@ -34,7 +34,7 @@ namespace DataImport.Common.ExtensionMethods
             {
                 while (r.ReadLine() != null) { totalLines++; }
             }
-            return totalLines;
+            return (isCsv) ? (totalLines - 1) : totalLines;
         }
 
         public static bool IsCsvFile(this string fileName) =>
