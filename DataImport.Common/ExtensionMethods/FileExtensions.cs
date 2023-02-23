@@ -3,15 +3,10 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using CsvHelper;
-using CsvHelper.Configuration;
 using DataImport.Models;
 using Microsoft.Extensions.Options;
 using System;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using Configuration = CsvHelper.Configuration.CsvConfiguration;
 
 namespace DataImport.Common.ExtensionMethods
 {
@@ -37,31 +32,9 @@ namespace DataImport.Common.ExtensionMethods
             var totalLines = 0;
             using (var r = new StreamReader(stream))
             {
-                if (isCsv)
-                {
-                    var configuration = new Configuration(CultureInfo.InvariantCulture)
-                    {
-                        IgnoreBlankLines = true,
-                        TrimOptions = TrimOptions.Trim,
-                        ShouldSkipRecord = record => record.Record.All(string.IsNullOrWhiteSpace)
-                    };
-                    using (var csv = new CsvReader(r, configuration))
-                    {
-                        while (csv.Read())
-                        {
-                            var record = csv.GetRecord<object>();
-                            if (record != null)
-                                totalLines++;
-                        }
-                    }
-                }
-                else
-                {
-                    while (r.ReadLine() != null) { totalLines++; }
-                }
-
-                return totalLines;
+                while (r.ReadLine() != null) { totalLines++; }
             }
+            return totalLines;
         }
 
         public static bool IsCsvFile(this string fileName) =>
