@@ -10,6 +10,9 @@ namespace DataImport.Server.TransformLoad
     public class MappedResource
     {
         public int? AgentId { get; set; }
+        public string AgentName { get; set; }
+        public string ApiServerName { get; set; }
+        public string ApiVersion { get; set; }
         public string FileName { get; set; }
         public string ResourcePath { get; set; }
         public string Metadata { get; set; }

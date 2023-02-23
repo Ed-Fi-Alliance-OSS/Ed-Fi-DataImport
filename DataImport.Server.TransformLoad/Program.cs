@@ -111,6 +111,7 @@ namespace DataImport.Server.TransformLoad
                 .Enrich.FromLogContext()
                 .Enrich.With<EmptyRequestInfoEnricher>()
                 .Enrich.With<LevelShortNameEnricher>()
+                .Enrich.With<IngestionLogEnricher>()
                 .Enrich.WithMachineName();
         }
     }

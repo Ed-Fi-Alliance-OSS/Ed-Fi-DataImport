@@ -1,92 +1,229 @@
-{ 
-  "Serilog": {  
-    "WriteTo": [
-      {
-        "Name": "MSSqlServer",
-        "Args": {
-          "connectionString": "defaultConnection",
-          "sinkOptionsSection": {
-            "tableName": "ApplicationLogs",
-            "autoCreateSqlTable": false
-          },
-          "columnOptionsSection": {
-            "disableTriggers": true,
-            "clusteredColumnstoreIndex": false,
-            "primaryKeyColumnName": "Id",
-            "addStandardColumns": [ "Message", "Exception", "LogEvent" ],
-            "removeStandardColumns": [ "MessageTemplate", "Properties", "Level" ],
-            "additionalColumns": [
-              {
-                "ColumnName": "MachineName",
-                "DataType": "nvarchar",
-                "DataLength": 200,
-                "PropertyName": "MachineName"
-              },
-              {
-                "ColumnName": "Level",
-                "DataType": "nvarchar",
-                "DataLength": 5,
-                "PropertyName": "LevelShortName"
-              },
-              {
-                "ColumnName": "UserName",
-                "DataType": "nvarchar",
-                "DataLength": 200,
-                "PropertyName": "UserName"
-              },
-              {
-                "ColumnName": "Logger",
-                "DataType": "nvarchar",
-                "DataLength": 300,
-                "PropertyName": "SourceContext"
-              },
-              {
-                "ColumnName": "ServerName",
-                "DataType": "nvarchar",
-                "DataLength": 200,
-                "PropertyName": "ServerName"
-              },
-              {
-                "ColumnName": "Port",
-                "DataType": "nvarchar",
-                "DataLength": 100,
-                "PropertyName": "ServerPort"
-              },
-              {
-                "ColumnName": "Url",
-                "DataType": "nvarchar",
-                "DataLength": 2000,
-                "PropertyName": "Url"
-              },
-              {
-                "ColumnName": "ServerAddress",
-                "DataType": "nvarchar",
-                "DataLength": 100,
-                "PropertyName": "LocalAddress"
-              },
-              {
-                "ColumnName": "RemoteAddress",
-                "DataType": "nvarchar",
-                "DataLength": -1,
-                "PropertyName": "RemoteAddress"
-              }
-            ],
-            "Id": {
-              "nonClusteredIndex": false,
-              "DataType": "bigint"
-            },
-            "TimeStamp": {
-              "columnName": "Logged",
-              "DataType": "datetimeoffset",
-              "DataLength": 7
-            },
-            "LogEvent": {
-              "columnName": "Properties",
-              "excludeStandardColumns": true
+{
+    "Serilog": {
+        "WriteTo:Ingestionlog": {
+            "Name": "Conditional",
+            "Args": {
+                "expression": "LogType = 'IngestionLog'",
+                "configureSink": [
+                    {
+                        "Name": "MSSqlServer",
+                        "Args": {
+                            "connectionString": "defaultConnection",
+                            "sinkOptionsSection": {
+                                "tableName": "IngestionLogs",
+                                "autoCreateSqlTable": false
+                            },
+                            "columnOptionsSection": {
+                                "disableTriggers": true,
+                                "clusteredColumnstoreIndex": false,
+                                "primaryKeyColumnName": "Id",
+                                "addStandardColumns": [],
+                                "removeStandardColumns": [ "MessageTemplate", "Properties", "Level", "Message", "Exception", "LogEvent" ],
+                                "additionalColumns": [
+                                    {
+                                        "ColumnName": "EducationOrganizationId",
+                                        "DataType": "uniqueidentifier",
+                                        "AllowNull": true,
+                                        "PropertyName": "EducationOrganizationId"
+                                    },
+                                    {
+                                        "ColumnName": "Level",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 255,
+                                        "PropertyName": "Level"
+                                    },
+                                    {
+                                        "ColumnName": "Operation",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 255,
+                                        "AllowNull": true,
+                                        "PropertyName": "Operation"
+                                    },
+                                    {
+                                        "ColumnName": "Process",
+                                        "DataType": "nvarchar",
+                                        "DataLength": -1,
+                                        "AllowNull": true,
+                                        "PropertyName": "Process"
+                                    },
+                                    {
+                                        "ColumnName": "FileName",
+                                        "DataType": "nvarchar",
+                                        "DataLength": -1,
+                                        "AllowNull": true,
+                                        "PropertyName": "FileName"
+                                    },
+                                    {
+                                        "ColumnName": "Result",
+                                        "DataType": "int",
+                                        "AllowNull": false,
+                                        "PropertyName": "Result"
+                                    },
+                                    {
+                                        "ColumnName": "RowNumber",
+                                        "DataType": "nvarchar",
+                                        "DataLength": -1,
+                                        "AllowNull": true,
+                                        "PropertyName": "RowNumber"
+                                    },
+                                    {
+                                        "ColumnName": "EndPointUrl",
+                                        "DataType": "nvarchar",
+                                        "DataLength": -1,
+                                        "AllowNull": true,
+                                        "PropertyName": "EndPointUrl"
+                                    },
+                                    {
+                                        "ColumnName": "HttpStatusCode",
+                                        "DataType": "nvarchar",
+                                        "DataLength": -1,
+                                        "AllowNull": true,
+                                        "PropertyName": "HttpStatusCode"
+                                    },
+                                    {
+                                        "ColumnName": "Data",
+                                        "DataType": "nvarchar",
+                                        "DataLength": -1,
+                                        "PropertyName": "Data"
+                                    },
+                                    {
+                                        "ColumnName": "OdsResponse",
+                                        "DataType": "nvarchar",
+                                        "DataLength": -1,
+                                        "AllowNull": true,
+                                        "PropertyName": "OdsResponse"
+                                    },
+                                    {
+                                        "ColumnName": "AgentName",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 255,
+                                        "AllowNull": true,
+                                        "PropertyName": "AgentName"
+                                    },
+                                    {
+                                        "ColumnName": "ApiServerName",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 255,
+                                        "AllowNull": true,
+                                        "PropertyName": "ApiServerName"
+                                    },
+                                    {
+                                        "ColumnName": "ApiVersion",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 20,
+                                        "AllowNull": true,
+                                        "PropertyName": "ApiVersion"
+                                    }
+                                ],
+                                "Id": {
+                                    "nonClusteredIndex": false,
+                                    "DataType": "bigint"
+                                },
+                                "TimeStamp": {
+                                    "columnName": "Date",
+                                    "DataType": "datetimeoffset",
+                                    "DataLength": 7
+                                }
+                            }
+                        }
+                    }
+                ]
             }
-          }
+        },
+        "WriteTo:AppLog": {
+            "Name": "Conditional",
+            "Args": {
+                "expression": "LogType is null",
+                "configureSink": [
+                    {
+                        "Name": "MSSqlServer",
+                        "Args": {
+                            "connectionString": "defaultConnection",
+                            "sinkOptionsSection": {
+                                "tableName": "ApplicationLogs",
+                                "autoCreateSqlTable": false
+                            },
+                            "columnOptionsSection": {
+                                "disableTriggers": true,
+                                "clusteredColumnstoreIndex": false,
+                                "primaryKeyColumnName": "Id",
+                                "addStandardColumns": [ "Message", "Exception", "LogEvent" ],
+                                "removeStandardColumns": [ "MessageTemplate", "Properties", "Level" ],
+                                "additionalColumns": [
+                                    {
+                                        "ColumnName": "MachineName",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 200,
+                                        "PropertyName": "MachineName"
+                                    },
+                                    {
+                                        "ColumnName": "Level",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 5,
+                                        "PropertyName": "LevelShortName"
+                                    },
+                                    {
+                                        "ColumnName": "UserName",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 200,
+                                        "PropertyName": "UserName"
+                                    },
+                                    {
+                                        "ColumnName": "Logger",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 300,
+                                        "PropertyName": "SourceContext"
+                                    },
+                                    {
+                                        "ColumnName": "ServerName",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 200,
+                                        "PropertyName": "ServerName"
+                                    },
+                                    {
+                                        "ColumnName": "Port",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 100,
+                                        "PropertyName": "ServerPort"
+                                    },
+                                    {
+                                        "ColumnName": "Url",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 2000,
+                                        "PropertyName": "Url"
+                                    },
+                                    {
+                                        "ColumnName": "ServerAddress",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 100,
+                                        "PropertyName": "LocalAddress"
+                                    },
+                                    {
+                                        "ColumnName": "RemoteAddress",
+                                        "DataType": "nvarchar",
+                                        "DataLength": -1,
+                                        "PropertyName": "RemoteAddress"
+                                    }
+                                ],
+                                "Id": {
+                                    "nonClusteredIndex": false,
+                                    "DataType": "bigint"
+                                },
+                                "TimeStamp": {
+                                    "columnName": "Logged",
+                                    "DataType": "datetimeoffset",
+                                    "DataLength": 7
+                                },
+                                "LogEvent": {
+                                    "columnName": "Properties",
+                                    "excludeStandardColumns": true
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
         }
-      }
-    ]
-  }
+
+    }
 }

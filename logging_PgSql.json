@@ -1,70 +1,169 @@
 {
-  "Serilog": {  
-    "WriteTo": [
-      {
-        "Name": "PostgreSQL",
-        "Args": {
-          "connectionString": "defaultConnection",
-          "tableName": "ApplicationLogs",
-          "schemaName": "public",
-          "needAutoCreateTable": false,
-          "loggerColumnOptions": {
-            "Id": "IdAutoIncrement",
-            "Logged": "Timestamp",
-            "Properties": "LogEvent",
-            "Message": "RenderedMessage",
-            "Exception": "Exception"
-          },
-          "loggerPropertyColumnOptions": {
-            "MachineName": {
-              "Name": "MachineName",
-              "Format": "{l}",
-              "WriteMethod": "Raw",
-              "DbType": "Varchar"
-            },
-            "Level": {
-              "Name": "LevelShortName",
-              "WriteMethod": "Raw",
-              "DbType": "Varchar"
-            },
-            "UserName": {
-              "Name": "UserName",
-              "WriteMethod": "Raw",
-              "DbType": "Varchar"
-            },
-            "Logger": {
-              "Name": "SourceContext",
-              "WriteMethod": "Raw",
-              "DbType": "Varchar"
-            },
-            "ServerName": {
-              "Name": "ServerName",
-              "WriteMethod": "Raw",
-              "DbType": "Varchar"
-            },
-            "Port": {
-              "Name": "ServerPort",
-              "WriteMethod": "Raw",
-              "DbType": "Varchar"
-            },
-            "Url": {
-              "Name": "Url",
-              "WriteMethod": "Raw",
-              "DbType": "Varchar"
-            },
-            "ServerAddress": {
-              "Name": "LocalAddress",
-              "WriteMethod": "Raw",
-              "DbType": "Varchar"
-            },
-            "RemoteAddress": {
-              "Name": "RemoteAddress",
-              "WriteMethod": "Raw",
-              "DbType": "Varchar"
+    "Serilog": {
+        "WriteTo:Ingestionlog": {
+            "Name": "Conditional",
+            "Args": {
+                "expression": "LogType = 'IngestionLog'",
+                "configureSink": [
+                    {
+                        "Name": "PostgreSQL",
+                        "Args": {
+                            "connectionString": "defaultConnection",
+                            "tableName": "IngestionLogs",
+                            "schemaName": "public",
+                            "needAutoCreateTable": false,
+                            "loggerColumnOptions": {
+                                "Id": "IdAutoIncrement",
+                                "Date": "Timestamp"
+                            },
+                            "loggerPropertyColumnOptions": {
+                                "EducationOrganizationId": {
+                                    "Name": "EducationOrganizationId",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Uuid"
+                                },
+                                "Level": {
+                                    "Name": "Level",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "Operation": {
+                                    "Name": "Operation",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "Process": {
+                                    "Name": "Process",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "FileName": {
+                                    "Name": "FileName",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "Result": {
+                                    "Name": "Result",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Integer"
+                                },
+                                "RowNumber": {
+                                    "Name": "RowNumber",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "EndPointUrl": {
+                                    "Name": "EndPointUrl",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "HttpStatusCode": {
+                                    "Name": "HttpStatusCode",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "Data": {
+                                    "Name": "Data",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "OdsResponse": {
+                                    "Name": "OdsResponse",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "AgentName": {
+                                    "Name": "AgentName",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "ApiServerName": {
+                                    "Name": "ApiServerName",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "ApiVersion": {
+                                    "Name": "ApiVersion",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                }
+                            }
+                        }
+                    }
+                ]
             }
-          }         
+        },
+        "WriteTo:AppLog": {
+            "Name": "Conditional",
+            "Args": {
+                "expression": "LogType is null",
+                "configureSink": [
+                    {
+                        "Name": "PostgreSQL",
+                        "Args": {
+                            "connectionString": "defaultConnection",
+                            "tableName": "ApplicationLogs",
+                            "schemaName": "public",
+                            "needAutoCreateTable": false,
+                            "loggerColumnOptions": {
+                                "Id": "IdAutoIncrement",
+                                "Logged": "Timestamp",
+                                "Properties": "LogEvent",
+                                "Message": "RenderedMessage",
+                                "Exception": "Exception"
+                            },
+                            "loggerPropertyColumnOptions": {
+                                "MachineName": {
+                                    "Name": "MachineName",
+                                    "Format": "{l}",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "Level": {
+                                    "Name": "LevelShortName",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "UserName": {
+                                    "Name": "UserName",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "Logger": {
+                                    "Name": "SourceContext",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "ServerName": {
+                                    "Name": "ServerName",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "Port": {
+                                    "Name": "ServerPort",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "Url": {
+                                    "Name": "Url",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "ServerAddress": {
+                                    "Name": "LocalAddress",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "RemoteAddress": {
+                                    "Name": "RemoteAddress",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
         }
-      }
-    ]
-  }
+    }
 }
