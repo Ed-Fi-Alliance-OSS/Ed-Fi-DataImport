@@ -30,7 +30,7 @@ namespace DataImport.Web.Tests.Helpers
             var result = stream.TotalLines(true);
 
             // Assert
-            result.ShouldBe(3);
+            result.ShouldBe(2);
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace DataImport.Web.Tests.Helpers
             var result = stream.TotalLines(true);
 
             // Assert
-            result.ShouldBe(3);
+            result.ShouldBe(2);
         }
 
         [Test]

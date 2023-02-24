@@ -7,6 +7,7 @@ using DataImport.Models;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace DataImport.Common.ExtensionMethods
 {
@@ -32,9 +33,29 @@ namespace DataImport.Common.ExtensionMethods
             var totalLines = 0;
             using (var r = new StreamReader(stream))
             {
-                while (r.ReadLine() != null) { totalLines++; }
+                if (isCsv)
+                {
+                    while (!IsEmptyRecord(r.ReadLine()))
+                    {
+                        totalLines++;
+                    }
+                }
+                else
+                {
+                    while (r.ReadLine() != null)
+                    {
+                        totalLines++;
+                    }
+                }
             }
             return (isCsv) ? (totalLines - 1) : totalLines;
+        }
+
+        private static bool IsEmptyRecord(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return true;
+            var array = s.Split(',');
+            return array.All(x => String.IsNullOrWhiteSpace(x));
         }
 
         public static bool IsCsvFile(this string fileName) =>
