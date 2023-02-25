@@ -53,6 +53,14 @@ namespace DataImport.Web.Areas.Identity
                 //.AddDefaultUI() //Restore this line to re-include default Identity Pages
                 .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Default Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            });
+
             services.ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "DataImportCookie";

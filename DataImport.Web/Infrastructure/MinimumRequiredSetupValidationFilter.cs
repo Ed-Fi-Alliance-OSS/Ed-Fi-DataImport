@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Routing;
 using System.Linq;
 using DataImport.Web.Features.Home;
 using DataImport.Web.Features.OpenIdConnect;
+using DataImport.Web.Features.UserReset;
 
 namespace DataImport.Web.Infrastructure
 {
@@ -31,6 +32,7 @@ namespace DataImport.Web.Infrastructure
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (filterContext.Controller is ConfigurationController ||
+                filterContext.Controller is RecoverUserController ||
                 filterContext.Controller is ApiServersController ||
                 filterContext.Controller is OpenIdConnectController ||
                 (filterContext.Controller is HomeController && (string) filterContext.RouteData.Values["action"] == "UserUnauthorized"))

@@ -13,27 +13,30 @@ namespace DataImport.Web.Infrastructure
     {
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var viewData = ((Controller) filterContext.Controller).ViewData;
-
-            if (!viewData.ModelState.IsValid)
+            if (filterContext.Controller.GetType() == typeof(Controller))
             {
-                if (filterContext.HttpContext.Request.Method == "GET")
-                {
-                    filterContext.Result = new BadRequestResult();
-                }
-                else if (filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                {
-                    var result = new ContentResult();
-                    string content = JsonConvert.SerializeObject(viewData.ModelState,
-                        new JsonSerializerSettings
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                        });
-                    result.Content = content;
-                    result.ContentType = "application/json";
+                var viewData = ((Controller) filterContext.Controller).ViewData;
 
-                    filterContext.HttpContext.Response.StatusCode = 400;
-                    filterContext.Result = result;
+                if (!viewData.ModelState.IsValid)
+                {
+                    if (filterContext.HttpContext.Request.Method == "GET")
+                    {
+                        filterContext.Result = new BadRequestResult();
+                    }
+                    else if (filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        var result = new ContentResult();
+                        string content = JsonConvert.SerializeObject(viewData.ModelState,
+                            new JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                            });
+                        result.Content = content;
+                        result.ContentType = "application/json";
+
+                        filterContext.HttpContext.Response.StatusCode = 400;
+                        filterContext.Result = result;
+                    }
                 }
             }
         }

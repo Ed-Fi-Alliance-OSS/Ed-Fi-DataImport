@@ -18,5 +18,6 @@ namespace DataImport.Web
         public string ShareName { get; set; }
         public bool UsePowerShellWithNoRestrictions { get; set; }
         public string DatabaseEngine { get; set; }
+        public string UserRecoveryToken { get; set; }
     }
 }
