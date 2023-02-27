@@ -47,6 +47,14 @@ Configure DataImport
         DbConnectionInfo = $dbConnectionInfo
         PackageVersion = '2.0.0'
     }
+
+    UserRecoveryToken is optional. This value can be used to recover/ reset the application user credentials
+    $p = @{
+        ToolsPath = "C:/temp/tools"
+        DbConnectionInfo = $dbConnectionInfo
+        PackageVersion = '2.0.0'
+        UserRecoveryToken = "bEnFYNociET2R1Wua3DHzwfU5u"
+    }
 #>
 
 $p = @{

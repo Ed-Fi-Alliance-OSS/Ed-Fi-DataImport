@@ -8,11 +8,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
+using DataImport.Models;
+using System.Text.RegularExpressions;
 
 namespace DataImport.Web.Features.UserReset
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
     public class RecoverUserController : ControllerBase
@@ -28,33 +32,78 @@ namespace DataImport.Web.Features.UserReset
 
         [HttpPost]
         [AllowAnonymous()]
-        [ActionName("Reset")]
         [Consumes("application/x-www-form-urlencoded"), Produces("application/json")]
-        public async Task<IActionResult> Reset([FromForm] ResetRequest resetRequest)
+        public async Task<IActionResult> Post([FromForm] ResetRequest resetRequest)
         {
-            if (ModelState.IsValid)
+            if (!string.IsNullOrEmpty(_options.Value.UserRecoveryToken) &&
+                resetRequest.UserRecoveryToken.Equals(_options.Value.UserRecoveryToken))
             {
-                if (!string.IsNullOrEmpty(_options.Value.UserRecoveryToken) &&
-                    resetRequest.UserRecoveryToken.Equals(_options.Value.UserRecoveryToken))
+                var existingUser = await _userManager.FindByNameAsync(resetRequest.UserName);
+                if (existingUser != null)
                 {
-                    var existingUser = await _userManager.FindByNameAsync(resetRequest.UserName);
-                    if (existingUser != null)
+                    if (existingUser.LockoutEnabled)
                     {
-                        if (existingUser.LockoutEnabled)
-                        {
-                            await _userManager.SetLockoutEnabledAsync(existingUser, false);
-                            await _userManager.SetLockoutEndDateAsync(existingUser, null);
-                        }
-                        var token = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
+                        await _userManager.SetLockoutEnabledAsync(existingUser, false);
+                        await _userManager.SetLockoutEndDateAsync(existingUser, null);
+                    }
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
 
-                        var result = await _userManager.ResetPasswordAsync(existingUser, token, resetRequest.NewPassword);
+                    var result = await _userManager.ResetPasswordAsync(existingUser, token, resetRequest.NewPassword);
 
-                        return Ok(result.Succeeded ? $"Reset password succeeded for {existingUser.UserName}" : $"Reset password failed");
+                    if (result.Succeeded)
+                    {
+                        return Ok($"Reset password succeeded for {existingUser.UserName}");
+                    }
+                    else
+                    {
+                        var errorMessage = string.Join("; ", result.Errors
+                                            .Select(x => x.Description));
+                        return new JsonResult($"Reset password failed. Errors: {errorMessage}");
                     }
                 }
-                return Unauthorized("User recovery token is not valid");
             }
-            return BadRequest();
+            return Unauthorized("User recovery token is not valid");
+        }
+    }
+
+    public class Validator : AbstractValidator<ResetRequest>
+    {
+        private readonly DataImportDbContext _dbContext;
+        private readonly IOptions<AppSettings> _options;
+
+        public Validator(DataImportDbContext dbContext, IOptions<AppSettings> options)
+        {
+            _dbContext = dbContext;
+            _options = options;
+
+            RuleFor(x => x.UserName)
+              .NotEmpty()
+              .Must(UserShouldExists).WithMessage(model =>
+                  $"{model.UserName} does not exist. Please provide valid user name.");
+
+            RuleFor(x => x.NewPassword).NotEmpty().Must(FollowPasswordRules)
+                .WithMessage("Password does not satisfy password rules." +
+                "Rules: At least one upper-case, lower-case, numeric-value, special-character with minimum length of 6.");
+
+            RuleFor(x => x.UserRecoveryToken).NotEmpty().
+                Must(MatchAppsettingValue).WithMessage("User recovery token is not valid");
+        }
+
+        private bool UserShouldExists(string username)
+        {
+            return _dbContext.Users.FirstOrDefault(user => user.UserName == username) != null;
+        }
+
+        private bool FollowPasswordRules(string password)
+        {
+            var expression = "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{6,}";
+            var regex = new Regex(expression);
+            return regex.IsMatch(password);
+        }
+
+        private bool MatchAppsettingValue(string userRecoveryToken)
+        {
+            return _options.Value.UserRecoveryToken.Equals(userRecoveryToken);
         }
     }
 

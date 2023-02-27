@@ -117,7 +117,11 @@ function Install-EdFiDataImport {
 
         # Database Config
         [switch]
-        $NoDuration
+        $NoDuration,
+
+        # User recovery token
+        [string]
+        $UserRecoveryToken
     )
 
     Write-InvocationInfo $MyInvocation
@@ -144,6 +148,7 @@ function Install-EdFiDataImport {
         TransformLoadApplicationName = $TransformLoadApplicationName
         DbConnectionInfo = $DbConnectionInfo
         NoDuration = $NoDuration
+        UserRecoveryToken = $UserRecoveryToken
     }
 
     $elapsed = Use-StopWatch {
@@ -373,7 +378,7 @@ function Invoke-TransformDataImportWebAppSettings {
             }
             $settings.AppSettings.EncryptionKey = $encryptionKey
         }
-
+        $settings.AppSettings.UserRecoveryToken = $Config.UserRecoveryToken
         $EmptyHashTable=@{}
         $mergedSettings = Merge-Hashtables $settings, $EmptyHashTable
         New-JsonFile $settingsFile $mergedSettings -Overwrite

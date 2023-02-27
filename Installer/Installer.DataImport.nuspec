@@ -19,5 +19,6 @@
     <file src="./README.md" />
     <file src="./key-management.psm1" />
     <file src="./assets/post-install-readme.txt" />
+    <file src="..\eng\Recover-User.ps1" />
   </files>
 </package>

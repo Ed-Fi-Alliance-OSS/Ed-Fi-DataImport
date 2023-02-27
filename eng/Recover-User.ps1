@@ -11,10 +11,11 @@
         User can unlock the account and reset the password
 
     .PARAMETER UserName
-        Account user name
+        Account user name. The user name should exist already, in order to reset the password.
 
     .PARAMETER NewPassword
-        New password for the account
+        New password for the account. Password should contain at least one upper-case, 
+        lower-case, numeric-value, special-character with minimum length of 6.
     
     .PARAMETER UserRecoveryToken
         User recovery token provided during Data Import installation 
@@ -24,9 +25,9 @@
 
     .EXAMPLE
     UserName: user1@gmail.com
-    NewPassword: password123
+    NewPassword: Password123$
     UserRecoveryToken: bEnFYNociET2R1Wua3DHzwfU5u
-    ApplicationUrl: https://DataImportServer
+    ApplicationUrl: https://DataImportServer    
   #>
 param (
     [string]
@@ -53,7 +54,7 @@ $Body = @{
     }
 
 $contentType = 'application/x-www-form-urlencoded'
-$Uri = "$ApplicationUrl/api/RecoverUser/Reset"
+$Uri = "$ApplicationUrl/api/RecoverUser"
 
 $testResult = (Invoke-WebRequest -Uri $Uri -Method Post -Body $Body -ContentType $contentType)
 $testResult
