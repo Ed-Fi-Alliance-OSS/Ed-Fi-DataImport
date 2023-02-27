@@ -57,8 +57,8 @@ namespace DataImport.Web.Features.UserReset
                     else
                     {
                         var errorMessage = string.Join("; ", result.Errors
-                                            .Select(x => x.Description));
-                        return new JsonResult($"Reset password failed. Errors: {errorMessage}");
+                                           .Select(x => x.Description));
+                        return StatusCode(500, $"Reset password failed. Errors: {errorMessage}");
                     }
                 }
             }
