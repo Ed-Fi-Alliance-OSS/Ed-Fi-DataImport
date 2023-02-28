@@ -9,6 +9,6 @@ namespace DataImport.Models
     {
         public bool InstanceAllowUserRegistration { get; set; } = true;
         public string AvailableCmdlets { get; set; }
-        public string ImportPsModules { get; set; }
+        public string ImportPSModules { get; set; }
     }
 }

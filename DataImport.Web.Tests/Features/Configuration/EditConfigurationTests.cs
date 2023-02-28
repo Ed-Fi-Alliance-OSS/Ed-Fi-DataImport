@@ -112,34 +112,34 @@ namespace DataImport.Web.Tests.Features.Configuration
                 var configuration = d.Configurations.Single();
 
                 configuration.AvailableCmdlets = "Some-Cmdlet";
-                configuration.ImportPsModules = "Some-PsModule";
+                configuration.ImportPSModules = "Some-PsModule";
 
                 return configuration;
             });
 
             var config = Query(d => d.Configurations.Single());
             config.AvailableCmdlets.ShouldBe("Some-Cmdlet");
-            config.ImportPsModules.ShouldBe("Some-PsModule");
+            config.ImportPSModules.ShouldBe("Some-PsModule");
 
             var editForm = await Send(new EditConfiguration.Query());
             await Send(ViewModelToCommand(editForm));
 
             config = Query(d => d.Configurations.Single());
             config.AvailableCmdlets.ShouldBe("Some-Cmdlet");
-            config.ImportPsModules.ShouldBe("Some-PsModule");
+            config.ImportPSModules.ShouldBe("Some-PsModule");
 
             Query(d =>
             {
                 var configuration = d.Configurations.Single();
 
                 configuration.AvailableCmdlets = null;
-                configuration.ImportPsModules = null;
+                configuration.ImportPSModules = null;
 
                 return configuration;
             });
             config = Query(d => d.Configurations.Single());
             config.AvailableCmdlets.ShouldBeNull();
-            config.ImportPsModules.ShouldBeNull();
+            config.ImportPSModules.ShouldBeNull();
         }
     }
 }
