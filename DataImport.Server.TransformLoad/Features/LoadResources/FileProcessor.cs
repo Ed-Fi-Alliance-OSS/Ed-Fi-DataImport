@@ -462,47 +462,6 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     _fileService.Delete(file);
             }
 
-            private async Task WriteIngestionLogs(IEnumerable<IngestionLogMarker> markers)
-            {
-                var agentIds = markers.Select(m => m.MappedResource.AgentId)
-                    .Distinct()
-                    .ToList();
-
-                var agents = _dbContext.Agents.Where(x => agentIds.Contains(x.Id)).Select(x => new
-                {
-                    AgentId = x.Id,
-                    ApiServerName = x.ApiServer.Name,
-                    ApiVersion = x.ApiServer.ApiVersion.Version,
-                    AgentName = x.Name
-                }).ToDictionary(x => x.AgentId);
-
-                var logs = markers.Select(marker =>
-                {
-                    agents.TryGetValue(marker.MappedResource.AgentId ?? -1, out var agent);
-
-                    return new IngestionLog
-                    {
-                        Date = marker.Date,
-                        Result = marker.Result,
-                        RowNumber = marker.MappedResource.RowNumber.ToString(),
-                        EndPointUrl = marker.EndpointUrl,
-                        HttpStatusCode = marker.StatusCode?.ToString(),
-                        Data = marker.MappedResource.Value.ToString(),
-                        OdsResponse = marker.OdsResponse,
-                        Level = marker.Level,
-                        Operation = "TransformingData",
-                        Process = "DataImport.Server.TransformLoad",
-                        FileName = marker.MappedResource.FileName,
-                        AgentName = agent?.AgentName,
-                        ApiServerName = agent?.ApiServerName,
-                        ApiVersion = agent?.ApiVersion,
-                    };
-                });
-
-                await _dbContext.IngestionLogs.AddRangeAsync(logs);
-                _dbContext.SaveChanges();
-            }
-
             private void WriteLog(IngestionLogMarker marker)
             {
                 var model = new IngestionLog
