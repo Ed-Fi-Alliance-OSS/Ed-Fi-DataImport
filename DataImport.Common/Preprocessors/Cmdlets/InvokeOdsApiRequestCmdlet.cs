@@ -13,7 +13,7 @@ namespace DataImport.Common.Preprocessors.Cmdlets
         protected override ScriptBlock GetScriptBlock()
         {
             return ScriptBlock.Create(@"
-                return Invoke-WebRequest -Uri $args[0] -Headers @{""Authorization"" = ""Bearer $($args[1])""} -UseBasicParsing
+                return Invoke-WebRequest -Uri $args[0] -Headers @{""Authorization"" = ""bearer $($args[1])""} -UseBasicParsing
             ");
         }
     }

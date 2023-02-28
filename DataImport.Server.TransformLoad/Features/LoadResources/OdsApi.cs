@@ -49,7 +49,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 throw new Exception("An attempt was made to make authenticated HTTP requests without an Access Token.");
 
             var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", AccessToken);
             return httpClient;
         }
 

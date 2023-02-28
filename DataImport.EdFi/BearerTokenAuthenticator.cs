@@ -30,7 +30,7 @@ namespace DataImport.EdFi
             // confirm bearer token is not already there -- implicit IAuthenticator requirement
             if (!request.Parameters.Any(p => p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)))
             {
-                request.AddParameter("Authorization", "Bearer " + _bearerToken, ParameterType.HttpHeader);
+                request.AddParameter("Authorization", "bearer " + _bearerToken, ParameterType.HttpHeader);
             }
         }
     }

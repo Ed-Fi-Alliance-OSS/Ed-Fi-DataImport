@@ -67,16 +67,16 @@ namespace DataImport.Common.Helpers
                 ? Decrypt(apiServer.Secret, encryptionKey)
                 : apiServer.Secret;
 
-            bearerTokenRequest.AddParameter("Client_id", apiServerKey);
-            bearerTokenRequest.AddParameter("Client_secret", apiServerSecret);
+            bearerTokenRequest.AddParameter("client_id", apiServerKey);
+            bearerTokenRequest.AddParameter("client_secret", apiServerSecret);
             if (accessCode != null)
             {
-                bearerTokenRequest.AddParameter("Code", accessCode);
-                bearerTokenRequest.AddParameter("Grant_type", "authorization_code");
+                bearerTokenRequest.AddParameter("code", accessCode);
+                bearerTokenRequest.AddParameter("grant_type", "authorization_code");
             }
             else
             {
-                bearerTokenRequest.AddParameter("Grant_type", "client_credentials");
+                bearerTokenRequest.AddParameter("grant_type", "client_credentials");
             }
 
 
