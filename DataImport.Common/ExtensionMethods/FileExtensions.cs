@@ -39,16 +39,14 @@ namespace DataImport.Common.ExtensionMethods
                     {
                         totalLines++;
                     }
+                    totalLines--;
                 }
                 else
                 {
-                    while (r.ReadLine() != null)
-                    {
-                        totalLines++;
-                    }
+                    while (r.ReadLine() != null) { totalLines++; }
                 }
             }
-            return (isCsv) ? (totalLines - 1) : totalLines;
+            return totalLines;
         }
 
         private static bool IsEmptyRecord(string s)
