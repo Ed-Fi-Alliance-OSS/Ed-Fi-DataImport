@@ -22,12 +22,10 @@ namespace DataImport.Web.Features.UserReset
     public class RecoverUserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IOptions<AppSettings> _options;
 
-        public RecoverUserController(UserManager<ApplicationUser> userManager, IOptions<AppSettings> options)
+        public RecoverUserController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _options = options;
         }
 
         [HttpPost]
@@ -35,34 +33,26 @@ namespace DataImport.Web.Features.UserReset
         [Consumes("application/x-www-form-urlencoded"), Produces("application/json")]
         public async Task<IActionResult> Post([FromForm] ResetRequest resetRequest)
         {
-            if (!string.IsNullOrEmpty(_options.Value.UserRecoveryToken) &&
-                resetRequest.UserRecoveryToken.Equals(_options.Value.UserRecoveryToken))
+            var existingUser = await _userManager.FindByNameAsync(resetRequest.UserName);
+            if (existingUser.LockoutEnabled)
             {
-                var existingUser = await _userManager.FindByNameAsync(resetRequest.UserName);
-                if (existingUser != null)
-                {
-                    if (existingUser.LockoutEnabled)
-                    {
-                        await _userManager.SetLockoutEnabledAsync(existingUser, false);
-                        await _userManager.SetLockoutEndDateAsync(existingUser, null);
-                    }
-                    var token = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
-
-                    var result = await _userManager.ResetPasswordAsync(existingUser, token, resetRequest.NewPassword);
-
-                    if (result.Succeeded)
-                    {
-                        return Ok($"Reset password succeeded for {existingUser.UserName}");
-                    }
-                    else
-                    {
-                        var errorMessage = string.Join("; ", result.Errors
-                                           .Select(x => x.Description));
-                        return StatusCode(500, $"Reset password failed. Errors: {errorMessage}");
-                    }
-                }
+                await _userManager.SetLockoutEnabledAsync(existingUser, false);
+                await _userManager.SetLockoutEndDateAsync(existingUser, null);
             }
-            return Unauthorized("User recovery token is not valid");
+            var token = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
+
+            var result = await _userManager.ResetPasswordAsync(existingUser, token, resetRequest.NewPassword);
+
+            if (result.Succeeded)
+            {
+                return Ok($"Reset password succeeded for {existingUser.UserName}");
+            }
+            else
+            {
+                var errorMessage = string.Join("; ", result.Errors
+                                    .Select(x => x.Description));
+                return StatusCode(500, $"Reset password failed. Errors: {errorMessage}");
+            }
         }
     }
 
