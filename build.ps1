@@ -29,7 +29,7 @@
           DockerEnvValues and copy over the latest files to existing DataImport docker container for testing.
 
     .EXAMPLE
-        .\build.ps1 build -Configuration Release -Version "2.0.0" -BuildCounter 45
+        .\build.ps1 build -Configuration Release -Version "2.0.0"
 
         Overrides the default build configuration (Debug) to build in release
         mode with assembly version 2.0.0.45.
@@ -45,9 +45,9 @@
         Output: test results displayed in the console and saved to XML files.
 
     .EXAMPLE
-        .\build.ps1 package -Version "2.0.0" -BuildCounter 45
+        .\build.ps1 package -Version "2.0.0"
 
-        Output: two NuGet packages, with version 2.0.0 and 2.0.0-pre0045.
+        Output: NuGet package, with version 2.0.0.
 
     .EXAMPLE
         .\build.ps1 push -NuGetApiKey $env:nuget_key
@@ -70,21 +70,13 @@
 param(
     # Command to execute, defaults to "Build".
     [string]
-    [ValidateSet("SetUp", "Clean", "Build", "UnitTest", "IntegrationTest", "PowerShellTests", "Package", "PackageTransformLoad", "Push", "PushPreRelease", "BuildAndTest", "BuildAndDeployToDockerContainer", "Run")]
+    [ValidateSet("SetUp", "Clean", "Build", "UnitTest", "IntegrationTest", "PowerShellTests", "Package", "PackageTransformLoad", "Push", "BuildAndTest", "BuildAndDeployToDockerContainer", "Run")]
     $Command = "Build",
 
     # Assembly and package version number. The current package number is
     # configured in the build automation tool and passed to this script.
     [string]
-    $Version = "0.1.0",
-
-    # Build counter from the automation tool. The .NET assembly version will be
-    # composed from <$Version>.<$BuildCounter> (i.e. "0.1.0.1" with the default
-    # values). When creating a NuGet package, a pre-release will be created with
-    # version <$Version>-pre<$BuildCounter padded to 4 digits> (i.e.
-    # "0.1.0-pre0001" with the default values).
-    [string]
-    $BuildCounter = "1",
+    $Version = "0.1.0",   
 
     # .NET project build configuration, defaults to "Debug". Options are: Debug, Release.
     [string]
@@ -102,7 +94,7 @@ param(
 
     # Full path of a package file to push to the NuGet feed. Optional, only
     # applies with the Push command. If not set, then the script looks for a
-    # NuGet package corresponding to the provided $Version and $BuildCounter.
+    # NuGet package corresponding to the provided $Version.
     [string]
     $PackageFile,
 
@@ -121,7 +113,7 @@ param(
     [switch]
     $Report,
 
-    # Only required with the Push or PushPreRelease command.
+    # Only required with the Push command.
     [string]
     [ValidateSet("Web", "TransformLoad")]
     $PackageFileType
@@ -173,7 +165,7 @@ function Restore {
 
 function AssemblyInfo {
     Invoke-Execute {
-        $assembly_version = "$Version.$BuildCounter"
+        $assembly_version = $Version
 
         Invoke-RegenerateFile "$solutionRoot/Directory.Build.props" @"
 <Project>
@@ -300,23 +292,16 @@ function NewDevCertificate {
     }
 }
 
-function GetPackagePreleaseVersion {
-    return "$Version-pre$($BuildCounter.PadLeft(4,'0'))"
-}
-
 function BuildPackage {
     $baseProjectFullName = "$solutionRoot/$entryProject/$entryProject"   
-    RunDotNetPack -PackageVersion $(GetPackagePreleaseVersion) -projectName $baseProjectFullName $baseProjectFullName
     RunDotNetPack -PackageVersion $Version -projectName $baseProjectFullName $baseProjectFullName
 }
 
 function BuildTransformLoadPackage {
     $baseProjectFullName = "$solutionRoot/$transformLoadProject/$transformLoadProject"  
-    RunDotNetPack -PackageVersion $(GetPackagePreleaseVersion) -projectName $baseProjectFullName $baseProjectFullName
     RunDotNetPack -PackageVersion $Version -projectName $baseProjectFullName $baseProjectFullName
 
     # Create windows 64 specific package
-    RunDotNetPack -PackageVersion $(GetPackagePreleaseVersion) -projectName $baseProjectFullName "$baseProjectFullName.Scd"
     RunDotNetPack -PackageVersion $Version -projectName $baseProjectFullName "$baseProjectFullName.Scd"
 }
 
@@ -357,11 +342,12 @@ function DotnetPush {
 function Invoke-Build {
     Write-Host "Building Version $Version" -ForegroundColor Cyan
 
-    Invoke-Step { InitializeNuGet }
     Invoke-Step { Clean }
     Invoke-Step { Restore }
-    Invoke-Step { AssemblyInfo }
     Invoke-Step { Compile }
+}
+
+function Invoke-Publish {
     Invoke-Step { PublishWeb }
     Invoke-Step { PublishTransformLoad }
     Invoke-Step { PublishTransformLoadSelfContained }
@@ -416,10 +402,6 @@ function Invoke-PushPackage {
     Invoke-Step { PushPackage }
 }
 
-function Invoke-PushPreReleasePackage {   
-    Invoke-Step { PushPackage $(GetPackagePreleaseVersion) }
-}
-
 function UpdateAppSettingsForDocker {
     $filePath = "$solutionRoot/$entryProject/publish/appsettings.json"
     $json = (Get-Content -Path $filePath) | ConvertFrom-Json
@@ -444,11 +426,22 @@ function Invoke-DockerDeploy {
    Invoke-Step { RestartDataImportContainer }
 }
 
+function Invoke-SetAssemblyInfo {
+    Write-Output "Setting Assembly Information" -ForegroundColor Cyan
+
+    Invoke-Step { AssemblyInfo }  
+}
+
 Invoke-Main {
     switch ($Command) {
         SetUp { Invoke-SetUp }
 		Clean { Invoke-Clean }
         Build { Invoke-Build }
+        BuildAndPublish {
+            Invoke-SetAssemblyInfo
+            Invoke-Build
+            Invoke-Publish
+        }
         Run { Invoke-Run }
         UnitTest { Invoke-UnitTests }
         IntegrationTest { Invoke-IntegrationTests }
@@ -462,7 +455,6 @@ Invoke-Main {
         Package { Invoke-BuildPackage }
         PackageTransformLoad { Invoke-BuildTransformLoadPackage }
         Push { Invoke-PushPackage }
-        PushPreRelease { Invoke-PushPreReleasePackage }
         BuildAndDeployToDockerContainer {
             Invoke-Build
             Invoke-DockerDeploy
