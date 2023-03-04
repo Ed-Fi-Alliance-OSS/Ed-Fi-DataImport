@@ -327,6 +327,10 @@ function PushPackage {
          DotnetPush  $PackageFileWin64
         }
     }
+    else
+    {
+        DotnetPush  $PackageFile
+    }
 }
 
 function DotnetPush {
