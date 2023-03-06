@@ -22,16 +22,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # v2.4.0
+    - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
     - name: Setup .NET
-      uses: actions/setup-dotnet@499789684c9a0d41c9b3f0d66a785ba17b1d51ab # v1.9.0
+      uses: actions/setup-dotnet@607fce577a46308457984d59e4954e075820f10a # v3.0.3
       with:
         dotnet-version: 6.0.x
     - name: Install-credential-handler
       run: iex "& { $(irm https://aka.ms/install-artifacts-credprovider.ps1) } -AddNetfx"
       shell: pwsh
     - name: Setup Nuget.exe
-      uses: nuget/setup-nuget@04b0c2b8d1b97922f67eca497d7cf0bf17b8ffe1 #v1.0.5
+      uses: nuget/setup-nuget@fd9fffd6ca4541cf4152a9565835ca1a88a6eb37 #v1.1.1
     - name: Build-and-publish-package
       run: ./Installer/build-and-publish-package.ps1 -SemanticVersion ${{ env.BUILD_VERSION }} -BuildCounter ${{ github.run_number }} -NuGetFeed ${{env.AZURE_ARTIFACTS_FEED_URL}} -PublishPreRelease -NuGetApiKey  ${{ env.API_KEY }}
       shell: pwsh
