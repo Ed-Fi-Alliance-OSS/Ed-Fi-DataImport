@@ -70,7 +70,7 @@
 param(
     # Command to execute, defaults to "Build".
     [string]
-    [ValidateSet("SetUp", "Clean", "Build", "UnitTest", "IntegrationTest", "PowerShellTests", "Package", "PackageTransformLoad", "Push", "BuildAndTest", "BuildAndDeployToDockerContainer", "Run")]
+    [ValidateSet("SetUp", "Clean", "Build", "UnitTest", "IntegrationTest", "PowerShellTests", "Package", "PackageTransformLoad", "Push", "BuildAndTest", "BuildAndPublish", "BuildAndDeployToDockerContainer", "Run")]
     $Command = "Build",
 
     # Assembly and package version number. The current package number is
