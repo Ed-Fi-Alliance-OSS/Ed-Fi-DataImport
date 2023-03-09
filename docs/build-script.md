@@ -26,8 +26,7 @@ Available commands:
 * `.\build.ps1 powershelltests` executes  NUnit Powershell Category tests in projects named `*.Test` which connect to a database.
 * `.\build.ps1 buildandtest` executes the Build, UnitTest, IntegrationTest
   and PowerShellTests commands.
-* `.\build.ps1 package` builds NuGet package for the Data Import web application.
-* `.\build.ps1 packagetransformload` builds NuGet package for the Data Import Transform Load application.
+* `.\build.ps1 package` builds NuGet package for the Data Import web application, installer and Data Import Transform Load application as single package.
 * `.\build.ps1 push` uploads a NuGet package to the NuGet feed.
 * `.\build.ps1 pushprerelease` uploads a pre-release NuGet package to the NuGet feed.
 * `.\build.ps1 run` launches the Data Import from the build script. The LaunchProfile parameter is required for running Data Import. Valid values include 'mssql' and 'pg'.

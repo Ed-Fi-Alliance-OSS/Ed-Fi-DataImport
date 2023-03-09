@@ -387,7 +387,7 @@ function Invoke-PowerShellTests {
     Invoke-Step { PowerShellTests }
 }
 
-function Invoke-BuildPackage {   
+function Invoke-BuildPackage {
     Invoke-Step { AddAppCommonPackageForInstaller }
     Invoke-Step { BuildPackage }
 }

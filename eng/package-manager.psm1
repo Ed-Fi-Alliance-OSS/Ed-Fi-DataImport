@@ -48,13 +48,13 @@ function Install-NugetCli {
 
     # See if NuGet >= 5.4.0 already in the path
     $info = Get-Command nuget.exe -ErrorAction SilentlyContinue
-    if (MeetsMinimumNuGetVersion -Version $info.Version) {        
+    if (MeetsMinimumNuGetVersion -Version $info.Version) {
         return $info
     }
 
     # Next see if it is in the .tools directory
     $info = Get-Command "$ToolsPath/nuget.exe" -ErrorAction SilentlyContinue
-    if (MeetsMinimumNuGetVersion -Version $info.Version) {        
+    if (MeetsMinimumNuGetVersion -Version $info.Version) {
         return $info.Path
     }
 

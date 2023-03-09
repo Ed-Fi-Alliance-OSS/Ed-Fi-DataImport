@@ -70,12 +70,8 @@ jobs:
           $appVersion = "${{ steps.versions.outputs.data-import-semver }}"
 
           "Building ${{ env.PACKAGE_NAME }} NuGet Package" | Write-Output
-          # Web, and DB
+          # Web, installer and Transform load to single package
           ./build.ps1 -Command Package `
-              -Version $appVersion `
-              -Configuration Release
-
-          ./build.ps1 -Command PackageTransformLoad `
               -Version $appVersion `
               -Configuration Release
 
