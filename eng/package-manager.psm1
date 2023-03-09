@@ -48,14 +48,14 @@ function Install-NugetCli {
 
     # See if NuGet >= 5.4.0 already in the path
     $info = Get-Command nuget.exe -ErrorAction SilentlyContinue
-    if (MeetsMinimumNuGetVersion -Version $info.Version) {
+    if (MeetsMinimumNuGetVersion -Version $info.Version) {        
         return $info
     }
 
     # Next see if it is in the .tools directory
     $info = Get-Command "$ToolsPath/nuget.exe" -ErrorAction SilentlyContinue
-    if (MeetsMinimumNuGetVersion -Version $info.Version) {
-        return $info
+    if (MeetsMinimumNuGetVersion -Version $info.Version) {        
+        return $info.Path
     }
 
     # Not found, therefore remove any older version and download the current version
@@ -79,23 +79,12 @@ function Push-Package {
         $NuGetFeed,
 
         [string]
-        $NuGetApiKey,
+        $NuGetApiKey       
 
-        [string]
-        $ToolsPath = "$PSScriptRoot/.tools"
-    )
-
-    $nugetExe = Install-NuGetCli -ToolsPath $ToolsPath
-
-    $arguments = @(
-        "push",
-        "$PackageFile",
-        "$NuGetApiKey",
-        "-source", "$NuGetFeed"
-    )
-
+    )   
+    
     Write-Host "Executing: nuget.exe $arguments" -ForegroundColor Magenta
-    &$nugetExe @arguments
+    dotnet nuget push $PackageFile --api-key $NuGetApiKey --source $NuGetFeed
 }
 
 function Get-RestApiPackage {
@@ -161,10 +150,96 @@ function Get-RestApiPackage {
     return (Resolve-Path $wildcardPath)
 }
 
+function Move-AppCommon {
+    param (
+        [string]
+        [Parameter(Mandatory=$true)]
+        $AppCommonSourceDirectory,
+
+        [string]
+        [Parameter(Mandatory=$true)]
+        $AppCommonDestinationDirectory
+    )
+
+    # Move AppCommon's modules to a destination directory
+    @(
+        "Application"
+        "Environment"
+        "IIS"
+        "Utility"
+    ) | ForEach-Object {
+        $parameters = @{
+            Recurse = $true
+            Force = $true
+            Path = "$AppCommonSourceDirectory/$_"
+            Destination = "$AppCommonDestinationDirectory/AppCommon/$_"
+        }
+        Copy-Item @parameters
+    }
+}
+
+function Add-AppCommon {
+    param (
+        [string]
+        [Parameter(Mandatory=$true)]
+        $AppCommonPackageName,
+
+        [string]
+        [Parameter(Mandatory=$true)]
+        $AppCommonPackageVersion,
+
+        [string]
+        [Parameter(Mandatory=$true)]
+        $NuGetFeed,
+
+        [string]
+        [Parameter(Mandatory=$true)]
+        $DestinationPath,
+
+        [string]
+        $PackagesPath = "$PSScriptRoot/.packages",
+
+        [string]
+        $ToolsPath = "$PSScriptRoot/.tools"
+    )
+
+    $wildcardPath = "$PackagesPath/$AppCommonPackageName.$AppCommonPackageVersion*"
+
+    # Remove anything that already exists, so that it is always easy to
+    # use Resolve-Path with a wildcard to find the installed path without
+    # having to parse pre-release number of the package.
+    $existing = Resolve-Path $wildcardPath -ErrorAction SilentlyContinue
+    if ($existing) {
+        Remove-Item -Path $existing -Force -ErrorAction SilentlyContinue -Recurse | Out-Null
+    }
+
+    New-Item -Path $PackagesPath -ItemType Directory -Force | Out-Null
+
+    $parameters = @(
+        "install", $AppCommonPackageName,
+        "-source", $NuGetFeed,
+        "-outputDirectory", $PackagesPath
+        "-version", $AppCommonPackageVersion
+    )
+
+    Write-Host "Downloading AppCommon"
+    Write-Host -ForegroundColor Magenta "Executing nuget: $parameters"
+    nuget $parameters | Out-Null
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "NuGet package install failed for AppCommon"
+    }
+
+    $appCommonDirectory = Resolve-Path $wildcardPath | Select-Object -Last 1
+
+    Move-AppCommon $appCommonDirectory $DestinationPath
+}
+
 $functions = @(
     "Install-NugetCli",
     "Get-RestApiPackage",
-    "Push-Package"
+    "Push-Package",
+    "Add-AppCommon"
 )
 
 Export-ModuleMember -Function $functions

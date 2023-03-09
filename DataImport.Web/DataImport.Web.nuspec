@@ -12,6 +12,20 @@
     <license type="expression">edfi</license>
   </metadata>
   <files>
-      <file src="publish\**\*.*" target="" />	 
+      <file src="publish\**\*.*" target="DataImport.Web" />	
+      <!--Installer --> 
+      <file src="..\Installer\install.ps1" target="installer"/>     
+      <file src="..\Installer\uninstall.ps1" target="installer"/>
+      <file src="..\Installer\global.json" target="installer"/>
+      <file src="..\Installer\Install-EdFiDataImport.psm1" target="installer"/>
+      <file src="..\Installer\key-management.psm1" target="installer"/>
+      <file src="..\Installer\README.md" target="installer"/>  
+      <file src="..\Installer\assets\post-install-readme.txt" target="installer"/>
+      <file src="..\eng\Recover-User.ps1" target="installer"/>
+      <file src="..\Installer\AppCommon\**" target="installer/AppCommon/"/>
+
+      <!--TransformLoad-->
+      <file src="..\DataImport.Server.TransformLoad\publish\fdd\**\*.*" target="DataImport.Server.TransformLoad" />
+      <file src="..\DataImport.Server.TransformLoad\publish\scd\**\*.*" target="DataImport.Server.TransformLoad.Win64" />
   </files>
 </package>

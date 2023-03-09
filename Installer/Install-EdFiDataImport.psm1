@@ -67,9 +67,9 @@ function Install-EdFiDataImport {
         [string]
         $PackageVersion,
 
-        # NuGet package source. Defaults to "https://pkgs.dev.azure.com/ed-fi-alliance/Ed-Fi-Alliance-OSS/_packaging/EdFi/nuget/v3/index.json".
+        # NuGet package source. Please specify the extracted path to the DataImport.Web nuget package.
         [string]
-        $PackageSource = "https://pkgs.dev.azure.com/ed-fi-alliance/Ed-Fi-Alliance-OSS/_packaging/EdFi/nuget/v3/index.json",
+        $PackageSource,
 
         # Path for storing installation tools, e.g. nuget.exe. Default: "C:\temp\tools".
         [string]
@@ -153,7 +153,7 @@ function Install-EdFiDataImport {
 
     $elapsed = Use-StopWatch {
         $result += Initialize-Configuration -Config $config
-        $result += Get-DataImportPackages -Config $config
+        $result += Set-DataImportPackagesSource -Config $config
         $result += Invoke-TransformDataImportWebAppSettings -Config $Config
         $result += Invoke-TransformDataImportTransformLoadAppSettings -Config $Config
         $result += Invoke-TransformDataImportWebConnectionStrings -Config $config
@@ -271,7 +271,35 @@ function RemoveTransformLoad($Config)
     Remove-Item -Path $Config.TransformLoadApplicationPath -Force -Recurse
 }
 
-function Get-DataImportPackages {
+function IsVersionMismatch($versionString, $otherVersionString) {
+    $version = ParseVersion($versionString)
+    $otherVersion = ParseVersion($otherVersionString)
+
+    $result = $version.CompareTo($otherVersion)
+    return $result -ne 0
+}
+
+function ParseVersion($versionString) {
+    $splitByTags = $versionString -split '-'
+    $version = $splitByTags[0];
+
+    for ($i = 1; $i -lt $splitByTags.Length; $i++) {
+        $preVersion = $splitByTags[$i] -replace '[^0-9.]', ''
+        $cleanedPreVersion = $preVersion.Trim('.')
+        if($cleanedPreVersion -ne '') {
+            $version += ".$cleanedPreVersion"
+        }
+    }
+
+    try { return [System.Version]::Parse($version) }
+    catch
+    {
+        Write-Warning "Failed to parse version configuration $versionString. Please correct and try again."
+        exit
+    }
+}
+
+function Set-DataImportPackagesSource {
     [CmdletBinding()]
     param (
         [hashtable]
@@ -280,25 +308,18 @@ function Get-DataImportPackages {
     )
 
     Invoke-Task -Name ($MyInvocation.MyCommand.Name) -Task {
-        $parameters = @{
-            PackageName = $Config.WebPackageName
-            PackageVersion = $Config.PackageVersion
-            ToolsPath = $Config.ToolsPath
-            OutputDirectory = $Config.DownloadPath
-            PackageSource = $Config.PackageSource
-        }
-        $webPackageDir = Get-NugetPackage @parameters
-        Test-Error
+        $dataImportPackageSource = $Config.PackageSource
+        $webPkgName = $Config.WebPackageName
+        $transformLoadPkgName = $Config.TransformLoadPackageName
+        $webPackageDir = "$dataImportPackageSource/$webPkgName"
+        $transformLoadPackageDir = "$dataImportPackageSource/$transformLoadPkgName"
+        $configVersionString = $Config.PackageVersion
+        $versionString = [System.Diagnostics.FileVersionInfo]::GetVersionInfo("$webPackageDir\DataImport.Web.dll").FileVersion
 
-        $parameters = @{
-            PackageName = $Config.TransformLoadPackageName
-            PackageVersion = $Config.PackageVersion
-            ToolsPath = $Config.ToolsPath
-            OutputDirectory = $Config.DownloadPath
-            PackageSource = $Config.PackageSource
-        }
-        $transformLoadPackageDir = Get-NugetPackage @parameters
-        Test-Error
+        if (IsVersionMismatch $versionString $configVersionString) {
+            Write-Warning "The specified Data Import package version $configVersionString in the configuration does not match the file version $versionString of the package used as source. Please specify the correct version in the installer configuration or use the correct source."
+            exit
+        } 
 
         $Config.PackageDirectory = $webPackageDir
         $Config.DataImportWebSettingsPath = $webPackageDir 

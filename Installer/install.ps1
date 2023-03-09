@@ -57,10 +57,13 @@ Configure DataImport
     }
 #>
 
+$packageSource = Split-Path $PSScriptRoot -Parent
+
 $p = @{
     ToolsPath = "C:/temp/tools"
     DbConnectionInfo = $dbConnectionInfo
     PackageVersion = '2.0.0'
+    PackageSource = $packageSource
 }
 
 Install-EdFiDataImport @p

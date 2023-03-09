@@ -70,7 +70,7 @@
 param(
     # Command to execute, defaults to "Build".
     [string]
-    [ValidateSet("SetUp", "Clean", "Build", "UnitTest", "IntegrationTest", "PowerShellTests", "Package", "PackageTransformLoad", "Push", "BuildAndTest", "BuildAndPublish", "BuildAndDeployToDockerContainer", "Run")]
+    [ValidateSet("SetUp", "Clean", "Build", "UnitTest", "IntegrationTest", "PowerShellTests", "Package", "Push", "BuildAndTest", "BuildAndPublish", "BuildAndDeployToDockerContainer", "Run")]
     $Command = "Build",
 
     # Assembly and package version number. The current package number is
@@ -116,7 +116,11 @@ param(
     # Only required with the Push command.
     [string]
     [ValidateSet("Web", "TransformLoad")]
-    $PackageFileType
+    $PackageFileType,
+
+    # Only required with local builds and testing.
+    [switch]
+    $IsLocalBuild
 )
 
 $Env:MSBUILDDISABLENODEREUSE = "1"
@@ -127,15 +131,15 @@ $entryProject = "DataImport.Web"
 $transformLoadProject = "DataImport.Server.TransformLoad"
 $maintainers = "Ed-Fi Alliance, LLC and contributors"
 
+$appCommonPackageName = "EdFi.Installer.AppCommon"
+$appCommonPackageVersion = "3.1.0-pre0018"
+
 Import-Module -Name "$PSScriptRoot/eng/build-helpers.psm1" -Force
 Import-Module -Name "$PSScriptRoot/eng/package-manager.psm1" -Force
 function Clean {
     Invoke-Execute { dotnet clean $solutionRoot -c $Configuration --nologo -v minimal }
 }
 
-function InitializeNuGet {
-    Invoke-Execute { $script:nugetExe = Install-NugetCli }
-}
 
 function InitializePython {
 	$toolsDir = "$PSScriptRoot/.tools"
@@ -297,14 +301,6 @@ function BuildPackage {
     RunDotNetPack -PackageVersion $Version -projectName $baseProjectFullName $baseProjectFullName
 }
 
-function BuildTransformLoadPackage {
-    $baseProjectFullName = "$solutionRoot/$transformLoadProject/$transformLoadProject"  
-    RunDotNetPack -PackageVersion $Version -projectName $baseProjectFullName $baseProjectFullName
-
-    # Create windows 64 specific package
-    RunDotNetPack -PackageVersion $Version -projectName $baseProjectFullName "$baseProjectFullName.Scd"
-}
-
 function PushPackage {
     param (
         [string]
@@ -372,8 +368,7 @@ function Invoke-Run {
 }
 
 function Invoke-SetUp {
-    Invoke-Step { InitializePython }
-	Invoke-Step { InitializeNuGet }
+    Invoke-Step { InitializePython }	
 }
 
 function Invoke-Clean {
@@ -392,13 +387,12 @@ function Invoke-PowerShellTests {
     Invoke-Step { PowerShellTests }
 }
 
-function Invoke-BuildPackage {
-    Invoke-Step { InitializeNuGet }
+function Invoke-BuildPackage {   
+    Invoke-Step { AddAppCommonPackageForInstaller }
     Invoke-Step { BuildPackage }
 }
 
-function Invoke-BuildTransformLoadPackage {
-    Invoke-Step { InitializeNuGet }
+function Invoke-BuildTransformLoadPackage {  
     Invoke-Step { BuildTransformLoadPackage }
 }
 
@@ -436,7 +430,25 @@ function Invoke-SetAssemblyInfo {
     Invoke-Step { AssemblyInfo }  
 }
 
+function AddAppCommonPackageForInstaller {   
+    $destinationPath = "$PSScriptRoot/Installer"
+
+    $arguments = @{
+        AppCommonPackageName = $appCommonPackageName
+        AppCommonPackageVersion = $appCommonPackageVersion
+        NuGetFeed = $EdFiNuGetFeed
+        DestinationPath = $destinationPath
+    }
+
+    Add-AppCommon @arguments
+}
+
 Invoke-Main {
+    if($IsLocalBuild)
+    {
+        $nugetExePath = Install-NugetCli    
+        Set-Alias nuget $nugetExePath -Scope Global -Verbose
+    }
     switch ($Command) {
         SetUp { Invoke-SetUp }
 		Clean { Invoke-Clean }
@@ -457,7 +469,6 @@ Invoke-Main {
             Invoke-PowerShellTests
         }
         Package { Invoke-BuildPackage }
-        PackageTransformLoad { Invoke-BuildTransformLoadPackage }
         Push { Invoke-PushPackage }
         BuildAndDeployToDockerContainer {
             Invoke-Build

@@ -5,7 +5,7 @@
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
     <IsPackable>true</IsPackable>
     <DefaultItemExcludes>$(DefaultItemExcludes);Publish/**/*</DefaultItemExcludes>
-    <NoWarn>NU5100, NU5124</NoWarn>
+    <NoWarn>NU5100, NU5110, NU5111, NU5124</NoWarn>
 	<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
 
