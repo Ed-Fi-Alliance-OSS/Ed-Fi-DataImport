@@ -56,7 +56,7 @@ namespace DataImport.Web.Areas.Identity
             services.Configure<IdentityOptions>(options =>
             {
                 // Default Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
 
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
