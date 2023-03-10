@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataImport.Models;
 using DataImport.Web.Services.Swagger;
+using Microsoft.Extensions.Options;
 
 namespace DataImport.Web.Services
 {
@@ -16,18 +17,19 @@ namespace DataImport.Web.Services
     {
         private readonly DataImportDbContext _database;
         private readonly ISwaggerMetadataFetcher _swaggerMetadataFetcher;
+        private readonly IOptions<AppSettings> _options;
 
         public ConfigurationService(DataImportDbContext database,
-            ISwaggerMetadataFetcher swaggerMetadataFetcher)
+            ISwaggerMetadataFetcher swaggerMetadataFetcher, IOptions<AppSettings> options)
         {
             _database = database;
             _swaggerMetadataFetcher = swaggerMetadataFetcher;
+            _options = options;
         }
 
         public bool AllowUserRegistrations()
         {
-            var config = _database.Configurations.SingleOrDefault();
-            return config == null || config.InstanceAllowUserRegistration;
+            return _options.Value.AllowUserRegistration;
         }
 
         public async Task FillSwaggerMetadata(ApiServer apiServer)

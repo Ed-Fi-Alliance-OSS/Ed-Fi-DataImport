@@ -5,14 +5,10 @@
 
 using DataImport.Models;
 using DataImport.Web.Features.ApiServers;
-using DataImport.Web.Features.Configuration;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Routing;
-using System.Linq;
 using DataImport.Web.Features.Home;
 using DataImport.Web.Features.OpenIdConnect;
 using DataImport.Web.Features.UserReset;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace DataImport.Web.Infrastructure
 {
@@ -31,8 +27,7 @@ namespace DataImport.Web.Infrastructure
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (filterContext.Controller is ConfigurationController ||
-                filterContext.Controller is RecoverUserController ||
+            if (filterContext.Controller is RecoverUserController ||
                 filterContext.Controller is ApiServersController ||
                 filterContext.Controller is OpenIdConnectController ||
                 (filterContext.Controller is HomeController && (string) filterContext.RouteData.Values["action"] == "UserUnauthorized"))
@@ -40,16 +35,6 @@ namespace DataImport.Web.Infrastructure
                 return;
             }
 
-            if (!_dbContext.ApiServers.Any())
-            {
-                filterContext.Result = new RedirectToRouteResult(
-                    new RouteValueDictionary
-                    {
-                            { "controller", "Configuration" },
-                            { "action", "Index" },
-                            { nameof(EditConfiguration.Query.OdsApiServerException), true }
-                    });
-            }
         }
 
         public override void OnActionExecuted(ActionExecutedContext context)

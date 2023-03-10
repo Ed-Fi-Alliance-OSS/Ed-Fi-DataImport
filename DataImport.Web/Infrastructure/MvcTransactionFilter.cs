@@ -5,7 +5,6 @@
 
 using DataImport.Models;
 using DataImport.Web.Features.ApiServers;
-using DataImport.Web.Features.Configuration;
 using DataImport.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -53,7 +52,7 @@ namespace DataImport.Web.Infrastructure
         {
             filterContext.ExceptionHandled = true;
 
-            RedirectToRouteResult result;
+            RedirectToRouteResult result = null;
             if (odsApiServerException.ApiServerId.HasValue)
             {
                 result = new RedirectToRouteResult(
@@ -65,16 +64,16 @@ namespace DataImport.Web.Infrastructure
                             { "Id", odsApiServerException.ApiServerId.Value }
                     });
             }
-            else
-            {
-                result = new RedirectToRouteResult(
-                    new RouteValueDictionary
-                    {
-                        { "controller", "Configuration" },
-                        { "action", "Index" },
-                        { nameof(EditConfiguration.Query.OdsApiServerException), true }
-                    });
-            }
+            //else
+            //{
+            //    result = new RedirectToRouteResult(
+            //        new RouteValueDictionary
+            //        {
+            //            { "controller", "Configuration" },
+            //            { "action", "Index" },
+            //            { nameof(EditConfiguration.Query.OdsApiServerException), true }
+            //        });
+            //}
 
             if (!(filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest"))
             {

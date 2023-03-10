@@ -9,7 +9,6 @@ using DataImport.Models;
 using DataImport.Web.Features.Agent;
 using DataImport.Web.Features.ApiServers;
 using DataImport.Web.Features.BootstrapData;
-using DataImport.Web.Features.Configuration;
 using DataImport.Web.Features.DataMaps;
 using DataImport.Web.Features.Lookup;
 using DataImport.Web.Features.Preprocessor;
@@ -290,7 +289,6 @@ namespace DataImport.Web.Tests
                 });
             }
 
-            await Send(new EditConfiguration.Command());
         }
 
         public static async Task ConfigureForOdsApiV25()

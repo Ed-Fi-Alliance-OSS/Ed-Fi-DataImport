@@ -19,5 +19,6 @@ namespace DataImport.Web
         public bool UsePowerShellWithNoRestrictions { get; set; }
         public string DatabaseEngine { get; set; }
         public string UserRecoveryToken { get; set; }
+        public bool AllowUserRegistration { get; set; }
     }
 }
