@@ -64,16 +64,6 @@ namespace DataImport.Web.Infrastructure
                             { "Id", odsApiServerException.ApiServerId.Value }
                     });
             }
-            //else
-            //{
-            //    result = new RedirectToRouteResult(
-            //        new RouteValueDictionary
-            //        {
-            //            { "controller", "Configuration" },
-            //            { "action", "Index" },
-            //            { nameof(EditConfiguration.Query.OdsApiServerException), true }
-            //        });
-            //}
 
             if (!(filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest"))
             {
