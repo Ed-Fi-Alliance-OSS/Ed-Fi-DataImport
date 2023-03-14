@@ -14,6 +14,11 @@ See the LICENSE and NOTICES files in the project root for more information.
 
 <h2>@ViewBag.Title</h2>
 
+@if (Model.ConfigurationFailureMsg != null)
+{
+	<div class="alert alert-danger">@Model.ConfigurationFailureMsg</div>
+}
+
 <div style="padding-bottom: 10px;">
     @HtmlHelperService.NavigationButton(Html, "Add API Connection", "Add")
 </div>

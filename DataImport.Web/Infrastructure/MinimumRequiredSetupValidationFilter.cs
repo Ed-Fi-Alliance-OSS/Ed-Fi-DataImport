@@ -8,7 +8,10 @@ using DataImport.Web.Features.ApiServers;
 using DataImport.Web.Features.Home;
 using DataImport.Web.Features.OpenIdConnect;
 using DataImport.Web.Features.UserReset;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Routing;
+using System.Linq;
 
 namespace DataImport.Web.Infrastructure
 {
@@ -34,7 +37,15 @@ namespace DataImport.Web.Infrastructure
             {
                 return;
             }
-
+            if (!_dbContext.ApiServers.Any())
+            {
+                filterContext.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary
+                    {
+                            { "controller", "ApiServers" },
+                            { "action", "Index" }
+                    });
+            }
         }
 
         public override void OnActionExecuted(ActionExecutedContext context)

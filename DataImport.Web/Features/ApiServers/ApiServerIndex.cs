@@ -19,6 +19,7 @@ namespace DataImport.Web.Features.ApiServers
         public class ViewModel
         {
             public IList<ApiServerModel> ApiServers { get; set; }
+            public string ConfigurationFailureMsg { get; set; }
         }
 
         public class ApiServerModel
@@ -50,7 +51,8 @@ namespace DataImport.Web.Features.ApiServers
 
                 return new ViewModel
                 {
-                    ApiServers = apiServers.Select(x => _mapper.Map<ApiServerModel>(x)).OrderBy(x => x.Name).ToList()
+                    ApiServers = apiServers.Select(x => _mapper.Map<ApiServerModel>(x)).OrderBy(x => x.Name).ToList(),
+                    ConfigurationFailureMsg = !apiServers.Any() ? "In order to proceed, please configure the ODS API Server." : null
                 };
             }
         }

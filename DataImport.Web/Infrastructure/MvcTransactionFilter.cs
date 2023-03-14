@@ -64,7 +64,15 @@ namespace DataImport.Web.Infrastructure
                             { "Id", odsApiServerException.ApiServerId.Value }
                     });
             }
-
+            else
+            {
+                result = new RedirectToRouteResult(
+                    new RouteValueDictionary
+                    {
+                        { "controller", "ApiServers" },
+                        { "action", "Index" }
+                    });
+            }
             if (!(filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest"))
             {
                 filterContext.Result = result;
