@@ -20,8 +20,8 @@ RUN apk --no-cache add unzip=~6.0 dos2unix=~7.4 bash=~5.1 gettext=~0.21 postgres
     unzip /app/DataImport.zip -d /app/DataImport && \
     cp -r /app/DataImport/DataImport.Web/. /app/DataImport.Web && \
     cp -r /app/DataImport/DataImport.Server.TransformLoad/. /app/DataImport.Server.TransformLoad && \
-    chmod 755 /app/DataImport.Server.TransformLoad/DataImport.Server.TransformLoad -- ** && \  
-    rm -r /app/DataImport && \ 
+    chmod 755 /app/DataImport.Server.TransformLoad/DataImport.Server.TransformLoad -- ** && \
+    rm -r /app/DataImport && \
     rm -f /app/DataImport.zip
 
 COPY Compose/pgsql/run.sh /app/DataImport.Web/run.sh
