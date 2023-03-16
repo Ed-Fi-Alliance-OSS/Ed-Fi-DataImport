@@ -15,12 +15,12 @@ services:
       - "8080:80"
     environment:
       POSTGRES_HOST: pb-dataimport
-      POSTGRES_PORT: "${PGBOUNCER_LISTEN_PORT:-6432}"
+      POSTGRES_PORT: "${POSTGRES_PORT:-6432}"
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       DATABASEENGINE: ${DATABASE_ENGINE:-PostgreSql}
       APPSETTINGS__DATABASEENGINE: ${DATABASE_ENGINE:-PostgreSql}
-      CONNECTIONSTRINGS__DEFAULTCONNECTION: "host=pb-dataimport;port=${PGBOUNCER_LISTEN_PORT:-6433};username=${POSTGRES_USER};password=${POSTGRES_PASSWORD};database=EdFi_DataImport;"
+      CONNECTIONSTRINGS__DEFAULTCONNECTION: "host=pb-dataimport;port=${POSTGRES_PORT:-6432};username=${POSTGRES_USER};password=${POSTGRES_PASSWORD};database=EdFi_DataImport;"
       APPSETTINGS__ENCRYPTIONKEY: "${ENCRYPTION_KEY}"
       APPSETTINGS__USERRECOVERYTOKEN: "${USER_RECOVERY_TOKEN}"
       APPSETTINGS__SHARENAME: "${APPSETTINGS__SHARENAME:-/app/Common/temp}"
@@ -48,9 +48,9 @@ services:
     image: pgbouncer/pgbouncer@sha256:aa8a38b7b33e5fe70c679053f97a8e55c74d52b00c195f0880845e52b50ce516 #pgbouncer:1.15.0
     environment:
       DATABASES: "* = host = db-dataimport port=5432 user=${POSTGRES_USER} password=${POSTGRES_PASSWORD}"
-      PGBOUNCER_LISTEN_PORT: "${PGBOUNCER_LISTEN_PORT:-6432}"
+      POSTGRES_PORT: "${POSTGRES_PORT:-6432}"
     ports:
-      - "5403:${PGBOUNCER_LISTEN_PORT:-6432}"
+      - "5403:${POSTGRES_PORT:-6432}"
     restart: always
     container_name: ed-fi-pb-dataimport
     depends_on:
