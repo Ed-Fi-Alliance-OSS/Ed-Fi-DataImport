@@ -7,7 +7,6 @@ namespace DataImport.Models
 {
     public class Configuration : Entity
     {
-        public bool InstanceAllowUserRegistration { get; set; } = true;
         public string AvailableCmdlets { get; set; }
         public string ImportPSModules { get; set; }
     }

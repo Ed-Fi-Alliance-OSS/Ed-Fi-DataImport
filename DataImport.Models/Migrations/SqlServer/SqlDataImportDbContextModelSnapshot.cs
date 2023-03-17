@@ -361,11 +361,6 @@ namespace DataImport.Models.Migrations.SqlServer
                     b.Property<string>("ImportPSModules")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("InstanceAllowUserRegistration")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.HasKey("Id");
 
                     b.ToTable("Configurations");

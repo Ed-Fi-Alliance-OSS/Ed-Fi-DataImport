@@ -65,10 +65,6 @@ namespace DataImport.Models
                 .HasIndex(m => m.Version)
                 .IsUnique();
 
-            modelBuilder.Entity<Configuration>()
-                .Property(b => b.InstanceAllowUserRegistration)
-                .HasDefaultValue(0);
-
             modelBuilder.Entity<Lookup>()
                 .HasIndex(m => new
                 {
