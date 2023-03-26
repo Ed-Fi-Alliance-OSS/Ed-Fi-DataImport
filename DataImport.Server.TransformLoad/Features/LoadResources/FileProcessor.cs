@@ -352,7 +352,8 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
 
                 try
                 {
-                    mappedRow = TransformCsvRow(map, currentRow, rowNum, file);
+                    var endpointUrl = $"{odsApi.Config.ApiUrl}{map.ResourcePath}";
+                    mappedRow = TransformCsvRow(map, currentRow, rowNum, file, endpointUrl);
                 }
                 catch (Exception ex)
                 {
@@ -364,9 +365,10 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     : PostMappedRow(odsApi, mappedRow, map.ResourcePath);
             }
 
-            private MappedResource TransformCsvRow(DataMap dataMap, Dictionary<string, string> currentRow, int rowNum, File file)
+            private MappedResource TransformCsvRow(DataMap dataMap, Dictionary<string, string> currentRow, int rowNum, File file, string endpointUrl)
             {
                 var resourceMapper = new ResourceMapper(_logger, dataMap, _mappingLookups);
+                resourceMapper.SetRowInfo(file.Agent?.Name, file.Agent?.ApiServer?.Name, file.Agent?.ApiServer?.ApiVersion?.Version.ToString(), file.FileName, rowNum.ToString(), endpointUrl);
 
                 var mappedRowJson = resourceMapper.ApplyMap(currentRow);
 
@@ -525,6 +527,16 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 OdsResponse = odsResponse;
                 Date = DateTimeOffset.Now;
             }
+        }
+
+        public class RowInfo
+        {
+            public string FileName { get; set; }
+            public string RowNumber { get; set; }
+            public string ApiServerName { get; set; }
+            public string AgentName { get; set; }
+            public string ApiVersion { get; set; }
+            public string EndpointUrl { get; set; }
         }
     }
 }

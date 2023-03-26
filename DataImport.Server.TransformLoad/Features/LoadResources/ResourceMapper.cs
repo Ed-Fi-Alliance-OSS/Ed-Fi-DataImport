@@ -3,9 +3,11 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+using DataImport.Common.Logging;
 using DataImport.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,6 +19,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
         private readonly ResourceMetadata[] _resourceMetadata;
         private readonly DataMapper[] _mappings;
         private readonly LookupCollection _mappingLookups;
+        private FileProcessor.RowInfo _rowInfo;
 
         public ResourceMapper(ILogger logger, DataMap dataMap, LookupCollection mappingLookups)
         {
@@ -26,6 +29,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             _mappings = dataMapSerializer.Deserialize(dataMap.Map);
             _resourceMetadata = ResourceMetadata.DeserializeFrom(dataMap);
             _mappingLookups = mappingLookups;
+            _rowInfo = new FileProcessor.RowInfo();
         }
 
         public ResourceMapper(ILogger<ResourceMapper> logger, ResourceMetadata[] resourceMetadata, DataMapper[] mappings, LookupCollection mappingLookups)
@@ -34,6 +38,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             _mappings = mappings;
             _resourceMetadata = resourceMetadata;
             _mappingLookups = mappingLookups;
+            _rowInfo = new FileProcessor.RowInfo();
         }
 
         public JToken ApplyMap(Dictionary<string, string> csvRow)
@@ -41,6 +46,16 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             var safeCsvRow = new CsvRow(csvRow);
 
             return MapToJsonObject(_resourceMetadata, _mappings, safeCsvRow);
+        }
+
+        public void SetRowInfo(string agentName, string apiServerName, string apiVersion, string fileName, string rowNumber, string endpointUrl)
+        {
+            _rowInfo.AgentName = agentName;
+            _rowInfo.ApiServerName = apiServerName;
+            _rowInfo.ApiVersion = apiVersion;
+            _rowInfo.FileName = fileName;
+            _rowInfo.RowNumber = rowNumber;
+            _rowInfo.EndpointUrl = endpointUrl;
         }
 
         private JObject MapToJsonObject(IReadOnlyList<ResourceMetadata> nodeMetadatas, IReadOnlyList<DataMapper> nodes, CsvRow csvRow)
@@ -130,9 +145,10 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         }
                         else
                         {
-                            _logger.LogInformation(
-                                "Discarding array item '{item}' because one of its required properties was blank. " +
-                                "This can happen when an input file with 'jagged' data is mapped to an ODS array property.", arrayItemMetadata.Name);
+                            var lookupMissingMessage = ($"Discarding array item '{arrayItemMetadata.Name}' because one of its required properties was blank. " +
+                                "This can happen when an input file with 'jagged' data is mapped to an ODS array property.");
+                            _logger.LogInformation(lookupMissingMessage);
+                            WriteIngestionLogForLookupMissingValidation(lookupMissingMessage);
                         }
                     }
                 }
@@ -146,6 +162,26 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             }
 
             return result;
+        }
+
+        private void WriteIngestionLogForLookupMissingValidation(string message)
+        {
+            var model = new IngestionLog
+            {
+                Date = DateTimeOffset.Now,
+                Result = IngestionResult.Error,
+                Data = message,
+                Operation = "TransformingData",
+                Process = "DataImport.Server.TransformLoad",
+                Level = DataImport.Common.Enums.LogLevel.Error,
+                ApiServerName = _rowInfo.ApiServerName,
+                FileName = _rowInfo.FileName,
+                AgentName = _rowInfo.AgentName,
+                RowNumber = _rowInfo.RowNumber,
+                ApiVersion = _rowInfo.ApiVersion,
+                EndPointUrl = _rowInfo.EndpointUrl
+            };
+            _logger.LogToTable("Writing in IngestionLog for lookup validation", model, "IngestionLog");
         }
 
         private object MapToValue(ResourceMetadata nodeMetadata, DataMapper node, CsvRow csvRow)
