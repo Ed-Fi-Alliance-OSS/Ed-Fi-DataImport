@@ -3,6 +3,7 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+using DataImport.Web.Features.UserReset;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
@@ -13,7 +14,7 @@ namespace DataImport.Web.Infrastructure
     {
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (filterContext.Controller.GetType() == typeof(Controller))
+            if (filterContext.Controller.GetType() != typeof(RecoverUserController))
             {
                 var viewData = ((Controller) filterContext.Controller).ViewData;
 

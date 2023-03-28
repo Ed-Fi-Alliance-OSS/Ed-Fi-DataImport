@@ -56,5 +56,24 @@ $Body = @{
 $contentType = 'application/x-www-form-urlencoded'
 $Uri = "$ApplicationUrl/api/RecoverUser"
 
-$testResult = (Invoke-WebRequest -Uri $Uri -Method Post -Body $Body -ContentType $contentType)
-$testResult
+try
+{
+    $apiResponse = (Invoke-WebRequest -Uri $Uri -Method Post -Body $Body -ContentType $contentType)
+    $apiResponse
+}
+catch
+{    
+    Write-Host "Exception details: "
+    $exception = $_.Exception
+    Write-Host ("`tMessage: " + $exception.Message)
+    Write-Host ("`tStatus code: " + $exception.Response.StatusCode)
+    Write-Host ("`tStatus description: " + $exception.Response.StatusDescription)
+   
+    Write-Host "`tResponse: " -NoNewline
+    $errorResponse = $_.Exception.Response.GetResponseStream()
+    $reader = New-Object System.IO.StreamReader($errorResponse)
+    $reader.BaseStream.Position = 0
+    $reader.DiscardBufferedData()
+    $errorContent = $reader.ReadToEnd();
+    Write-Host $errorContent -ForegroundColor red
+}
