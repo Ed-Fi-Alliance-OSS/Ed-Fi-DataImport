@@ -357,6 +357,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error transforming {map} row {row}", map.ResourcePath, rowNum);
+                    return Task.FromResult((RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, $"{odsApi.Config.ApiUrl}{map.ResourcePath}", null, ex.Message)));
                 }
 
                 return mappedRow == null
@@ -468,18 +469,18 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 {
                     Date = marker.Date,
                     Result = marker.Result,
-                    RowNumber = marker.MappedResource.RowNumber.ToString(),
+                    RowNumber = marker.MappedResource?.RowNumber.ToString(),
                     EndPointUrl = marker.EndpointUrl,
                     HttpStatusCode = marker.StatusCode?.ToString(),
-                    Data = marker.MappedResource.Value.ToString(),
+                    Data = marker.MappedResource?.Value.ToString(),
                     OdsResponse = marker.OdsResponse,
                     Level = marker.Level,
                     Operation = "TransformingData",
                     Process = "DataImport.Server.TransformLoad",
-                    FileName = marker.MappedResource.FileName,
-                    AgentName = marker.MappedResource.AgentName,
-                    ApiServerName = marker.MappedResource.ApiServerName,
-                    ApiVersion = marker.MappedResource.ApiVersion
+                    FileName = marker.MappedResource?.FileName,
+                    AgentName = marker.MappedResource?.AgentName,
+                    ApiServerName = marker.MappedResource?.ApiServerName,
+                    ApiVersion = marker.MappedResource?.ApiVersion
                 };
                 _logger.LogToTable($"Writing in IngestionLog for row: {model.RowNumber}", model, "IngestionLog");
             }
