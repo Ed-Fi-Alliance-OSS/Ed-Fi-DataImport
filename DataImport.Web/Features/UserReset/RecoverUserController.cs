@@ -34,9 +34,8 @@ namespace DataImport.Web.Features.UserReset
         public async Task<IActionResult> Post([FromForm] ResetRequest resetRequest)
         {
             var existingUser = await _userManager.FindByNameAsync(resetRequest.UserName);
-            if (existingUser.LockoutEnabled)
+            if (existingUser.LockoutEnabled && existingUser.LockoutEnd != null)
             {
-                await _userManager.SetLockoutEnabledAsync(existingUser, false);
                 await _userManager.SetLockoutEndDateAsync(existingUser, null);
             }
             var token = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
