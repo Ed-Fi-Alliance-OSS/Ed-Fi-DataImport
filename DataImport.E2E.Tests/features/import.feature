@@ -25,6 +25,7 @@ Feature: Import
   Scenario: Import Data
     When selecting a valid file to import
     And clicking import
+    And select api version
     And clicking on Import Template
     Then selected template is imported
     And it's redirected to the "Maps" page

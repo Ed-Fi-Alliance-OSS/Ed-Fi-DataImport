@@ -9,10 +9,6 @@ import { API_Versions } from "../enums";
 export class MapsPage extends DataImportPage {
   private _addedMaps: Array<string> = [];
 
-  get mapFor52(): string {
-    return this.getMap(API_Versions.Version52);
-  }
-
   get mapFor340(): string {
     return this.getMap(API_Versions.Version34);
   }

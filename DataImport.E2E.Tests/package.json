@@ -29,7 +29,6 @@
     "test-wip": "cucumber-js --tags @WIP",
     "publish": "cucumber-js --publish",
     "test-api": "cucumber-js -- features/apiConnections.feature --fail-fast",
-    "test-config": "cucumber-js --  features/configuration.feature --fail-fast",
     "test-export": "cucumber-js --  features/export.feature --fail-fast",
     "test-import": "cucumber-js --  features/import.feature --fail-fast",
     "test-login": "cucumber-js -- features/login.feature --fail-fast",

@@ -36,9 +36,6 @@ Given("it's on the {string} page", async (pageName: string) => {
     case "API Connections":
       currentPage = models.apiConnectionsPage;
       break;
-    case "Configuration":
-      currentPage = models.configurationPage;
-      break;
     case "Import / Export Templates":
       currentPage = models.importExportPage;
       break;

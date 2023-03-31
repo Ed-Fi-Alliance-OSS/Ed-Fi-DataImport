@@ -28,7 +28,7 @@ Given("there's a template imported", async () => {
     const errors = await models.exportTemplatePage.getValidationErrors();
     throw errors ? errors : e;
   }
-  const apiVersion = process.env.API_Version;
+  const apiVersion = API_Versions.Version00;
   if (!apiVersion) {
     throw "API Version not found. Verify it is set in the .env file (API_Version)";
   }

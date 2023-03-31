@@ -45,10 +45,9 @@ When("user enters valid username and password", async () => {
 Then("login is successful", async () => {
   strictEqual(
     await models.activityPage.pageTitle(),
-    "Configuration",
+    "Activity",
     "Page Title does not match"
   );
-  ok(models.configurationPage.isOnPage, 'Configuration');
 });
 
 Then("login validation message appears", async () => {

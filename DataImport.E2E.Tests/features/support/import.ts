@@ -15,6 +15,10 @@ When("clicking import", async () => {
   await models.importTemplatePage.setData();
 });
 
+When("select api version", async () => {
+  await models.importExportPage.selectODSVersionByIndex();
+});
+
 When("clicking on Import Template", async () => {
   await models.importExportPage.importTemplate();
 });

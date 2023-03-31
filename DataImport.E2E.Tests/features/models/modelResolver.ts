@@ -8,7 +8,6 @@ import { ActivityPage } from "./activityPage";
 import { ApiConnectionsPage } from "./apiConnectionsPage";
 import { DataImportPage } from "./dataImportPage";
 import { LoginPage } from "./loginPage";
-import { ConfigurationPage } from "./configurationPage";
 import { ImportExportPage } from "./importExportPage";
 import { MapsPage } from "./mapsPage";
 import { BootstrapPage } from "./bootstrapPage";
@@ -40,15 +39,6 @@ export class ModelResolver {
     let model = this.getModel<ActivityPage>(ActivityPage.name);
     if (!model) {
       model = new ActivityPage(this.page);
-      this.diPages.push(model);
-    }
-    return model;
-  }
-
-  public get configurationPage(): ConfigurationPage {
-    let model = this.getModel<ConfigurationPage>(ConfigurationPage.name);
-    if (!model) {
-      model = new ConfigurationPage(this.page);
       this.diPages.push(model);
     }
     return model;

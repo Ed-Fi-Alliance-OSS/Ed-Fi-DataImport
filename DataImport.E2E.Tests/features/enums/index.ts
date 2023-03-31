@@ -4,7 +4,6 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 export enum API_Versions {
-  Version34 = "3.4.0",
-  Version52 = "5.2",
-  Version53 = "5.3",
-}
+    Version34 = "3.4.0",
+    Version00 = "0.0"
+  }
