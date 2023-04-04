@@ -61,6 +61,10 @@ namespace DataImport.Web
             var env = context.HostingEnvironment;
             config.AddJsonFile(loggingConfigFile, optional: false);
 
+            config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+              .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+            config.AddEnvironmentVariables();
+
             var dbEngine = config.Build().GetValue<string>("AppSettings:DatabaseEngine");
             if (DatabaseEngineEnum.Parse(dbEngine).Equals(DatabaseEngineEnum.PostgreSql))
             {
@@ -70,11 +74,6 @@ namespace DataImport.Web
             {
                 config.AddJsonFile(Path.Combine(runPath ?? "./", "logging_Sql.json"), optional: false);
             }
-
-            config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                  .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-
-            config.AddEnvironmentVariables();
         }
 
         private static void ConfigureLogger(HostBuilderContext context, LoggerConfiguration config)

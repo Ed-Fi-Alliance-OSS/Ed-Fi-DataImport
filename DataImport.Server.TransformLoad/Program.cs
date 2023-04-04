@@ -92,6 +92,8 @@ namespace DataImport.Server.TransformLoad
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                   .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
+            config.AddEnvironmentVariables();
+
             var dbEngine = config.Build().GetValue<string>("AppSettings:DatabaseEngine");
             if (DatabaseEngineEnum.Parse(dbEngine).Equals(DatabaseEngineEnum.PostgreSql))
             {
@@ -101,8 +103,6 @@ namespace DataImport.Server.TransformLoad
             {
                 config.AddJsonFile(Path.Combine(runPath ?? "./", "logging_Sql.json"), optional: false);
             }
-
-            config.AddEnvironmentVariables();
         }
 
         private static void ConfigureLogger(HostBuilderContext context, LoggerConfiguration config)
