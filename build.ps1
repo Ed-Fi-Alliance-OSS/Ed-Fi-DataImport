@@ -132,7 +132,7 @@ $transformLoadProject = "DataImport.Server.TransformLoad"
 $maintainers = "Ed-Fi Alliance, LLC and contributors"
 
 $appCommonPackageName = "EdFi.Installer.AppCommon"
-$appCommonPackageVersion = "3.1.0-pre0018"
+$appCommonPackageVersion = "3.1.0"
 
 Import-Module -Name "$PSScriptRoot/eng/build-helpers.psm1" -Force
 Import-Module -Name "$PSScriptRoot/eng/package-manager.psm1" -Force
