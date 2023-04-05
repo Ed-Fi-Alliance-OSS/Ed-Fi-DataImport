@@ -164,6 +164,8 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         UpdateStatus(fileResponse.Key, status, message);
                     }
 
+                    agent.LastExecuted = DateTimeOffset.Now;
+
                     DataImportCacheManager.DestroyCache(agent.Id.ToString(CultureInfo.InvariantCulture));
                 }
             }
