@@ -9,6 +9,10 @@ import { DataImportPage } from "./dataImportPage";
 export class BootstrapPage extends DataImportPage {
   private _addedBootstraps: Array<string> = [];
 
+  get bootstrapFor52(): string {
+    return this.getBootstrap(API_Versions.Version52);
+  }
+
   get mapFor340(): string {
     return this.getBootstrap(API_Versions.Version34);
   }
