@@ -84,6 +84,7 @@ jobs:
           retention-days: 5
 
       - name: Dependency Review ("Dependabot on PR")
+        if: github.event_name == 'pull_request'
         uses: actions/dependency-review-action@c090f4e553673e6e505ea70d6a95362ee12adb94 # v3.0.3
 
       - name: Initialize CodeQL
