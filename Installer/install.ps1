@@ -62,7 +62,7 @@ $packageSource = Split-Path $PSScriptRoot -Parent
 $p = @{
     ToolsPath = "C:/temp/tools"
     DbConnectionInfo = $dbConnectionInfo
-    PackageVersion = '2.1.0'
+    PackageVersion = '2.1.0.0'
     PackageSource = $packageSource
 }
 
