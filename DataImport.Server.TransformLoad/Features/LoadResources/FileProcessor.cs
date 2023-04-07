@@ -358,8 +358,19 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error transforming {map} row {row}", map.ResourcePath, rowNum);
-                    return Task.FromResult((RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, $"{odsApi.Config.ApiUrl}{map.ResourcePath}", null, ex.Message)));
+                    _logger.LogError(ex, $"Error transforming {map.ResourcePath} row {rowNum}");
+                    var rowWithError = mappedRow ?? new MappedResource()
+                    {
+                        ResourcePath = map?.ResourcePath,
+                        Metadata = map?.Metadata,
+                        AgentId = file.AgentId,
+                        AgentName = file.Agent?.Name,
+                        ApiServerName = file.Agent?.ApiServer?.Name,
+                        ApiVersion = file.Agent?.ApiServer?.ApiVersion?.Version.ToString(),
+                        FileName = file.FileName,
+                        RowNumber = rowNum
+                    };
+                    return Task.FromResult((RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, rowWithError, $"{odsApi.Config.ApiUrl}{map.ResourcePath}", null, ex.Message)));
                 }
 
                 return mappedRow == null
@@ -474,7 +485,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     RowNumber = marker.MappedResource?.RowNumber.ToString(),
                     EndPointUrl = marker.EndpointUrl,
                     HttpStatusCode = marker.StatusCode?.ToString(),
-                    Data = marker.MappedResource?.Value.ToString(),
+                    Data = marker.MappedResource?.Value?.ToString(),
                     OdsResponse = marker.OdsResponse,
                     Level = marker.Level,
                     Operation = "TransformingData",

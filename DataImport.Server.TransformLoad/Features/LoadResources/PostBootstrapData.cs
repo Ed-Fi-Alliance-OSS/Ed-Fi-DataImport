@@ -97,7 +97,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
 
                 foreach (var singlePayload in bootstrapPayloads)
                 {
-                    _logger.LogInformation("Inserting bootstrap data for ID: {id}", singlePayload.Id);
+                    _logger.LogInformation($"Inserting bootstrap data for ID: {singlePayload.Id}");
 
                     var resourcePath = singlePayload.ResourcePath;
                     var endpointUrl = $"{ods.Config.ApiUrl}{resourcePath}";
