@@ -89,7 +89,10 @@ See the LICENSE and NOTICES files in the project root for more information.
                 $(divSelector).find('input').prop('disabled', true);
             }
 
-            $("#btnSubmit").click(function() { $("#encryption-error").remove(); });
+            $("#btnSubmit").click(function(e) {
+                $("#encryption-error").remove();
+                addValuesSelected();
+            });
 
             $("#btnTest").click(function() {
                 $("#btnTest").attr("disabled", true);
@@ -143,7 +146,9 @@ See the LICENSE and NOTICES files in the project root for more information.
                 });
             });
 
-            $("#btnAddMap").click(function() {
+            $("#btnAddMap").click(addMap);
+
+            function addMap() {
                 var dataMapList = $('#ddlDataMap');
                 var selectedDataMapId = dataMapList.val();
                 if (selectedDataMapId === '') {
@@ -184,9 +189,11 @@ See the LICENSE and NOTICES files in the project root for more information.
 
                 resetProcessingOrderForDataMaps();
                 dataMapList.find("option[value=\"\"]").prop('selected', true);
-            });
+            }
 
-            $("#btnAddBootstrapData").click(function() {
+            $("#btnAddBootstrapData").click(addBootstrap);
+
+            function addBootstrap() {
                 var bootstraps = $('#ddlBootstrapDatas');
                 var selectedBootstrap = bootstraps.val();
                 if (selectedBootstrap === '') {
@@ -236,7 +243,7 @@ See the LICENSE and NOTICES files in the project root for more information.
                 bootstraps.find("option[value=\"\"]").prop('selected', true);
 
                 invalidateAvailableBootstrapDatas();
-            });
+            }
 
             function invalidateAvailableBootstrapDatas() {
 
@@ -265,7 +272,9 @@ See the LICENSE and NOTICES files in the project root for more information.
                 }
             }
 
-            $("#btnAddSchedule").click(function() {
+            $("#btnAddSchedule").click(addSchedule);
+
+            function addSchedule() {
                 var ddlDay = $('#ddlDay');
                 var ddlHour = $('#ddlHour');
                 var ddlMinute = $('#ddlMinute');
@@ -318,7 +327,7 @@ See the LICENSE and NOTICES files in the project root for more information.
                 ddlDay.find("option[value=\"\"]").prop('selected', true);
                 ddlHour.find("option[value=\"\"]").prop('selected', true);
                 ddlMinute.find("option[value=\"\"]").prop('selected', true);
-            });
+            }
 
             $('#tblAgentSchedule, #tblAgentDataMaps').on('click',
                 '.delete-row',
@@ -354,6 +363,34 @@ See the LICENSE and NOTICES files in the project root for more information.
                     input.attr('value', JSON.stringify(entityObject));
                     $(row).find('.processing-order').text(currentOrderNumber);
                 });
+            }
+
+            function addValuesSelected() {
+                if ($($(".scheduled-agents-only")[0]).is(":visible")) {
+                    var ddlDay = $('#ddlDay');
+                    var ddlHour = $('#ddlHour');
+                    var ddlMinute = $('#ddlMinute');
+
+                    var dayId = ddlDay.val();
+                    var hourId = ddlHour.val();
+                    var minuteId = ddlMinute.val();
+
+                    if (dayId && hourId && minuteId) {
+                        addSchedule();
+                    }
+                }
+
+                var bootstraps = $('#ddlBootstrapDatas');
+                var selectedBootstrap = bootstraps.val();
+                if (selectedBootstrap !== '') {
+                    addBootstrap();
+                }
+
+                var dataMapList = $('#ddlDataMap');
+                var selectedDataMapId = dataMapList.val();
+                if (selectedDataMapId !== '') {
+                    addMap();
+                }
             }
         });
     </script>
