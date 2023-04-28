@@ -7,7 +7,6 @@ using DataImport.Common;
 using DataImport.Common.Helpers;
 using DataImport.Models;
 using DataImport.Web.Infrastructure;
-using DataImport.Web.Middleware;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -31,6 +30,9 @@ using NUglify.JavaScript;
 using Serilog;
 using DataImport.Common.Enums;
 using DataImport.Web.Infrastructure.Security;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using DataImport.Web.Middleware;
 
 namespace DataImport.Web
 {
@@ -68,6 +70,7 @@ namespace DataImport.Web
             services.Configure<IdentitySettings>(Configuration.GetSection("IdentitySettings"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<ExternalPreprocessorOptions>(_configuration.GetSection("ExternalPreprocessors"));
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
             services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(sp => sp.GetService<ILogger<NoLoggingCategoryPlaceHolder>>());
             services.AddTransient<IFileSettings>(sp => sp.GetService<IOptions<AppSettings>>().Value);
             services.AddTransient<IPowerShellPreprocessSettings>(sp => sp.GetService<IOptions<AppSettings>>().Value);
@@ -173,7 +176,10 @@ namespace DataImport.Web
             });
 
             services.AddMvc()
+                  .AddSessionStateTempDataProvider()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+
+            services.AddSession();
 
             services.AddWebOptimizer(pipeline =>
             {
@@ -242,6 +248,7 @@ namespace DataImport.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSession();
             app.UseMiddleware<LoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
