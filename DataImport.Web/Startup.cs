@@ -203,8 +203,8 @@ namespace DataImport.Web
                 pipeline.AddJavaScriptBundle("/bundles/toastr.min.js", minifyJsSettings, "/js/toastr.js");
                 pipeline.AddCssBundle("/content/toastr.min.css", "/css/toastr.min.css");
             });
-
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
