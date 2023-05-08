@@ -237,6 +237,12 @@ namespace DataImport.Web
                 return Task.CompletedTask;
             });
 
+            var pathBase = Configuration.GetValue<string>("AppSettings:PathBase");
+            if (!string.IsNullOrEmpty(pathBase))
+            {
+                app.UsePathBase("/" + pathBase.Trim('/'));
+            }
+
             Log.Logger.Information("Migrating database");
             dataImportDbContext.Database.Migrate();
 
