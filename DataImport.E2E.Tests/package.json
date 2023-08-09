@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@cucumber/cucumber": "^8.5.2",
+    "@cucumber/cucumber": "^9.3.0",
     "chromedriver": "^104.0.0",
     "dotenv": "^16.0.1",
     "playwright": "^1.25.1"
