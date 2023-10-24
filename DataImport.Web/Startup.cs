@@ -33,7 +33,6 @@ using DataImport.Web.Infrastructure.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using DataImport.Web.Middleware;
-using Microsoft.AspNetCore.Http.Features;
 
 namespace DataImport.Web
 {
@@ -70,7 +69,6 @@ namespace DataImport.Web
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.Configure<IdentitySettings>(Configuration.GetSection("IdentitySettings"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
-            services.Configure<FormOptions>(Configuration.GetSection("FormOptions"));
             services.Configure<ExternalPreprocessorOptions>(_configuration.GetSection("ExternalPreprocessors"));
             services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
             services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(sp => sp.GetService<ILogger<NoLoggingCategoryPlaceHolder>>());
