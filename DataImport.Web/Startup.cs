@@ -70,8 +70,8 @@ namespace DataImport.Web
             services.Configure<IdentitySettings>(Configuration.GetSection("IdentitySettings"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<ExternalPreprocessorOptions>(_configuration.GetSection("ExternalPreprocessors"));
-            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
             services.AddSingleton<Microsoft.Extensions.Logging.ILogger>(sp => sp.GetService<ILogger<NoLoggingCategoryPlaceHolder>>());
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
             services.AddTransient<IFileSettings>(sp => sp.GetService<IOptions<AppSettings>>().Value);
             services.AddTransient<IPowerShellPreprocessSettings>(sp => sp.GetService<IOptions<AppSettings>>().Value);
             services.AddTransient<IEncryptionKeySettings>(sp => sp.GetService<IOptions<AppSettings>>().Value);
