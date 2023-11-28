@@ -51,5 +51,8 @@ namespace DataImport.Web.Features.DataMaps
         public IList<LogMessageViewModel> PreprocessorLogMessages { get; set; }
 
         public string CsvError { get; set; }
+
+        [Display(Name = "This is a DELETE Map")]
+        public bool IsDeleteOperation { get; set; }
     }
 }

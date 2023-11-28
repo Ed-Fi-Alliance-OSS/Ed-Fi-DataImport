@@ -127,6 +127,8 @@ See the LICENSE and NOTICES files in the project root for more information.
         </div>
     </div>
 
+    @Html.Input(m => m.IsDeleteOperation)
+
     <fieldset>
         <div id="attributeContainer" style="display:none;">
             @Html.Input(x => x.Attribute, new { placeholder = "Preprocessor Attribute" }, Html.HelpSpan("This should be provided if the selected preprocessor is configured to require an attribute."))

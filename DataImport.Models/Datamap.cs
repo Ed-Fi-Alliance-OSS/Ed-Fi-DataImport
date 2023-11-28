@@ -48,5 +48,7 @@ namespace DataImport.Models
         public Script FileProcessorScript { get; set; }
 
         public ICollection<DataMapAgent> DataMapAgents { get; set; }
+
+        public bool IsDeleteOperation { get; set; }
     }
 }
