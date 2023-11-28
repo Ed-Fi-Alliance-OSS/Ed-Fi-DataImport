@@ -178,6 +178,7 @@ namespace DataImport.Web.Features.DataMaps
                 viewModel.PreprocessorLogMessages = tempViewModel.PreprocessorLogMessages;
                 viewModel.Attribute = tempViewModel.Attribute;
                 viewModel.CsvError = tempViewModel.CsvError;
+                viewModel.IsDeleteOperation = tempViewModel.IsDeleteOperation;
             }
         }
     }

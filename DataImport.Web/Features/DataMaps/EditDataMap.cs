@@ -72,7 +72,8 @@ namespace DataImport.Web.Features.DataMaps
                     ApiVersionId = dataMap.ApiVersionId,
                     PreprocessorId = dataMap.FileProcessorScriptId,
                     Preprocessors = _preprocessorSelectListProvider.GetCustomFileProcessors(),
-                    Attribute = dataMap.Attribute
+                    Attribute = dataMap.Attribute,
+                    IsDeleteOperation = dataMap.IsDeleteOperation
                 };
             }
         }
@@ -86,6 +87,7 @@ namespace DataImport.Web.Features.DataMaps
             public string[] ColumnHeaders { get; set; }
             public int? PreprocessorId { get; set; }
             public string Attribute { get; set; }
+            public bool IsDeleteOperation { get; set;}
         }
 
         public class Validator : AbstractValidator<Command>
@@ -141,6 +143,7 @@ namespace DataImport.Web.Features.DataMaps
                 map.UpdateDate = DateTimeOffset.Now;
                 map.FileProcessorScriptId = request.PreprocessorId;
                 map.Attribute = request.Attribute;
+                map.IsDeleteOperation = request.IsDeleteOperation;
                 _logger.Modified(map, m => m.Name);
 
                 return new ToastResponse
