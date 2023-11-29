@@ -999,21 +999,21 @@ namespace DataImport.Models.Tests
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
 
-            return JToken.Parse(dataMapSerializer.Serialize(mappings));
+            return JToken.Parse(dataMapSerializer.Serialize(mappings, false));
         }
 
         private static DataMapper[] Deserialize(ResourceMetadata[] resourceMetadata, string jsonMap)
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
 
-            return dataMapSerializer.Deserialize(jsonMap);
+            return dataMapSerializer.Deserialize(jsonMap, false);
         }
 
         private static DataMapper[] Deserialize(ResourceMetadata[] resourceMetadata, JObject jsonMap)
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
 
-            return dataMapSerializer.Deserialize(jsonMap);
+            return dataMapSerializer.Deserialize(jsonMap, false);
         }
     }
 }

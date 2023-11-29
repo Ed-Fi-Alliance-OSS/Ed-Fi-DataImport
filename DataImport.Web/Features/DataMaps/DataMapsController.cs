@@ -97,7 +97,7 @@ namespace DataImport.Web.Features.DataMaps
         [HttpPost]
         public async Task<ActionResult> AddModelFields(DataMapperFields.Query query)
         {
-            return PartialView("_PartialDataMapperFields", await _mediator.Send(query));
+            return PartialView(query.IsDeleteOperation ? "_PartialDataMapperDeleteByIdFields" : "_PartialDataMapperFields", await _mediator.Send(query));
         }
 
         public async Task<ActionResult> RetrieveDescriptors(RetrieveDescriptors.Query query)
@@ -141,7 +141,7 @@ namespace DataImport.Web.Features.DataMaps
         }
 
         [HttpPost]
-        public async Task<ActionResult> UploadFile(IFormFile uploadSampleFile, int dataMapId, int? preprocessorId, string mapName, int? apiVersionId, string resourcePath, int? apiServerId, string attribute)
+        public async Task<ActionResult> UploadFile(IFormFile uploadSampleFile, int dataMapId, int? preprocessorId, string mapName, int? apiVersionId, string resourcePath, int? apiServerId, string attribute, bool isDeleteOperation)
         {
             var csvData = await _mediator.Send(new UploadCsvFile.Command { FileBase = uploadSampleFile, PreprocessorId = preprocessorId, ApiServerId = apiServerId, Attribute = attribute });
 
@@ -157,7 +157,8 @@ namespace DataImport.Web.Features.DataMaps
                 ApiServerId = apiServerId,
                 PreprocessorLogMessages = csvData.PreprocessorLogMessages,
                 CsvError = csvData.CsvError,
-                Attribute = attribute
+                Attribute = attribute,
+                IsDeleteOperation = isDeleteOperation
             };
 
             return dataMapId == 0

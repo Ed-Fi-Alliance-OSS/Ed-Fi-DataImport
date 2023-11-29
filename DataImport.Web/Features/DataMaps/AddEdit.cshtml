@@ -259,15 +259,28 @@ See the LICENSE and NOTICES files in the project root for more information.
     {
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+                @if (!Model.IsDeleteOperation)
+                {
                     <div id="divCSVFields">
                         @Html.Label("CSV Fields")
                     </div>
                     <div id="divModelFields" style="padding: 10px;">
                         @await Html.PartialAsync("_PartialDataMapperFields", Model.FieldsViewModel)
                     </div>
-                                                            @Html.Hidden("ColumnHeaders", JsonConvert.SerializeObject(Model.ColumnHeaders))
-                                                                                @Html.SubmitButton("Save Map", new { id = "btnSubmit" })}
-                                                                        }
+                                                            
+                }
+                else
+                {
+                    <div id="divCSVFields">
+                        @Html.Label("CSV Fields")
+                    </div>
+                    <div id="divModelFields" style="padding: 10px;">
+                        @await Html.PartialAsync("_PartialDataMapperDeleteByIdFields", Model.FieldsViewModel)
+                    </div>
+                }
+        @Html.Hidden("ColumnHeaders", JsonConvert.SerializeObject(Model.ColumnHeaders))
+        @Html.SubmitButton("Save Map", new { id = "btnSubmit" })}
+}
 
 @section scripts{
     <script type="text/javascript">
@@ -275,6 +288,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 
             var $apiVersionIdElem = $('#@Html.IdFor(m => m.ApiVersionId)');
             var $resourcePathElem = $('#@Html.IdFor(m => m.ResourcePath)');
+            var $isDeleteOperationElem = $('#@Html.IdFor(m => m.IsDeleteOperation)');
 
             refreshResourcePathVisibility();
             refreshAllControlVisibility();
@@ -436,7 +450,8 @@ See the LICENSE and NOTICES files in the project root for more information.
                 var formData = {
                     apiVersionId: $apiVersionIdElem.val(),
                     columnHeaders: columnHeaders,
-                    resourcePath: resourcePath
+                    resourcePath: resourcePath,
+                    isDeleteOperation: $isDeleteOperationElem.is(":checked")
                 };
 
                 disableSubmitButton(true);

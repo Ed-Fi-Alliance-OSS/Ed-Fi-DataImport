@@ -39,12 +39,13 @@ namespace DataImport.Models
             _resourceMetadatas = resourceMetadatas;
         }
 
-        public string Serialize(DataMapper[] mappings)
+        public string Serialize(DataMapper[] mappings, bool isDeleteByIdOperation)
         {
-            return SerializeObject(_resourceMetadatas, mappings).ToString(Formatting.Indented);
+            return isDeleteByIdOperation ? SerializeResourceIdForDeleteObject(mappings.Single()).ToString(Formatting.Indented) :
+                    SerializeObject(_resourceMetadatas, mappings).ToString(Formatting.Indented);
         }
 
-        public DataMapper[] Deserialize(string jsonMap)
+        public DataMapper[] Deserialize(string jsonMap, bool isDeleteByIdOperation)
         {
             JObject jobject;
             try
@@ -60,12 +61,12 @@ namespace DataImport.Models
                     , exception);
             }
 
-            return Deserialize(jobject);
+            return Deserialize(jobject, isDeleteByIdOperation);
         }
 
-        public DataMapper[] Deserialize(JObject jsonMap)
+        public DataMapper[] Deserialize(JObject jsonMap, bool isDeleteByIdOperation)
         {
-            return DeserializeObject(_resourceMetadatas, jsonMap).ToArray();
+            return !isDeleteByIdOperation ? DeserializeObject(_resourceMetadatas, jsonMap).ToArray() : DeserializeForDeleteObject(jsonMap).ToArray();
         }
 
         private JObject SerializeObject(IReadOnlyList<ResourceMetadata> nodeMetadatas, IReadOnlyList<DataMapper> nodes)
@@ -122,6 +123,12 @@ namespace DataImport.Models
                 }
             }
 
+            return result;
+        }
+
+        private JObject SerializeResourceIdForDeleteObject(DataMapper node)
+        {
+            var result = new JObject { new JProperty("Id", new JObject {new JProperty("Column", node.SourceColumn)}) };
             return result;
         }
 
@@ -209,6 +216,31 @@ namespace DataImport.Models
                     }
                 }
             }
+
+            return result;
+        }
+
+        private List<DataMapper> DeserializeForDeleteObject(JToken objectToken)
+        {
+            var jobject = objectToken as JObject;
+
+            if (jobject == null)
+                throw new InvalidOperationException(
+                    "Cannot deserialize mappings from JSON, because an object literal was expected. " +
+                    "Instead, found: " +
+                    $"{objectToken.ToString(Formatting.Indented)}");
+
+            var result = new List<DataMapper>();
+
+            var nodes = jobject.Children().Cast<JProperty>().ToArray();
+
+            var node = nodes.SingleOrDefault(n => n.Name == "Id");
+
+            var propertyValue = node.Children().Single();
+
+            var sourceColumn = ((JObject) propertyValue).Children().Cast<JProperty>().Single().Value;
+
+            result.Add(new DataMapper() { Name = "Id", SourceColumn = DeserializeRawValue(sourceColumn) });
 
             return result;
         }

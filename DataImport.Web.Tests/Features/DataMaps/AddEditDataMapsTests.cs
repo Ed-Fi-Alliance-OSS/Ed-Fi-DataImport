@@ -115,7 +115,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
             var apiVersion = Query(d => d.ApiVersions.Single(x => x.Id == resource.ApiVersionId));
 
             var dataMapSerializer = new DataMapSerializer(resource);
-            var expectedJsonMap = dataMapSerializer.Serialize(mappings);
+            var expectedJsonMap = dataMapSerializer.Serialize(mappings, false);
             var sourceCsvHeaders = new[] { "ColA", "ColB", "ColC" };
 
             var addForm = await Send(new AddDataMap.Query { SourceCsvHeaders = sourceCsvHeaders });
@@ -203,7 +203,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
                 var columnHeaders = new[] { "ColA", "ColB", "ColC" };
 
                 var dataMapSerializer = new DataMapSerializer(resource);
-                var expectedJsonMap = dataMapSerializer.Serialize(updatedMappings);
+                var expectedJsonMap = dataMapSerializer.Serialize(updatedMappings, false);
 
                 var response = await Send(new AddDataMap.Command
                 {

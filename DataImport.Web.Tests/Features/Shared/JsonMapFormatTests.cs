@@ -46,8 +46,8 @@ namespace DataImport.Web.Tests.Features.Shared
 
                 var dataMapSerializer = new DataMapSerializer(resource);
 
-                var serializedToJsonMap = dataMapSerializer.Serialize(originalMappings);
-                var deserializedFromJsonMap = dataMapSerializer.Deserialize(serializedToJsonMap);
+                var serializedToJsonMap = dataMapSerializer.Serialize(originalMappings, false);
+                var deserializedFromJsonMap = dataMapSerializer.Deserialize(serializedToJsonMap, false);
 
                 // Serializing and deserializing should be an identity operation.
                 deserializedFromJsonMap.ShouldMatch(originalMappings);

@@ -23,7 +23,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             _logger = logger;
 
             var dataMapSerializer = new DataMapSerializer(dataMap);
-            _mappings = dataMapSerializer.Deserialize(dataMap.Map);
+            _mappings = dataMapSerializer.Deserialize(dataMap.Map, false);
             _resourceMetadata = ResourceMetadata.DeserializeFrom(dataMap);
             _mappingLookups = mappingLookups;
         }

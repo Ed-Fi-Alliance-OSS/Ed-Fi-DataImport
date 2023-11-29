@@ -69,6 +69,7 @@ namespace DataImport.Web.Features.DataMaps
             public string[] ColumnHeaders { get; set; }
             public int? PreprocessorId { get; set; }
             public string Attribute { get; set; }
+            public bool IsDeleteOperation { get; set; }
         }
 
         public class Response : ToastResponse
@@ -123,7 +124,7 @@ namespace DataImport.Web.Features.DataMaps
                 {
                     Name = request.MapName,
                     ResourcePath = resource.Path,
-                    Map = dataMapSerializer.Serialize(request.Mappings),
+                    Map = dataMapSerializer.Serialize(request.Mappings, request.IsDeleteOperation),
                     Metadata = resource.Metadata,
                     CreateDate = DateTimeOffset.Now,
                     UpdateDate = DateTimeOffset.Now,
@@ -133,7 +134,8 @@ namespace DataImport.Web.Features.DataMaps
                             : JsonConvert.SerializeObject(request.ColumnHeaders),
                     ApiVersionId = request.ApiVersionId,
                     FileProcessorScriptId = request.PreprocessorId,
-                    Attribute = request.Attribute
+                    Attribute = request.Attribute,
+                    IsDeleteOperation = request.IsDeleteOperation
                 };
 
                 _database.DataMaps.Add(dataMap);

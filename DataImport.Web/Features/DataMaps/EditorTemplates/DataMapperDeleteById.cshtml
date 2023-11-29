@@ -1,0 +1,105 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Models
+@using DataImport.Web.Features.DataMaps
+@using Humanizer
+@model DataImport.Models.DataMapper
+@functions
+{
+    public static string InferSource(DataMapper mapper)
+    {
+        if (mapper.SourceTable != null)
+            return Sources.LookupTable;
+
+        if (mapper.SourceColumn != null)
+            return Sources.Column;
+
+        if (mapper.Value != null)
+            return Sources.Static;
+
+        return null;
+    }
+}
+@{
+    var dataSources = (List<SelectListItem>)ViewData["DataSources"];
+    var sourceColumns = (List<SelectListItem>)ViewData["SourceColumns"];
+    var sourceTables = (List<SelectListItem>)ViewData["SourceTables"];
+
+    <div class="property-border map-node" data-node-depth="0" data-node-name="@Model.Name" style="padding-left: 15px;">
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label class = required>@($"{Model.Name.Titleize()}")</label>
+            </div>
+
+             <div class="map-property-selections col-sm-10 field-block" data-node-depth="0">
+                    @Html.DropDownList("Source", new SelectList(dataSources, "Value", "Text", InferSource(Model)), new
+                    {
+                        id = (string)null,
+                        title = "Select Data Source",
+                        @class = "form-control map-source-type"
+                    })
+
+                    @{
+                        var sourceColumnItems = new List<SelectListItem>(sourceColumns);
+                        if (!string.IsNullOrWhiteSpace(Model.SourceColumn) && sourceColumns.All(x => x.Value != Model.SourceColumn))
+                        {
+                            sourceColumnItems.Add(new SelectListItem
+                            {
+                                Value = Model.SourceColumn,
+                                Text = Model.SourceColumn,
+                                Selected = true
+                            });
+                        }
+                    }
+
+                    @Html.DropDownListFor(x => x.SourceColumn, new SelectList(sourceColumnItems, "Value", "Text", Model.SourceColumn), new
+                    {
+                        id = (string)null,
+                        title = "Select Source Column",
+                        @class = "form-control map-source-column"
+                    })
+
+                    @{
+                        var sourceTableItems = new List<SelectListItem>(sourceTables);
+                        if (!string.IsNullOrWhiteSpace(Model.SourceTable) && sourceTables.All(x => x.Value != Model.SourceTable))
+                        {
+                            sourceTableItems.Add(new SelectListItem
+                            {
+                                Value = Model.SourceTable,
+                                Text = Model.SourceTable,
+                                Selected = true
+                            });
+                        }
+                    }
+
+                    @Html.DropDownListFor(x => x.SourceTable, new SelectList(sourceTableItems, "Value", "Text", Model.SourceTable), new
+                    {
+                        id = (string)null,
+                        title = "Select Source Table",
+                        @class = "form-control map-source-table"
+                    })
+
+                    @Html.TextBoxFor(x => x.Value, new
+                    {
+                        id = (string)null,
+                        title = "Static Value",
+                        @class = "form-control map-static-value",
+                        placeholder = "Static Value"
+                    })
+
+                    @Html.TextBoxFor(x => x.Default, new
+                    {
+                        id = (string)null,
+                        title = "Default Value",
+                        @class = "form-control map-default-value",
+                        placeholder = "Default Value"
+                    })
+             </div>
+        </div>
+    </div>
+}

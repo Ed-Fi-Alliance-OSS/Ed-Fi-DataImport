@@ -61,13 +61,13 @@ namespace DataImport.Web.Features.DataMaps
                         SourceTables = DataMapperFields.MapLookupTablesToViewModel(_database),
                         SourceColumns = DataMapperFields.MapCsvHeadersToSourceColumns(columnHeaders),
                         ResourceMetadata = resourceMetadata,
-                        Mappings = dataMapSerializer.Deserialize(dataMap.Map)
+                        Mappings = dataMapSerializer.Deserialize(dataMap.Map, dataMap.IsDeleteOperation)
                     },
 
                     MapName = dataMap.Name,
                     ResourcePath = dataMap.ResourcePath,
                     ResourceName = dataMap.ToResourceName(),
-                    MetadataIsIncompatible = dataMap.MetadataIsIncompatible(_database),
+                    MetadataIsIncompatible = !dataMap.IsDeleteOperation && dataMap.MetadataIsIncompatible(_database),
                     ApiVersion = dataMap.ApiVersion.Version,
                     ApiVersionId = dataMap.ApiVersionId,
                     PreprocessorId = dataMap.FileProcessorScriptId,
@@ -87,7 +87,7 @@ namespace DataImport.Web.Features.DataMaps
             public string[] ColumnHeaders { get; set; }
             public int? PreprocessorId { get; set; }
             public string Attribute { get; set; }
-            public bool IsDeleteOperation { get; set;}
+            public bool IsDeleteOperation { get; set; }
         }
 
         public class Validator : AbstractValidator<Command>
@@ -138,7 +138,7 @@ namespace DataImport.Web.Features.DataMaps
                 var dataMapSerializer = new DataMapSerializer(map);
 
                 map.Name = request.MapName;
-                map.Map = dataMapSerializer.Serialize(request.Mappings);
+                map.Map = dataMapSerializer.Serialize(request.Mappings, request.IsDeleteOperation);
                 map.ColumnHeaders = JsonConvert.SerializeObject(request.ColumnHeaders);
                 map.UpdateDate = DateTimeOffset.Now;
                 map.FileProcessorScriptId = request.PreprocessorId;
