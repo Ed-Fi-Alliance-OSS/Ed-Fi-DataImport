@@ -23,7 +23,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             _logger = logger;
 
             var dataMapSerializer = new DataMapSerializer(dataMap);
-            _mappings = dataMapSerializer.Deserialize(dataMap.Map, false);
+            _mappings = dataMapSerializer.Deserialize(dataMap.Map, dataMap.IsDeleteOperation);
             _resourceMetadata = ResourceMetadata.DeserializeFrom(dataMap);
             _mappingLookups = mappingLookups;
         }
@@ -41,6 +41,13 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             var safeCsvRow = new CsvRow(csvRow);
 
             return MapToJsonObject(_resourceMetadata, _mappings, safeCsvRow);
+        }
+
+        public JToken ApplyMapForDeleteByIdOperation(Dictionary<string, string> csvRow)
+        {
+            var safeCsvRow = new CsvRow(csvRow);
+
+            return MapToJsonObjectForDeleteById(_mappings, safeCsvRow);
         }
 
         private JObject MapToJsonObject(IReadOnlyList<ResourceMetadata> nodeMetadatas, IReadOnlyList<DataMapper> nodes, CsvRow csvRow)
@@ -79,6 +86,20 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             return result;
         }
 
+        private JObject MapToJsonObjectForDeleteById(IReadOnlyList<DataMapper> nodes, CsvRow csvRow)
+        {
+            var result = new JObject();
+
+            foreach (var node in nodes)
+            {
+                var rawValue = RawValue(node, csvRow);
+
+                result.Add(new JProperty("Id", rawValue));
+            }
+
+            return result;
+        }
+        
         private JArray MapToJsonArray(ResourceMetadata arrayItemMetadata, IReadOnlyList<DataMapper> nodes, CsvRow csvRow)
         {
             var result = new JArray();

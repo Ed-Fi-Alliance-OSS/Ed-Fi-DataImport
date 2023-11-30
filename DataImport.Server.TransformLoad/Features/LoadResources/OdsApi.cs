@@ -20,6 +20,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
     {
         Task<OdsResponse> PostBootstrapData(string endpointUrl, string dataToInsert);
         Task<OdsResponse> Post(string content, string endpointUrl, string postInfo = null);
+        Task<OdsResponse> Delete(string id, string endpointUrl);
         ApiConfig Config { get; set; }
     }
 
@@ -162,6 +163,36 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     AuthenticatedHttpClient = new Lazy<HttpClient>(CreateAuthenticatedHttpClient);
                     _logger.LogWarning("POST failed. Reason: {reason}. StatusCode: {status}.", response.ReasonPhrase, response.StatusCode);
                     _logger.LogInformation("Refreshing token and retrying POST request for {info}.", postInfo);
+                }
+                else
+                    break;
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            return new OdsResponse(response.StatusCode, responseContent);
+        }
+
+        public async Task<OdsResponse> Delete(string id, string endpointUrl)
+        {
+            await Authenticate();
+
+            const int RetryAttempts = 3;
+            var currentAttempt = 0;
+            HttpResponseMessage response = null;
+
+            while (RetryAttempts > currentAttempt)
+            {
+                response = await AuthenticatedHttpClient.Value.DeleteAsync($"{endpointUrl}/{id}");
+                currentAttempt++;
+
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    AccessToken = null;
+                    await Authenticate();
+                    AuthenticatedHttpClient = new Lazy<HttpClient>(CreateAuthenticatedHttpClient);
+                    _logger.LogWarning("DELETE failed. Reason: {reason}. StatusCode: {status}.", response.ReasonPhrase, response.StatusCode);
+                    _logger.LogInformation("Refreshing token and retrying DELETE request for {id}.", id);
                 }
                 else
                     break;

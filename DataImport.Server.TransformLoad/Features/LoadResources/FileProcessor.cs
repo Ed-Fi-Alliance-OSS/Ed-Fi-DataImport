@@ -21,6 +21,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using static System.Environment;
 using File = DataImport.Models.File;
 using LogLevels = DataImport.Common.Enums.LogLevel;
@@ -149,7 +150,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
 
                             UpdateStatus(file.Id, FileStatus.Transforming);
 
-                            await TransformAndPostEachRowUsingDataMap(file, dataMap, request.OdsApi, agent);
+                            await TransformAndProcessEachRowUsingDataMap(file, dataMap, request.OdsApi, agent);
                         }
                     }
 
@@ -170,7 +171,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
             }
 
-            private async Task TransformAndPostEachRowUsingDataMap(File file, DataMap dataMap, IOdsApi odsApi, Agent agent)
+            private async Task TransformAndProcessEachRowUsingDataMap(File file, DataMap dataMap, IOdsApi odsApi, Agent agent)
             {
                 string tempCsvFilePath = null;
                 var successCount = 0;
@@ -191,7 +192,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                             ValidateHeadersAndLookUps(file, dataMap, row.Content.Keys);
 
                         _logger.LogDebug("Transforming {path} row {row}", dataMap.ResourcePath, row.Number);
-                        var (rowPostResponse, log) = await MapAndPostCsvRow(odsApi, row.Content, dataMap, row.Number, file);
+                        var (rowPostResponse, log) = await MapAndProcessCsvRow(odsApi, row.Content, dataMap, row.Number, file);
 
                         if (log != null && _ingestionLogLevels.Contains(log.Level))
                             WriteLog(log);
@@ -348,7 +349,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
             }
 
-            private Task<(RowResult, IngestionLogMarker)> MapAndPostCsvRow(IOdsApi odsApi, Dictionary<string, string> currentRow, DataMap map, int rowNum, File file)
+            private Task<(RowResult, IngestionLogMarker)> MapAndProcessCsvRow(IOdsApi odsApi, Dictionary<string, string> currentRow, DataMap map, int rowNum, File file)
             {
                 MappedResource mappedRow = null;
 
@@ -375,14 +376,18 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
 
                 return mappedRow == null
                     ? Task.FromResult((RowResult.Error, (IngestionLogMarker) null))
-                    : PostMappedRow(odsApi, mappedRow, map.ResourcePath);
+                    : map.IsDeleteOperation
+                        ? DeleteMappedRow(odsApi, mappedRow, map.ResourcePath)
+                        : PostMappedRow(odsApi, mappedRow, map.ResourcePath);
             }
 
             private MappedResource TransformCsvRow(DataMap dataMap, Dictionary<string, string> currentRow, int rowNum, File file)
             {
                 var resourceMapper = new ResourceMapper(_logger, dataMap, _mappingLookups);
 
-                var mappedRowJson = resourceMapper.ApplyMap(currentRow);
+                var mappedRowJson = dataMap.IsDeleteOperation
+                    ? resourceMapper.ApplyMapForDeleteByIdOperation(currentRow)
+                    : resourceMapper.ApplyMap(currentRow);
 
                 return new MappedResource
                 {
@@ -400,9 +405,9 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
 
             private async Task<(RowResult Error, IngestionLogMarker)> PostMappedRow(IOdsApi odsApi, MappedResource mappedRow, string resourcePath)
             {
-                var endpointUrl = $"{odsApi.Config.ApiUrl}{resourcePath}";
+                var endpointUrl = $"{odsApi.Config.ApiUrl.TrimEnd('/')}{resourcePath}";
 
-                if (RowHasAlreadyBeenPosted(mappedRow, endpointUrl))
+                if (RowHasAlreadyBeenProcessed(mappedRow, endpointUrl))
                     return (RowResult.Duplicate, null);
 
                 var postInfo = $"{mappedRow.ResourcePath} row {mappedRow.RowNumber}";
@@ -432,7 +437,39 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
             }
 
-            private bool RowHasAlreadyBeenPosted(MappedResource mappedResource, string endPoint)
+            private async Task<(RowResult Error, IngestionLogMarker)> DeleteMappedRow(IOdsApi odsApi, MappedResource mappedRow, string resourcePath)
+            {
+                var endpointUrl = $"{odsApi.Config.ApiUrl.TrimEnd('/')}{resourcePath}";
+
+                if (RowHasAlreadyBeenProcessed(mappedRow, endpointUrl))
+                    return (RowResult.Duplicate, null);
+
+                _logger.LogDebug("Deleting {id}", mappedRow.Value.ToString());
+
+                OdsResponse odsResponse;
+                try
+                {
+                    var id = mappedRow.Value.SelectToken("Id").Value<string>();
+
+                    odsResponse = await odsApi.Delete(id, endpointUrl);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "POST failed for resource: {url}, Row Number: {row}", endpointUrl, mappedRow.RowNumber);
+                    return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl));
+                }
+
+                switch (odsResponse.StatusCode)
+                {
+                    case HttpStatusCode.NoContent:
+                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
+                    default:
+                        _logger.LogError($"DELETE returned unexpected HTTP status: {endpointUrl}, Row Number: {mappedRow.RowNumber}, Status: {odsResponse.StatusCode}, Error: {odsResponse.Content}");
+                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, odsResponse.StatusCode, odsResponse.Content));
+                }
+            }
+
+            private bool RowHasAlreadyBeenProcessed(MappedResource mappedResource, string endPoint)
             {
                 var strBuilder = new StringBuilder();
                 strBuilder.AppendLine("Endpoint: " + endPoint);

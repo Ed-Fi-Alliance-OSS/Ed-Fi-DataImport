@@ -22,6 +22,11 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
 
         public List<SimulatedPost> PostedBootstrapData { get; }
 
+        public Task<OdsResponse> Delete(string id, string endpointUrl)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public ApiConfig Config { get; set; } = new ApiConfig
         { ApiUrl = "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019" };
 

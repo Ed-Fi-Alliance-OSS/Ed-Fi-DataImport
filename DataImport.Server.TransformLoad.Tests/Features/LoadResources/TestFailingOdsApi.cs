@@ -14,6 +14,11 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
     {
         public static string ConfigUrlDefault = "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019";
 
+        public Task<OdsResponse> Delete(string id, string endpointUrl)
+        {
+            throw new NotImplementedException();
+        }
+
         public ApiConfig Config { get; set; } = new ApiConfig
         { ApiUrl = ConfigUrlDefault };
 
