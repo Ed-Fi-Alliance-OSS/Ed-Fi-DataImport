@@ -185,6 +185,11 @@ See the LICENSE and NOTICES files in the project root for more information.
     </fieldset>
 }
 
+<div id="delete-operation-warning" class="alert alert-warning @(Model.IsDeleteOperation ? "" : "hidden")">
+    <h4>Delete by Id</h4>
+    <p>This data map will delete the rows from the selected ODS / API instance based on the unique identifier given in the selected resource as selected above. It will perform a lookup by these values, and then send a DELETE command to the ODS API to remove the data from the instance. Please use this function with caution and ensure any critical data is backed up before using this feature. </p>
+</div>
+
 @if (Model.PreprocessorLogMessages?.Count > 0)
 {
     <div id="preprocessorLogs">
@@ -401,6 +406,10 @@ See the LICENSE and NOTICES files in the project root for more information.
                 clearDataMapping();
                 invalidateAPIConnectionVisibility();
                 refreshAttributeVisibility();
+            });
+
+            $isDeleteOperationElem.change(function() {
+                $('#delete-operation-warning').toggleClass('hidden', $isDeleteOperationElem.is(":checked")===false)
             });
 
             $apiVersionIdElem.change(function() {
