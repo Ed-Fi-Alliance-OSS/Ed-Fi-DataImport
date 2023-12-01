@@ -41,8 +41,9 @@ namespace DataImport.Models
 
         public string Serialize(DataMapper[] mappings, bool isDeleteByIdOperation)
         {
-            return isDeleteByIdOperation ? SerializeResourceIdForDeleteObject(mappings.Single()).ToString(Formatting.Indented) :
-                    SerializeObject(_resourceMetadatas, mappings).ToString(Formatting.Indented);
+            return isDeleteByIdOperation
+                ? SerializeObjectForDeleteById(mappings.Single()).ToString(Formatting.Indented)
+                : SerializeObject(_resourceMetadatas, mappings).ToString(Formatting.Indented);
         }
 
         public DataMapper[] Deserialize(string jsonMap, bool isDeleteByIdOperation)
@@ -66,7 +67,9 @@ namespace DataImport.Models
 
         public DataMapper[] Deserialize(JObject jsonMap, bool isDeleteByIdOperation)
         {
-            return !isDeleteByIdOperation ? DeserializeObject(_resourceMetadatas, jsonMap).ToArray() : DeserializeForDeleteObject(jsonMap).ToArray();
+            return isDeleteByIdOperation
+                ? DeserializeObjectForDeleteById(jsonMap).ToArray()
+                : DeserializeObject(_resourceMetadatas, jsonMap).ToArray();
         }
 
         private JObject SerializeObject(IReadOnlyList<ResourceMetadata> nodeMetadatas, IReadOnlyList<DataMapper> nodes)
@@ -126,7 +129,7 @@ namespace DataImport.Models
             return result;
         }
 
-        private JObject SerializeResourceIdForDeleteObject(DataMapper node)
+        private JObject SerializeObjectForDeleteById(DataMapper node)
         {
             var result = new JObject { new JProperty("Id", new JObject { new JProperty("Column", node.SourceColumn) }) };
             return result;
@@ -220,7 +223,7 @@ namespace DataImport.Models
             return result;
         }
 
-        private List<DataMapper> DeserializeForDeleteObject(JToken objectToken)
+        private List<DataMapper> DeserializeObjectForDeleteById(JToken objectToken)
         {
             var jobject = objectToken as JObject;
 
@@ -234,7 +237,7 @@ namespace DataImport.Models
 
             var nodes = jobject.Children().Cast<JProperty>().ToArray();
 
-            var node = nodes.SingleOrDefault(n => n.Name == "Id");
+            var node = nodes.Single(n => n.Name == "Id");
 
             var propertyValue = node.Children().Single();
 
