@@ -4,6 +4,7 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
+using System.Linq;
 using NUnit.Framework;
 using DataImport.TestHelpers;
 using Newtonsoft.Json;
@@ -137,6 +138,26 @@ namespace DataImport.Models.Tests
 
             SerializeNormalMap(_resourceMetadata, mappings).ShouldMatch(jsonMap);
             DeserializeNormalMap(_resourceMetadata, jsonMap).ShouldMatch(mappings);
+        }
+
+        [Test]
+        public void ShouldSerializeAndDeserializeJsonMapRepresentationOfDeleteByIdMappings()
+        {
+            //Deleting by Id is a unique case where the mapping will always be between exactly one source column
+            //and a property always called 'Id' which is not part of the underlying metadata.
+            var mappings = new[]
+            {
+                MapColumn("propertyB", "ColumnB"),
+            };
+
+            var jsonMap = @"{
+                    ""Id"": {
+                        ""Column"": ""ColumnB""
+                    }
+                }";
+
+            SerializeDeleteByIdMap(_resourceMetadata, mappings).ShouldMatch(jsonMap);
+            DeserializeDeleteByIdMap(_resourceMetadata, jsonMap).Single().SourceColumn.ShouldMatch(mappings.Single().SourceColumn);
         }
 
         [Test]
@@ -427,6 +448,23 @@ namespace DataImport.Models.Tests
                 }";
 
             DeserializeNormalMap(_resourceMetadata, JObject.Parse(jsonMap)).ShouldMatch(mappings);
+        }
+
+        [Test]
+        public void ShouldDeserializeFromPreviouslyParsedDeleteByIdJObject()
+        {
+            var mappings = new[]
+            {
+                MapColumn("propertyB", "ColumnB")
+            };
+
+            var jsonMap = @"{
+                    ""Id"": {
+                        ""Column"": ""ColumnB""
+                    }
+                }";
+
+            DeserializeDeleteByIdMap(_resourceMetadata, JObject.Parse(jsonMap)).Single().SourceColumn.ShouldMatch(mappings.Single().SourceColumn);
         }
 
         [Test]
@@ -1002,6 +1040,13 @@ namespace DataImport.Models.Tests
             return JToken.Parse(dataMapSerializer.Serialize(mappings, false));
         }
 
+        private static JToken SerializeDeleteByIdMap(ResourceMetadata[] resourceMetadata, DataMapper[] mappings)
+        {
+            var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
+
+            return JToken.Parse(dataMapSerializer.Serialize(mappings, true));
+        }
+
         private static DataMapper[] DeserializeNormalMap(ResourceMetadata[] resourceMetadata, string jsonMap)
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
@@ -1009,11 +1054,25 @@ namespace DataImport.Models.Tests
             return dataMapSerializer.Deserialize(jsonMap, false);
         }
 
+        private static DataMapper[] DeserializeDeleteByIdMap(ResourceMetadata[] resourceMetadata, string jsonMap)
+        {
+            var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
+
+            return dataMapSerializer.Deserialize(jsonMap, true);
+        }
+
         private static DataMapper[] DeserializeNormalMap(ResourceMetadata[] resourceMetadata, JObject jsonMap)
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
 
             return dataMapSerializer.Deserialize(jsonMap, false);
+        }
+
+        private static DataMapper[] DeserializeDeleteByIdMap(ResourceMetadata[] resourceMetadata, JObject jsonMap)
+        {
+            var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
+
+            return dataMapSerializer.Deserialize(jsonMap, true);
         }
     }
 }

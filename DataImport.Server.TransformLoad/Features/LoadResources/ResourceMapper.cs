@@ -99,7 +99,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
 
             return result;
         }
-        
+
         private JArray MapToJsonArray(ResourceMetadata arrayItemMetadata, IReadOnlyList<DataMapper> nodes, CsvRow csvRow)
         {
             var result = new JArray();
