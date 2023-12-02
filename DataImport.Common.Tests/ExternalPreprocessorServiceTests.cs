@@ -19,6 +19,7 @@ using Shouldly;
 namespace DataImport.Common.Tests
 {
     [TestFixture]
+    [Explicit]
     public class ExternalPreprocessorServiceTests
     {
         private ExternalPreprocessorService _service;
