@@ -40,7 +40,11 @@ namespace DataImport.Web.Helpers
                 }
                 catch (Exception ex)
                 {
+<<<<<<< HEAD
                     _logger.LogError(ex, "Cannot parse text as JSON.");
+=======
+                    _logger.LogError(ex,"Cannot parse text as JSON.");
+>>>>>>> d2b3417 (Fix param order)
                     return false;
                 }
             }
