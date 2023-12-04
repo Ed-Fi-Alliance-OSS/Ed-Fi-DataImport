@@ -3,13 +3,14 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+using System;
 using DataImport.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using static DataImport.Web.Tests.Testing;
 
@@ -32,9 +33,7 @@ namespace DataImport.Web.Tests
 
             using (var context = Testing.Services.GetRequiredService<SqlDataImportDbContext>())
             {
-                if (RunningUnderTeamCity())
-                    context.Database.EnsureDeleted();
-
+                context.Database.EnsureDeleted();
                 context.Database.Migrate();
             }
 
@@ -42,8 +41,5 @@ namespace DataImport.Web.Tests
 
             await ConfigureForOdsApiV311();
         }
-
-        private static bool RunningUnderTeamCity()
-            => Environment.GetEnvironmentVariable("TEAMCITY_PROJECT_NAME") != null;
     }
 }

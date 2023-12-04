@@ -43,7 +43,10 @@ namespace DataImport.Models.Tests
             // Migrations MUST run first, before any logging attempts,
             // so that database logging can be properly initialized.
             using (var context = new SqlDataImportDbContext(dbContextLogger, optionsBuilder.Options))
+            {
+                context.Database.EnsureDeleted();
                 context.Database.Migrate();
+            }
 
             logger.LogInformation("{assembly} Starting", Assembly.GetExecutingAssembly().GetName().Name);
         }
