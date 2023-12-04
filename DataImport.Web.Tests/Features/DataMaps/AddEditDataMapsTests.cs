@@ -140,7 +140,8 @@ namespace DataImport.Web.Tests.Features.DataMaps
                 ResourcePath = resource.Path,
                 MapName = mapName,
                 Mappings = mappings,
-                ColumnHeaders = addForm.ColumnHeaders
+                ColumnHeaders = addForm.ColumnHeaders,
+                IsDeleteOperation = addForm.IsDeleteOperation
             });
             response.AssertToast($"Data Map '{mapName}' was created.");
 
@@ -169,7 +170,77 @@ namespace DataImport.Web.Tests.Features.DataMaps
                 ApiVersionId = apiVersion.Id,
                 Preprocessors = editForm.Preprocessors,
                 PreprocessorLogMessages = editForm.PreprocessorLogMessages,
-                ApiServers = editForm.ApiServers
+                ApiServers = editForm.ApiServers,
+                IsDeleteOperation = editForm.IsDeleteOperation
+            });
+        }
+
+        [Test]
+        public async Task ShouldSuccessfullyAddDeleteByIdDataMap()
+        {
+            var resource = RandomResource();
+            var mapName = SampleString();
+            var mappings = (await TrivialMappings(resource)).Take(1).ToArray();
+            var apiVersion = Query(d => d.ApiVersions.Single(x => x.Id == resource.ApiVersionId));
+
+            var dataMapSerializer = new DataMapSerializer(resource);
+            var expectedJsonMap = dataMapSerializer.Serialize(mappings, true);
+            var sourceCsvHeaders = new[] { "ColA", "ColB", "ColC" };
+
+            var addForm = await Send(new AddDataMap.Query { SourceCsvHeaders = sourceCsvHeaders });
+            addForm.ColumnHeaders.ShouldMatch("ColA", "ColB", "ColC");
+            addForm.FieldsViewModel.DataSources.ShouldMatch(
+                new SelectListItem { Text = "Select Data Source", Value = "" },
+                new SelectListItem { Text = "column", Value = "column" },
+                new SelectListItem { Text = "lookup-table", Value = "lookup-table" },
+                new SelectListItem { Text = "static", Value = "static" });
+            addForm.FieldsViewModel.SourceTables.ShouldMatch(Query(DataMapperFields.MapLookupTablesToViewModel));
+            addForm.FieldsViewModel.SourceColumns.ShouldMatch(
+                new SelectListItem { Text = "Select Source Column", Value = "" },
+                new SelectListItem { Text = "ColA", Value = "ColA" },
+                new SelectListItem { Text = "ColB", Value = "ColB" },
+                new SelectListItem { Text = "ColC", Value = "ColC" });
+            addForm.FieldsViewModel.ResourceMetadata.ShouldBeEmpty();
+            addForm.FieldsViewModel.Mappings.ShouldBeEmpty();
+
+            var response = await Send(new AddDataMap.Command
+            {
+                ApiVersionId = resource.ApiVersionId,
+                ResourcePath = resource.Path,
+                MapName = mapName,
+                Mappings = mappings,
+                ColumnHeaders = addForm.ColumnHeaders,
+                IsDeleteOperation = true
+            });
+            response.AssertToast($"Data Map '{mapName}' was created.");
+
+            var actual = Query<DataMap>(response.DataMapId);
+            actual.Name.ShouldBe(mapName);
+            actual.ResourcePath.ShouldBe(resource.Path);
+            actual.Map.ShouldBe(expectedJsonMap);
+            actual.Metadata.ShouldBe(resource.Metadata);
+            actual.CreateDate.ShouldNotBe(null);
+            actual.UpdateDate.ShouldNotBe(null);
+            actual.ApiVersionId.ShouldBe(resource.ApiVersionId);
+
+            var editForm = await Send(new EditDataMap.Query { Id = response.DataMapId, SourceCsvHeaders = new string[] { } });
+
+            editForm.ShouldMatch(new AddEditDataMapViewModel
+            {
+                DataMapId = response.DataMapId,
+                ResourcePath = resource.Path,
+                ResourceName = resource.ToResourceName(),
+                MapName = mapName,
+                ColumnHeaders = sourceCsvHeaders,
+                FieldsViewModel = editForm.FieldsViewModel,
+                MetadataIsIncompatible = false,
+                ApiVersions = editForm.ApiVersions,
+                ApiVersion = apiVersion.Version,
+                ApiVersionId = apiVersion.Id,
+                Preprocessors = editForm.Preprocessors,
+                PreprocessorLogMessages = editForm.PreprocessorLogMessages,
+                ApiServers = editForm.ApiServers,
+                IsDeleteOperation = editForm.IsDeleteOperation
             });
         }
 
@@ -253,6 +324,92 @@ namespace DataImport.Web.Tests.Features.DataMaps
                     ApiServers = updatedEditForm.ApiServers,
                     PreprocessorLogMessages = updatedEditForm.PreprocessorLogMessages,
                     Preprocessors = updatedEditForm.Preprocessors
+                });
+            }
+        }
+
+        [Test]
+        public async Task ShouldSuccessfullyEditDeleteByIdDataMap()
+        {
+            // This test deals with editing an empty map to one with a single static
+            // mapped value, so the only usable resources for these tests are those
+            // which have at least one mappable property. That *should* be all resources,
+            // but the simplest way to find a field to map to is to search for resources
+            // with at least one top-level non-array / non-object property. Most resources
+            // do meet this requirement.
+
+            var apiVersion = GetDefaultApiVersion();
+
+            var usableResources = Query(x => x.Resources.Where(r => r.ApiVersionId == apiVersion.Id).ToArray())
+                .Where(x => ResourceMetadata.DeserializeFrom(x).Any(IsStaticMappable))
+                .ToArray();
+
+            usableResources.Length.ShouldBeGreaterThan(0);
+
+            foreach (var resource in usableResources)
+            {
+                var initialMapName = SampleString();
+                var updatedMapName = SampleString();
+                var initialMappings = (await TrivialMappings(resource)).Take(1).ToArray();
+                var updatedMappings = (await TrivialMappings(resource)).Take(1).ToArray();
+                
+                var columnHeaders = new[] { "ColA", "ColB", "ColC" };
+
+                var dataMapSerializer = new DataMapSerializer(resource);
+                var expectedJsonMap = dataMapSerializer.Serialize(updatedMappings, true);
+
+                var response = await Send(new AddDataMap.Command
+                {
+                    ApiVersionId = resource.ApiVersionId,
+                    ResourcePath = resource.Path,
+                    MapName = initialMapName,
+                    Mappings = initialMappings,
+                    ColumnHeaders = columnHeaders,
+                    IsDeleteOperation = true
+                });
+
+                var editForm = await Send(new EditDataMap.Query
+                { Id = response.DataMapId, SourceCsvHeaders = new string[] { } });
+
+                editForm.MapName = updatedMapName;
+
+                var toastResponse = await Send(new EditDataMap.Command
+                {
+                    DataMapId = response.DataMapId,
+                    MapName = editForm.MapName,
+                    Mappings = updatedMappings,
+                    ColumnHeaders = editForm.ColumnHeaders,
+                    IsDeleteOperation = editForm.IsDeleteOperation
+                });
+                toastResponse.AssertToast($"Data Map '{editForm.MapName}' was modified.");
+
+                var actual = Query<DataMap>(response.DataMapId);
+                actual.Name.ShouldBe(updatedMapName);
+                actual.ResourcePath.ShouldBe(resource.Path);
+                actual.Map.ShouldBe(expectedJsonMap);
+                actual.Metadata.ShouldBe(resource.Metadata);
+                actual.CreateDate.ShouldNotBe(null);
+                actual.UpdateDate.ShouldNotBe(null);
+                actual.IsDeleteOperation.ShouldBe(true);
+
+                var updatedEditForm = await Send(new EditDataMap.Query { Id = response.DataMapId, SourceCsvHeaders = new string[] { } });
+
+                updatedEditForm.ShouldMatch(new AddEditDataMapViewModel
+                {
+                    DataMapId = response.DataMapId,
+                    ResourcePath = resource.Path,
+                    ResourceName = resource.ToResourceName(),
+                    MapName = updatedMapName,
+                    ColumnHeaders = columnHeaders,
+                    FieldsViewModel = updatedEditForm.FieldsViewModel,
+                    MetadataIsIncompatible = false,
+                    ApiVersions = updatedEditForm.ApiVersions,
+                    ApiVersion = apiVersion.Version,
+                    ApiVersionId = apiVersion.Id,
+                    ApiServers = updatedEditForm.ApiServers,
+                    PreprocessorLogMessages = updatedEditForm.PreprocessorLogMessages,
+                    Preprocessors = updatedEditForm.Preprocessors,
+                    IsDeleteOperation = updatedEditForm.IsDeleteOperation
                 });
             }
         }
