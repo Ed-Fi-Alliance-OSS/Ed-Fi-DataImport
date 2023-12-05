@@ -33,8 +33,8 @@ namespace DataImport.Web.Tests
 
             using (var context = Testing.Services.GetRequiredService<SqlDataImportDbContext>())
             {
-                context.Database.EnsureDeleted();
-                context.Database.Migrate();
+                await context.Database.EnsureDeletedAsync();
+                await context.Database.MigrateAsync();
             }
 
             Log.Information(Assembly.GetExecutingAssembly().GetName().Name + " Starting");
