@@ -90,7 +90,7 @@ namespace DataImport.Common.Preprocessors
             {
                 using var process = Process.Start(startInfo);
 
-                var processName = process.ProcessName;
+                var processName = process.HasExited ? "Exited python process" : process.ProcessName;
                 _logger.LogInformation("External preprocess {ProcessName} started", processName);
 
                 process.OutputDataReceived += (_, e) => { WriteToCollection(e, outputLines); };
