@@ -93,6 +93,7 @@ namespace DataImport.Common.Tests
             var input = new MemoryStream();
 
             var exception = Should.Throw<ExternalPreprocessorException>(() => _service.ProcessStreamWithExternalProcess(_pythonExe, script, input));
+            exception.Message.ShouldContain("python");
             exception.Message.ShouldContain("non-zero exit code", Case.Insensitive);
             exception.Message.ShouldContain("1"); // exit code from script
         }
@@ -104,6 +105,7 @@ namespace DataImport.Common.Tests
             var input = new MemoryStream();
 
             var exception = Should.Throw<ExternalPreprocessorException>(() => _service.ProcessStreamWithExternalProcess(_pythonExe, script, input));
+            exception.Message.ShouldContain("python");
             var innerMessages = exception.InnerExceptions.Select(e => e.Message).ToList();
             innerMessages.ShouldContain("Start with an error");
             innerMessages.ShouldContain("Here's an in-between error");

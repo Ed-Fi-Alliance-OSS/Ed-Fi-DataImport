@@ -90,23 +90,17 @@ namespace DataImport.Common.Preprocessors
             {
                 using var process = Process.Start(startInfo);
 
-                process.OutputDataReceived += (_, e) =>
-                {
-                    WriteToCollection(e, outputLines);
-                };
+                var processName = process.HasExited ? "Exited python process" : process.ProcessName;
+                _logger.LogInformation("External preprocess {ProcessName} started", processName);
+
+                process.OutputDataReceived += (_, e) => { WriteToCollection(e, outputLines); };
                 process.BeginOutputReadLine();
-                process.ErrorDataReceived += (_, e) =>
-                {
-                    WriteToCollection(e, errors);
-                };
+                process.ErrorDataReceived += (_, e) => { WriteToCollection(e, errors); };
                 process.BeginErrorReadLine();
 
                 interact(process);
 
                 process.WaitForExit(_options.TimeOutInMilliseconds);
-
-                var processName = process.HasExited ? "Exited Process" : process.ProcessName;
-                _logger.LogInformation("External preprocess {ProcessName} started", processName);
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) //process properties after exit are only available on Windows
                 {
