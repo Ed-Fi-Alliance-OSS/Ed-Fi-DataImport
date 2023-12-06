@@ -124,7 +124,9 @@ namespace DataImport.Web.Features.DataMaps
                 {
                     Name = request.MapName,
                     ResourcePath = resource.Path,
-                    Map = dataMapSerializer.Serialize(request.Mappings, request.IsDeleteOperation),
+                    Map = request.IsDeleteOperation
+                    ? new DeleteDataMapSerializer().Serialize(request.Mappings)
+                    : new DataMapSerializer(resource).Serialize(request.Mappings),
                     Metadata = resource.Metadata,
                     CreateDate = DateTimeOffset.Now,
                     UpdateDate = DateTimeOffset.Now,

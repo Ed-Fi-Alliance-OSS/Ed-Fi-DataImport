@@ -115,7 +115,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
             var apiVersion = Query(d => d.ApiVersions.Single(x => x.Id == resource.ApiVersionId));
 
             var dataMapSerializer = new DataMapSerializer(resource);
-            var expectedJsonMap = dataMapSerializer.Serialize(mappings, false);
+            var expectedJsonMap = dataMapSerializer.Serialize(mappings);
             var sourceCsvHeaders = new[] { "ColA", "ColB", "ColC" };
 
             var addForm = await Send(new AddDataMap.Query { SourceCsvHeaders = sourceCsvHeaders });
@@ -183,8 +183,8 @@ namespace DataImport.Web.Tests.Features.DataMaps
             var mappings = (await TrivialMappings(resource)).Take(1).ToArray();
             var apiVersion = Query(d => d.ApiVersions.Single(x => x.Id == resource.ApiVersionId));
 
-            var dataMapSerializer = new DataMapSerializer(resource);
-            var expectedJsonMap = dataMapSerializer.Serialize(mappings, true);
+            var dataMapSerializer = new DeleteDataMapSerializer();
+            var expectedJsonMap = dataMapSerializer.Serialize(mappings);
             var sourceCsvHeaders = new[] { "ColA", "ColB", "ColC" };
 
             var addForm = await Send(new AddDataMap.Query { SourceCsvHeaders = sourceCsvHeaders });
@@ -274,7 +274,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
                 var columnHeaders = new[] { "ColA", "ColB", "ColC" };
 
                 var dataMapSerializer = new DataMapSerializer(resource);
-                var expectedJsonMap = dataMapSerializer.Serialize(updatedMappings, false);
+                var expectedJsonMap = dataMapSerializer.Serialize(updatedMappings);
 
                 var response = await Send(new AddDataMap.Command
                 {
@@ -352,11 +352,11 @@ namespace DataImport.Web.Tests.Features.DataMaps
                 var updatedMapName = SampleString();
                 var initialMappings = (await TrivialMappings(resource)).Take(1).ToArray();
                 var updatedMappings = (await TrivialMappings(resource)).Take(1).ToArray();
-                
+
                 var columnHeaders = new[] { "ColA", "ColB", "ColC" };
 
-                var dataMapSerializer = new DataMapSerializer(resource);
-                var expectedJsonMap = dataMapSerializer.Serialize(updatedMappings, true);
+                var dataMapSerializer = new DeleteDataMapSerializer();
+                var expectedJsonMap = dataMapSerializer.Serialize(updatedMappings);
 
                 var response = await Send(new AddDataMap.Command
                 {

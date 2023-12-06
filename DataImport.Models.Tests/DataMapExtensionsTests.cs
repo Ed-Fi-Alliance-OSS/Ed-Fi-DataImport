@@ -61,7 +61,7 @@ namespace DataImport.Models.Tests
             };
 
             var dataMapSerializer = new DataMapSerializer(_dataMap);
-            _dataMap.Map = dataMapSerializer.Serialize(mappings, false);
+            _dataMap.Map = dataMapSerializer.Serialize(mappings);
         }
 
         [Test]

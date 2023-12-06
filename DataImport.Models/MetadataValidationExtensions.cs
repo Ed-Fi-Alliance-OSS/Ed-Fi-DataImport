@@ -50,12 +50,12 @@ namespace DataImport.Models
             try
             {
                 var serializer = new DataMapSerializer(resource);
-                var deserialized = serializer.Deserialize(jsonMap, false);
+                var deserialized = serializer.Deserialize(jsonMap);
 
                 if (level == MetadataCompatibilityLevel.Bootstrap && deserialized.ReferencedColumns().Any())
                     throw new Exception("Bootstrap JSON cannot include column references.");
 
-                serializer.Serialize(deserialized, false);
+                serializer.Serialize(deserialized);
                 exceptionMessage = null;
                 return true;
             }

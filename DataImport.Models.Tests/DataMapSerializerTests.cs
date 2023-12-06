@@ -156,7 +156,7 @@ namespace DataImport.Models.Tests
                     }
                 }";
 
-            SerializeDeleteByIdMap(_resourceMetadata, mappings).ShouldMatch(jsonMap);
+            SerializeDeleteByIdMap(mappings).ShouldMatch(jsonMap);
             DeserializeDeleteByIdMap(_resourceMetadata, jsonMap).Single().SourceColumn.ShouldMatch(mappings.Single().SourceColumn);
         }
 
@@ -464,7 +464,7 @@ namespace DataImport.Models.Tests
                     }
                 }";
 
-            DeserializeDeleteByIdMap(_resourceMetadata, JObject.Parse(jsonMap)).Single().SourceColumn.ShouldMatch(mappings.Single().SourceColumn);
+            DeserializeDeleteByIdMap(JObject.Parse(jsonMap)).Single().SourceColumn.ShouldMatch(mappings.Single().SourceColumn);
         }
 
         [Test]
@@ -1037,42 +1037,42 @@ namespace DataImport.Models.Tests
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
 
-            return JToken.Parse(dataMapSerializer.Serialize(mappings, false));
+            return JToken.Parse(dataMapSerializer.Serialize(mappings));
         }
 
-        private static JToken SerializeDeleteByIdMap(ResourceMetadata[] resourceMetadata, DataMapper[] mappings)
+        private static JToken SerializeDeleteByIdMap(DataMapper[] mappings)
         {
-            var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
+            var dataMapDeleteSerializer = new DeleteDataMapSerializer();
 
-            return JToken.Parse(dataMapSerializer.Serialize(mappings, true));
+            return JToken.Parse(dataMapDeleteSerializer.Serialize(mappings));
         }
 
         private static DataMapper[] DeserializeNormalMap(ResourceMetadata[] resourceMetadata, string jsonMap)
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
 
-            return dataMapSerializer.Deserialize(jsonMap, false);
+            return dataMapSerializer.Deserialize(jsonMap);
         }
 
         private static DataMapper[] DeserializeDeleteByIdMap(ResourceMetadata[] resourceMetadata, string jsonMap)
         {
-            var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
+            var dataMapSerializer = new DeleteDataMapSerializer();
 
-            return dataMapSerializer.Deserialize(jsonMap, true);
+            return dataMapSerializer.Deserialize(jsonMap);
         }
 
         private static DataMapper[] DeserializeNormalMap(ResourceMetadata[] resourceMetadata, JObject jsonMap)
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
 
-            return dataMapSerializer.Deserialize(jsonMap, false);
+            return dataMapSerializer.Deserialize(jsonMap);
         }
 
-        private static DataMapper[] DeserializeDeleteByIdMap(ResourceMetadata[] resourceMetadata, JObject jsonMap)
+        private static DataMapper[] DeserializeDeleteByIdMap(JObject jsonMap)
         {
-            var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
+            var dataMapSerializer = new DeleteDataMapSerializer();
 
-            return dataMapSerializer.Deserialize(jsonMap, true);
+            return dataMapSerializer.Deserialize(jsonMap);
         }
     }
 }

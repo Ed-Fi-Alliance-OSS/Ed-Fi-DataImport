@@ -49,8 +49,6 @@ namespace DataImport.Web.Features.DataMaps
 
                 var resourceMetadata = ResourceMetadata.DeserializeFrom(dataMap);
 
-                var dataMapSerializer = new DataMapSerializer(dataMap);
-
                 return new AddEditDataMapViewModel
                 {
                     DataMapId = mapId,
@@ -61,7 +59,9 @@ namespace DataImport.Web.Features.DataMaps
                         SourceTables = DataMapperFields.MapLookupTablesToViewModel(_database),
                         SourceColumns = DataMapperFields.MapCsvHeadersToSourceColumns(columnHeaders),
                         ResourceMetadata = resourceMetadata,
-                        Mappings = dataMapSerializer.Deserialize(dataMap.Map, dataMap.IsDeleteOperation)
+                        Mappings = dataMap.IsDeleteOperation
+                        ? new DeleteDataMapSerializer().Deserialize(dataMap.Map)
+                        : new DataMapSerializer(dataMap).Deserialize(dataMap.Map),
                     },
 
                     MapName = dataMap.Name,
@@ -135,10 +135,10 @@ namespace DataImport.Web.Features.DataMaps
             {
                 var map = _dataImportDbContext.DataMaps.FirstOrDefault(x => x.Id == request.DataMapId) ?? new DataMap();
 
-                var dataMapSerializer = new DataMapSerializer(map);
-
                 map.Name = request.MapName;
-                map.Map = dataMapSerializer.Serialize(request.Mappings, request.IsDeleteOperation);
+                map.Map = request.IsDeleteOperation
+                ? new DeleteDataMapSerializer().Serialize(request.Mappings)
+                : new DataMapSerializer(map).Serialize(request.Mappings);
                 map.ColumnHeaders = JsonConvert.SerializeObject(request.ColumnHeaders);
                 map.UpdateDate = DateTimeOffset.Now;
                 map.FileProcessorScriptId = request.PreprocessorId;

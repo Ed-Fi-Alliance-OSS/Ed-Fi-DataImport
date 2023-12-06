@@ -34,7 +34,7 @@ namespace DataImport.Models
         private static DataMapper[] Mappings(DataMap dataMap)
         {
             var dataMapSerializer = new DataMapSerializer(dataMap);
-            return dataMapSerializer.Deserialize(dataMap.Map, false);
+            return dataMapSerializer.Deserialize(dataMap.Map);
         }
 
         private static IEnumerable<string> Yield(this IEnumerable<DataMapper> mappings, Func<DataMapper, string> propertyAccessor)

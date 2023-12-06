@@ -116,7 +116,7 @@ namespace DataImport.Web.Features.Share
                 MapName = Name,
                 ResourcePath = ResourcePath,
                 ColumnHeaders = ColumnHeaders,
-                Mappings = serializer.Deserialize(Map, false),
+                Mappings = serializer.Deserialize(Map),
                 ApiVersionId = resource.ApiVersionId,
                 PreprocessorId = preprocessorId,
                 Attribute = Attribute
