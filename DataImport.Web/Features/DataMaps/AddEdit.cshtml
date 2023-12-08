@@ -104,7 +104,8 @@ See the LICENSE and NOTICES files in the project root for more information.
         @Html.HiddenFor(m => m.ApiVersionId)
         @Html.Display(m => m.ApiVersion)
         @Html.Display(m => m.ResourceName)
-        @Html.HiddenFor(m => m.ResourcePath) 
+        @Html.HiddenFor(m => m.ResourcePath)
+        @Html.HiddenFor(m => m.IsDeleteOperation)
     }
 
     <div class="form-group">
