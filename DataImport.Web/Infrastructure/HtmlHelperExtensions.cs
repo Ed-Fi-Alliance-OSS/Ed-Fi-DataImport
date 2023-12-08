@@ -101,14 +101,9 @@ namespace DataImport.Web.Infrastructure
             var inputDiv = new TagBuilder("div");
             inputDiv.AddCssClass("col-sm-offset-2 col-sm-10");
 
-            if (isDisabled)
-            {
-                inputDiv.InnerHtml.AppendHtml(html.CheckBoxFor(expression, new { disabled = "disabled"}));
-            }
-            else
-            {
-                inputDiv.InnerHtml.AppendHtml(html.CheckBoxFor(expression));
-            }
+            inputDiv.InnerHtml.AppendHtml(isDisabled
+                ? html.CheckBoxFor(expression, new { disabled = "disabled" })
+                : html.CheckBoxFor(expression));
             inputDiv.InnerHtml.AppendHtml(" ");
             inputDiv.InnerHtml.AppendHtml(html.LabelFor(expression));
 

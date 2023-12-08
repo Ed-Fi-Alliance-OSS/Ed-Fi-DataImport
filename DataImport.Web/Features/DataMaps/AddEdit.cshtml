@@ -134,7 +134,7 @@ See the LICENSE and NOTICES files in the project root for more information.
     }
     else
     {
-        <div class = "form-group">
+        <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <label>This is an INSERT/UPDATE map</label>
             </div>
@@ -421,7 +421,7 @@ See the LICENSE and NOTICES files in the project root for more information.
             });
 
             $isDeleteOperationElem.change(function() {
-                $('#delete-operation-warning').toggleClass('hidden', $isDeleteOperationElem.is(":checked")===false)
+                $('#delete-operation-warning').toggleClass('hidden', $isDeleteOperationElem.is(":checked")===false);
                 clearColumnsMetadata();
                 clearDataMapping();
                 invalidateAPIConnectionVisibility();
@@ -622,6 +622,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 
             function clearDataMapping() {
                 $('#divModelFields').html('');
+                $('#divCSVFields').html('');
                 $('#divCSVFields').html('');
                 refreshAllControlVisibility();
                 $('#btnSubmit').hide();
