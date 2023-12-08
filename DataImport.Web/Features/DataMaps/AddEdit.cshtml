@@ -127,7 +127,18 @@ See the LICENSE and NOTICES files in the project root for more information.
         </div>
     </div>
 
-    @Html.Input(m => m.IsDeleteOperation)
+    if (ControllerAction(Context.Request.RouteValues) == "Add" || Model.IsDeleteOperation)
+    {
+        @Html.Input(m => m.IsDeleteOperation, ControllerAction(Context.Request.RouteValues) == "Edit")
+    }
+    else
+    {
+        <div class = "form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <label>This is an INSERT/UPDATE map</label>
+            </div>
+        </div>
+    }
 
     <fieldset>
         <div id="attributeContainer" style="display:none;">
@@ -410,6 +421,10 @@ See the LICENSE and NOTICES files in the project root for more information.
 
             $isDeleteOperationElem.change(function() {
                 $('#delete-operation-warning').toggleClass('hidden', $isDeleteOperationElem.is(":checked")===false)
+                clearColumnsMetadata();
+                clearDataMapping();
+                invalidateAPIConnectionVisibility();
+                refreshAttributeVisibility();
             });
 
             $apiVersionIdElem.change(function() {
@@ -606,6 +621,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 
             function clearDataMapping() {
                 $('#divModelFields').html('');
+                $('#divCSVFields').html('');
                 refreshAllControlVisibility();
                 $('#btnSubmit').hide();
             }
