@@ -141,7 +141,7 @@ namespace DataImport.Web.Features.DataMaps
         }
 
         [HttpPost]
-        public async Task<ActionResult> UploadFile(IFormFile uploadSampleFile, int dataMapId, int? preprocessorId, string mapName, int? apiVersionId, string resourcePath, int? apiServerId, string attribute, bool isDeleteOperation)
+        public async Task<ActionResult> UploadFile(IFormFile uploadSampleFile, int dataMapId, int? preprocessorId, string mapName, int? apiVersionId, string resourcePath, int? apiServerId, string attribute, bool isDeleteOperation, bool isDeleteByNaturalKey)
         {
             var csvData = await _mediator.Send(new UploadCsvFile.Command { FileBase = uploadSampleFile, PreprocessorId = preprocessorId, ApiServerId = apiServerId, Attribute = attribute });
 
@@ -158,7 +158,8 @@ namespace DataImport.Web.Features.DataMaps
                 PreprocessorLogMessages = csvData.PreprocessorLogMessages,
                 CsvError = csvData.CsvError,
                 Attribute = attribute,
-                IsDeleteOperation = isDeleteOperation
+                IsDeleteOperation = isDeleteOperation,
+                IsDeleteByNaturalKey = isDeleteByNaturalKey
             };
 
             return dataMapId == 0
@@ -180,6 +181,7 @@ namespace DataImport.Web.Features.DataMaps
                 viewModel.Attribute = tempViewModel.Attribute;
                 viewModel.CsvError = tempViewModel.CsvError;
                 viewModel.IsDeleteOperation = tempViewModel.IsDeleteOperation;
+                viewModel.IsDeleteByNaturalKey = tempViewModel.IsDeleteByNaturalKey;
             }
         }
     }

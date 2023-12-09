@@ -70,6 +70,7 @@ namespace DataImport.Web.Features.DataMaps
             public int? PreprocessorId { get; set; }
             public string Attribute { get; set; }
             public bool IsDeleteOperation { get; set; }
+            public bool IsDeleteByNaturalKey { get; set; }
         }
 
         public class Response : ToastResponse
@@ -118,8 +119,6 @@ namespace DataImport.Web.Features.DataMaps
             {
                 var resource = _database.Resources.Single(x => x.Path == request.ResourcePath && x.ApiVersionId == request.ApiVersionId);
 
-                var dataMapSerializer = new DataMapSerializer(resource);
-
                 var dataMap = new DataMap
                 {
                     Name = request.MapName,
@@ -137,7 +136,8 @@ namespace DataImport.Web.Features.DataMaps
                     ApiVersionId = request.ApiVersionId,
                     FileProcessorScriptId = request.PreprocessorId,
                     Attribute = request.Attribute,
-                    IsDeleteOperation = request.IsDeleteOperation
+                    IsDeleteOperation = request.IsDeleteOperation,
+                    IsDeleteByNaturalKey = request.IsDeleteOperation && request.IsDeleteByNaturalKey
                 };
 
                 _database.DataMaps.Add(dataMap);

@@ -54,5 +54,7 @@ namespace DataImport.Web.Features.DataMaps
 
         [Display(Name = "This is a DELETE Map")]
         public bool IsDeleteOperation { get; set; }
+
+        public bool IsDeleteByNaturalKey { get; set; }
     }
 }
