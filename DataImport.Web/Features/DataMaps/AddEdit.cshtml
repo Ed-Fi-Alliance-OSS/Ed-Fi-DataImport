@@ -224,7 +224,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 
 <div id="delete-operation-warning-by-key" class="alert alert-warning @(Model.IsDeleteOperation && Model.IsDeleteByNaturalKey ? "" : "hidden")">
     <h4>Delete by Natural Key</h4>
-    <p>Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. Words. </p>
+    <p>This data map type will delete rows of data from the selected ODS / API instance based on the required fields, or natural keys, given the selected resource as selected above. It will perform a lookup by these values, then send a DELETE command to the ODS API to remove data from the instance. Please use this function with caution and ensure any critical data is backed up before using this feature. </p>
 </div>
 
 @if (Model.PreprocessorLogMessages?.Count > 0)
@@ -301,13 +301,13 @@ See the LICENSE and NOTICES files in the project root for more information.
     {
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                @if (!Model.IsDeleteOperation)
+                @if (Model.IsDeleteOperation && !Model.IsDeleteByNaturalKey)
                 {
                     <div id="divCSVFields">
                         @Html.Label("CSV Fields")
                     </div>
                     <div id="divModelFields" style="padding: 10px;">
-                        @await Html.PartialAsync("_PartialDataMapperFields", Model.FieldsViewModel)
+                        @await Html.PartialAsync("_PartialDataMapperDeleteByIdFields", Model.FieldsViewModel)
                     </div>
                                                             
                 }
@@ -317,7 +317,7 @@ See the LICENSE and NOTICES files in the project root for more information.
                         @Html.Label("CSV Fields")
                     </div>
                     <div id="divModelFields" style="padding: 10px;">
-                        @await Html.PartialAsync("_PartialDataMapperDeleteByIdFields", Model.FieldsViewModel)
+                        @await Html.PartialAsync("_PartialDataMapperFields", Model.FieldsViewModel)
                     </div>
                 }
         @Html.Hidden("ColumnHeaders", JsonConvert.SerializeObject(Model.ColumnHeaders))
