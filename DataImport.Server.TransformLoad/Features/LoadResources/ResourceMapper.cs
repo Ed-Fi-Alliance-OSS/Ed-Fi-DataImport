@@ -23,7 +23,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             _logger = logger;
 
             _mappings = dataMap.IsDeleteOperation
-                ? new DeleteDataMapSerializer().Deserialize(dataMap.Map)
+                ? new DeleteDataMapSerializer(dataMap).Deserialize(dataMap.Map)
                 : new DataMapSerializer(dataMap).Deserialize(dataMap.Map);
             _resourceMetadata = ResourceMetadata.DeserializeFrom(dataMap);
             _mappingLookups = mappingLookups;

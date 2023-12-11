@@ -1056,7 +1056,7 @@ namespace DataImport.Models.Tests
 
         private static DataMapper[] DeserializeDeleteByIdMap(ResourceMetadata[] resourceMetadata, string jsonMap)
         {
-            var dataMapSerializer = new DeleteDataMapSerializer();
+            var dataMapSerializer = new DeleteDataMapSerializer("/testResource", resourceMetadata);
 
             return dataMapSerializer.Deserialize(jsonMap);
         }
