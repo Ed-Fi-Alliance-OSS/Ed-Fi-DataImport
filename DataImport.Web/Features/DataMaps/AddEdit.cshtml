@@ -105,6 +105,7 @@ See the LICENSE and NOTICES files in the project root for more information.
         @Html.Display(m => m.ApiVersion)
         @Html.Display(m => m.ResourceName)
         @Html.HiddenFor(m => m.ResourcePath)
+        @Html.HiddenFor(m => m.IsDeleteOperation)
     }
 
     <div class="form-group">
@@ -304,7 +305,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 
             var $apiVersionIdElem = $('#@Html.IdFor(m => m.ApiVersionId)');
             var $resourcePathElem = $('#@Html.IdFor(m => m.ResourcePath)');
-            var $isDeleteOperationElem = $('#@Html.IdFor(m => m.IsDeleteOperation)');
+            var $isDeleteOperationElem = $('input:checkbox, #@Html.IdFor(m => m.IsDeleteOperation)');
 
             refreshResourcePathVisibility();
             refreshAllControlVisibility();
@@ -384,7 +385,7 @@ See the LICENSE and NOTICES files in the project root for more information.
                     {
                         @: var resourcePath = emptyToNull($("#ResourcePath").val());
                     }
-
+                    
                     var dataObject = {
                         apiVersionId: $apiVersionIdElem.val(),
                         dataMapId: $('#@Html.IdFor(m => m.DataMapId)').val(),
@@ -393,7 +394,7 @@ See the LICENSE and NOTICES files in the project root for more information.
                         mappings: mappingJson,
                         preprocessorId: $('#@Html.IdFor(m => m.PreprocessorId)').val(),
                         attribute: $('#@Html.IdFor(m => m.Attribute)').val(),
-                        isDeleteOperation: $('#@Html.IdFor(m => m.IsDeleteOperation)').is(":checked"),
+                        isDeleteOperation: $('input:checkbox, #@Html.IdFor(m => m.IsDeleteOperation)').is(":checked"),
                         columnHeaders: JSON.parse($('#@Html.IdFor(m => m.ColumnHeaders)').val())
                     };
                     $.ajax({
