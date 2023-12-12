@@ -14,11 +14,6 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
     {
         public static string ConfigUrlDefault = "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019";
 
-        public Task<OdsResponse> Delete(string id, string endpointUrl)
-        {
-            throw new NotImplementedException();
-        }
-
         public ApiConfig Config { get; set; } = new ApiConfig
         { ApiUrl = ConfigUrlDefault };
 
@@ -28,6 +23,16 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
         }
 
         public Task<OdsResponse> Post(string content, string endpointUrl, string postInfo = null)
+        {
+            return Task.FromResult(new OdsResponse(HttpStatusCode.InternalServerError, "An expected error has occurred."));
+        }
+
+        public Task<OdsResponse> Delete(string id, string endpointUrl)
+        {
+            return Task.FromResult(new OdsResponse(HttpStatusCode.InternalServerError, "An expected error has occurred."));
+        }
+
+        public Task<OdsResponse> PostAndDelete(string content, string endpointUrl, string postInfo = null)
         {
             return Task.FromResult(new OdsResponse(HttpStatusCode.InternalServerError, "An expected error has occurred."));
         }

@@ -49,6 +49,13 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
             return Task.FromResult(new OdsResponse(HttpStatusCode.OK, string.Empty));
         }
 
+        public Task<OdsResponse> PostAndDelete(string content, string endpointUrl, string postInfo = null)
+        {
+            PostedContent.Add(new SimulatedPost(endpointUrl, content));
+
+            return Task.FromResult(new OdsResponse(HttpStatusCode.NoContent, string.Empty));
+        }
+
         public class SimulatedPost
         {
             public SimulatedPost(string endpointUrl, string body)
@@ -71,6 +78,16 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
 
             public string EndpointUrl { get; set; }
             public string Id { get; set; }
+        }
+
+        public class SimulatedGet
+        {
+            public SimulatedGet(string endpointUrl)
+            {
+                EndpointUrl = endpointUrl;
+            }
+
+            public string EndpointUrl { get; set; }
         }
     }
 }

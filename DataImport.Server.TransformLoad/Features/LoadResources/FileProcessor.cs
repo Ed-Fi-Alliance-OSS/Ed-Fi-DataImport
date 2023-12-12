@@ -377,7 +377,9 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 return mappedRow == null
                     ? Task.FromResult((RowResult.Error, (IngestionLogMarker) null))
                     : map.IsDeleteOperation
-                        ? DeleteMappedRow(odsApi, mappedRow, map.ResourcePath)
+                        ? map.IsDeleteByNaturalKey
+                            ? DeleteMappedRowByNaturalKey(odsApi, mappedRow, map.ResourcePath)
+                            : DeleteMappedRowById(odsApi, mappedRow, map.ResourcePath)
                         : PostMappedRow(odsApi, mappedRow, map.ResourcePath);
             }
 
@@ -385,7 +387,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             {
                 var resourceMapper = new ResourceMapper(_logger, dataMap, _mappingLookups);
 
-                var mappedRowJson = dataMap.IsDeleteOperation
+                var mappedRowJson = dataMap.IsDeleteOperation && !dataMap.IsDeleteByNaturalKey
                     ? resourceMapper.ApplyMapForDeleteByIdOperation(currentRow)
                     : resourceMapper.ApplyMap(currentRow);
 
@@ -437,20 +439,20 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
             }
 
-            private async Task<(RowResult Error, IngestionLogMarker)> DeleteMappedRow(IOdsApi odsApi, MappedResource mappedRow, string resourcePath)
+            private async Task<(RowResult Error, IngestionLogMarker)> DeleteMappedRowById(IOdsApi odsApi, MappedResource mappedRow, string resourcePath)
             {
                 var endpointUrl = $"{odsApi.Config.ApiUrl.TrimEnd('/')}{resourcePath}";
 
                 if (RowHasAlreadyBeenProcessed(mappedRow, endpointUrl))
                     return (RowResult.Duplicate, null);
 
-                _logger.LogDebug("Deleting {id}", mappedRow.Value.ToString());
+                var id = mappedRow.Value.SelectToken("Id").Value<string>();
+
+                _logger.LogDebug("Deleting {id}", id);
 
                 OdsResponse odsResponse;
                 try
                 {
-                    var id = mappedRow.Value.SelectToken("Id").Value<string>();
-
                     odsResponse = await odsApi.Delete(id, endpointUrl);
                 }
                 catch (Exception ex)
@@ -465,6 +467,38 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
                     default:
                         _logger.LogError($"DELETE returned unexpected HTTP status: {endpointUrl}, Row Number: {mappedRow.RowNumber}, Status: {odsResponse.StatusCode}, Error: {odsResponse.Content}");
+                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, odsResponse.StatusCode, odsResponse.Content));
+                }
+            }
+
+            private async Task<(RowResult Error, IngestionLogMarker)> DeleteMappedRowByNaturalKey(IOdsApi odsApi, MappedResource mappedRow, string resourcePath)
+            {
+                var endpointUrl = $"{odsApi.Config.ApiUrl.TrimEnd('/')}{resourcePath}";
+
+                if (RowHasAlreadyBeenProcessed(mappedRow, endpointUrl))
+                    return (RowResult.Duplicate, null);
+
+                var deleteInfo = $"{mappedRow.ResourcePath} row {mappedRow.RowNumber}";
+
+                _logger.LogDebug("Deleting {post}", deleteInfo);
+
+                OdsResponse odsResponse;
+                try
+                {
+                    odsResponse = await odsApi.PostAndDelete(mappedRow.Value.ToString(), endpointUrl, deleteInfo);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "POST and DELETE failed for resource: {url}, Row Number: {row}", endpointUrl, mappedRow.RowNumber);
+                    return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl));
+                }
+
+                switch (odsResponse.StatusCode)
+                {
+                    case HttpStatusCode.NoContent:
+                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
+                    default:
+                        _logger.LogError($"POST returned unexpected HTTP status: {endpointUrl}, Row Number: {mappedRow.RowNumber}, Status: {odsResponse.StatusCode}, Error: {odsResponse.Content}");
                         return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, odsResponse.StatusCode, odsResponse.Content));
                 }
             }

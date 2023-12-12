@@ -20,6 +20,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
     {
         Task<OdsResponse> PostBootstrapData(string endpointUrl, string dataToInsert);
         Task<OdsResponse> Post(string content, string endpointUrl, string postInfo = null);
+        Task<OdsResponse> PostAndDelete(string content, string endpointUrl, string postInfo = null);
         Task<OdsResponse> Delete(string id, string endpointUrl);
         ApiConfig Config { get; set; }
     }
@@ -166,6 +167,60 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
                 else
                     break;
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            return new OdsResponse(response.StatusCode, responseContent);
+        }
+
+        public async Task<OdsResponse> PostAndDelete(string content, string endpointUrl, string postInfo)
+        {
+            await Authenticate();
+
+            const int RetryAttempts = 3;
+            var currentAttempt = 0;
+            HttpResponseMessage response = null;
+
+            while (RetryAttempts > currentAttempt)
+            {
+                var strContent = new StringContent(content);
+                strContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                response = await AuthenticatedHttpClient.Value.PostAsync(endpointUrl, strContent);
+                currentAttempt++;
+
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    AccessToken = null;
+                    await Authenticate();
+                    AuthenticatedHttpClient = new Lazy<HttpClient>(CreateAuthenticatedHttpClient);
+                    _logger.LogWarning("POST failed. Reason: {reason}. StatusCode: {status}.", response.ReasonPhrase, response.StatusCode);
+                    _logger.LogInformation("Refreshing token and retrying POST request for {info}.", postInfo);
+                }
+                else
+                {
+                    currentAttempt = 0;
+                    break;
+                }
+            }
+
+            while (RetryAttempts > currentAttempt)
+            {
+                response = await AuthenticatedHttpClient.Value.DeleteAsync(response.Headers.Location);
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    AccessToken = null;
+                    await Authenticate();
+                    AuthenticatedHttpClient = new Lazy<HttpClient>(CreateAuthenticatedHttpClient);
+                    _logger.LogWarning("POST failed. Reason: {reason}. StatusCode: {status}.", response.ReasonPhrase, response.StatusCode);
+                    _logger.LogInformation("Refreshing token and retrying POST request for {info}.", postInfo);
+                }
+                else
+                {
+                    currentAttempt = 0;
+                    break;
+                }
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
