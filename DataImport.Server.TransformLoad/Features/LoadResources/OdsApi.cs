@@ -217,10 +217,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     _logger.LogInformation("Refreshing token and retrying POST request for {info}.", postInfo);
                 }
                 else
-                {
-                    currentAttempt = 0;
                     break;
-                }
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();

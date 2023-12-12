@@ -282,7 +282,9 @@ namespace DataImport.Web.Tests.Features.DataMaps
                     ResourcePath = resource.Path,
                     MapName = initialMapName,
                     Mappings = initialMappings,
-                    ColumnHeaders = columnHeaders
+                    ColumnHeaders = columnHeaders,
+                    IsDeleteOperation = false,
+                    IsDeleteByNaturalKey = false
                 });
 
                 var editForm = await Send(new EditDataMap.Query
@@ -295,7 +297,9 @@ namespace DataImport.Web.Tests.Features.DataMaps
                     DataMapId = response.DataMapId,
                     MapName = editForm.MapName,
                     Mappings = updatedMappings,
-                    ColumnHeaders = editForm.ColumnHeaders
+                    ColumnHeaders = editForm.ColumnHeaders,
+                    IsDeleteOperation = editForm.IsDeleteOperation,
+                    IsDeleteByNaturalKey = editForm.IsDeleteByNaturalKey
                 });
                 toastResponse.AssertToast($"Data Map '{editForm.MapName}' was modified.");
 
@@ -306,6 +310,8 @@ namespace DataImport.Web.Tests.Features.DataMaps
                 actual.Metadata.ShouldBe(resource.Metadata);
                 actual.CreateDate.ShouldNotBe(null);
                 actual.UpdateDate.ShouldNotBe(null);
+                actual.IsDeleteOperation.ShouldBe(false);
+                actual.IsDeleteByNaturalKey.ShouldBe(false);
 
                 var updatedEditForm = await Send(new EditDataMap.Query { Id = response.DataMapId, SourceCsvHeaders = new string[] { } });
 
@@ -323,7 +329,9 @@ namespace DataImport.Web.Tests.Features.DataMaps
                     ApiVersionId = apiVersion.Id,
                     ApiServers = updatedEditForm.ApiServers,
                     PreprocessorLogMessages = updatedEditForm.PreprocessorLogMessages,
-                    Preprocessors = updatedEditForm.Preprocessors
+                    Preprocessors = updatedEditForm.Preprocessors,
+                    IsDeleteOperation = updatedEditForm.IsDeleteOperation,
+                    IsDeleteByNaturalKey = updatedEditForm.IsDeleteByNaturalKey
                 });
             }
         }
@@ -365,7 +373,8 @@ namespace DataImport.Web.Tests.Features.DataMaps
                     MapName = initialMapName,
                     Mappings = initialMappings,
                     ColumnHeaders = columnHeaders,
-                    IsDeleteOperation = true
+                    IsDeleteOperation = true,
+                    IsDeleteByNaturalKey = false
                 });
 
                 var editForm = await Send(new EditDataMap.Query
@@ -379,7 +388,8 @@ namespace DataImport.Web.Tests.Features.DataMaps
                     MapName = editForm.MapName,
                     Mappings = updatedMappings,
                     ColumnHeaders = editForm.ColumnHeaders,
-                    IsDeleteOperation = editForm.IsDeleteOperation
+                    IsDeleteOperation = editForm.IsDeleteOperation,
+                    IsDeleteByNaturalKey = editForm.IsDeleteByNaturalKey
                 });
                 toastResponse.AssertToast($"Data Map '{editForm.MapName}' was modified.");
 
@@ -391,6 +401,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
                 actual.CreateDate.ShouldNotBe(null);
                 actual.UpdateDate.ShouldNotBe(null);
                 actual.IsDeleteOperation.ShouldBe(true);
+                actual.IsDeleteByNaturalKey.ShouldBe(false);
 
                 var updatedEditForm = await Send(new EditDataMap.Query { Id = response.DataMapId, SourceCsvHeaders = new string[] { } });
 
@@ -409,7 +420,98 @@ namespace DataImport.Web.Tests.Features.DataMaps
                     ApiServers = updatedEditForm.ApiServers,
                     PreprocessorLogMessages = updatedEditForm.PreprocessorLogMessages,
                     Preprocessors = updatedEditForm.Preprocessors,
-                    IsDeleteOperation = updatedEditForm.IsDeleteOperation
+                    IsDeleteOperation = updatedEditForm.IsDeleteOperation,
+                    IsDeleteByNaturalKey = updatedEditForm.IsDeleteByNaturalKey
+                });
+            }
+        }
+
+        [Test]
+        public async Task ShouldSuccessfullyEditDeleteByNaturalKeyDataMap()
+        {
+            // This test deals with editing an empty map to one with a single static
+            // mapped value, so the only usable resources for these tests are those
+            // which have at least one mappable property. That *should* be all resources,
+            // but the simplest way to find a field to map to is to search for resources
+            // with at least one top-level non-array / non-object property. Most resources
+            // do meet this requirement.
+
+            var apiVersion = GetDefaultApiVersion();
+
+            var usableResources = Query(x => x.Resources.Where(r => r.ApiVersionId == apiVersion.Id).ToArray())
+                .Where(x => ResourceMetadata.DeserializeFrom(x).Any(IsStaticMappable))
+                .ToArray();
+
+            usableResources.Length.ShouldBeGreaterThan(0);
+
+            foreach (var resource in usableResources)
+            {
+                var initialMapName = SampleString();
+                var updatedMapName = SampleString();
+                var initialMappings = (await TrivialMappings(resource)).Take(1).ToArray();
+                var updatedMappings = (await TrivialMappings(resource)).Take(1).ToArray();
+
+                var columnHeaders = new[] { "ColA", "ColB", "ColC" };
+
+                var dataMapSerializer = new DataMapSerializer(resource);
+                var expectedJsonMap = dataMapSerializer.Serialize(updatedMappings);
+
+                var response = await Send(new AddDataMap.Command
+                {
+                    ApiVersionId = resource.ApiVersionId,
+                    ResourcePath = resource.Path,
+                    MapName = initialMapName,
+                    Mappings = initialMappings,
+                    ColumnHeaders = columnHeaders,
+                    IsDeleteOperation = true,
+                    IsDeleteByNaturalKey = true
+                });
+
+                var editForm = await Send(new EditDataMap.Query
+                { Id = response.DataMapId, SourceCsvHeaders = new string[] { } });
+
+                editForm.MapName = updatedMapName;
+
+                var toastResponse = await Send(new EditDataMap.Command
+                {
+                    DataMapId = response.DataMapId,
+                    MapName = editForm.MapName,
+                    Mappings = updatedMappings,
+                    ColumnHeaders = editForm.ColumnHeaders,
+                    IsDeleteOperation = editForm.IsDeleteOperation,
+                    IsDeleteByNaturalKey = editForm.IsDeleteByNaturalKey
+                });
+                toastResponse.AssertToast($"Data Map '{editForm.MapName}' was modified.");
+
+                var actual = Query<DataMap>(response.DataMapId);
+                actual.Name.ShouldBe(updatedMapName);
+                actual.ResourcePath.ShouldBe(resource.Path);
+                actual.Map.ShouldBe(expectedJsonMap);
+                actual.Metadata.ShouldBe(resource.Metadata);
+                actual.CreateDate.ShouldNotBe(null);
+                actual.UpdateDate.ShouldNotBe(null);
+                actual.IsDeleteOperation.ShouldBe(true);
+                actual.IsDeleteByNaturalKey.ShouldBe(true);
+
+                var updatedEditForm = await Send(new EditDataMap.Query { Id = response.DataMapId, SourceCsvHeaders = new string[] { } });
+
+                updatedEditForm.ShouldMatch(new AddEditDataMapViewModel
+                {
+                    DataMapId = response.DataMapId,
+                    ResourcePath = resource.Path,
+                    ResourceName = resource.ToResourceName(),
+                    MapName = updatedMapName,
+                    ColumnHeaders = columnHeaders,
+                    FieldsViewModel = updatedEditForm.FieldsViewModel,
+                    MetadataIsIncompatible = false,
+                    ApiVersions = updatedEditForm.ApiVersions,
+                    ApiVersion = apiVersion.Version,
+                    ApiVersionId = apiVersion.Id,
+                    ApiServers = updatedEditForm.ApiServers,
+                    PreprocessorLogMessages = updatedEditForm.PreprocessorLogMessages,
+                    Preprocessors = updatedEditForm.Preprocessors,
+                    IsDeleteOperation = updatedEditForm.IsDeleteOperation,
+                    IsDeleteByNaturalKey = updatedEditForm.IsDeleteByNaturalKey
                 });
             }
         }
