@@ -93,7 +93,7 @@ namespace DataImport.Web.Infrastructure
             return div.ToHtmlString();
         }
 
-        public static HtmlString Input<TModel>(this IHtmlHelper<TModel> html, Expression<Func<TModel, bool>> expression, bool isDisabled)
+        public static HtmlString Input<TModel>(this IHtmlHelper<TModel> html, Expression<Func<TModel, bool>> expression, object htmlAttributes)
         {
             var input = new TagBuilder("div");
             input.AddCssClass("form-group");
@@ -101,9 +101,7 @@ namespace DataImport.Web.Infrastructure
             var inputDiv = new TagBuilder("div");
             inputDiv.AddCssClass("col-sm-offset-2 col-sm-10");
 
-            inputDiv.InnerHtml.AppendHtml(isDisabled
-                ? html.CheckBoxFor(expression, new { disabled = "disabled" })
-                : html.CheckBoxFor(expression));
+            inputDiv.InnerHtml.AppendHtml(html.CheckBoxFor(expression, htmlAttributes));
             inputDiv.InnerHtml.AppendHtml(" ");
             inputDiv.InnerHtml.AppendHtml(html.LabelFor(expression));
 

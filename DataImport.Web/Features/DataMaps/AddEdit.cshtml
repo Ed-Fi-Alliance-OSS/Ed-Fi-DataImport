@@ -135,18 +135,25 @@ See the LICENSE and NOTICES files in the project root for more information.
 
     if (ControllerAction(Context.Request.RouteValues) == "Add" || Model.IsDeleteOperation)
     {
-        @Html.Input(m => m.IsDeleteOperation, ControllerAction(Context.Request.RouteValues) == "Edit")
+        @if (ControllerAction(Context.Request.RouteValues) == "Add")
+        {
+            @Html.Input(m => m.IsDeleteOperation, new {Id = "IsDeleteOperationCheckbox"})
+        }
+        else
+        {
+            @Html.Input(m => m.IsDeleteOperation, new {Id = "IsDeleteOperationCheckbox", disabled = "disabled"})
+        }
         <div class="form-group @(Model.IsDeleteOperation ? "" : "hidden")" id="delete-operation-radios" >
             <div class="col-sm-offset-2 col-sm-10">
                 @if (ControllerAction(Context.Request.RouteValues) == "Add")
                 {
-                    @Html.RadioButtonFor(m => m.IsDeleteByNaturalKey, "False", new { Id = "IsDeleteById" }) <label>DELETE by Id</label>
-                    @Html.RadioButtonFor(m => m.IsDeleteByNaturalKey, "True", new { Id = "IsDeleteByNaturalKey" }) <label>DELETE by natural key</label>
+                    @Html.RadioButtonFor(m => m.IsDeleteByNaturalKey, "False", new { Id = "IsDeleteByIdRadio" }) <label>DELETE by Id</label>
+                    @Html.RadioButtonFor(m => m.IsDeleteByNaturalKey, "True", new { Id = "IsDeleteByNaturalKeyRadio" }) <label>DELETE by natural key</label>
                 }
                 else
                 {
-                    @Html.RadioButtonFor(m => m.IsDeleteByNaturalKey, "False", new { Id = "IsDeleteById", disabled = "disabled" }) <label>DELETE by Id</label>
-                    @Html.RadioButtonFor(m => m.IsDeleteByNaturalKey, "True", new { Id = "IsDeleteByNaturalKey", disabled = "disabled" }) <label>DELETE by natural key</label>
+                    @Html.RadioButtonFor(m => m.IsDeleteByNaturalKey, "False", new { Id = "IsDeleteByIdRadio", disabled = "disabled" }) <label>DELETE by Id</label>
+                    @Html.RadioButtonFor(m => m.IsDeleteByNaturalKey, "True", new { Id = "IsDeleteByNaturalKeyRadio", disabled = "disabled" }) <label>DELETE by natural key</label>
                 }
                 
             </div>
@@ -330,9 +337,9 @@ See the LICENSE and NOTICES files in the project root for more information.
 
             var $apiVersionIdElem = $('#@Html.IdFor(m => m.ApiVersionId)');
             var $resourcePathElem = $('#@Html.IdFor(m => m.ResourcePath)');
-            var $isDeleteOperationElem = $('input:checkbox, #@Html.IdFor(m => m.IsDeleteOperation)');
-            var $isDeleteByIdElem = $('#IsDeleteById');
-            var $isDeleteByNaturalKeyElem = $('#IsDeleteByNaturalKey');
+            var $isDeleteOperationElem = $('#IsDeleteOperationCheckbox');
+            var $isDeleteByIdElem = $('#IsDeleteByIdRadio');
+            var $isDeleteByNaturalKeyElem = $('#IsDeleteByNaturalKeyRadio');
 
             refreshResourcePathVisibility();
             refreshAllControlVisibility();
@@ -412,7 +419,7 @@ See the LICENSE and NOTICES files in the project root for more information.
                     {
                         @: var resourcePath = emptyToNull($("#ResourcePath").val());
                     }
-                    
+                                        
                     var dataObject = {
                         apiVersionId: $apiVersionIdElem.val(),
                         dataMapId: $('#@Html.IdFor(m => m.DataMapId)').val(),
@@ -421,8 +428,8 @@ See the LICENSE and NOTICES files in the project root for more information.
                         mappings: mappingJson,
                         preprocessorId: $('#@Html.IdFor(m => m.PreprocessorId)').val(),
                         attribute: $('#@Html.IdFor(m => m.Attribute)').val(),
-                        isDeleteOperation: $('input:checkbox, #@Html.IdFor(m => m.IsDeleteOperation)').is(":checked"),
-                        isDeleteByNaturalKey: $isDeleteByNaturalKeyElem.is(":checked"),
+                        isDeleteOperation: $('#IsDeleteOperationCheckbox').is(":checked"),
+                        isDeleteByNaturalKey: $('#IsDeleteByNaturalKeyRadio').is(":checked"),
                         columnHeaders: JSON.parse($('#@Html.IdFor(m => m.ColumnHeaders)').val())
                     };
                     $.ajax({
@@ -448,7 +455,7 @@ See the LICENSE and NOTICES files in the project root for more information.
                 refreshAttributeVisibility();
             });
 
-            $('#@Html.IdFor(m => m.IsDeleteOperation), #IsDeleteById, #IsDeleteByNaturalKey')
+            $('#IsDeleteOperationCheckbox, #IsDeleteByIdRadio, #IsDeleteByNaturalKeyRadio')
             .change(function() {
                 $('#delete-operation-warning-by-id').toggleClass('hidden', $isDeleteOperationElem.is(":checked") === false ||
                     $isDeleteByIdElem.is(":checked") === false);
