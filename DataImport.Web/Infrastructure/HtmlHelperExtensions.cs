@@ -93,6 +93,22 @@ namespace DataImport.Web.Infrastructure
             return div.ToHtmlString();
         }
 
+        public static HtmlString Input<TModel>(this IHtmlHelper<TModel> html, Expression<Func<TModel, bool>> expression)
+        {
+            var input = new TagBuilder("div");
+            input.AddCssClass("form-group");
+
+            var inputDiv = new TagBuilder("div");
+            inputDiv.AddCssClass("col-sm-offset-2 col-sm-10");
+
+            inputDiv.InnerHtml.AppendHtml(html.CheckBoxFor(expression));
+            inputDiv.InnerHtml.AppendHtml(" ");
+            inputDiv.InnerHtml.AppendHtml(html.LabelFor(expression));
+
+            input.InnerHtml.AppendHtml(inputDiv);
+            return input.ToHtmlString();
+        }
+
         public static HtmlString Input<TModel>(this IHtmlHelper<TModel> html, Expression<Func<TModel, bool>> expression, object htmlAttributes)
         {
             var input = new TagBuilder("div");
