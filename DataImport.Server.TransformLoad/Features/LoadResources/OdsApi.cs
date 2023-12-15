@@ -181,6 +181,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             const int RetryAttempts = 3;
             var currentAttempt = 0;
             HttpResponseMessage response = null;
+            var deleteLocation = string.Empty;
 
             while (RetryAttempts > currentAttempt)
             {
@@ -201,19 +202,22 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 else
                 {
                     currentAttempt = 0;
+                    deleteLocation = response.Headers.Location.AbsoluteUri;
                     break;
                 }
             }
 
             while (RetryAttempts > currentAttempt)
             {
-                response = await AuthenticatedHttpClient.Value.DeleteAsync(response.Headers.Location);
+                response = await AuthenticatedHttpClient.Value.DeleteAsync(deleteLocation);
+                currentAttempt++;
+
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     AccessToken = null;
                     await Authenticate();
                     AuthenticatedHttpClient = new Lazy<HttpClient>(CreateAuthenticatedHttpClient);
-                    _logger.LogWarning("POST failed. Reason: {reason}. StatusCode: {status}.", response.ReasonPhrase, response.StatusCode);
+                    _logger.LogWarning("DELETE failed. Reason: {reason}. StatusCode: {status}.", response.ReasonPhrase, deleteLocation);
                     _logger.LogInformation("Refreshing token and retrying POST request for {info}.", postInfo);
                 }
                 else
@@ -221,7 +225,6 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             }
 
             var responseContent = await response.Content.ReadAsStringAsync();
-
             return new OdsResponse(response.StatusCode, responseContent);
         }
 
