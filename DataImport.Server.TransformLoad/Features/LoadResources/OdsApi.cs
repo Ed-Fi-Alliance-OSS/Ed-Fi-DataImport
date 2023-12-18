@@ -207,9 +207,11 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
             }
 
+            var id = deleteLocation.Substring(deleteLocation.LastIndexOf('/') + 1);
+
             while (RetryAttempts > currentAttempt)
             {
-                response = await AuthenticatedHttpClient.Value.DeleteAsync(deleteLocation);
+                response = await AuthenticatedHttpClient.Value.DeleteAsync($"{endpointUrl}/{id}");
                 currentAttempt++;
 
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
