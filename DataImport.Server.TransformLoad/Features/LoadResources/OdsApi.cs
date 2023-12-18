@@ -217,8 +217,8 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     AccessToken = null;
                     await Authenticate();
                     AuthenticatedHttpClient = new Lazy<HttpClient>(CreateAuthenticatedHttpClient);
-                    _logger.LogWarning("DELETE failed. Reason: {reason}. StatusCode: {status}.", response.ReasonPhrase, deleteLocation);
-                    _logger.LogInformation("Refreshing token and retrying POST request for {info}.", postInfo);
+                    _logger.LogWarning("DELETE failed. Reason: {reason}. StatusCode: {status}.", response.ReasonPhrase, response.StatusCode);
+                    _logger.LogInformation("Refreshing token and retrying DELETE request for {info}.", deleteLocation);
                 }
                 else
                     break;
