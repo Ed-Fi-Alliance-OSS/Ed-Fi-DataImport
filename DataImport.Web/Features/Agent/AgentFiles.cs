@@ -86,10 +86,14 @@ namespace DataImport.Web.Features.Agent
 
                     using (var ftpsClient = new FtpClient(url, port.Value, username, password))
                     {
-                        ftpsClient.EncryptionMode = FtpEncryptionMode.Implicit;
+                        ftpsClient.EncryptionMode = FtpEncryptionMode.Explicit;
                         ftpsClient.ValidateCertificate += OnValidateFtpsCertificate;
                         ftpsClient.Connect();
                         if (!ftpsClient.IsConnected) throw new Exception("Ftps Client Cannot Connect");
+                        if (String.IsNullOrEmpty(filePattern))
+                            return ftpsClient.GetListing(directory).Where(x =>
+                           x.Type == FtpFileSystemObjectType.File).Select(x => x.Name).ToList();
+
                         return ftpsClient.GetListing(directory).Where(x =>
                             x.Type == FtpFileSystemObjectType.File && x.Name.IsLike(filePattern.Trim())).Select(x => x.Name).ToList();
                     }
@@ -105,8 +109,10 @@ namespace DataImport.Web.Features.Agent
                         sftpClient.Connect();
                         if (!sftpClient.IsConnected) throw new Exception("Sftp Client Cannot Connect");
                         filePattern = filePattern.Trim();
+                        if (String.IsNullOrEmpty(filePattern))
+                            return sftpClient.ListDirectory(directory).Select(x => x.Name).ToList();
                         return sftpClient.ListDirectory(directory).Where(x => x.Name.IsLike(filePattern))
-                            .Select(x => x.Name).ToList();
+                           .Select(x => x.Name).ToList();
                     }
                 }
             }
