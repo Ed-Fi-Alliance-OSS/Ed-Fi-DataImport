@@ -64,7 +64,7 @@ PowerShell installation provides a convenient method for installing Data Import 
 
 **Only Data Import 1.3 and above support deployment using Docker.**
 
-* For general Docker Deployment information, see [Docker Deployment for Data Import](docs/docker-deployment.md)
+* For general Docker Deployment information, see [Docker Deployment for Data Import](https://techdocs.ed-fi.org/display/EDFITOOLS/Advanced+Details+for+Data+Import+in+Docker)
 
 * For simple, out-of-the-box deployment of Data Import, see [Docker DI - Quick Start](https://techdocs.ed-fi.org/display/EDFITOOLS/Quick+Start+for+Data+Import+in+Docker)
 
