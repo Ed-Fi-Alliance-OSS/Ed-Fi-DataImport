@@ -6,5 +6,4 @@ state/
 logs/
 reports/
 traces/
-
 .env
