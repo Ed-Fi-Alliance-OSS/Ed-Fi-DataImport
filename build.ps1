@@ -76,7 +76,7 @@ param(
     # Assembly and package version number. The current package number is
     # configured in the build automation tool and passed to this script.
     [string]
-    $Version = "0.1.0",   
+    $Version = "0.1.0",
 
     # .NET project build configuration, defaults to "Debug". Options are: Debug, Release.
     [string]
@@ -136,7 +136,7 @@ $appCommonPackageVersion = "3.1.0"
 
 Import-Module -Name "$PSScriptRoot/eng/build-helpers.psm1" -Force
 Import-Module -Name "$PSScriptRoot/eng/package-manager.psm1" -Force
-function Clean {
+function DotNetClean {
     Invoke-Execute { dotnet clean $solutionRoot -c $Configuration --nologo -v minimal }
 }
 
@@ -151,7 +151,7 @@ function InitializePython {
     if (-not (Test-Path $python)) {
         $sourcePythonZip = "https://www.python.org/ftp/python/3.10.2/python-3.10.2-embed-amd64.zip"
 		$destPythonZip = "$toolsDir\python-3.10.2-embed-amd64.zip"
-		
+
         Write-Host "Downloading python 3.10.2 official release"
         Invoke-WebRequest $sourcePythonZip -OutFile $destPythonZip
 		Expand-Archive $destPythonZip -DestinationPath "$toolsDir\python"
@@ -159,7 +159,7 @@ function InitializePython {
     }
 }
 
-function Clean {
+function DotNetClean {
     Invoke-Execute { dotnet clean $solutionRoot -c $Configuration --nologo -v minimal }
 }
 
@@ -214,7 +214,7 @@ function PublishTransformLoad {
 function PublishTransformLoadSelfContained {
     Invoke-Execute {
         $outputPath = "$solutionRoot/$transformLoadProject/publish/scd"
-        $project = "$solutionRoot/$transformLoadProject/"      
+        $project = "$solutionRoot/$transformLoadProject/"
         dotnet publish $project -c $Configuration /p:EnvironmentName=Production -o $outputPath -r win10-x64 --nologo --self-contained true
     }
 }
@@ -299,14 +299,14 @@ function NewDevCertificate {
 }
 
 function BuildPackage {
-    $baseProjectFullName = "$solutionRoot/$entryProject/$entryProject"   
+    $baseProjectFullName = "$solutionRoot/$entryProject/$entryProject"
     RunDotNetPack -PackageVersion $Version -projectName $baseProjectFullName $baseProjectFullName
 }
 
 function PushPackage {
     param (
         [string]
-        $PackageVersion = $Version       
+        $PackageVersion = $Version
     )
 
     if (-not $NuGetApiKey) {
@@ -314,12 +314,12 @@ function PushPackage {
     }
 
     if (-not $PackageFile) {
-        if("Web" -ieq $PackageFileType){       
-         $PackageFile = "$PSScriptRoot/$entryProject.$PackageVersion.nupkg"  
+        if("Web" -ieq $PackageFileType){
+         $PackageFile = "$PSScriptRoot/$entryProject.$PackageVersion.nupkg"
          DotnetPush  $PackageFile
         }
-        else {      
-         $PackageFile = "$PSScriptRoot/$transformLoadProject.$PackageVersion.nupkg" 
+        else {
+         $PackageFile = "$PSScriptRoot/$transformLoadProject.$PackageVersion.nupkg"
          DotnetPush  $PackageFile
          $PackageFileWin64 = "$PSScriptRoot/$transformLoadProject.Win64.$PackageVersion.nupkg"
          DotnetPush  $PackageFileWin64
@@ -344,7 +344,7 @@ function DotnetPush {
 function Invoke-Build {
     Write-Host "Building Version $Version" -ForegroundColor Cyan
 
-    Invoke-Step { Clean }
+    Invoke-Step { DotNetClean }
     Invoke-Step { Restore }
     Invoke-Step { Compile }
 }
@@ -370,11 +370,11 @@ function Invoke-Run {
 }
 
 function Invoke-SetUp {
-    Invoke-Step { InitializePython }	
+    Invoke-Step { InitializePython }
 }
 
 function Invoke-Clean {
-    Invoke-Step { Clean }
+    Invoke-Step { DotNetClean }
 }
 
 function Invoke-UnitTests {
@@ -394,11 +394,11 @@ function Invoke-BuildPackage {
     Invoke-Step { BuildPackage }
 }
 
-function Invoke-BuildTransformLoadPackage {  
+function Invoke-BuildTransformLoadPackage {
     Invoke-Step { BuildTransformLoadPackage }
 }
 
-function Invoke-PushPackage {    
+function Invoke-PushPackage {
     Invoke-Step { PushPackage }
 }
 
@@ -429,10 +429,10 @@ function Invoke-DockerDeploy {
 function Invoke-SetAssemblyInfo {
     Write-Output "Setting Assembly Information" -ForegroundColor Cyan
 
-    Invoke-Step { AssemblyInfo }  
+    Invoke-Step { AssemblyInfo }
 }
 
-function AddAppCommonPackageForInstaller {   
+function AddAppCommonPackageForInstaller {
     $destinationPath = "$PSScriptRoot/Installer"
 
     $arguments = @{
@@ -448,7 +448,7 @@ function AddAppCommonPackageForInstaller {
 Invoke-Main {
     if($IsLocalBuild)
     {
-        $nugetExePath = Install-NugetCli    
+        $nugetExePath = Install-NugetCli
         Set-Alias nuget $nugetExePath -Scope Global -Verbose
     }
     switch ($Command) {
