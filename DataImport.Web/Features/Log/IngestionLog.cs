@@ -79,7 +79,7 @@ namespace DataImport.Web.Features.Log
                     if (!string.IsNullOrEmpty(filters.Filename))
                     {
                         logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
-                            x.FileName.ToLower().Contains(filters.Filename));
+                            x.FileName.ToLower().Contains(filters.Filename.ToLower()));
                     }
                 }
                 var pagedList = logsByDateDesc.Skip(offset).Take(limit).ToList();
