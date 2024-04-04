@@ -57,9 +57,10 @@ namespace DataImport.Web.Services.Swagger
 
                 var rawApis = await _swaggerWebClient.DownloadString(baseUrl);
                 var response = JToken.Parse(rawApis);
-                var isYearSpecific = response["apiMode"].ToString() == "Year Specific";
+                //var isYearSpecific = response["apiMode"].ToString() == "Year Specific";
 
-                return isYearSpecific ? new Uri(apiUrl).Segments.Last().Trim('/') : null;
+                //return isYearSpecific ? new Uri(apiUrl).Segments.Last().Trim('/') : null;
+                return null;
             }
             catch (Exception exception)
             {
@@ -75,9 +76,10 @@ namespace DataImport.Web.Services.Swagger
 
                 var rawApis = await _swaggerWebClient.DownloadString(baseUrl);
                 var response = JToken.Parse(rawApis);
-                var isInstanceYearSpecific = response["apiMode"].ToString() == "Instance Year Specific";
+                //var isInstanceYearSpecific = response["apiMode"].ToString() == "Instance Year Specific";
 
-                return isInstanceYearSpecific ? new Uri(apiUrl).Segments.Reverse().Skip(1).Take(1).Single().Trim('/') : null;
+                //return isInstanceYearSpecific ? new Uri(apiUrl).Segments.Reverse().Skip(1).Take(1).Single().Trim('/') : null;
+                return null;
             }
             catch (Exception exception)
             {
@@ -93,9 +95,10 @@ namespace DataImport.Web.Services.Swagger
 
                 var rawApis = await _swaggerWebClient.DownloadString(baseUrl);
                 var response = JToken.Parse(rawApis);
-                var isInstanceYearSpecific = response["apiMode"].ToString() == "Instance Year Specific";
+                //var isInstanceYearSpecific = response["apiMode"].ToString() == "Instance Year Specific";
 
-                return isInstanceYearSpecific ? new Uri(apiUrl).Segments.Last().Trim('/') : null;
+                //return isInstanceYearSpecific ? new Uri(apiUrl).Segments.Last().Trim('/') : null;
+                return null;
             }
             catch (Exception exception)
             {
