@@ -1,10 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DataImport.Common\DataImport.Common.csproj" />
     <ProjectReference Include="..\DataImport.EdFi\DataImport.EdFi.csproj" />
@@ -12,23 +10,21 @@
     <ProjectReference Include="..\DataImport.TestHelpers\DataImport.TestHelpers.csproj" />
     <ProjectReference Include="..\DataImport.Web\DataImport.Web.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="FakeItEasy" Version="7.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.1" />
-    <PackageReference Include="NUnit" Version="3.13.2" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
-    <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="Shouldly" Version="4.0.3" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FakeItEasy" Version="8.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.4.1" />
+    <PackageReference Include="NUnit" Version="4.1.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Shouldly" Version="4.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="SampleMetadata-v3.1.1\**" CopyToOutputDirectory="Always" LinkBase="SampleMetadata-v3.1.1\" />
     <None Include="SampleMetadata-v2.5.0.1\**" CopyToOutputDirectory="Always" LinkBase="SampleMetadata-v2.5.0.1=" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -36,5 +32,4 @@
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
-
 </Project>

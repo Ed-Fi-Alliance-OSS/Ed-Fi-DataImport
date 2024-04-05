@@ -6,6 +6,7 @@
 using DataImport.Common.Enums;
 using DataImport.Common.ExtensionMethods;
 using FluentFTP;
+using FluentFTP.Client.BaseClient;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -71,7 +72,7 @@ namespace DataImport.Web.Features.Agent
                 }
             }
 
-            private static void OnValidateFtpsCertificate(FtpClient control, FtpSslValidationEventArgs e)
+            private static void OnValidateFtpsCertificate(BaseFtpClient control, FtpSslValidationEventArgs e)
             {
                 if (_allowTestCertificates)
                     e.Accept = true;
@@ -84,14 +85,14 @@ namespace DataImport.Web.Features.Agent
                     if (port == null)
                         port = AgentTypeCodeEnum.DefaultPort(AgentTypeCodeEnum.Ftps);
 
-                    using (var ftpsClient = new FtpClient(url, port.Value, username, password))
+                    using (var ftpsClient = new FtpClient(url, username, password, port.Value))
                     {
-                        ftpsClient.EncryptionMode = FtpEncryptionMode.Implicit;
+                        ftpsClient.Config.EncryptionMode = FtpEncryptionMode.Implicit;
                         ftpsClient.ValidateCertificate += OnValidateFtpsCertificate;
                         ftpsClient.Connect();
                         if (!ftpsClient.IsConnected) throw new Exception("Ftps Client Cannot Connect");
                         return ftpsClient.GetListing(directory).Where(x =>
-                            x.Type == FtpFileSystemObjectType.File && x.Name.IsLike(filePattern.Trim())).Select(x => x.Name).ToList();
+                            x.Type == FtpObjectType.File && x.Name.IsLike(filePattern.Trim())).Select(x => x.Name).ToList();
                     }
                 }
                 else

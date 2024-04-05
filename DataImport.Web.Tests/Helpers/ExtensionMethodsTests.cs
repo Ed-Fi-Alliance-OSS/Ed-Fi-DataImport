@@ -100,7 +100,7 @@ namespace DataImport.Web.Tests.Helpers
         {
             string descriptor = null;
             // ReSharper disable once ExpressionIsAlwaysNull
-            Assert.AreEqual(string.Empty, descriptor.ToDescriptorName());
+            Assert.That(string.Empty, Is.EqualTo(descriptor.ToDescriptorName()));
         }
     }
 }

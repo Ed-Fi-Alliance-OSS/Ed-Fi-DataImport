@@ -50,7 +50,7 @@ namespace DataImport.Common
                 var recordCount = fileStream.TotalLines(fileName.IsCsvFile());
 
                 _fileHelper.LogFile(fileName, agent.Id, cloudFile.StorageUri.PrimaryUri.ToString(), FileStatus.Uploaded, recordCount);
-                _logger.LogInformation("File '{file}' was uploaded to '{uri}' for Agent '{name}' (Id: {id}).", fileName, cloudFile.StorageUri.PrimaryUri, agent.Name, agent.Id);
+                _logger.LogInformation("File '{File}' was uploaded to '{Uri}' for Agent '{Name}' (Id: {Id}).", fileName, cloudFile.StorageUri.PrimaryUri, agent.Name, agent.Id);
             }
             else
             {
@@ -84,11 +84,11 @@ namespace DataImport.Common
                     var recordCount = stream.TotalLines(file.IsCsvFile());
 
                     await _fileHelper.LogFileAsync(shortFileName, agent.Id, cloudFile.StorageUri.PrimaryUri.ToString(), FileStatus.Uploaded, recordCount);
-                    _logger.LogInformation("Successfully transferred file {file} to {uri} by agent ID: {agent}", shortFileName, cloudFile.StorageUri.PrimaryUri, agent.Id);
+                    _logger.LogInformation("Successfully transferred file {File} to {Uri} by agent ID: {Agent}", shortFileName, cloudFile.StorageUri.PrimaryUri, agent.Id);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Unexpected error in TransferFile for file: {file} on site: ", agent.Url);
+                    _logger.LogError(ex, "Unexpected error in TransferFile for file: {File} on site: ", agent.Url);
                     await _fileHelper.LogFileAsync(shortFileName, agent.Id, "", FileStatus.ErrorUploaded, 0);
                 }
             }
