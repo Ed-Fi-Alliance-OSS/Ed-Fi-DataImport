@@ -17,7 +17,6 @@ namespace Microsoft.AspNetCore.Http
     internal static class HttpContextHelper
     {
         private static readonly HttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
-
         /// <summary>
         /// Gets the current <see cref="HttpContext"/>. Returns <c>null</c> if there is no current <see cref="HttpContext"/>.
         /// </summary>
