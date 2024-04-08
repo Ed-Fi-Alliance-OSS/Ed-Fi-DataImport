@@ -23,7 +23,7 @@ on:
       - ".github/**/*.yml"
   workflow_dispatch:
 
-env:  
+env:
   DB_PASS: ${{ secrets.DB_PASS }}
 
 jobs:
@@ -49,7 +49,7 @@ jobs:
           ACCEPT_EULA: 'Y'
         ports:
           - 1433:1433
-    
+
     defaults:
       run:
         shell: pwsh
@@ -60,7 +60,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@607fce577a46308457984d59e4954e075820f10a # v3.0.3
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 8.0.x
 
       - name: Build
         run: ./build.ps1 -Command Build -Configuration Release
@@ -68,7 +68,7 @@ jobs:
       - name: Run Unit Tests
         if: success()
         run: ./build.ps1 -Command UnitTest -Configuration Release -Report True
-      
+
       - name: Integration Tests
         run: ./build.ps1 -Command IntegrationTest -Configuration Release -Report True
         shell: pwsh
