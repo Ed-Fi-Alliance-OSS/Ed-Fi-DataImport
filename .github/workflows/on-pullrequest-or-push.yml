@@ -73,7 +73,7 @@ jobs:
         run: ./build.ps1 -Command IntegrationTest -Configuration Release -Report True
         shell: pwsh
         env:
-          ConnectionStrings__defaultConnection: "Server=localhost,1433;Initial Catalog=EdFi_DataImport_Test;User Id=sa;Password=${{ env.DB_PASS }};Trusted_Connection=False;"
+          ConnectionStrings__defaultConnection: "Server=localhost,1433;Initial Catalog=EdFi_DataImport_Test;User Id=sa;Password=${{ env.DB_PASS }};Trusted_Connection=False;TrustServerCertificate=True;"
           PythonExecutableLocation: "/usr/bin/python"
 
       - name: Upload Results as Workflow Artifact
