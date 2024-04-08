@@ -16,7 +16,9 @@ namespace Microsoft.AspNetCore.Http
     /// </summary>
     internal static class HttpContextHelper
     {
+#pragma warning disable IDE0055
         private static readonly HttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
+#pragma warning restore IDE0055
         /// <summary>
         /// Gets the current <see cref="HttpContext"/>. Returns <c>null</c> if there is no current <see cref="HttpContext"/>.
         /// </summary>
