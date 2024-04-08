@@ -89,7 +89,7 @@ jobs:
 
       - name: Initialize CodeQL
         if: success()
-        uses: github/codeql-action/init@896079047b4bb059ba6f150a5d87d47dde99e6e5 # codeql-bundle-20221211
+        uses: github/codeql-action/init@cf7e9f23492505046de9a37830c3711dd0f25bb3 # v2.16.2
         with:
           languages: csharp
 
@@ -98,4 +98,4 @@ jobs:
 
       - name: Perform CodeQL Analysis
         if: success()
-        uses: github/codeql-action/analyze@896079047b4bb059ba6f150a5d87d47dde99e6e5 # codeql-bundle-20221211
+        uses: github/codeql-action/analyze@cf7e9f23492505046de9a37830c3711dd0f25bb3 # v2.16.2
