@@ -89,6 +89,9 @@ jobs:
         run:
             shell: pwsh
     steps:
+      - name: Checkout the Repo
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
       - name: Initialize CodeQL
         if: success()
         uses: github/codeql-action/init@cf7e9f23492505046de9a37830c3711dd0f25bb3 # v2.16.2
