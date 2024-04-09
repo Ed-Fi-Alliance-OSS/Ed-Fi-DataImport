@@ -68,7 +68,7 @@ namespace DataImport.Common.Tests
 
             output.ShouldBe(input);
 
-            Assert.AreSame(input, output);
+            Assert.That(input, Is.SameAs(output));
         }
 
         [Test]
@@ -391,7 +391,7 @@ $A  = New-NamedArrayList TestArray
                 var output = _service.ProcessStreamWithScript(scriptContent, input);
                 var actual = new StreamReader(output).ReadToEnd();
 
-                Assert.AreEqual(expected, actual, message);
+                Assert.That(expected, Is.EqualTo(actual), message);
             };
 
             test("Write-Output (ConvertFrom-FixedWidth -FixedWidthString \"012 45 789\" -FieldMap @(0, 4, 7) -NoTrim)",

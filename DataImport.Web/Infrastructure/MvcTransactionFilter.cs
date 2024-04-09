@@ -6,6 +6,7 @@
 using DataImport.Models;
 using DataImport.Web.Features.ApiServers;
 using DataImport.Web.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
@@ -97,7 +98,7 @@ namespace DataImport.Web.Infrastructure
             if (filterContext.HttpContext.Request.Method == "GET")
             {
                 // REDIRECT_LOCATION must be handled on the client side.
-                filterContext.HttpContext.Response.Headers.Add("REDIRECT_LOCATION", redirectUrl);
+                filterContext.HttpContext.Response.Headers.Append("REDIRECT_LOCATION", redirectUrl);
             }
             else
             {

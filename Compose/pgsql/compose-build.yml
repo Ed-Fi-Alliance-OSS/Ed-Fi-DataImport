@@ -7,6 +7,7 @@ version: "3.8"
 
 services:
   dataimport:
+    platform: linux/x86_64
     build:
       context: ../../
       dockerfile: Dockerfile
@@ -26,9 +27,9 @@ services:
       APPSETTINGS__SHARENAME: "${APPSETTINGS__SHARENAME:-/app/Common/temp}"
       TZ: "${TIME_ZONE:-US/Central}"
     depends_on:
-      - pb-dataimport 
+      - pb-dataimport
     restart: always
-    hostname: dataimport 
+    hostname: dataimport
     container_name: ed-fi-dataimport
 
   db-dataimport:
@@ -43,12 +44,21 @@ services:
       - vol-db-dataimport:/var/lib/postgresql/data
     restart: always
     container_name: ed-fi-db-dataimport
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready  -U ${POSTGRES_USER}"]
+      start_period: "60s"
+      retries: 3
 
   pb-dataimport:
-    image: pgbouncer/pgbouncer@sha256:aa8a38b7b33e5fe70c679053f97a8e55c74d52b00c195f0880845e52b50ce516 #pgbouncer:1.15.0
+    image: bitnami/pgbouncer
     environment:
-      DATABASES: "* = host = db-dataimport port=5432 user=${POSTGRES_USER} password=${POSTGRES_PASSWORD}"
-      POSTGRES_PORT: "${POSTGRES_PORT:-6432}"
+      PGBOUNCER_DATABASE: "*"
+      PGBOUNCER_PORT: "${PGBOUNCER_LISTEN_PORT:-6432}"
+      POSTGRESQL_USER: "${POSTGRES_USER}"
+      POSTGRESQL_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRESQL_HOST: db-dataimport
+      PGBOUNCER_SET_DATABASE_USER: "yes"
+      PGBOUNCER_SET_DATABASE_PASSWORD: "yes"
     ports:
       - "5403:${POSTGRES_PORT:-6432}"
     restart: always

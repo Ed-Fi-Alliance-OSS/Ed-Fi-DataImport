@@ -47,7 +47,7 @@ namespace DataImport.Common
 
             _fileHelper.LogFile(fileName, agent.Id, UrlUtility.ConvertLocalPathToUri(fullFilePath), FileStatus.Uploaded, recordCount);
 
-            _logger.LogInformation("File '{file}' was uploaded to '{path}' for Agent '{name}' (Id: {id}).", fileName, uploadPath, agent.Name, agent.Id);
+            _logger.LogInformation("File '{File}' was uploaded to '{Path}' for Agent '{Name}' (Id: {Id}).", fileName, uploadPath, agent.Name, agent.Id);
         }
 
         public virtual async Task Transfer(Stream stream, string file, Agent agent)
@@ -73,11 +73,11 @@ namespace DataImport.Common
                 var recordCount = stream.TotalLines(file.IsCsvFile());
 
                 await _fileHelper.LogFileAsync(shortFileName, agent.Id, localFileUri.AbsoluteUri, FileStatus.Uploaded, recordCount);
-                _logger.LogInformation("Successfully transferred file {file} to {path} by agent ID: {id}", shortFileName, localFileUri.AbsoluteUri, agent.Id);
+                _logger.LogInformation("Successfully transferred file {File} to {Path} by agent ID: {Id}", shortFileName, localFileUri.AbsoluteUri, agent.Id);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error in TransferFile for file: {file} on site: {path}", file, agent.Url);
+                _logger.LogError(ex, "Unexpected error in TransferFile for file: {File} on site: {Path}", file, agent.Url);
                 await _fileHelper.LogFileAsync(shortFileName, agent.Id, "", FileStatus.ErrorUploaded, 0);
             }
         }

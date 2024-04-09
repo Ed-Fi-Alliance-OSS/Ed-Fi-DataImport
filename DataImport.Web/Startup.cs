@@ -102,7 +102,7 @@ namespace DataImport.Web
 
             services.AddTransient<IOAuthRequestWrapper, OAuthRequestWrapper>();
 
-            //Configure MVC Razor Views under "FeatureFolder" and with compilation 
+            //Configure MVC Razor Views under "FeatureFolder" and with compilation
             services.Configure<RazorViewEngineOptions>(options => options.ViewLocationExpanders.Add(new FeatureViewLocationExpander()))
                     .AddControllersWithViews(options =>
                     {
@@ -176,8 +176,8 @@ namespace DataImport.Web
             });
 
             services.AddMvc()
-                  .AddSessionStateTempDataProvider()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+                .AddSessionStateTempDataProvider();
+            services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
             services.AddSession();
 

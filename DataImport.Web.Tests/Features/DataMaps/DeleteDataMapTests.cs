@@ -13,7 +13,6 @@ using DataImport.Models;
 using DataImport.Web.Features.Agent;
 using Shouldly;
 using static DataImport.Web.Tests.Testing;
-using static DataImport.TestHelpers.TestHelpers;
 
 namespace DataImport.Web.Tests.Features.DataMaps
 {
@@ -68,7 +67,7 @@ namespace DataImport.Web.Tests.Features.DataMaps
                     Name = SampleString(),
                     DdlDataMaps = new List<string>
                     {
-                        Json(new MappedAgent { DataMapId = dataMapId })
+                        TestHelpers.TestHelpers.Json(new MappedAgent { DataMapId = dataMapId })
                     },
                     ApiServerId = apiServer.Id
                 }

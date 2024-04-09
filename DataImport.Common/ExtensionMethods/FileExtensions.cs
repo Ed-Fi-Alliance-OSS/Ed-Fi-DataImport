@@ -7,13 +7,11 @@ using DataImport.Models;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace DataImport.Common.ExtensionMethods
 {
     public static class FileExtensions
     {
-        private static IOptions<ConnectionStrings> ConnectionStringsOptions => _connectionStringsOptions;
         private static IOptions<ConnectionStrings> _connectionStringsOptions;
 
         public static void SetConnectionStringsOptions(IOptions<ConnectionStrings> options)
@@ -53,7 +51,7 @@ namespace DataImport.Common.ExtensionMethods
         {
             if (string.IsNullOrWhiteSpace(s)) return true;
             var array = s.Split(',');
-            return array.All(x => String.IsNullOrWhiteSpace(x));
+            return Array.TrueForAll(array, x => String.IsNullOrWhiteSpace(x));
         }
 
         public static bool IsCsvFile(this string fileName) =>

@@ -30,7 +30,7 @@ namespace DataImport.Web.Features.Shared
             _database = database;
         }
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             var apiServerSelectItems = await _serverSelectListProvider.GetApiServers(cancellationToken);
             var hasConfiguredApiServer = apiServerSelectItems.Any(x => !string.IsNullOrWhiteSpace(x.Value));

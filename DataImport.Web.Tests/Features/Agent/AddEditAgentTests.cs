@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using static DataImport.TestHelpers.TestHelpers;
 using static DataImport.Web.Tests.Testing;
 
 namespace DataImport.Web.Tests.Features.Agent
@@ -599,8 +598,8 @@ namespace DataImport.Web.Tests.Features.Agent
                 ApiServerId = apiServer.Id,
                 DdlBootstrapDatas = new List<string>
                 {
-                    Json(new AgentBootstrapData { BootstrapDataId = bootstrapData1.Id, ProcessingOrder = 1 }),
-                    Json(new AgentBootstrapData { BootstrapDataId = bootstrapData2.Id, ProcessingOrder = 2 })
+                    TestHelpers.TestHelpers.Json(new AgentBootstrapData { BootstrapDataId = bootstrapData1.Id, ProcessingOrder = 1 }),
+                    TestHelpers.TestHelpers.Json(new AgentBootstrapData { BootstrapDataId = bootstrapData2.Id, ProcessingOrder = 2 })
                 }
             };
 
@@ -614,7 +613,7 @@ namespace DataImport.Web.Tests.Features.Agent
 
             addEditViewModel.DdlBootstrapDatas = new List<string>
             {
-                Json(new AgentBootstrapData { BootstrapDataId = bootstrapData1.Id, ProcessingOrder = 5})
+                TestHelpers.TestHelpers.Json(new AgentBootstrapData { BootstrapDataId = bootstrapData1.Id, ProcessingOrder = 5})
             };
 
             await Send(new EditAgent.Command { ViewModel = addEditViewModel });
@@ -652,8 +651,8 @@ namespace DataImport.Web.Tests.Features.Agent
                 ApiServerId = apiServer.Id,
                 DdlBootstrapDatas = new List<string>
                 {
-                    Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id, ProcessingOrder = 1 }),
-                    Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id, ProcessingOrder = 2 })
+                    TestHelpers.TestHelpers.Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id, ProcessingOrder = 1 }),
+                    TestHelpers.TestHelpers.Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id, ProcessingOrder = 2 })
                 }
             };
 
@@ -666,8 +665,8 @@ namespace DataImport.Web.Tests.Features.Agent
 
             addEditViewModel.DdlBootstrapDatas = new List<string>
             {
-                Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id, ProcessingOrder = 2 }),
-                Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id, ProcessingOrder = 1 }),
+                TestHelpers.TestHelpers.Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id, ProcessingOrder = 2 }),
+                TestHelpers.TestHelpers.Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id, ProcessingOrder = 1 }),
             };
             await Send(new EditAgent.Command { ViewModel = addEditViewModel });
             addEditViewModel = await Send(new EditAgent.Query { Id = response.AgentId });
@@ -691,7 +690,7 @@ namespace DataImport.Web.Tests.Features.Agent
                 ApiServerId = apiServer.Id,
                 DdlBootstrapDatas = new List<string>
                 {
-                    Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id }),
+                    TestHelpers.TestHelpers.Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id }),
                 }
             };
 
