@@ -215,7 +215,7 @@ function PublishTransformLoadSelfContained {
     Invoke-Execute {
         $outputPath = "$solutionRoot/$transformLoadProject/publish/scd"
         $project = "$solutionRoot/$transformLoadProject/"
-        dotnet publish $project -c $Configuration /p:EnvironmentName=Production -o $outputPath -r win10-x64 --nologo --self-contained true
+        dotnet publish $project -c $Configuration /p:EnvironmentName=Production -o $outputPath -r win-x64 --nologo --self-contained true
     }
 }
 
