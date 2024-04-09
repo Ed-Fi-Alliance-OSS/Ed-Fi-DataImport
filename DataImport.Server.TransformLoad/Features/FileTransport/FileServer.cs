@@ -50,7 +50,12 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
                 {
                     //TODO: CHECK
                     client.ValidateCertificate += OnValidateFtpsCertificate;
-                    await client.Connect();
+                    await client.ConnectAsync();
+                    if (String.IsNullOrEmpty(ftpsAgent.FilePattern))
+                        list.AddRange(from file in await client.GetListingAsync(ftpsAgent.Directory)
+                                      where file.Type == FtpFileSystemObjectType.File
+                                      select file.FullName);
+
 
                     list.AddRange(from file in await client.GetListing(ftpsAgent.Directory)
                                   where file.Type == FtpObjectType.File && file.Name.IsLike(ftpsAgent.FilePattern)
@@ -131,6 +136,9 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
                     _logger.LogInformation("Connected, server version: {version}", client.ConnectionInfo.ServerVersion);
 
                     var fileList = client.ListDirectory(sftpAgent.Directory);
+                    if (String.IsNullOrEmpty(sftpAgent.FilePattern))
+                        list.AddRange(from file in fileList select file.FullName);
+
                     list.AddRange(from file in fileList
                                   where file.Name.IsLike(sftpAgent.FilePattern)
                                   select file.FullName);
