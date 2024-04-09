@@ -7,7 +7,6 @@ using DataImport.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Serilog;
@@ -32,18 +31,13 @@ namespace DataImport.Web.Tests
 
             using (var context = Testing.Services.GetRequiredService<SqlDataImportDbContext>())
             {
-                if (RunningUnderTeamCity())
-                    context.Database.EnsureDeleted();
-
-                context.Database.Migrate();
+                await context.Database.EnsureDeletedAsync();
+                await context.Database.MigrateAsync();
             }
 
             Log.Information(Assembly.GetExecutingAssembly().GetName().Name + " Starting");
 
             await ConfigureForOdsApiV311();
         }
-
-        private static bool RunningUnderTeamCity()
-            => Environment.GetEnvironmentVariable("TEAMCITY_PROJECT_NAME") != null;
     }
 }

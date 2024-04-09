@@ -1,0 +1,67 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Features.DataMaps
+@using Humanizer
+@model DataImport.Models.DataMapper
+
+@{
+    var dataSources = (List<SelectListItem>)ViewData["DataSources"];
+    var sourceColumns = (List<SelectListItem>)ViewData["SourceColumns"];
+    var sourceTables = (List<SelectListItem>)ViewData["SourceTables"];
+
+    <div class="property-border map-node" data-node-depth="0" data-node-name="@Model.Name" style="padding-left: 15px;">
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label class = required>@($"{Model.Name.Titleize()}")</label>
+            </div>
+
+            <div class="map-property-selections col-sm-10 field-block" data-node-depth="0">
+                @* Hard coding data source to only support column for now until feedback. Leaving the sources dropdown for consistency and user familiarity. *@
+                @Html.DropDownList("Source", new SelectList(dataSources.Where(s => s.Value.Equals("column", StringComparison.OrdinalIgnoreCase)), "Value", "Text", Sources.Column), new
+                {
+                    id = (string) null,
+                    title = "Select Data Source",
+                    @class = "form-control map-source-type"
+                })
+
+                @{
+                    var sourceColumnItems = new List<SelectListItem>(sourceColumns);
+                    if (!string.IsNullOrWhiteSpace(Model.SourceColumn) && sourceColumns.All(x => x.Value != Model.SourceColumn))
+                    {
+                        sourceColumnItems.Add(new SelectListItem
+                        {
+                            Value = Model.SourceColumn,
+                            Text = Model.SourceColumn,
+                            Selected = true
+                        });
+                    }
+                }
+
+                @Html.DropDownListFor(x => x.SourceColumn, new SelectList(sourceColumnItems, "Value", "Text", Model.SourceColumn), new
+                {
+                    id = (string) null,
+                    title = "Select Source Column",
+                    @class = "form-control map-source-column"
+                })
+
+                @{
+                    var sourceTableItems = new List<SelectListItem>(sourceTables);
+                    if (!string.IsNullOrWhiteSpace(Model.SourceTable) && sourceTables.All(x => x.Value != Model.SourceTable))
+                    {
+                        sourceTableItems.Add(new SelectListItem
+                        {
+                            Value = Model.SourceTable,
+                            Text = Model.SourceTable,
+                            Selected = true
+                        });
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}

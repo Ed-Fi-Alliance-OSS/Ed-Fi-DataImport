@@ -21,7 +21,7 @@ namespace DataImport.Common.Tests
             List<string> actual = LogLevelConstants.GetValidList(LogLevelConstants.Error);
             Console.WriteLine($"Expected: {string.Join(",", expected)}");
             Console.WriteLine($"Actual: {string.Join(",", actual)}");
-            Assert.IsTrue(actual.SequenceEqual(expected));
+            Assert.That(actual.SequenceEqual(expected), Is.True);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace DataImport.Common.Tests
         {
             List<string> expected = LogLevelConstants.All.ToList();
             List<string> actual = LogLevelConstants.GetValidList("");
-            Assert.IsTrue(actual.SequenceEqual(expected));
+            Assert.That(actual.SequenceEqual(expected), Is.True);
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace DataImport.Common.Tests
         {
             List<string> expected = LogLevelConstants.All.ToList();
             List<string> actual = LogLevelConstants.GetValidList("Test");
-            Assert.IsTrue(actual.SequenceEqual(expected));
+            Assert.That(actual.SequenceEqual(expected), Is.True);
         }
     }
 }

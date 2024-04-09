@@ -26,6 +26,7 @@ namespace DataImport.Server.TransformLoad.Tests
             {
                 using (var context = scope.ServiceProvider.GetRequiredService<DataImportDbContext>())
                 {
+                    context.Database.EnsureDeleted();
                     context.Database.Migrate();
 
                     //Populate data for tests.

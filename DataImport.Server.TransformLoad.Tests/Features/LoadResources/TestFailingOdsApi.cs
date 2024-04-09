@@ -26,5 +26,15 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
         {
             return Task.FromResult(new OdsResponse(HttpStatusCode.InternalServerError, "An expected error has occurred."));
         }
+
+        public Task<OdsResponse> Delete(string id, string endpointUrl)
+        {
+            return Task.FromResult(new OdsResponse(HttpStatusCode.InternalServerError, "An expected error has occurred."));
+        }
+
+        public Task<OdsResponse> PostAndDelete(string content, string endpointUrl, string postInfo = null)
+        {
+            return Task.FromResult(new OdsResponse(HttpStatusCode.InternalServerError, "An expected error has occurred."));
+        }
     }
 }

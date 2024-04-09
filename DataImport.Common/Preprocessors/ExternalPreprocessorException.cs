@@ -62,14 +62,18 @@ namespace DataImport.Common.Preprocessors
         public ExternalPreprocessorException(string message, params Exception[] innerExceptions)
             : base(message, innerExceptions) { }
 
+#pragma warning disable S1133 // Deprecated code should be removed
+        [Obsolete("Obsolete for NET 8", DiagnosticId = "SYSLIB0051")]
         protected ExternalPreprocessorException(SerializationInfo info, StreamingContext context)
             : base(info, context) { }
 
+        [Obsolete("Obsolete for NET 8", DiagnosticId = "SYSLIB0051")]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
             info.AddValue(nameof(ProcessName), ProcessName);
             info.AddValue(nameof(Errors), Errors);
         }
+#pragma warning disable S1133 // Deprecated code should be removed
     }
 }

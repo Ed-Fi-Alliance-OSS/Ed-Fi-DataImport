@@ -21,8 +21,8 @@ namespace DataImport.Web.Tests.Features.ApiServers
             var apiVersion = Testing.Query<ApiVersion>(newApiServer.ApiVersionId);
             var allApiServers = await Testing.Send(new ApiServerIndex.Query());
 
-            CollectionAssert.IsNotEmpty(allApiServers.ApiServers);
-            Assert.IsTrue(allApiServers.ApiServers.Count >= 2);
+            Assert.That(allApiServers.ApiServers, Is.Not.Empty);
+            Assert.That(allApiServers.ApiServers.Count >= 2, Is.True);
 
             allApiServers.ApiServers.Single(x => x.Id == newApiServer.Id)
                 .ShouldMatch(new ApiServerIndex.ApiServerModel

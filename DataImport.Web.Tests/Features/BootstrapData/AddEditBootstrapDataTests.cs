@@ -384,7 +384,7 @@ namespace DataImport.Web.Tests.Features.BootstrapData
                 ApiServerId = apiServer.Id,
                 DdlBootstrapDatas = new List<string>
                 {
-                    Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id })
+                    TestHelpers.TestHelpers.Json(new AgentBootstrapData { BootstrapDataId = bootstrapData.Id })
                 }
             };
 

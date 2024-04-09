@@ -26,7 +26,7 @@ namespace DataImport.Web.Tests.Features.Preprocessor
 
             var preprocessors = await Send(new PreprocessorIndex.Query());
 
-            CollectionAssert.IsNotEmpty(preprocessors.Preprocessors);
+            Assert.That(preprocessors.Preprocessors, Is.Not.Empty);
 
             preprocessors.Preprocessors.Single(x => x.Id == preprocessor.Id)
                 .ShouldMatch(new PreprocessorIndex.PreprocessorIndexModel

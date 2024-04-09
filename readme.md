@@ -29,7 +29,7 @@ Data Import is a multi-project C# .NET solution with a web administration panel 
 
 ### Prerequisites
 
-Data Import 1.3+ requires **.NET 6**
+Data Import 1.3+ requires **.NET 8**
 
 Additionally, familiarity with the following technologies are required for installing and configuring Data Import:
 
@@ -64,7 +64,7 @@ PowerShell installation provides a convenient method for installing Data Import 
 
 **Only Data Import 1.3 and above support deployment using Docker.**
 
-* For general Docker Deployment information, see [Docker Deployment for Data Import](docs/docker-deployment.md)
+* For general Docker Deployment information, see [Docker Deployment for Data Import](https://techdocs.ed-fi.org/display/EDFITOOLS/Docker+Deployment+for+Data+Import)
 
 * For simple, out-of-the-box deployment of Data Import, see [Docker DI - Quick Start](https://techdocs.ed-fi.org/display/EDFITOOLS/Quick+Start+for+Data+Import+in+Docker)
 
@@ -91,7 +91,7 @@ for detailed information on how to contribute source code.
 
 ## License
 
-Copyright (c) 2022 Ed-Fi Alliance, LLC and contributors.
+Copyright (c) 2024 Ed-Fi Alliance, LLC and contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License").
 

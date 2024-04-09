@@ -19,6 +19,8 @@ namespace DataImport.Web.Features.DataMaps
             public string ResourcePath { get; set; }
             public string[] ColumnHeaders { get; set; }
             public int ApiVersionId { get; set; }
+            public bool IsDeleteOperation { get; set; }
+            public bool IsDeleteByNaturalKey { get; set; }
         }
 
         public class QueryHandler : RequestHandler<Query, DataMapperFieldsViewModel>
@@ -42,13 +44,27 @@ namespace DataImport.Web.Features.DataMaps
                     SourceTables = MapLookupTablesToViewModel(_database),
                     SourceColumns = MapCsvHeadersToSourceColumns(columnHeaders),
                     ResourceMetadata = resourceMetadata,
-                    Mappings = InitialMappings(resourceMetadata)
+                    Mappings = request.IsDeleteOperation
+                        ? request.IsDeleteByNaturalKey
+                            ? InitialDeleteByNaturalKeyMappings(resourceMetadata)
+                            : InitialDeleteByIdMappings()
+                        : InitialMappings(resourceMetadata)
                 };
             }
 
             private static List<DataMapper> InitialMappings(IEnumerable<ResourceMetadata> resourceMetadata)
             {
                 return resourceMetadata.Select(x => x.BuildInitialMappings()).ToList();
+            }
+
+            private static List<DataMapper> InitialDeleteByIdMappings()
+            {
+                return new List<DataMapper>() { new DataMapper() { Name = "Id" } };
+            }
+
+            private static List<DataMapper> InitialDeleteByNaturalKeyMappings(IEnumerable<ResourceMetadata> resourceMetadata)
+            {
+                return resourceMetadata.Where(r => r.Required).Select(x => x.BuildInitialMappings()).ToList();
             }
 
             private ResourceMetadata[] GetResourceMetadata(Query request)

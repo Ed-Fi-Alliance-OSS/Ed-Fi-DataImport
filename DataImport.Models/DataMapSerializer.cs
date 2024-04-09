@@ -168,7 +168,7 @@ namespace DataImport.Models
 
             foreach (var node in nodes)
             {
-                if (nodeMetadatas.All(x => x.Name != node.Name))
+                if (node.Name != "Id" && nodeMetadatas.All(x => x.Name != node.Name))
                     throw new InvalidOperationException(
                         $"Cannot deserialize mappings from JSON, because the key '{node.Name}' should not exist " +
                         $"according to the metadata for resource '{_resourcePath}'.");

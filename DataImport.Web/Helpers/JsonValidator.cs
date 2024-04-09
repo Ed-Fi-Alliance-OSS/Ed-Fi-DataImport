@@ -40,7 +40,7 @@ namespace DataImport.Web.Helpers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Cannot parse text as JSON.", ex);
+                    _logger.LogError(ex, "Cannot parse text as JSON.");
                     return false;
                 }
             }

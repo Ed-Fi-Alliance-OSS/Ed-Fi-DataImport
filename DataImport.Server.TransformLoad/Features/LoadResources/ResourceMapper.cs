@@ -22,8 +22,9 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
         {
             _logger = logger;
 
-            var dataMapSerializer = new DataMapSerializer(dataMap);
-            _mappings = dataMapSerializer.Deserialize(dataMap.Map);
+            _mappings = dataMap.IsDeleteOperation
+                ? new DeleteDataMapSerializer(dataMap).Deserialize(dataMap.Map)
+                : new DataMapSerializer(dataMap).Deserialize(dataMap.Map);
             _resourceMetadata = ResourceMetadata.DeserializeFrom(dataMap);
             _mappingLookups = mappingLookups;
         }
@@ -41,6 +42,13 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             var safeCsvRow = new CsvRow(csvRow);
 
             return MapToJsonObject(_resourceMetadata, _mappings, safeCsvRow);
+        }
+
+        public JToken ApplyMapForDeleteByIdOperation(Dictionary<string, string> csvRow)
+        {
+            var safeCsvRow = new CsvRow(csvRow);
+
+            return MapToJsonObjectForDeleteById(_mappings, safeCsvRow);
         }
 
         private JObject MapToJsonObject(IReadOnlyList<ResourceMetadata> nodeMetadatas, IReadOnlyList<DataMapper> nodes, CsvRow csvRow)
@@ -74,6 +82,20 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     if (value != null)
                         result.Add(new JProperty(nodeMetadata.Name, value));
                 }
+            }
+
+            return result;
+        }
+
+        private JObject MapToJsonObjectForDeleteById(IReadOnlyList<DataMapper> nodes, CsvRow csvRow)
+        {
+            var result = new JObject();
+
+            foreach (var node in nodes)
+            {
+                var rawValue = RawValue(node, csvRow);
+
+                result.Add(new JProperty("Id", rawValue));
             }
 
             return result;

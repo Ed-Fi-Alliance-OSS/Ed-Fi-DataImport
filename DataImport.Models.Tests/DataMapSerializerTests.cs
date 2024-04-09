@@ -4,6 +4,7 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
+using System.Linq;
 using NUnit.Framework;
 using DataImport.TestHelpers;
 using Newtonsoft.Json;
@@ -135,8 +136,28 @@ namespace DataImport.Models.Tests
                     ]
                 }";
 
-            Serialize(_resourceMetadata, mappings).ShouldMatch(jsonMap);
-            Deserialize(_resourceMetadata, jsonMap).ShouldMatch(mappings);
+            SerializeNormalMap(_resourceMetadata, mappings).ShouldMatch(jsonMap);
+            DeserializeNormalMap(_resourceMetadata, jsonMap).ShouldMatch(mappings);
+        }
+
+        [Test]
+        public void ShouldSerializeAndDeserializeJsonMapRepresentationOfDeleteByIdMappings()
+        {
+            //Deleting by Id is a unique case where the mapping will always be between exactly one source column
+            //and a property always called 'Id' which is not part of the underlying metadata.
+            var mappings = new[]
+            {
+                MapColumn("propertyB", "ColumnB"),
+            };
+
+            var jsonMap = @"{
+                    ""Id"": {
+                        ""Column"": ""ColumnB""
+                    }
+                }";
+
+            SerializeDeleteByIdMap(mappings).ShouldMatch(jsonMap);
+            DeserializeDeleteByIdMap(_resourceMetadata, jsonMap).Single().SourceColumn.ShouldMatch(mappings.Single().SourceColumn);
         }
 
         [Test]
@@ -149,7 +170,7 @@ namespace DataImport.Models.Tests
             //as the most natural behavior.
 
             var emptyMappings = new DataMapper[] { };
-            Serialize(_resourceMetadata, emptyMappings).ShouldMatch("{}");
+            SerializeNormalMap(_resourceMetadata, emptyMappings).ShouldMatch("{}");
 
             var partialMappings = new[]
             {
@@ -165,7 +186,7 @@ namespace DataImport.Models.Tests
                                 ""Column"": ""ColumnB""
                             }
                   }";
-            Serialize(_resourceMetadata, partialMappings).ShouldMatch(expectedJsonMap);
+            SerializeNormalMap(_resourceMetadata, partialMappings).ShouldMatch(expectedJsonMap);
         }
 
         [Test]
@@ -217,8 +238,8 @@ namespace DataImport.Models.Tests
                     ]
                 }";
 
-            Serialize(resourceMetadata, mappingsIncludingUnmappedItem).ShouldMatch(jsonLackingUnmappedItem);
-            Deserialize(resourceMetadata, jsonLackingUnmappedItem).ShouldMatch(mappingsLackingUnmappedItem);
+            SerializeNormalMap(resourceMetadata, mappingsIncludingUnmappedItem).ShouldMatch(jsonLackingUnmappedItem);
+            DeserializeNormalMap(resourceMetadata, jsonLackingUnmappedItem).ShouldMatch(mappingsLackingUnmappedItem);
         }
 
         [Test]
@@ -238,7 +259,7 @@ namespace DataImport.Models.Tests
                 MapColumn("unexpectedProperty", "ColumnZ")
             };
 
-            Action attemptToSerializeInvalidMapping = () => Serialize(_resourceMetadata, invalidMappings);
+            Action attemptToSerializeInvalidMapping = () => SerializeNormalMap(_resourceMetadata, invalidMappings);
 
             attemptToSerializeInvalidMapping
                 .ShouldThrow<InvalidOperationException>()
@@ -252,7 +273,7 @@ namespace DataImport.Models.Tests
         {
             Action attemptToSerializeStaticMappingToExpectedObject = () =>
             {
-                Serialize(_resourceMetadata, new[]
+                SerializeNormalMap(_resourceMetadata, new[]
                 {
                     MapStatic("complexProperty", "Static Value"),
                 });
@@ -267,7 +288,7 @@ namespace DataImport.Models.Tests
 
             Action attemptToSerializeColumnMappingToExpectedObject = () =>
             {
-                Serialize(_resourceMetadata, new[]
+                SerializeNormalMap(_resourceMetadata, new[]
                 {
                     MapColumn("complexProperty", "ColumnA"),
                 });
@@ -286,7 +307,7 @@ namespace DataImport.Models.Tests
         {
             Action attemptToSerializeStaticMappingToExpectedArray = () =>
             {
-                Serialize(_resourceMetadata, new[]
+                SerializeNormalMap(_resourceMetadata, new[]
                 {
                     MapStatic("arrayProperty", "Static Value"),
                 });
@@ -301,7 +322,7 @@ namespace DataImport.Models.Tests
 
             Action attemptToSerializeColumnMappingToExpectedArray = () =>
             {
-                Serialize(_resourceMetadata, new[]
+                SerializeNormalMap(_resourceMetadata, new[]
                 {
                     MapColumn("arrayProperty", "ColumnA"),
                 });
@@ -320,7 +341,7 @@ namespace DataImport.Models.Tests
         {
             Action attemptToSerializeObjectMappingToExpectedSingleValue = () =>
             {
-                Serialize(_resourceMetadata, new[]
+                SerializeNormalMap(_resourceMetadata, new[]
                 {
                     MapObject("propertyA",
                         MapColumn("nestedPropertyF", "ColumnF"),
@@ -338,7 +359,7 @@ namespace DataImport.Models.Tests
 
             Action attemptToSerializeArrayMappingToExpectedSingleValue = () =>
             {
-                Serialize(_resourceMetadata, new[]
+                SerializeNormalMap(_resourceMetadata, new[]
                 {
                     MapArray(
                         "propertyA",
@@ -426,7 +447,24 @@ namespace DataImport.Models.Tests
                     ]
                 }";
 
-            Deserialize(_resourceMetadata, JObject.Parse(jsonMap)).ShouldMatch(mappings);
+            DeserializeNormalMap(_resourceMetadata, JObject.Parse(jsonMap)).ShouldMatch(mappings);
+        }
+
+        [Test]
+        public void ShouldDeserializeFromPreviouslyParsedDeleteByIdJObject()
+        {
+            var mappings = new[]
+            {
+                MapColumn("propertyB", "ColumnB")
+            };
+
+            var jsonMap = @"{
+                    ""Id"": {
+                        ""Column"": ""ColumnB""
+                    }
+                }";
+
+            DeserializeDeleteByIdMap(JObject.Parse(jsonMap)).Single().SourceColumn.ShouldMatch(mappings.Single().SourceColumn);
         }
 
         [Test]
@@ -440,7 +478,7 @@ namespace DataImport.Models.Tests
             //in the JSON Map to deserialize is not meaningful, so the output is normalized to
             //metadata order as a result of ensuring completeness of the result
 
-            Deserialize(_resourceMetadata, "{}")
+            DeserializeNormalMap(_resourceMetadata, "{}")
                 .ShouldMatch(
                     Unmapped("propertyA"),
                     Unmapped("propertyB"),
@@ -472,7 +510,7 @@ namespace DataImport.Models.Tests
                                 ""Column"": ""ColumnB""
                             }
                   }";
-            Deserialize(_resourceMetadata, partialJsonMap)
+            DeserializeNormalMap(_resourceMetadata, partialJsonMap)
                 .ShouldMatch(
                     Unmapped("propertyA"),
                     MapColumn("propertyB", "ColumnB"),
@@ -505,7 +543,7 @@ namespace DataImport.Models.Tests
 
             var invalidJsonMap = @"This plain text is not JSON.";
 
-            Action attemptToDeserializeInvalidJsonMap = () => Deserialize(_resourceMetadata, invalidJsonMap);
+            Action attemptToDeserializeInvalidJsonMap = () => DeserializeNormalMap(_resourceMetadata, invalidJsonMap);
 
             var argumentException = attemptToDeserializeInvalidJsonMap
                 .ShouldThrow<ArgumentException>();
@@ -540,7 +578,7 @@ namespace DataImport.Models.Tests
                 ""unexpectedProperty"": { ""Column"": ""ColumnZ"" }
             }";
 
-            Action attemptToDeserializeInvalidJsonMap = () => Deserialize(_resourceMetadata, invalidJsonMap);
+            Action attemptToDeserializeInvalidJsonMap = () => DeserializeNormalMap(_resourceMetadata, invalidJsonMap);
 
             attemptToDeserializeInvalidJsonMap
                 .ShouldThrow<InvalidOperationException>()
@@ -554,7 +592,7 @@ namespace DataImport.Models.Tests
         {
             //The outermost JSON should be an { object }, not an [ array ].
             Action attemptToDeserializeInvalidTopLevelObject =
-                () => Deserialize(_resourceMetadata, @"[]");
+                () => DeserializeNormalMap(_resourceMetadata, @"[]");
             attemptToDeserializeInvalidTopLevelObject
                 .ShouldThrow<ArgumentException>()
                 .Message
@@ -565,7 +603,7 @@ namespace DataImport.Models.Tests
 
             //Metadata declares that "complexProperty" should be an { object }, not an [ array ].
             Action attemptToDeserializeInvalidObjectValue =
-                () => Deserialize(_resourceMetadata, @"{ ""complexProperty"": [] }");
+                () => DeserializeNormalMap(_resourceMetadata, @"{ ""complexProperty"": [] }");
             attemptToDeserializeInvalidObjectValue
                 .ShouldThrow<InvalidOperationException>()
                 .Message
@@ -575,7 +613,7 @@ namespace DataImport.Models.Tests
 
             //Metadata declares that "arrayProperty" should be an [ array ], not a boolean.
             Action attemptToDeserializeInvalidArrayValue =
-                () => Deserialize(_resourceMetadata, @"{ ""arrayProperty"": true }");
+                () => DeserializeNormalMap(_resourceMetadata, @"{ ""arrayProperty"": true }");
             attemptToDeserializeInvalidArrayValue
                 .ShouldThrow<InvalidOperationException>()
                 .Message
@@ -585,7 +623,7 @@ namespace DataImport.Models.Tests
 
             //Metadata declares that "arrayProperty" whose items should be { objects }, not booleans.
             Action attemptToDeserializeInvalidArrayItemValue =
-                () => Deserialize(_resourceMetadata, @"{ ""arrayProperty"": [ true, false ] }");
+                () => DeserializeNormalMap(_resourceMetadata, @"{ ""arrayProperty"": [ true, false ] }");
             attemptToDeserializeInvalidArrayItemValue
                 .ShouldThrow<InvalidOperationException>()
                 .Message
@@ -595,7 +633,7 @@ namespace DataImport.Models.Tests
 
             //Metadata declares that "propertyA" should be Column Source object like a column mapping or static value, not an array.
             Action attemptToDeserializeInvalidColumnMapValue =
-                () => Deserialize(_resourceMetadata, @"{ ""propertyA"": [] }");
+                () => DeserializeNormalMap(_resourceMetadata, @"{ ""propertyA"": [] }");
             attemptToDeserializeInvalidColumnMapValue
                 .ShouldThrow<InvalidOperationException>()
                 .Message
@@ -605,7 +643,7 @@ namespace DataImport.Models.Tests
 
             //When a Column Source object is expected, it should have a "Column" property.
             Action attemptToDeserializeMissingSourceColumn =
-                () => Deserialize(_resourceMetadata, @"{ ""propertyA"": {} }");
+                () => DeserializeNormalMap(_resourceMetadata, @"{ ""propertyA"": {} }");
             attemptToDeserializeMissingSourceColumn
                 .ShouldThrow<InvalidOperationException>()
                 .Message
@@ -617,7 +655,7 @@ namespace DataImport.Models.Tests
             //When a Column Source object is expected, it can have optional "Default" and "Lookup" properties
             //in addition to "Column", but no other unexpected properties.
             Action attemptToDeserializeUnexpectedColumnSourceProperties =
-                () => Deserialize(_resourceMetadata, @"
+                () => DeserializeNormalMap(_resourceMetadata, @"
                     {
                         ""propertyA"": {
                             ""Column"": ""Col1"",
@@ -636,7 +674,7 @@ namespace DataImport.Models.Tests
 
             //When a Column Source object is expected, and has expected keys, Columns and Lookup must be strings.
             Action attemptToDeserializeNonStringColumnSourceProperties =
-                () => Deserialize(_resourceMetadata, @"
+                () => DeserializeNormalMap(_resourceMetadata, @"
                     {
                         ""propertyA"": {
                             ""Column"": null,
@@ -654,7 +692,7 @@ namespace DataImport.Models.Tests
 
             //When a Column Source object is expected, and has expected keys, Default must be a single value.
             Action attemptToDeserializeComplexDefault =
-                () => Deserialize(_resourceMetadata, @"
+                () => DeserializeNormalMap(_resourceMetadata, @"
                     {
                         ""propertyA"": {
                             ""Column"": ""Col1"",
@@ -764,12 +802,12 @@ namespace DataImport.Models.Tests
                     ]
                 }";
 
-            Serialize(atypicalResourceMetadata, atypicalMappings).ShouldMatch(atypicalJsonMap);
-            Deserialize(atypicalResourceMetadata, atypicalJsonMap).ShouldMatch(atypicalMappings);
+            SerializeNormalMap(atypicalResourceMetadata, atypicalMappings).ShouldMatch(atypicalJsonMap);
+            DeserializeNormalMap(atypicalResourceMetadata, atypicalJsonMap).ShouldMatch(atypicalMappings);
 
             //Metadata declares that "booleanArrayProperty" array elements should be Column Source object like a column mapping or static value, not an array.
             Action attemptToDeserializeInvalidColumnMapValue =
-                () => Deserialize(atypicalResourceMetadata, @"{
+                () => DeserializeNormalMap(atypicalResourceMetadata, @"{
                     ""booleanArrayProperty"": [
                         {
                             ""Column"": ""ColumnK""
@@ -795,7 +833,7 @@ namespace DataImport.Models.Tests
             //to serialize at all.
 
             Action attemptToSerializeAmbiguousMapping =
-                () => Serialize(_resourceMetadata, new[]
+                () => SerializeNormalMap(_resourceMetadata, new[]
                 {
                     new DataMapper
                     {
@@ -869,10 +907,10 @@ namespace DataImport.Models.Tests
                     ""unanticipatedType"": ""some future unanticipated swagger type value""
                 }";
 
-            Serialize(resourceMetadata, mappings)
+            SerializeNormalMap(resourceMetadata, mappings)
                 .ShouldMatch(jsonMap);
 
-            Deserialize(resourceMetadata, jsonMap)
+            DeserializeNormalMap(resourceMetadata, jsonMap)
                 .ShouldMatch(
                     MapStatic("stringProperty", "ABC123"), //Trimmed.
                     MapStatic("dateTimeProperty", "08-01-2017"), //Trimmed.
@@ -976,10 +1014,10 @@ namespace DataImport.Models.Tests
                     }
                 }";
 
-            Serialize(resourceMetadata, mappings)
+            SerializeNormalMap(resourceMetadata, mappings)
                 .ShouldMatch(jsonMap);
 
-            Deserialize(resourceMetadata, jsonMap)
+            DeserializeNormalMap(resourceMetadata, jsonMap)
                 .ShouldMatch(
                     MapColumn("stringProperty", "ColumnA", "ABC123"), //Trimmed.
                     MapColumn("dateTimeProperty", "ColumnB", "08-01-2017"), //Trimmed.
@@ -995,23 +1033,44 @@ namespace DataImport.Models.Tests
                 );
         }
 
-        private static JToken Serialize(ResourceMetadata[] resourceMetadata, DataMapper[] mappings)
+        private static JToken SerializeNormalMap(ResourceMetadata[] resourceMetadata, DataMapper[] mappings)
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
 
             return JToken.Parse(dataMapSerializer.Serialize(mappings));
         }
 
-        private static DataMapper[] Deserialize(ResourceMetadata[] resourceMetadata, string jsonMap)
+        private static JToken SerializeDeleteByIdMap(DataMapper[] mappings)
+        {
+            var dataMapDeleteSerializer = new DeleteDataMapSerializer();
+
+            return JToken.Parse(dataMapDeleteSerializer.Serialize(mappings));
+        }
+
+        private static DataMapper[] DeserializeNormalMap(ResourceMetadata[] resourceMetadata, string jsonMap)
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
 
             return dataMapSerializer.Deserialize(jsonMap);
         }
 
-        private static DataMapper[] Deserialize(ResourceMetadata[] resourceMetadata, JObject jsonMap)
+        private static DataMapper[] DeserializeDeleteByIdMap(ResourceMetadata[] resourceMetadata, string jsonMap)
+        {
+            var dataMapSerializer = new DeleteDataMapSerializer("/testResource", resourceMetadata);
+
+            return dataMapSerializer.Deserialize(jsonMap);
+        }
+
+        private static DataMapper[] DeserializeNormalMap(ResourceMetadata[] resourceMetadata, JObject jsonMap)
         {
             var dataMapSerializer = new DataMapSerializer("/testResource", resourceMetadata);
+
+            return dataMapSerializer.Deserialize(jsonMap);
+        }
+
+        private static DataMapper[] DeserializeDeleteByIdMap(JObject jsonMap)
+        {
+            var dataMapSerializer = new DeleteDataMapSerializer();
 
             return dataMapSerializer.Deserialize(jsonMap);
         }

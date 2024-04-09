@@ -69,6 +69,8 @@ namespace DataImport.Web.Features.DataMaps
             public string[] ColumnHeaders { get; set; }
             public int? PreprocessorId { get; set; }
             public string Attribute { get; set; }
+            public bool IsDeleteOperation { get; set; }
+            public bool IsDeleteByNaturalKey { get; set; }
         }
 
         public class Response : ToastResponse
@@ -117,13 +119,15 @@ namespace DataImport.Web.Features.DataMaps
             {
                 var resource = _database.Resources.Single(x => x.Path == request.ResourcePath && x.ApiVersionId == request.ApiVersionId);
 
-                var dataMapSerializer = new DataMapSerializer(resource);
-
                 var dataMap = new DataMap
                 {
                     Name = request.MapName,
                     ResourcePath = resource.Path,
-                    Map = dataMapSerializer.Serialize(request.Mappings),
+                    Map = request.IsDeleteOperation
+                    ? request.IsDeleteByNaturalKey
+                        ? new DataMapSerializer(resource).Serialize(request.Mappings)
+                        : new DeleteDataMapSerializer(resource).Serialize(request.Mappings)
+                    : new DataMapSerializer(resource).Serialize(request.Mappings),
                     Metadata = resource.Metadata,
                     CreateDate = DateTimeOffset.Now,
                     UpdateDate = DateTimeOffset.Now,
@@ -133,7 +137,9 @@ namespace DataImport.Web.Features.DataMaps
                             : JsonConvert.SerializeObject(request.ColumnHeaders),
                     ApiVersionId = request.ApiVersionId,
                     FileProcessorScriptId = request.PreprocessorId,
-                    Attribute = request.Attribute
+                    Attribute = request.Attribute,
+                    IsDeleteOperation = request.IsDeleteOperation,
+                    IsDeleteByNaturalKey = request.IsDeleteOperation && request.IsDeleteByNaturalKey
                 };
 
                 _database.DataMaps.Add(dataMap);

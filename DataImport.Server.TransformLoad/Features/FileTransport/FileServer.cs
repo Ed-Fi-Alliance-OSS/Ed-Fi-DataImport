@@ -8,6 +8,7 @@ using DataImport.Common.Enums;
 using DataImport.Common.ExtensionMethods;
 using DataImport.Models;
 using FluentFTP;
+using FluentFTP.Client.BaseClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Renci.SshNet;
@@ -45,13 +46,14 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
             try
             {
                 _logger.LogInformation("Connecting to host: {url}", ftpsAgent.Url);
-                using (var client = CreateClient(ftpsAgent))
+                using (var client = CreateAsyncClient(ftpsAgent))
                 {
+                    //TODO: CHECK
                     client.ValidateCertificate += OnValidateFtpsCertificate;
-                    await client.ConnectAsync();
+                    await client.Connect();
 
-                    list.AddRange(from file in await client.GetListingAsync(ftpsAgent.Directory)
-                                  where file.Type == FtpFileSystemObjectType.File && file.Name.IsLike(ftpsAgent.FilePattern)
+                    list.AddRange(from file in await client.GetListing(ftpsAgent.Directory)
+                                  where file.Type == FtpObjectType.File && file.Name.IsLike(ftpsAgent.FilePattern)
                                   select file.FullName);
                 }
             }
@@ -63,7 +65,7 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
             return list;
         }
 
-        private void OnValidateFtpsCertificate(FtpClient control, FtpSslValidationEventArgs e)
+        private void OnValidateFtpsCertificate(BaseFtpClient control, FtpSslValidationEventArgs e)
         {
             if (_appSettings.AllowTestCertificates)
                 e.Accept = true;
@@ -72,22 +74,29 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
         public async Task TransferFileToStorage(Agent agent, string fileName)
         {
             using (var stream = new MemoryStream())
-            using (var client = CreateClient(agent))
+            using (var client = CreateAsyncClient(agent))
             {
                 client.ValidateCertificate += OnValidateFtpsCertificate;
-                await client.ConnectAsync();
-                await client.DownloadAsync(stream, fileName);
+                await client.Connect();
+                await client.DownloadStream(stream, fileName);
                 await _fileService.Transfer(stream, fileName, agent);
             }
         }
 
         private FtpClient CreateClient(Agent agent)
         {
-            return new FtpClient(agent.Url, Port(agent), agent.Username,
-                Encryption.Decrypt(agent.Password, _appSettings.EncryptionKey))
-            {
-                EncryptionMode = FtpEncryptionMode.Implicit
-            };
+            FtpConfig ftpConfig = new FtpConfig();
+            ftpConfig.EncryptionMode = FtpEncryptionMode.Implicit;
+            return new FtpClient(agent.Url, agent.Username,
+                Encryption.Decrypt(agent.Password, _appSettings.EncryptionKey), Port(agent), ftpConfig);
+        }
+
+        private AsyncFtpClient CreateAsyncClient(Agent agent)
+        {
+            FtpConfig ftpConfig = new FtpConfig();
+            ftpConfig.EncryptionMode = FtpEncryptionMode.Implicit;
+            return new AsyncFtpClient(agent.Url, agent.Username,
+                Encryption.Decrypt(agent.Password, _appSettings.EncryptionKey), Port(agent), ftpConfig);
         }
 
         private int Port(Agent agent)

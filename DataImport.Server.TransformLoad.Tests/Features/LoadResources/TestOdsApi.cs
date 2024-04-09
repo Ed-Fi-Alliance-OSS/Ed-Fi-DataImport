@@ -16,11 +16,21 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
         {
             PostedBootstrapData = new List<SimulatedPost>();
             PostedContent = new List<SimulatedPost>();
+            DeletedContent = new List<SimulatedDelete>();
         }
 
         public List<SimulatedPost> PostedContent { get; }
 
+        public List<SimulatedDelete> DeletedContent { get; }
+
         public List<SimulatedPost> PostedBootstrapData { get; }
+
+        public Task<OdsResponse> Delete(string id, string endpointUrl)
+        {
+            DeletedContent.Add(new SimulatedDelete(endpointUrl, id));
+
+            return Task.FromResult(new OdsResponse(HttpStatusCode.NoContent, string.Empty));
+        }
 
         public ApiConfig Config { get; set; } = new ApiConfig
         { ApiUrl = "http://test-ods-v2.5.0.1.example.com/api/v2.0/2019" };
@@ -39,6 +49,13 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
             return Task.FromResult(new OdsResponse(HttpStatusCode.OK, string.Empty));
         }
 
+        public Task<OdsResponse> PostAndDelete(string content, string endpointUrl, string postInfo = null)
+        {
+            PostedContent.Add(new SimulatedPost(endpointUrl, content));
+
+            return Task.FromResult(new OdsResponse(HttpStatusCode.NoContent, string.Empty));
+        }
+
         public class SimulatedPost
         {
             public SimulatedPost(string endpointUrl, string body)
@@ -49,6 +66,28 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
 
             public string EndpointUrl { get; set; }
             public string Body { get; set; }
+        }
+
+        public class SimulatedDelete
+        {
+            public SimulatedDelete(string endpointUrl, string id)
+            {
+                EndpointUrl = endpointUrl;
+                Id = id;
+            }
+
+            public string EndpointUrl { get; set; }
+            public string Id { get; set; }
+        }
+
+        public class SimulatedGet
+        {
+            public SimulatedGet(string endpointUrl)
+            {
+                EndpointUrl = endpointUrl;
+            }
+
+            public string EndpointUrl { get; set; }
         }
     }
 }

@@ -49,8 +49,6 @@ namespace DataImport.Web.Features.DataMaps
 
                 var resourceMetadata = ResourceMetadata.DeserializeFrom(dataMap);
 
-                var dataMapSerializer = new DataMapSerializer(dataMap);
-
                 return new AddEditDataMapViewModel
                 {
                     DataMapId = mapId,
@@ -60,19 +58,25 @@ namespace DataImport.Web.Features.DataMaps
                         DataSources = DataMapperFields.MapDataSourcesTypesToViewModel(),
                         SourceTables = DataMapperFields.MapLookupTablesToViewModel(_database),
                         SourceColumns = DataMapperFields.MapCsvHeadersToSourceColumns(columnHeaders),
-                        ResourceMetadata = resourceMetadata,
-                        Mappings = dataMapSerializer.Deserialize(dataMap.Map)
+                        ResourceMetadata = dataMap.IsDeleteByNaturalKey
+                            ? resourceMetadata.Where(r => r.Required).ToList()
+                            : resourceMetadata,
+                        Mappings = dataMap.IsDeleteOperation
+                            ? new DeleteDataMapSerializer(dataMap).Deserialize(dataMap.Map)
+                            : new DataMapSerializer(dataMap).Deserialize(dataMap.Map),
                     },
 
                     MapName = dataMap.Name,
                     ResourcePath = dataMap.ResourcePath,
                     ResourceName = dataMap.ToResourceName(),
-                    MetadataIsIncompatible = dataMap.MetadataIsIncompatible(_database),
+                    MetadataIsIncompatible = !dataMap.IsDeleteOperation && dataMap.MetadataIsIncompatible(_database),
                     ApiVersion = dataMap.ApiVersion.Version,
                     ApiVersionId = dataMap.ApiVersionId,
                     PreprocessorId = dataMap.FileProcessorScriptId,
                     Preprocessors = _preprocessorSelectListProvider.GetCustomFileProcessors(),
-                    Attribute = dataMap.Attribute
+                    Attribute = dataMap.Attribute,
+                    IsDeleteOperation = dataMap.IsDeleteOperation,
+                    IsDeleteByNaturalKey = dataMap.IsDeleteByNaturalKey
                 };
             }
         }
@@ -86,6 +90,8 @@ namespace DataImport.Web.Features.DataMaps
             public string[] ColumnHeaders { get; set; }
             public int? PreprocessorId { get; set; }
             public string Attribute { get; set; }
+            public bool IsDeleteOperation { get; set; }
+            public bool IsDeleteByNaturalKey { get; set; }
         }
 
         public class Validator : AbstractValidator<Command>
@@ -133,14 +139,18 @@ namespace DataImport.Web.Features.DataMaps
             {
                 var map = _dataImportDbContext.DataMaps.FirstOrDefault(x => x.Id == request.DataMapId) ?? new DataMap();
 
-                var dataMapSerializer = new DataMapSerializer(map);
-
                 map.Name = request.MapName;
-                map.Map = dataMapSerializer.Serialize(request.Mappings);
+                map.Map = request.IsDeleteOperation
+                ? request.IsDeleteByNaturalKey
+                    ? new DataMapSerializer(map).Serialize(request.Mappings)
+                    : new DeleteDataMapSerializer(map).Serialize(request.Mappings)
+                : new DataMapSerializer(map).Serialize(request.Mappings);
                 map.ColumnHeaders = JsonConvert.SerializeObject(request.ColumnHeaders);
                 map.UpdateDate = DateTimeOffset.Now;
                 map.FileProcessorScriptId = request.PreprocessorId;
                 map.Attribute = request.Attribute;
+                map.IsDeleteOperation = request.IsDeleteOperation;
+                map.IsDeleteByNaturalKey = request.IsDeleteOperation && request.IsDeleteByNaturalKey;
                 _logger.Modified(map, m => m.Name);
 
                 return new ToastResponse

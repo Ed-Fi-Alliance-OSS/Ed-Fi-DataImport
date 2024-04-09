@@ -20,7 +20,7 @@ namespace DataImport.Common.Helpers
 
             if (attributes != null && attributes.Any())
             {
-                return attributes.First().Description;
+                return attributes[0].Description;
             }
 
             return value.ToString();
