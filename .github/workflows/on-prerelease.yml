@@ -59,7 +59,7 @@ jobs:
 
           ./build.ps1 -Command BuildAndPublish `
               -Configuration Release `
-              -Version $appVersion 
+              -Version $appVersion
 
       - name: Setup Nuget.exe
         uses: nuget/setup-nuget@fd9fffd6ca4541cf4152a9565835ca1a88a6eb37 #v1.1.1
@@ -100,7 +100,7 @@ jobs:
     outputs:
       sbom-hash-code: ${{ steps.sbom-hash-code.outputs.sbom-hash-code }}
     steps:
-      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Get Artifacts
         uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a #v3.0.2

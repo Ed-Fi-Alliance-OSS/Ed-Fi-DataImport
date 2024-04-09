@@ -55,12 +55,7 @@ jobs:
         shell: pwsh
     steps:
       - name: Checkout the Repo
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@607fce577a46308457984d59e4954e075820f10a # v3.0.3
-        with:
-          dotnet-version: 8.0.x
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Build
         run: ./build.ps1 -Command Build -Configuration Release
@@ -85,8 +80,15 @@ jobs:
 
       - name: Dependency Review ("Dependabot on PR")
         if: github.event_name == 'pull_request'
-        uses: actions/dependency-review-action@c090f4e553673e6e505ea70d6a95362ee12adb94 # v3.0.3
+        uses: actions/dependency-review-action@4901385134134e04cec5fbe5ddfe3b2c5bd5d976 # v4.0.0
 
+  code-analysis:
+    name: Code Analysis
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+            shell: pwsh
+    steps:
       - name: Initialize CodeQL
         if: success()
         uses: github/codeql-action/init@cf7e9f23492505046de9a37830c3711dd0f25bb3 # v2.16.2
