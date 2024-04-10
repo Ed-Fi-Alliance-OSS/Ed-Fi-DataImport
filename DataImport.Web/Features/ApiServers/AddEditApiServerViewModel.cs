@@ -28,6 +28,12 @@ namespace DataImport.Web.Features.ApiServers
         [Display(Name = "API Version")]
         public string ApiVersion { get; set; }
 
+        [Display(Name = "Tenant")]
+        public string Tenant { get; set; }
+
+        [Display(Name = "Context")]
+        public string Context { get; set; }
+
         [Display(Name = "Key")]
         public string Key { get; set; }
 

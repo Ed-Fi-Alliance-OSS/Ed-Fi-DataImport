@@ -11,6 +11,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 @{
     ViewBag.Title = (!@Model.Id.HasValue ? "Add" : "Edit") + " API Connection";
     var hidden = string.IsNullOrEmpty(Model.ApiVersion) ? "hidden=true" : "";
+    var hiddenForApiVersionSeven = string.IsNullOrEmpty(Model.ApiVersion) || Model.ApiVersion != "7.1" ? "hidden=true" : "";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -39,6 +40,11 @@ See the LICENSE and NOTICES files in the project root for more information.
     @Html.Input(m => m.Url, new { placeholder = "API Server Base URL (Example: https://[url]/api/v2.0/2019)" },
         Html.HelpSpan("Examples: https://ods.example.com/api/v2.0/2019, https://ods.example.com/data/v3, or https://ods.example.com/data/v3/2019"),
         Html.OdsApiUrlHelpModalButton())
+
+    <div id="divApiVersionSeven" @hiddenForApiVersionSeven>
+        @Html.Input(m => m.Tenant)
+        @Html.Input(m => m.Context)
+    </div>
 
     @Html.Input(m => m.Key)
     @Html.Input(m => m.Secret)
@@ -136,6 +142,7 @@ See the LICENSE and NOTICES files in the project root for more information.
                 input.val(apiVersion);
                 $("#ApiVersionContent").text(apiVersion);
                 $("#divApiVersion").attr('hidden', !apiVersion);
+                $("#divApiVersionSeven").attr('hidden', apiVersion != "7.1");
             }
 
             function disableFormButtons(disabled) {
