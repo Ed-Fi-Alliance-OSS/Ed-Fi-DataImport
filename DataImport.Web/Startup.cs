@@ -129,6 +129,7 @@ namespace DataImport.Web
             services.AddScoped<Services.Swagger.ISwaggerMetadataFetcher, Services.Swagger.SwaggerMetadataFetcher>();
             services.AddScoped<Services.Swagger.ISwaggerMetadataProcessor, Services.Swagger.SwaggerMetadataProcessorV1>();
             services.AddScoped<Services.Swagger.ISwaggerMetadataProcessor, Services.Swagger.SwaggerMetadataProcessorV2>();
+            services.AddScoped<Services.Swagger.ISwaggerMetadataProcessor, Services.Swagger.SwaggerMetadataProcessorV3>();
             services.AddTransient<Features.Agent.AgentSelectListProvider>();
             services.AddScoped<IEncryptionService, EncryptionService>();
             services.AddSingleton<IClock, Clock>();

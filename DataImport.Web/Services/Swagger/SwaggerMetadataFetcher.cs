@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Automation;
 using System.Threading.Tasks;
 
 namespace DataImport.Web.Services.Swagger
@@ -57,7 +58,10 @@ namespace DataImport.Web.Services.Swagger
 
                 var rawApis = await _swaggerWebClient.DownloadString(baseUrl);
                 var response = JToken.Parse(rawApis);
-                var isYearSpecific = response["apiMode"].ToString() == "Year Specific";
+                var isYearSpecific = false;
+
+                if (response["apiMode"] != null)
+                    isYearSpecific = response["apiMode"].ToString() == "Year Specific";
 
                 return isYearSpecific ? new Uri(apiUrl).Segments.Last().Trim('/') : null;
             }
@@ -75,7 +79,10 @@ namespace DataImport.Web.Services.Swagger
 
                 var rawApis = await _swaggerWebClient.DownloadString(baseUrl);
                 var response = JToken.Parse(rawApis);
-                var isInstanceYearSpecific = response["apiMode"].ToString() == "Instance Year Specific";
+                var isInstanceYearSpecific = false;
+
+                if (response["apiMode"] != null)
+                    isInstanceYearSpecific = response["apiMode"].ToString() == "Instance Year Specific";
 
                 return isInstanceYearSpecific ? new Uri(apiUrl).Segments.Reverse().Skip(1).Take(1).Single().Trim('/') : null;
             }
@@ -93,7 +100,10 @@ namespace DataImport.Web.Services.Swagger
 
                 var rawApis = await _swaggerWebClient.DownloadString(baseUrl);
                 var response = JToken.Parse(rawApis);
-                var isInstanceYearSpecific = response["apiMode"].ToString() == "Instance Year Specific";
+                var isInstanceYearSpecific = false;
+
+                if (response["apiMode"] != null)
+                    isInstanceYearSpecific = response["apiMode"].ToString() == "Instance Year Specific";
 
                 return isInstanceYearSpecific ? new Uri(apiUrl).Segments.Last().Trim('/') : null;
             }
@@ -177,29 +187,56 @@ namespace DataImport.Web.Services.Swagger
                 var v2BaseUrl = Common.Helpers.UrlUtility.RemoveAfterLastInstanceOf(apiUrl.Trim(), "/api/");
                 return $"{v2BaseUrl}/metadata/{apiSection.ToMetadataRoutePart()}/api-docs";
             }
-
-            var baseUrl = Common.Helpers.UrlUtility.RemoveAfterLastInstanceOf(apiUrl.Trim(), "/data/");
-            var year = await GetYearSpecificYear(apiUrl);
-
-            var instanceYearSpecificInstance = await GetInstanceYearSpecificInstance(apiUrl);
-            var instanceYearSpecificYear = await GetInstanceYearSpecificYear(apiUrl);
-
-            string path;
-
-            if (year is not null)
+            else if (apiVersion.IsOdsV3())
             {
-                path = $"data/v3/{year}";
-            }
-            else if (instanceYearSpecificInstance is not null && instanceYearSpecificYear is not null)
-            {
-                path = $"data/v3/{instanceYearSpecificInstance}/{instanceYearSpecificYear}";
+                var baseUrl = Common.Helpers.UrlUtility.RemoveAfterLastInstanceOf(apiUrl.Trim(), "/data/");
+                var year = await GetYearSpecificYear(apiUrl);
+
+                var instanceYearSpecificInstance = await GetInstanceYearSpecificInstance(apiUrl);
+                var instanceYearSpecificYear = await GetInstanceYearSpecificYear(apiUrl);
+
+                string path;
+
+                if (year is not null)
+                {
+                    path = $"data/v3/{year}";
+                }
+                else if (instanceYearSpecificInstance is not null && instanceYearSpecificYear is not null)
+                {
+                    path = $"data/v3/{instanceYearSpecificInstance}/{instanceYearSpecificYear}";
+                }
+                else
+                {
+                    path = "data/v3";
+                }
+
+                return $"{baseUrl}/metadata/{path}/{apiSection.ToMetadataRoutePart()}/swagger.json";
             }
             else
             {
-                path = "data/v3";
-            }
+                var baseUrl = Common.Helpers.UrlUtility.RemoveAfterLastInstanceOf(apiUrl.Trim(), "/data/");
+                var year = await GetYearSpecificYear(apiUrl);
 
-            return $"{baseUrl}/metadata/{path}/{apiSection.ToMetadataRoutePart()}/swagger.json";
+                var instanceYearSpecificInstance = await GetInstanceYearSpecificInstance(apiUrl);
+                var instanceYearSpecificYear = await GetInstanceYearSpecificYear(apiUrl);
+
+                string path;
+
+                if (year is not null)
+                {
+                    path = $"data/v3/{year}";
+                }
+                else if (instanceYearSpecificInstance is not null && instanceYearSpecificYear is not null)
+                {
+                    path = $"data/v3/{instanceYearSpecificInstance}/{instanceYearSpecificYear}";
+                }
+                else
+                {
+                    path = "data/v3";
+                }
+
+                return $"{baseUrl}/metadata/{path}/{apiSection.ToMetadataRoutePart()}/swagger.json";
+            }
         }
     }
 }

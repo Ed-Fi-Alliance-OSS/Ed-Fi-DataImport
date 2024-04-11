@@ -11,5 +11,10 @@ namespace DataImport.Common.ExtensionMethods
         {
             return apiVersion != null && apiVersion.StartsWith("2.");
         }
+
+        public static bool IsOdsV3(this string apiVersion)
+        {
+            return apiVersion != null && apiVersion.StartsWith("7.");
+        }
     }
 }
