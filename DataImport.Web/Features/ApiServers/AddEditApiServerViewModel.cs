@@ -65,8 +65,8 @@ namespace DataImport.Web.Features.ApiServers
                 apiServer.Secret = encryptionService.TryEncrypt(Secret, encryptionKey, out var encryptedKey) ? encryptedKey : string.Empty;
             }
 
-            apiServer.TokenUrl = await configurationService.GetTokenUrl(apiServer.Url, apiServer.ApiVersion.Version);
-            apiServer.AuthUrl = await configurationService.GetAuthUrl(apiServer.Url, apiServer.ApiVersion.Version);
+            apiServer.TokenUrl = await configurationService.GetTokenUrl(apiServer.Url, apiServer.ApiVersion.Version, Tenant, Context);
+            apiServer.AuthUrl = await configurationService.GetAuthUrl(apiServer.Url, apiServer.ApiVersion.Version, Tenant, Context);
         }
 
         public class Validator : AbstractValidator<AddEditApiServerViewModel>

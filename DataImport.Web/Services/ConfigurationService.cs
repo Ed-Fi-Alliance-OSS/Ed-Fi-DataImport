@@ -32,7 +32,7 @@ namespace DataImport.Web.Services
             return _options.Value.AllowUserRegistration;
         }
 
-        public async Task FillSwaggerMetadata(ApiServer apiServer)
+        public async Task FillSwaggerMetadata(ApiServerTenantAndContext apiServer)
         {
             if (apiServer.ApiVersion == null)
                 throw new ArgumentException($"{nameof(ApiServer.ApiVersion)} must be populated in {nameof(apiServer)}", nameof(apiServer));
@@ -40,7 +40,7 @@ namespace DataImport.Web.Services
             IEnumerable<SwaggerResource> swaggerResources;
             try
             {
-                swaggerResources = await _swaggerMetadataFetcher.GetMetadata(apiServer.Url, apiServer.ApiVersion.Version);
+                swaggerResources = await _swaggerMetadataFetcher.GetMetadata(apiServer.Url, apiServer.ApiVersion.Version, apiServer.Tenant, apiServer.Context);
             }
             catch (OdsApiServerException e)
             {
@@ -67,11 +67,11 @@ namespace DataImport.Web.Services
             }
         }
 
-        public async Task<string> GetTokenUrl(string apiUrl, string apiVersion)
-            => await _swaggerMetadataFetcher.GetTokenUrl(apiUrl, apiVersion);
+        public async Task<string> GetTokenUrl(string apiUrl, string apiVersion, string tenant, string context)
+            => await _swaggerMetadataFetcher.GetTokenUrl(apiUrl, apiVersion, tenant, context);
 
-        public async Task<string> GetAuthUrl(string apiUrl, string apiVersion)
-            => await _swaggerMetadataFetcher.GetAuthUrl(apiUrl, apiVersion);
+        public async Task<string> GetAuthUrl(string apiUrl, string apiVersion, string tenant, string context)
+            => await _swaggerMetadataFetcher.GetAuthUrl(apiUrl, apiVersion, tenant, context);
 
         public async Task<string> InferOdsApiVersion(string apiUrl)
             => await _swaggerMetadataFetcher.InferOdsApiVersion(apiUrl);

@@ -9,7 +9,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management.Automation;
 using System.Threading.Tasks;
 
 namespace DataImport.Web.Services.Swagger
@@ -25,10 +24,10 @@ namespace DataImport.Web.Services.Swagger
             _swaggerWebClient = swaggerWebClient;
         }
 
-        public async Task<IEnumerable<SwaggerResource>> GetMetadata(string apiUrl, string apiVersion)
+        public async Task<IEnumerable<SwaggerResource>> GetMetadata(string apiUrl, string apiVersion, string tenant, string context)
         {
-            var (resourcesSwaggerDocument, resourcesHandler) = await GetSwaggerDocument(apiUrl, apiVersion, ApiSection.Resources);
-            var (descriptorsSwaggerDocument, descriptorsHandler) = await GetSwaggerDocument(apiUrl, apiVersion, ApiSection.Descriptors);
+            var (resourcesSwaggerDocument, resourcesHandler) = await GetSwaggerDocument(apiUrl, apiVersion, tenant, context, ApiSection.Resources);
+            var (descriptorsSwaggerDocument, descriptorsHandler) = await GetSwaggerDocument(apiUrl, apiVersion, tenant, context, ApiSection.Descriptors);
 
             var resources = await resourcesHandler.GetMetadata(resourcesSwaggerDocument, ApiSection.Resources);
             var descriptors = await descriptorsHandler.GetMetadata(descriptorsSwaggerDocument, ApiSection.Descriptors);
@@ -36,16 +35,16 @@ namespace DataImport.Web.Services.Swagger
             return resources.Concat(descriptors);
         }
 
-        public async Task<string> GetTokenUrl(string apiUrl, string apiVersion)
+        public async Task<string> GetTokenUrl(string apiUrl, string apiVersion, string tenant, string context)
         {
-            var (swaggerDocument, handler) = await GetSwaggerDocument(apiUrl, apiVersion, ApiSection.Resources);
+            var (swaggerDocument, handler) = await GetSwaggerDocument(apiUrl, apiVersion, tenant, context, ApiSection.Resources);
 
             return handler.GetTokenUrl(swaggerDocument);
         }
 
-        public async Task<string> GetAuthUrl(string apiUrl, string apiVersion)
+        public async Task<string> GetAuthUrl(string apiUrl, string apiVersion, string tenant, string context)
         {
-            var (swaggerDocument, handler) = await GetSwaggerDocument(apiUrl, apiVersion, ApiSection.Resources);
+            var (swaggerDocument, handler) = await GetSwaggerDocument(apiUrl, apiVersion, tenant, context, ApiSection.Resources);
 
             return handler.GetAuthUrl(swaggerDocument);
         }
@@ -156,9 +155,9 @@ namespace DataImport.Web.Services.Swagger
             }
         }
 
-        private async Task<(JObject swaggerDocument, ISwaggerMetadataProcessor swaggerMetadataProcessor)> GetSwaggerDocument(string apiUrl, string apiVersion, ApiSection apiSection)
+        private async Task<(JObject swaggerDocument, ISwaggerMetadataProcessor swaggerMetadataProcessor)> GetSwaggerDocument(string apiUrl, string apiVersion, string tenant, string context, ApiSection apiSection)
         {
-            var baseUrl = await GetSwaggerBaseDocumentUrl(apiUrl, apiVersion, apiSection);
+            var baseUrl = await GetSwaggerBaseDocumentUrl(apiUrl, apiVersion, tenant, context, apiSection);
 
             var rawApis = await _swaggerWebClient.DownloadString(baseUrl);
 
@@ -180,7 +179,7 @@ namespace DataImport.Web.Services.Swagger
             return (swaggerDocument, handler);
         }
 
-        protected async Task<string> GetSwaggerBaseDocumentUrl(string apiUrl, string apiVersion, ApiSection apiSection)
+        protected async Task<string> GetSwaggerBaseDocumentUrl(string apiUrl, string apiVersion, string tenant, string context, ApiSection apiSection)
         {
             if (apiVersion.IsOdsV2())
             {
@@ -197,7 +196,11 @@ namespace DataImport.Web.Services.Swagger
 
                 string path;
 
-                if (year is not null)
+                if (apiVersion == "7.1" && !string.IsNullOrEmpty(context))
+                {
+                    path = $"{context}/data/v3";
+                }
+                else if (year is not null)
                 {
                     path = $"data/v3/{year}";
                 }

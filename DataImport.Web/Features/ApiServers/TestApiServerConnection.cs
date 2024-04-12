@@ -133,8 +133,8 @@ namespace DataImport.Web.Features.ApiServers
 
                 try
                 {
-                    apiServer.TokenUrl = await _configurationService.GetTokenUrl(request.Url, request.ApiVersion);
-                    apiServer.AuthUrl = await _configurationService.GetAuthUrl(request.Url, request.ApiVersion);
+                    apiServer.TokenUrl = await _configurationService.GetTokenUrl(request.Url, request.ApiVersion, string.Empty, string.Empty);
+                    apiServer.AuthUrl = await _configurationService.GetAuthUrl(request.Url, request.ApiVersion, string.Empty, string.Empty);
                 }
                 catch (OdsApiServerException e)
                 {

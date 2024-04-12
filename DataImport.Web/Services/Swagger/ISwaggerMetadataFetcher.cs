@@ -10,9 +10,9 @@ namespace DataImport.Web.Services.Swagger
 {
     public interface ISwaggerMetadataFetcher
     {
-        Task<IEnumerable<SwaggerResource>> GetMetadata(string apiUrl, string apiVersion);
-        Task<string> GetTokenUrl(string apiUrl, string apiVersion);
-        Task<string> GetAuthUrl(string apiUrl, string apiVersion);
+        Task<IEnumerable<SwaggerResource>> GetMetadata(string apiUrl, string apiVersion, string tenant, string context);
+        Task<string> GetTokenUrl(string apiUrl, string apiVersion, string tenant, string context);
+        Task<string> GetAuthUrl(string apiUrl, string apiVersion, string tenant, string context);
         Task<string> InferOdsApiVersion(string apiUrl);
         Task<string> GetYearSpecificYear(string apiUrl);
         Task<string> GetInstanceYearSpecificInstance(string apiUrl);
