@@ -11,6 +11,7 @@ using FakeItEasy;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using RestSharp;
+using RestSharp.Authenticators;
 using Shouldly;
 
 namespace DataImport.EdFi.UnitTests.Api.EnrollmentComposite
@@ -68,6 +69,44 @@ namespace DataImport.EdFi.UnitTests.Api.EnrollmentComposite
             // Assert
             enrollmentApi.Client.Options.BaseUrl.ShouldNotBeNull();
             enrollmentApi.Client.Options.BaseUrl.ToString().ShouldBe(ExpectedUrl);
+        }
+
+        [Test]
+        public void Given_suite2_version260_then_should_have_the_authenticator()
+        {
+            // Arrange
+            const string ApiVersion = "2.6.0";
+            const string Year = "2199";
+            const string InitialUrl = "https://example.com/v3/data/";
+            RestClientOptions options = new RestClientOptions();
+            options.BaseUrl = new Uri(InitialUrl);
+            options.Authenticator = A.Fake<IAuthenticator>();
+            var restClient = new RestClient(options);
+
+            // Act
+            var enrollmentApi = new EnrollmentApiTss(restClient, ApiVersion, Year);
+
+            // Assert
+            enrollmentApi.Client.Options.Authenticator.ShouldNotBeNull();
+        }
+
+        [TestCase("3.1.1", "2129")]
+        [TestCase("3.1.1", null)]
+        [TestCase("5.1.0", "2129")]
+        [TestCase("5.1.0", null)]
+        public void Given_suite_3_then_should_have_the_authenticator(string apiVersion, string year)
+        {
+            const string InitialUrl = "https://example.com/v3/data/";
+            RestClientOptions options = new RestClientOptions();
+            options.BaseUrl = new Uri(InitialUrl);
+            options.Authenticator = A.Fake<IAuthenticator>();
+            var restClient = new RestClient(options);
+
+            // Act
+            var enrollmentApi = new EnrollmentApiTss(restClient, apiVersion, year);
+
+            // Assert
+            enrollmentApi.Client.Options.Authenticator.ShouldNotBeNull();
         }
     }
 }
