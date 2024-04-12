@@ -4,8 +4,11 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
+using DataImport.Common.ExtensionMethods;
 using DataImport.EdFi.Api.EnrollmentComposite;
+using DataImport.Models;
 using FakeItEasy;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using RestSharp;
 using Shouldly;
@@ -34,15 +37,16 @@ namespace DataImport.EdFi.UnitTests.Api.EnrollmentComposite
             const string Year = "2199";
 
             const string InitialUrl = "https://example.com";
-            var restClient = A.Fake<IRestClient>();
-            restClient.BaseUrl = new Uri(InitialUrl);
+            RestClientOptions options = new RestClientOptions();
+            options.BaseUrl = new Uri(InitialUrl);
+            var restClient = new RestClient(options);
 
             // Act
-            var _ = new EnrollmentApiTss(restClient, ApiVersion, Year);
+            var enrollmentApi = new EnrollmentApiTss(restClient, ApiVersion, Year);
 
             // Assert
-            restClient.BaseUrl.ShouldNotBeNull();
-            restClient.BaseUrl.ToString().ShouldBe($"{InitialUrl}/");
+            enrollmentApi.Client.Options.BaseUrl.ShouldNotBeNull();
+            enrollmentApi.Client.Options.BaseUrl.ToString().ShouldBe($"{InitialUrl}/");
         }
 
         [TestCase("3.1.1", "2129", "/composites/v1/2129/")]
@@ -54,16 +58,16 @@ namespace DataImport.EdFi.UnitTests.Api.EnrollmentComposite
             // Arrange
             const string InitialUrl = "https://example.com/v3/data/";
             const string ExpectedUrl = "https://example.com/v3";
-
-            var restClient = A.Fake<IRestClient>();
-            restClient.BaseUrl = new Uri(InitialUrl);
+            RestClientOptions options = new RestClientOptions();
+            options.BaseUrl = new Uri(InitialUrl);
+            var restClient = new RestClient(options);
 
             // Act
-            var _ = new EnrollmentApiTss(restClient, apiVersion, year);
+            var enrollmentApi = new EnrollmentApiTss(restClient, apiVersion, year);
 
             // Assert
-            restClient.BaseUrl.ShouldNotBeNull();
-            restClient.BaseUrl.ToString().ShouldBe(ExpectedUrl);
+            enrollmentApi.Client.Options.BaseUrl.ShouldNotBeNull();
+            enrollmentApi.Client.Options.BaseUrl.ToString().ShouldBe(ExpectedUrl);
         }
     }
 }

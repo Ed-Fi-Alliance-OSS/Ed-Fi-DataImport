@@ -144,9 +144,11 @@ namespace DataImport.Web.Features.ApiServers
 
                 try
                 {
-                    var client = new RestClient(url);
                     var tokenRetriever = new OdsApiTokenRetriever(_oAuthRequestWrapper, apiServer);
-                    client.Authenticator = new BearerTokenAuthenticator(tokenRetriever);
+                    var options = new RestClientOptions();
+                    options.Authenticator = new BearerTokenAuthenticator(tokenRetriever);
+                    options.BaseUrl = new Uri(url);
+                    var client = new RestClient(options);
 
                     var api = new SchoolsApi(client, apiVersion);
                     var apiCall = api.GetAllSchoolsWithHttpResponse(0, 1);

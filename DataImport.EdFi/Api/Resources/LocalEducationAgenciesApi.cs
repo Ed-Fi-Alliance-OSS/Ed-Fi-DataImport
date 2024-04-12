@@ -4,6 +4,7 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using DataImport.Common.ExtensionMethods;
 using DataImport.EdFi.Models.Resources;
 using RestSharp;
@@ -24,15 +25,17 @@ namespace DataImport.EdFi.Api.Resources
         public LocalEducationAgency GetLocalEducationAgenciesById(string id)
         {
             var request = _apiVersion.IsOdsV2()
-                ? new RestRequest("/localEducationAgencies/{id}", Method.GET)
-                : new RestRequest("/ed-fi/localEducationAgencies/{id}", Method.GET);
+                ? new RestRequest("/localEducationAgencies/{id}", Method.Get)
+                : new RestRequest("/ed-fi/localEducationAgencies/{id}", Method.Get);
             request.RequestFormat = DataFormat.Json;
 
             request.AddUrlSegment("id", id);
             if (id == null)
                 throw new ArgumentException("API method call is missing required parameters");
             request.AddHeader("Accept", "application/json");
-            var response = _client.Execute<LocalEducationAgency>(request);
+            var clientExecute = _client.ExecuteAsync<LocalEducationAgency>(request);
+            clientExecute.Wait();
+            var response = clientExecute.Result;
 
             return response.Data;
         }

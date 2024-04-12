@@ -28,7 +28,7 @@ namespace DataImport.Common.Helpers
             var authUrl = new Uri(apiServer.AuthUrl);
             var oauthClient = new RestClient(authUrl.GetLeftPart(UriPartial.Authority));
 
-            var accessCodeRequest = new RestRequest(authUrl.AbsolutePath, Method.POST);
+            var accessCodeRequest = new RestRequest(authUrl.AbsolutePath, Method.Post);
             var apiServerKey = !string.IsNullOrEmpty(encryptionKey)
                 ? Decrypt(apiServer.Key, encryptionKey)
                 : apiServer.Key;
@@ -58,7 +58,7 @@ namespace DataImport.Common.Helpers
             var tokenUrl = new Uri(apiServer.TokenUrl);
             var oauthClient = new RestClient(tokenUrl.GetLeftPart(UriPartial.Authority));
 
-            var bearerTokenRequest = new RestRequest(tokenUrl.AbsolutePath, Method.POST);
+            var bearerTokenRequest = new RestRequest(tokenUrl.AbsolutePath, Method.Post);
 
             var apiServerKey = !string.IsNullOrEmpty(encryptionKey)
                 ? Decrypt(apiServer.Key, encryptionKey)
@@ -79,9 +79,7 @@ namespace DataImport.Common.Helpers
                 bearerTokenRequest.AddParameter("grant_type", "client_credentials");
             }
 
-
             var bearerTokenResponse = oauthClient.Execute<BearerTokenResponse>(bearerTokenRequest);
-
             if (bearerTokenResponse.StatusCode != HttpStatusCode.OK)
                 throw new AuthenticationException("Unable to retrieve an access token. Error message: " +
                                                   bearerTokenResponse.ErrorMessage);

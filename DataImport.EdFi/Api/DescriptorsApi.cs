@@ -22,15 +22,17 @@ namespace DataImport.EdFi.Api
 
         public List<Descriptor> GetAllDescriptors(string descriptorPath, int? offset = null, int? limit = null)
         {
-            var request = new RestRequest($"/{descriptorPath}", Method.GET) { RequestFormat = DataFormat.Json };
+            var request = new RestRequest($"/{descriptorPath}", Method.Get) { RequestFormat = DataFormat.Json };
 
             if (offset != null)
-                request.AddParameter("offset", offset);
+                request.AddParameter("offset", offset, ParameterType.HttpHeader);
             if (limit != null)
-                request.AddParameter("limit", limit);
+                request.AddParameter("limit", limit, ParameterType.HttpHeader);
             request.AddHeader("Accept", "application/json");
 
-            var response = _client.Execute<List<Descriptor>>(request);
+            var clientExecute = _client.ExecuteAsync<List<Descriptor>>(request);
+            clientExecute.Wait();
+            var response = clientExecute.Result;
             if (response.StatusCode == HttpStatusCode.NotFound)
                 throw new DescriptorNotFoundException(new Exception($"Descriptor '{descriptorPath}' could not be found."));
 

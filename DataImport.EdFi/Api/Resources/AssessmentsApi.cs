@@ -29,37 +29,59 @@ namespace DataImport.EdFi.Api.Resources
         public List<Assessment> GetAllAssessments(int? offset = null, int? limit = null)
         {
             var request = _apiVersion.IsOdsV2()
-                ? new RestRequest("/assessments", Method.GET)
-                : new RestRequest("/ed-fi/assessments", Method.GET);
+                ? new RestRequest("/assessments", Method.Get)
+                : new RestRequest("/ed-fi/assessments", Method.Get);
             request.RequestFormat = DataFormat.Json;
 
             if (offset != null)
-                request.AddParameter("offset", offset);
+                request.AddParameter("offset", offset, ParameterType.HttpHeader);
             if (limit != null)
-                request.AddParameter("limit", limit);
+                request.AddParameter("limit", limit, ParameterType.HttpHeader);
             request.AddHeader("Accept", "application/json");
 
-            return _apiVersion.IsOdsV2()
-                ? _client.Execute<List<ModelsV25.Resources.Assessment>>(request).Data
-                    .Select(_mapper.Map<Assessment>).ToList()
-                : _client.Execute<List<Assessment>>(request).Data;
+            if (!_apiVersion.IsOdsV2())
+            {
+                var clientExecute =
+                    _client.ExecuteAsync<List<Assessment>>(request);
+                clientExecute.Wait();
+                return clientExecute.Result.Data
+                    .Select(_mapper.Map<Assessment>).ToList();
+            }
+            else
+            {
+                var clientExecute =
+                    _client.ExecuteAsync<List<ModelsV25.Resources.Assessment>>(request);
+                clientExecute.Wait();
+                return clientExecute.Result.Data
+                    .Select(_mapper.Map<Assessment>).ToList();
+            }
         }
 
         public Assessment GetAssessmentById(string id)
         {
             var request = _apiVersion.IsOdsV2()
-                ? new RestRequest("/assessments/{id}", Method.GET)
-                : new RestRequest("/ed-fi/assessments/{id}", Method.GET);
+                ? new RestRequest("/assessments/{id}", Method.Get)
+                : new RestRequest("/ed-fi/assessments/{id}", Method.Get);
             request.RequestFormat = DataFormat.Json;
 
             request.AddUrlSegment("id", id);
             if (id == null)
                 throw new ArgumentException("API method call is missing required parameters");
             request.AddHeader("Accept", "application/json");
-
-            return _apiVersion.IsOdsV2()
-                ? _mapper.Map<Assessment>(_client.Execute<ModelsV25.Resources.Assessment>(request).Data)
-                : _client.Execute<Assessment>(request).Data;
+            if (!_apiVersion.IsOdsV2())
+            {
+                var clientExecute =
+                    _client.ExecuteAsync<Assessment>(request);
+                clientExecute.Wait();
+                return clientExecute.Result.Data;
+            }
+            else
+            {
+                var clientExecute =
+                    _client.ExecuteAsync<ModelsV25.Resources.Assessment>(request);
+                clientExecute.Wait();
+                return _mapper.Map<Assessment>(clientExecute.Result.Data);
+            }
         }
     }
 }

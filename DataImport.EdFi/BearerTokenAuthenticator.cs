@@ -5,6 +5,7 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using DataImport.Common.Helpers;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -25,13 +26,14 @@ namespace DataImport.EdFi
             _bearerToken = tokenRetriever.ObtainNewBearerToken();
         }
 
-        public void Authenticate(IRestClient client, IRestRequest request)
+        public ValueTask Authenticate(IRestClient client, RestRequest request)
         {
             // confirm bearer token is not already there -- implicit IAuthenticator requirement
             if (!request.Parameters.Any(p => p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)))
             {
                 request.AddParameter("Authorization", "bearer " + _bearerToken, ParameterType.HttpHeader);
             }
+            return new ValueTask();
         }
     }
 }

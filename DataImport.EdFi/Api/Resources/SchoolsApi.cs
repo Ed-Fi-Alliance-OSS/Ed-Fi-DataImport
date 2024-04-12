@@ -22,19 +22,21 @@ namespace DataImport.EdFi.Api.Resources
             _apiVersion = apiVersion;
         }
 
-        public IRestResponse<List<School>> GetAllSchoolsWithHttpResponse(int? offset = null, int? limit = null)
+        public RestResponse<List<School>> GetAllSchoolsWithHttpResponse(int? offset = null, int? limit = null)
         {
             var request = _apiVersion.IsOdsV2()
-                ? new RestRequest("/schools", Method.GET)
-                : new RestRequest("/ed-fi/schools", Method.GET);
+                ? new RestRequest("/schools", Method.Get)
+                : new RestRequest("/ed-fi/schools", Method.Get);
             request.RequestFormat = DataFormat.Json;
 
             if (offset != null)
-                request.AddParameter("offset", offset);
+                request.AddParameter("offset", offset, ParameterType.HttpHeader);
             if (limit != null)
-                request.AddParameter("limit", limit);
+                request.AddParameter("limit", limit, ParameterType.HttpHeader);
             request.AddHeader("Accept", "application/json");
-            var response = _client.Execute<List<School>>(request);
+            var clientExecute = _client.ExecuteAsync<List<School>>(request);
+            clientExecute.Wait();
+            var response = clientExecute.Result;
 
             return response;
         }
@@ -42,15 +44,17 @@ namespace DataImport.EdFi.Api.Resources
         public School GetSchoolById(string id)
         {
             var request = _apiVersion.IsOdsV2()
-                ? new RestRequest("/schools/{id}", Method.GET)
-                : new RestRequest("/ed-fi/schools/{id}", Method.GET);
+                ? new RestRequest("/schools/{id}", Method.Get)
+                : new RestRequest("/ed-fi/schools/{id}", Method.Get);
             request.RequestFormat = DataFormat.Json;
 
             request.AddUrlSegment("id", id);
             if (id == null)
                 throw new ArgumentException("API method call is missing required parameters");
             request.AddHeader("Accept", "application/json");
-            var response = _client.Execute<School>(request);
+            var clientExecute = _client.ExecuteAsync<School>(request);
+            clientExecute.Wait();
+            var response = clientExecute.Result;
 
             return response.Data;
         }

@@ -44,11 +44,10 @@ namespace DataImport.Web.Services
         protected override IRestClient EstablishApiClient(ApiServer apiServer)
         {
             var tokenRetriever = new OdsApiTokenRetriever(_oauthRequestWrapper, apiServer, EncryptionKey);
-
-            return new RestClient(apiServer?.Url)
-            {
-                Authenticator = new BearerTokenAuthenticator(tokenRetriever)
-            };
+            var options = new RestClientOptions();
+            options.Authenticator = new BearerTokenAuthenticator(tokenRetriever);
+            options.BaseUrl = new Uri(apiServer?.Url);
+            return new RestClient(options);
         }
 
         protected override async Task<string> GetYearSpecificYear(ApiServer apiServer, ApiVersion apiVersion)

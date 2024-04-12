@@ -24,22 +24,22 @@ namespace DataImport.EdFi.Api.Resources
         public List<ObjectiveAssessment> GetObjectiveAssessmentsByAssessmentKey(int? offset = null, int? limit = null, string assessmentIdentifier = null, string @namespace = null)
         {
             var request = _apiVersion.IsOdsV2()
-                ? new RestRequest("/objectiveAssessments", Method.GET)
-                : new RestRequest("/ed-fi/objectiveAssessments", Method.GET);
+                ? new RestRequest("/objectiveAssessments", Method.Get)
+                : new RestRequest("/ed-fi/objectiveAssessments", Method.Get);
             request.RequestFormat = DataFormat.Json;
 
             if (offset != null)
-                request.AddParameter("offset", offset);
+                request.AddParameter("offset", offset, ParameterType.HttpHeader);
             if (limit != null)
-                request.AddParameter("limit", limit);
+                request.AddParameter("limit", limit, ParameterType.HttpHeader);
             if (assessmentIdentifier != null)
                 request.AddParameter("assessmentIdentifier", assessmentIdentifier);
             if (@namespace != null)
                 request.AddParameter("@namespace", @namespace);
             request.AddHeader("Accept", "application/json");
-
-            var response = _client.Execute<List<ObjectiveAssessment>>(request);
-
+            var clientExecute = _client.ExecuteAsync<List<ObjectiveAssessment>>(request);
+            clientExecute.Wait();
+            var response = clientExecute.Result;
             return response.Data;
         }
     }
