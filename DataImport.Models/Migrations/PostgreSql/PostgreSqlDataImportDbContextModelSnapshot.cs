@@ -17,7 +17,7 @@ namespace DataImport.Models.Migrations.PostgreSql
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -27,7 +27,9 @@ namespace DataImport.Models.Migrations.PostgreSql
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.ToView("AdminView");
+                    b.ToTable((string)null);
+
+                    b.ToView("AdminView", (string)null);
                 });
 
             modelBuilder.Entity("DataImport.Models.Agent", b =>
@@ -146,6 +148,10 @@ namespace DataImport.Models.Migrations.PostgreSql
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<string>("Context")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnType("text");
@@ -158,6 +164,10 @@ namespace DataImport.Models.Migrations.PostgreSql
                     b.Property<string>("Secret")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("Tenant")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("TokenUrl")
                         .IsRequired()
@@ -361,16 +371,6 @@ namespace DataImport.Models.Migrations.PostgreSql
                     b.ToTable("Configurations");
                 });
 
-            modelBuilder.Entity("DataImport.Models.DatabaseVersion", b =>
-                {
-                    b.Property<string>("VersionString")
-                        .HasColumnType("text");
-
-                    b.ToTable("DatabaseVersion");
-
-                    b.ToSqlQuery("SELECT version() as VersionString");
-                });
-
             modelBuilder.Entity("DataImport.Models.DataMap", b =>
                 {
                     b.Property<int>("Id")
@@ -454,6 +454,16 @@ namespace DataImport.Models.Migrations.PostgreSql
                     b.HasIndex("DataMapId");
 
                     b.ToTable("DataMapAgents");
+                });
+
+            modelBuilder.Entity("DataImport.Models.DatabaseVersion", b =>
+                {
+                    b.Property<string>("VersionString")
+                        .HasColumnType("text");
+
+                    b.ToTable("DatabaseVersion");
+
+                    b.ToSqlQuery("SELECT version() as VersionString");
                 });
 
             modelBuilder.Entity("DataImport.Models.File", b =>

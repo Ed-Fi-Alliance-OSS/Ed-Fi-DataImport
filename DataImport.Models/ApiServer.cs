@@ -35,6 +35,12 @@ namespace DataImport.Models
 
         public ApiVersion ApiVersion { get; set; }
 
+        [MaxLength(255)]
+        public string Tenant { get; set; }
+
+        [MaxLength(255)]
+        public string Context { get; set; }
+
         public ICollection<BootstrapDataApiServer> BootstrapDataApiServers { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace DataImport.Web.Services.Swagger
         bool CanHandle(JObject swaggerDocument);
         Task<List<SwaggerResource>> GetMetadata(JObject swaggerDocument, ApiSection apiSection);
         string GetTokenUrl(JObject swaggerDocument);
+        string GetTokenUrl(string apiUrl, string apiVersion, string tenant, string context);
         string GetAuthUrl(JObject swaggerDocument);
     }
 }

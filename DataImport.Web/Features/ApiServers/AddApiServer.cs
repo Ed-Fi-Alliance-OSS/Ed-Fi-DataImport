@@ -68,7 +68,7 @@ namespace DataImport.Web.Features.ApiServers
                     };
                 }
 
-                var apiServer = new ApiServerTenantAndContext();
+                var apiServer = new ApiServer();
                 _database.ApiServers.Add(apiServer);
 
                 await request.ViewModel.MapTo(apiServer, apiVersion, _encryptionService, _encryptionKey, _configurationService);

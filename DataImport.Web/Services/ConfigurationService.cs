@@ -32,7 +32,7 @@ namespace DataImport.Web.Services
             return _options.Value.AllowUserRegistration;
         }
 
-        public async Task FillSwaggerMetadata(ApiServerTenantAndContext apiServer)
+        public async Task FillSwaggerMetadata(ApiServer apiServer)
         {
             if (apiServer.ApiVersion == null)
                 throw new ArgumentException($"{nameof(ApiServer.ApiVersion)} must be populated in {nameof(apiServer)}", nameof(apiServer));

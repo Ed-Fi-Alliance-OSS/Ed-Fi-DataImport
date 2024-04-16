@@ -63,6 +63,8 @@ namespace DataImport.Web.Services.Swagger
         public string GetTokenUrl(JObject swaggerDocument)
             => swaggerDocument["authorizations"]["edfi"].Value<string>("tokenUrl");
 
+        public string GetTokenUrl(string apiUrl, string apiVersion, string tenant, string context) => null;
+
         public string GetAuthUrl(JObject swaggerDocument)
             => swaggerDocument["authorizations"]["edfi"].Value<string>("authUrl");
     }

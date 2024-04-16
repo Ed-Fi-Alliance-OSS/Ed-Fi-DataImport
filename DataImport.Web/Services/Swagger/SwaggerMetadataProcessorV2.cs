@@ -65,6 +65,8 @@ namespace DataImport.Web.Services.Swagger
 
         public string GetAuthUrl(JObject swaggerDocument) => null;
 
+        public string GetTokenUrl(string apiUrl, string apiVersion, string tenant, string context) => null;
+
         private string GetEntityMetadata(JToken entity, JObject swaggerDocument)
         {
             //Swagger 2.0 has a number of differences in format compared to v1.2

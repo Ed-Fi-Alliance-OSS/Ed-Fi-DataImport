@@ -39,6 +39,11 @@ namespace DataImport.Web.Services.Swagger
         {
             var (swaggerDocument, handler) = await GetSwaggerDocument(apiUrl, apiVersion, tenant, context, ApiSection.Resources);
 
+            if (!string.IsNullOrEmpty(apiVersion) && apiVersion == "7.1" && !string.IsNullOrEmpty(context))
+            {
+                return handler.GetTokenUrl(apiUrl, apiVersion, tenant, context);
+            }
+
             return handler.GetTokenUrl(swaggerDocument);
         }
 
@@ -125,6 +130,7 @@ namespace DataImport.Web.Services.Swagger
         private async Task<(bool isOdsV3, string apiVersion)> IsOdsV3(string apiUrl)
         {
             var baseUrl = Common.Helpers.UrlUtility.RemoveAfterLastInstanceOf(apiUrl.Trim(), "/data/");
+
             try
             {
                 var rawApis = await _swaggerWebClient.DownloadString(baseUrl);
@@ -132,8 +138,9 @@ namespace DataImport.Web.Services.Swagger
                 var apiVersion = response["version"].ToString();
                 return (true, apiVersion);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return (false, null);
             }
         }
@@ -149,8 +156,9 @@ namespace DataImport.Web.Services.Swagger
                 var apiVersion = response["apiVersion"]?.ToString();
                 return (apiVersion == "2.0", apiVersion);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return (false, null);
             }
         }

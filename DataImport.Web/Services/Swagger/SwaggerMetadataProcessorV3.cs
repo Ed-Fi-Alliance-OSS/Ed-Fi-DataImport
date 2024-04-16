@@ -63,6 +63,9 @@ namespace DataImport.Web.Services.Swagger
         public string GetTokenUrl(JObject swaggerDocument)
             => swaggerDocument["components"]["securitySchemes"]["oauth2_client_credentials"]["flows"]["clientCredentials"].Value<string>("tokenUrl");
 
+        public string GetTokenUrl(string apiUrl, string apiVersion, string tenant, string context) =>
+            apiUrl.Replace("/data/v3/", "/oauth/token/");
+
         public string GetAuthUrl(JObject swaggerDocument) => null;
 
         private string GetEntityMetadata(JToken entity, JObject swaggerDocument)

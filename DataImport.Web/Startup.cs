@@ -34,6 +34,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using DataImport.Web.Middleware;
 using Microsoft.AspNetCore.Http.Features;
+using System.Net.Http;
 
 namespace DataImport.Web
 {
@@ -47,6 +48,8 @@ namespace DataImport.Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; //DI-1340 Remove this.
         }
 
         public IConfiguration Configuration
@@ -82,7 +85,10 @@ namespace DataImport.Web
             services.AddMediatR(typeof(Startup));
             services.AddHttpContextAccessor();
 
-            services.AddHttpClient();
+            services.AddHttpClient("yourServerName").ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler  //DI-1340 Remove this.
+            {
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+            });
 
             var databaseEngine = Configuration["AppSettings:DatabaseEngine"];
 

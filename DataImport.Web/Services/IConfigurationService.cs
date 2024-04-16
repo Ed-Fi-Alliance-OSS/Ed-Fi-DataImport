@@ -10,7 +10,7 @@ namespace DataImport.Web.Services
 {
     public interface IConfigurationService
     {
-        Task FillSwaggerMetadata(ApiServerTenantAndContext apiServer);
+        Task FillSwaggerMetadata(ApiServer apiServer);
         bool AllowUserRegistrations();
         Task<string> GetTokenUrl(string apiUrl, string apiVersion, string tenant, string context);
         Task<string> GetAuthUrl(string apiUrl, string apiVersion, string tenant, string context);

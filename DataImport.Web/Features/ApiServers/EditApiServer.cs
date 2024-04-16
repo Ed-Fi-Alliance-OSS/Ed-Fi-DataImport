@@ -109,15 +109,8 @@ namespace DataImport.Web.Features.ApiServers
                     e.ApiServerId = apiServer.Id;
                     throw;
                 }
-                ApiServerTenantAndContext apiServerTenantAndContext = new ApiServerTenantAndContext()
-                {
-                    Url = apiServer.Url,
-                    Key = apiServer.Key,
-                    Secret = apiServer.Secret,
-                    Name = apiServer.Name,
-                };
 
-                await _configurationService.FillSwaggerMetadata(apiServerTenantAndContext);
+                await _configurationService.FillSwaggerMetadata(apiServer);
 
                 _logger.Added(apiServer, x => x.Name);
 

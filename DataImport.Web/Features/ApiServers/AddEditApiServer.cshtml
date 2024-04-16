@@ -84,7 +84,9 @@ See the LICENSE and NOTICES files in the project root for more information.
                         url: $("#Url").val(),
                         apiVersion: $("#ApiVersion").val(),
                         key: $("#Key").val(),
-                        secret: $("#Secret").val()
+                        secret: $("#Secret").val(),
+                        context: $("#Context").val(),
+                        tenant: $("#Tenant").val()
                     },
                     dataType: "json",
                     url: '@Url.Action("TestOdsApiConfiguration")',
@@ -105,12 +107,16 @@ See the LICENSE and NOTICES files in the project root for more information.
             });
             $("#Url").change(function() {
                 var apiServerUrl = $("#Url").val();
+                var tenant = $("#Tenant").val();
+                var context = $("#Context").val();
                 disableFormButtons(true);
                 clearValidationSummary();
                 $.ajax({
                     type: 'POST',
                     data: {
                         apiServerUrl: apiServerUrl,
+                        tenant: tenant,
+                        context: context
                     },
                     dataType: "html",
                     url: '@Url.Action("InferOdsApiVersion")',
