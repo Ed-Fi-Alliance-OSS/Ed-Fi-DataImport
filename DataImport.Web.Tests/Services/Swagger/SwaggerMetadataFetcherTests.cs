@@ -385,7 +385,7 @@ namespace DataImport.Web.Tests.Services.Swagger
             var processors = GetMetadataProcessors(swaggerClientMock);
             var sut = new SwaggerMetadataFetcherTss(processors, swaggerClientMock);
 
-            var resources = (await sut.GetMetadata("https://someapiurl/api/v2.0/2018", string.Empty, string.Empty, OdsApiV25)).ToList();
+            var resources = (await sut.GetMetadata("https://someapiurl/api/v2.0/2018", OdsApiV25, string.Empty, string.Empty)).ToList();
             resources.Count.ShouldBe(3);
             resources.Any(e => e.Path == "/student").ShouldBeTrue();
             resources.Any(e => e.Path == "/studentAssessments").ShouldBeTrue();
@@ -438,7 +438,7 @@ namespace DataImport.Web.Tests.Services.Swagger
             var processors = GetMetadataProcessors(swaggerClientMock);
             var sut = new SwaggerMetadataFetcherTss(processors, swaggerClientMock);
 
-            var resources = (await sut.GetMetadata("https://someapiurl/v2/api/api/v2.0/2018", string.Empty, string.Empty, OdsApiV25)).ToList();
+            var resources = (await sut.GetMetadata("https://someapiurl/v2/api/api/v2.0/2018", OdsApiV25, string.Empty, string.Empty)).ToList();
             resources.Count.ShouldBe(3);
         }
 
