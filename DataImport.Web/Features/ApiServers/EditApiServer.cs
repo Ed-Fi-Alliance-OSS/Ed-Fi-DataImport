@@ -50,7 +50,9 @@ namespace DataImport.Web.Features.ApiServers
                     Url = apiServer.Url,
                     ApiVersion = apiServer.ApiVersion.Version,
                     Key = _encryptionService.TryDecrypt(apiServer.Key, _encryptionKey, out var decryptedKey) ? SensitiveText.Mask(decryptedKey) : string.Empty,
-                    Secret = _encryptionService.TryDecrypt(apiServer.Secret, _encryptionKey, out var decryptedSecret) ? SensitiveText.Mask(decryptedSecret) : string.Empty
+                    Secret = _encryptionService.TryDecrypt(apiServer.Secret, _encryptionKey, out var decryptedSecret) ? SensitiveText.Mask(decryptedSecret) : string.Empty,
+                    Context = apiServer.Context,
+                    Tenant = apiServer.Tenant
                 };
 
                 if (!_encryptionService.TryDecrypt(apiServer.Key, _encryptionKey, out _))

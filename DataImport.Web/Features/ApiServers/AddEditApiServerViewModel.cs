@@ -54,6 +54,8 @@ namespace DataImport.Web.Features.ApiServers
             apiServer.Name = Name;
             apiServer.Url = Url;
             apiServer.ApiVersion = apiVersion;
+            apiServer.Context = Context;
+            apiServer.Tenant = Tenant;
 
             if (!SensitiveText.IsMasked(Key))
             {
@@ -65,8 +67,8 @@ namespace DataImport.Web.Features.ApiServers
                 apiServer.Secret = encryptionService.TryEncrypt(Secret, encryptionKey, out var encryptedKey) ? encryptedKey : string.Empty;
             }
 
-            apiServer.TokenUrl = await configurationService.GetTokenUrl(apiServer.Url, apiServer.ApiVersion.Version, Tenant, Context);
-            apiServer.AuthUrl = await configurationService.GetAuthUrl(apiServer.Url, apiServer.ApiVersion.Version, Tenant, Context);
+            apiServer.TokenUrl = await configurationService.GetTokenUrl(apiServer.Url, apiServer.ApiVersion.Version, apiServer.Tenant, apiServer.Context);
+            apiServer.AuthUrl = await configurationService.GetAuthUrl(apiServer.Url, apiServer.ApiVersion.Version, apiServer.Tenant, apiServer.Context);
         }
 
         public class Validator : AbstractValidator<AddEditApiServerViewModel>
