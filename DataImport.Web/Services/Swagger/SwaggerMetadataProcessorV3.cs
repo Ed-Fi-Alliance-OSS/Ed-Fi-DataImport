@@ -42,12 +42,12 @@ namespace DataImport.Web.Services.Swagger
 
                 //generally we only care about POST entities, so we'll filter
                 //out and return only entities involved in a POST operation
-                var entityReference = apiOperation["post"]?["parameters"]?[0]?["schema"]?.Value<string>("$ref");
+                var entityReference = apiOperation["post"]?["requestBody"]?["content"]?["application/json"]?["schema"]?.Value<string>("$ref");
                 if (entityReference == null)
                     continue;
 
                 var swaggerEntityName = SwaggerHelpers.GetSwagger20EntityNameFromReference(entityReference);
-                var postEntity = swaggerDocument["definitions"][swaggerEntityName];
+                var postEntity = swaggerDocument["components"]["schemas"][swaggerEntityName];
                 postEntity["resourcePath"] = apiPath;
 
                 yield return new SwaggerResource
@@ -117,7 +117,7 @@ namespace DataImport.Web.Services.Swagger
 
         private JToken GetReferencedEntity(JToken swaggerDocument, string swaggerEntityName)
         {
-            return swaggerDocument["definitions"][swaggerEntityName];
+            return swaggerDocument["components"]["schemas"][swaggerEntityName];
         }
     }
 }
