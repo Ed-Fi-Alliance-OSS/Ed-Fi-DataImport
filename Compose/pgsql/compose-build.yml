@@ -10,7 +10,7 @@ services:
     platform: linux/x86_64
     build:
       context: ../../
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
     image: dataimport
     ports:
       - "8080:80"
@@ -25,7 +25,7 @@ services:
       APPSETTINGS__ENCRYPTIONKEY: "${ENCRYPTION_KEY}"
       APPSETTINGS__USERRECOVERYTOKEN: "${USER_RECOVERY_TOKEN}"
       APPSETTINGS__SHARENAME: "${APPSETTINGS__SHARENAME:-/app/Common/temp}"
-      FORMOPTIONS__VALUECOUNTLIMIT: "${FORMOPTIONS__VALUECOUNTLIMIT:1024}"
+      FORMOPTIONS__VALUECOUNTLIMIT: "${FORMOPTIONS__VALUECOUNTLIMIT:-1024}"
       TZ: "${TIME_ZONE:-US/Central}"
     depends_on:
       - pb-dataimport
