@@ -120,8 +120,8 @@ namespace DataImport.Web.Tests.Features.ApiServers
                 Delete(resource);
             }
 
-            var ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
-            ods311Resources.ShouldBeEmpty();
+            var ods711Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods711Resources.ShouldBeEmpty();
 
             var viewModel = new AddEditApiServerViewModel
             {
@@ -144,8 +144,8 @@ namespace DataImport.Web.Tests.Features.ApiServers
             SensitiveText.IsMasked(addEditViewModel.Key).ShouldBeTrue();
             SensitiveText.IsMasked(addEditViewModel.Secret).ShouldBeTrue();
 
-            ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
-            ods311Resources.ShouldBeEmpty();
+            ods711Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods711Resources.ShouldNotBeEmpty();
 
             viewModel = new AddEditApiServerViewModel
             {
@@ -167,8 +167,8 @@ namespace DataImport.Web.Tests.Features.ApiServers
             SensitiveText.IsMasked(editApiServerViewModel.Key).ShouldBeTrue();
             SensitiveText.IsMasked(editApiServerViewModel.Secret).ShouldBeTrue();
 
-            ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
-            ods311Resources.ShouldNotBeEmpty();
+            ods711Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods711Resources.ShouldNotBeEmpty();
         }
 
         [Test]
@@ -181,8 +181,8 @@ namespace DataImport.Web.Tests.Features.ApiServers
                 Delete(resource);
             }
 
-            var ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
-            ods311Resources.ShouldBeEmpty();
+            var ods711Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods711Resources.ShouldBeEmpty();
 
             var viewModel = new AddEditApiServerViewModel
             {
@@ -207,8 +207,8 @@ namespace DataImport.Web.Tests.Features.ApiServers
             SensitiveText.IsMasked(addEditViewModel.Key).ShouldBeTrue();
             SensitiveText.IsMasked(addEditViewModel.Secret).ShouldBeTrue();
 
-            ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
-            ods311Resources.ShouldBeEmpty();
+            ods711Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods711Resources.ShouldNotBeEmpty();
 
             viewModel = new AddEditApiServerViewModel
             {
@@ -232,8 +232,8 @@ namespace DataImport.Web.Tests.Features.ApiServers
             SensitiveText.IsMasked(editApiServerViewModel.Key).ShouldBeTrue();
             SensitiveText.IsMasked(editApiServerViewModel.Secret).ShouldBeTrue();
 
-            ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
-            ods311Resources.ShouldNotBeEmpty();
+            ods711Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods711Resources.ShouldNotBeEmpty();
         }
 
         [Test]

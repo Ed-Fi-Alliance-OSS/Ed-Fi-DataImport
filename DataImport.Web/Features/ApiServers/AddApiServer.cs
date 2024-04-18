@@ -75,7 +75,7 @@ namespace DataImport.Web.Features.ApiServers
 
                 await _database.SaveChangesAsync(cancellationToken); // Explicitly call SaveChanges to get Id for the apiServer.
 
-                //await _configurationService.FillSwaggerMetadata(apiServer); // DI-1340 error here for new ods api I need to fix.
+                await _configurationService.FillSwaggerMetadata(apiServer); // DI-1340 error here for new ods api I need to fix.
 
                 _logger.Added(apiServer, x => x.Name);
 

@@ -16,12 +16,11 @@ namespace DataImport.Web.Tests
     {
         private const string OdsDomainV25 = "http://test-ods-v2.5.0.1.example.com";
         private const string OdsDomainV311 = "http://test-ods-v3.1.1.example.com";
-        private const string OdsDomainV711 = "http://test-ods-v7.1.1.example.com";
 
         public const string ApiServerUrlV25 = OdsDomainV25 + "/api/v2.0/2019";
         public const string ApiServerUrlV311 = OdsDomainV311 + "/data/v3";
-        public const string ApiServerUrlV711 = OdsDomainV711 + "/data/v3";
-        public const string ApiServerUrlV711WithOdsContext = OdsDomainV711 + "/2022/data/v3";
+        public const string ApiServerUrlV711 = OdsDomainV311 + "/data/v3";
+        public const string ApiServerUrlV711WithOdsContext = OdsDomainV311 + "/2022/data/v3";
 
         public async Task<string> DownloadString(string url)
         {
