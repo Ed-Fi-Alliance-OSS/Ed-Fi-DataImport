@@ -49,7 +49,7 @@ param (
 )
 
 # Convert SecureString to plain text
-$ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToGlobalAllocUnicode($securePassword)
+$ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToGlobalAllocUnicode($NewPassword)
 try {
     $newPasswordText = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($ptr)
 } finally {

@@ -43,7 +43,6 @@ function Invoke-Step {
 
     $command = $block.ToString().Trim()
 
-    Write-Information
     Write-Information $command -fore CYAN
 
     &$block
@@ -57,13 +56,10 @@ function Invoke-Main {
 
     try {
         &$MainBlock
-        Write-Information
         Write-Information "Build Succeeded" -fore GREEN
         exit 0
     } catch [Exception] {
-        Write-Information
         Write-Error $_.Exception.Message
-        Write-Information
         Write-Error "Build Failed"
         exit 1
     }
