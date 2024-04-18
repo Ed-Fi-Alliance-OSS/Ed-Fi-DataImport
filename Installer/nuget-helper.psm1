@@ -117,7 +117,7 @@ function Get-NuGetPackage {
 
 
 
-    Write-Information -ForegroundColor Magenta "$ToolsPath\nuget $parameters"
+    Write-Information "$ToolsPath\nuget $parameters"
     & "$ToolsPath\nuget" $parameters | Out-Null
 
     return Resolve-Path $OutputDirectory/$PackageName.$PackageVersion* | Select-Object -Last 1

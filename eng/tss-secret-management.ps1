@@ -6,7 +6,7 @@
 
 $confFile = "$PSScriptRoot/.tssconf"
 
-Write-Information "== Template Sharing Service User Enrollment ==`n" -ForegroundColor Green
+Write-Information "== Template Sharing Service User Enrollment ==`n"
 
 #########################################################################################
 ###   HELPERS
@@ -14,12 +14,12 @@ Write-Information "== Template Sharing Service User Enrollment ==`n" -Foreground
 
 function Write-Labeled-Value ($label, $value){
   Write-Information "$($label): " -NoNewline
-  Write-Information $value -ForegroundColor Cyan
+  Write-Information $value
 }
 
 function Write-Middle-Highlight ($before, $highlighted, $after){
   Write-Information $before -NoNewline
-  Write-Information $highlighted -NoNewline -ForegroundColor Cyan
+  Write-Information $highlighted
   Write-Information $after
 }
 
@@ -54,7 +54,7 @@ function Get-ConfigInput {
   }
 
   Set-Content -Path $confFile -Value ($conf | ConvertTo-Json)
-  Write-Information "Config file saved" -ForegroundColor Green
+  Write-Information "Config file saved"
   return $conf
 }
 
@@ -68,8 +68,8 @@ function Get-Auth-Token ($conf) {
   try {
     $authResponse = Invoke-RestMethod -Method 'Post' -Uri $authUrl -Body $authRequest -ContentType "application/x-www-form-urlencoded"
   } catch {
-    Write-Information "Authentication failed: " -NoNewLine -ForegroundColor Red
-    Write-Information $_.Exception.Message
+    Write-Error "Authentication failed: "
+    Write-Error $_.Exception.Message
 
     $retry = Invoke-YesNoRetryLoop  'Re-enter configuration and try again [y/N]?' 'n'
     if ($retry -eq "y") {
@@ -82,18 +82,18 @@ function Get-Auth-Token ($conf) {
     }
   }
 
-  Write-Information "`nAuthenticated successfully" -ForegroundColor Green
+  Write-Information "`nAuthenticated successfully"
   return $authResponse.access_token
 }
 
 function Get-ClientInput  {
-    Write-Information "`nInput new client details:" -ForegroundColor Yellow
+    Write-Information "`nInput new client details:"
 
   $clientName = Read-Host -Prompt "Client/Organization Name"
   $clientFullName = Read-Host -Prompt "Full Name"
   $clientEmail = Read-Host -Prompt "Email"
 
-  Write-Information "`nConfirm details:" -ForegroundColor Yellow
+  Write-Information "`nConfirm details:"
   Write-Labeled-Value "Organization" $clientName
   Write-Labeled-Value "Full Name" $clientFullName
   Write-Labeled-Value "Email" $clientEmail
@@ -118,7 +118,7 @@ function Get-ClientInput  {
 
 If (-not(Test-Path -Path $confFile)) {
   Write-Middle-Highlight -before "Configuration file (" -highlighted $confFile -after ") not found"
-  Write-Information "Please input Template Sharing configuration:" -ForegroundColor Yellow
+  Write-Information "Please input Template Sharing configuration:"
 
   $conf = Get-ConfigInput
 } Else {
@@ -127,7 +127,7 @@ If (-not(Test-Path -Path $confFile)) {
     $conf = Get-Content -Path $confFile | ConvertFrom-Json
   }
   catch {
-    Write-Information "Failed to load configuration: " -NoNewline -ForegroundColor Red
+    Write-Information "Failed to load configuration: "
     Write-Information $_.Exception.Message
 
     $retry = Invoke-YesNoRetryLoop  'Re-enter configuration and try again [y/N]?' 'n'
@@ -176,16 +176,16 @@ $headers = @{
 try {
   Invoke-RestMethod -Method 'Post' -Uri $tssClientUrl -Body ($addClientJson | ConvertTo-Json) -Headers $headers -ContentType "application/json"
 
-  Write-Information "`nClient created successfully" -ForegroundColor Green
+  Write-Information "`nClient created successfully"
 
-  Write-Information "`nClient details:" -ForegroundColor Yellow
+  Write-Information "`nClient details:"
   Write-Labeled-Value "Organization" $client.Name
   Write-Labeled-Value "Full Name" $client.FullName
   Write-Labeled-Value "Email" $client.Email
   Write-Labeled-Value "Client Key" $client.Id
   Write-Labeled-Value "Client Secret" $client.Secret
 } catch {
-  Write-Information "Client creation failed failed: " -NoNewLine -ForegroundColor Red
+  Write-Information "Client creation failed failed: "
   Write-Information $_.Exception.Message
   Write-Information "Please check info and try again. See full exception below`n"
   throw $_

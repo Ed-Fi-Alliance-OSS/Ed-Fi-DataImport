@@ -83,7 +83,7 @@ function Push-Package {
 
     )
 
-    Write-Information "Executing: nuget.exe $arguments" -ForegroundColor Magenta
+    Write-Information "Executing: nuget.exe $arguments"
     dotnet nuget push $PackageFile --api-key $NuGetApiKey --source $NuGetFeed
 }
 
@@ -140,7 +140,7 @@ function Get-RestApiPackage {
         $arguments += "$RestApiPackageVersion"
     }
 
-    Write-Information "Executing: nuget.exe $arguments" -ForegroundColor Magenta
+    Write-Information "Executing: nuget.exe $arguments"
     &$nugetExe @arguments | Out-Null
 
     if ($LASTEXITCODE -ne 0) {
@@ -223,7 +223,7 @@ function Add-AppCommon {
     )
 
     Write-Information "Downloading AppCommon"
-    Write-Information -ForegroundColor Magenta "Executing nuget: $parameters"
+    Write-Information "Executing nuget: $parameters"
     nuget $parameters | Out-Null
 
     if ($LASTEXITCODE -ne 0) {

@@ -52,7 +52,7 @@ function Add-AppCommon{
     )
 
     Write-Information "Downloading AppCommon"
-    Write-Information -ForegroundColor Magenta "Executing nuget: $parameters"
+    Write-Information "Executing nuget: $parameters"
     nuget $parameters
 
     $appCommonDirectory = Resolve-Path $Downloads/$PackageName.$PackageVersion* | Select-Object -Last 1
@@ -92,7 +92,7 @@ function New-Package {
             $parameters += $Suffix
         }
 
-        Write-Information @parameters -ForegroundColor Magenta
+        Write-Information @parameters
         nuget @parameters
     }
 }

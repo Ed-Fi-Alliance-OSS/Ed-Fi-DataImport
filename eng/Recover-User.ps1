@@ -82,5 +82,5 @@ catch {
     $reader.BaseStream.Position = 0
     $reader.DiscardBufferedData()
     $errorContent = $reader.ReadToEnd();
-    Write-Information $errorContent -ForegroundColor red
+    Write-Error $errorContent
 }
