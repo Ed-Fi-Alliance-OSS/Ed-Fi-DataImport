@@ -111,6 +111,132 @@ namespace DataImport.Web.Tests.Features.ApiServers
         }
 
         [Test]
+        public async Task ShouldSuccessfullyAddEditApiServerForOdsApi71()
+        {
+            // Delete resources for testing.
+            var resources = Query(d => d.Resources.ToList());
+            foreach (var resource in resources)
+            {
+                Delete(resource);
+            }
+
+            var ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods311Resources.ShouldBeEmpty();
+
+            var viewModel = new AddEditApiServerViewModel
+            {
+                Name = SampleString("ApiServer"),
+                ApiVersion = OdsApiV711,
+                Url = StubSwaggerWebClient.ApiServerUrlV711,
+                Key = SampleString("testKey"),
+                Secret = SampleString("testSecret")
+            };
+
+            var addApiServerResponse = await Send(new AddApiServer.Command { ViewModel = viewModel });
+            addApiServerResponse.AssertToast($"Connection '{viewModel.Name}' was created.");
+            addApiServerResponse.ApiServerId.ShouldBeGreaterThan(0);
+
+            var addEditViewModel = await Send(new EditApiServer.Query { Id = addApiServerResponse.ApiServerId });
+            addEditViewModel.Name.ShouldBe(viewModel.Name);
+            addEditViewModel.Url.ShouldBe(viewModel.Url);
+            addEditViewModel.ApiVersion.ShouldBe(viewModel.ApiVersion);
+            addEditViewModel.Key.ShouldNotBeEmpty();
+            SensitiveText.IsMasked(addEditViewModel.Key).ShouldBeTrue();
+            SensitiveText.IsMasked(addEditViewModel.Secret).ShouldBeTrue();
+
+            ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods311Resources.ShouldBeEmpty();
+
+            viewModel = new AddEditApiServerViewModel
+            {
+                Id = addApiServerResponse.ApiServerId,
+                Name = SampleString("ApiServer"),
+                ApiVersion = OdsApiV711,
+                Url = StubSwaggerWebClient.ApiServerUrlV711,
+                Key = SampleString("testKey"),
+                Secret = SampleString("testSecret")
+            };
+            var editApiServerResponse = await Send(new EditApiServer.Command { ViewModel = viewModel });
+            editApiServerResponse.AssertToast($"Connection '{viewModel.Name}' was modified.");
+            editApiServerResponse.ApiServerId.ShouldBeGreaterThan(0);
+
+            var editApiServerViewModel = await Send(new EditApiServer.Query { Id = addApiServerResponse.ApiServerId });
+            editApiServerViewModel.Name.ShouldBe(viewModel.Name);
+            editApiServerViewModel.Url.ShouldBe(viewModel.Url);
+            editApiServerViewModel.ApiVersion.ShouldBe(viewModel.ApiVersion);
+            SensitiveText.IsMasked(editApiServerViewModel.Key).ShouldBeTrue();
+            SensitiveText.IsMasked(editApiServerViewModel.Secret).ShouldBeTrue();
+
+            ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods311Resources.ShouldNotBeEmpty();
+        }
+
+        [Test]
+        public async Task ShouldSuccessfullyAddEditApiServerForOdsApi71WithOdsContext()
+        {
+            // Delete resources for testing.
+            var resources = Query(d => d.Resources.ToList());
+            foreach (var resource in resources)
+            {
+                Delete(resource);
+            }
+
+            var ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods311Resources.ShouldBeEmpty();
+
+            var viewModel = new AddEditApiServerViewModel
+            {
+                Name = SampleString("ApiServer"),
+                ApiVersion = OdsApiV711,
+                Url = StubSwaggerWebClient.ApiServerUrlV711,
+                Key = SampleString("testKey"),
+                Secret = SampleString("testSecret"),
+                Context = SampleString("testContext")
+            };
+
+            var addApiServerResponse = await Send(new AddApiServer.Command { ViewModel = viewModel });
+            addApiServerResponse.AssertToast($"Connection '{viewModel.Name}' was created.");
+            addApiServerResponse.ApiServerId.ShouldBeGreaterThan(0);
+
+            var addEditViewModel = await Send(new EditApiServer.Query { Id = addApiServerResponse.ApiServerId });
+            addEditViewModel.Name.ShouldBe(viewModel.Name);
+            addEditViewModel.Url.ShouldBe(viewModel.Url);
+            addEditViewModel.ApiVersion.ShouldBe(viewModel.ApiVersion);
+            addEditViewModel.Context.ShouldBe(viewModel.Context);
+            addEditViewModel.Key.ShouldNotBeEmpty();
+            SensitiveText.IsMasked(addEditViewModel.Key).ShouldBeTrue();
+            SensitiveText.IsMasked(addEditViewModel.Secret).ShouldBeTrue();
+
+            ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods311Resources.ShouldBeEmpty();
+
+            viewModel = new AddEditApiServerViewModel
+            {
+                Id = addApiServerResponse.ApiServerId,
+                Name = SampleString("ApiServer"),
+                ApiVersion = OdsApiV711,
+                Url = StubSwaggerWebClient.ApiServerUrlV711,
+                Key = SampleString("testKey"),
+                Secret = SampleString("testSecret"),
+                Context = SampleString("testContext")
+            };
+            var editApiServerResponse = await Send(new EditApiServer.Command { ViewModel = viewModel });
+            editApiServerResponse.AssertToast($"Connection '{viewModel.Name}' was modified.");
+            editApiServerResponse.ApiServerId.ShouldBeGreaterThan(0);
+
+            var editApiServerViewModel = await Send(new EditApiServer.Query { Id = addApiServerResponse.ApiServerId });
+            editApiServerViewModel.Name.ShouldBe(viewModel.Name);
+            editApiServerViewModel.Url.ShouldBe(viewModel.Url);
+            editApiServerViewModel.ApiVersion.ShouldBe(viewModel.ApiVersion);
+            editApiServerViewModel.Context.ShouldBe(viewModel.Context);
+            SensitiveText.IsMasked(editApiServerViewModel.Key).ShouldBeTrue();
+            SensitiveText.IsMasked(editApiServerViewModel.Secret).ShouldBeTrue();
+
+            ods311Resources = Query(d => d.Resources.Where(x => x.ApiVersion.Version == OdsApiV711).ToList());
+            ods311Resources.ShouldNotBeEmpty();
+        }
+
+        [Test]
         public async Task ShouldFullyMaskKeyAndSecret()
         {
             var apiServer = Query(d => d.ApiServers.OrderBy(x => x.Id).First());

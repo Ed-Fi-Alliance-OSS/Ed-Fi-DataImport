@@ -38,6 +38,7 @@ namespace DataImport.Web.Tests
 
         public const string OdsApiV25 = "2.5+";
         public const string OdsApiV311 = "3.1.1";
+        public const string OdsApiV711 = "7.1.1";
 
         static Testing()
         {
