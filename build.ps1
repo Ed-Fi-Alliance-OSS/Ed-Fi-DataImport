@@ -291,12 +291,12 @@ function RunDotNetPack {
 function NewDevCertificate {
     Invoke-Command { dotnet dev-certs https -c }
     if ($lastexitcode) {
-        Write-Information "Generating a new Dev Certificate" -ForegroundColor Magenta
+        Write-Information "Generating a new Dev Certificate"
         Invoke-Execute { dotnet dev-certs https --clean }
         Invoke-Execute { dotnet dev-certs https -t }
     }
     else {
-        Write-Information "Dev Certificate already exists" -ForegroundColor Magenta
+        Write-Information "Dev Certificate already exists"
     }
 }
 
@@ -343,7 +343,7 @@ function DotnetPush {
 }
 
 function Invoke-Build {
-    Write-Information "Building Version $Version" -ForegroundColor Cyan
+    Write-Information "Building Version $Version"
 
     Invoke-Step { DotNetClean }
     Invoke-Step { Restore }
@@ -357,14 +357,14 @@ function Invoke-Publish {
 }
 
 function Invoke-Run {
-    Write-Information "Running Data Import" -ForegroundColor Cyan
+    Write-Information "Running Data Import"
 
     Invoke-Step { NewDevCertificate }
 
     $projectFilePath = "$solutionRoot/$entryProject"
 
     if ([string]::IsNullOrEmpty($LaunchProfile)) {
-        Write-Information "LaunchProfile parameter is required for running Data Import. Please specify the LaunchProfile parameter. Valid values include 'mssql-district', 'mssql-shared', 'mssql-year', 'pg-district', 'pg-shared' and 'pg-year'" -ForegroundColor Red
+        Write-Information "LaunchProfile parameter is required for running Data Import. Please specify the LaunchProfile parameter. Valid values include 'mssql-district', 'mssql-shared', 'mssql-year', 'pg-district', 'pg-shared' and 'pg-year'"
     }
     else {
         Invoke-Execute { dotnet run --project $projectFilePath --launch-profile $LaunchProfile }
@@ -429,7 +429,7 @@ function Invoke-DockerDeploy {
 }
 
 function Invoke-SetAssemblyInfo {
-    Write-Output "Setting Assembly Information" -ForegroundColor Cyan
+    Write-Output "Setting Assembly Information"
 
     Invoke-Step { AssemblyInfo }
 }
