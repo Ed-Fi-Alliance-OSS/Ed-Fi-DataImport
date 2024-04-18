@@ -335,7 +335,7 @@ Write-Output (Get-Date)
 Write-Output (ConvertFrom-Json '')
 Write-Output ('some string' | Measure-Object )
 Write-Output ('some string' | Out-Null )
-Write-Host 'info'
+Write-Information 'info'
 ";
             var input = new MemoryStream();
             var output = _service.ProcessStreamWithScript(scriptContent, input);

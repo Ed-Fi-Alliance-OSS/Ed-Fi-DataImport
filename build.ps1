@@ -142,20 +142,20 @@ function DotNetClean {
 
 
 function InitializePython {
-	$toolsDir = "$PSScriptRoot/.tools"
-	if (-not (Test-Path "$toolsDir")) {
+    $toolsDir = "$PSScriptRoot/.tools"
+    if (-not (Test-Path "$toolsDir")) {
         New-Item -ItemType Directory -Force -Path "$toolsDir" | Out-Null
     }
 
     $python = "$toolsDir\python\python.exe"
     if (-not (Test-Path $python)) {
         $sourcePythonZip = "https://www.python.org/ftp/python/3.10.2/python-3.10.2-embed-amd64.zip"
-		$destPythonZip = "$toolsDir\python-3.10.2-embed-amd64.zip"
+        $destPythonZip = "$toolsDir\python-3.10.2-embed-amd64.zip"
 
-        Write-Host "Downloading python 3.10.2 official release"
+        Write-Information "Downloading python 3.10.2 official release"
         Invoke-WebRequest $sourcePythonZip -OutFile $destPythonZip
-		Expand-Archive $destPythonZip -DestinationPath "$toolsDir\python"
-		Remove-Item $destPythonZip
+        Expand-Archive $destPythonZip -DestinationPath "$toolsDir\python"
+        Remove-Item $destPythonZip
     }
 }
 
@@ -227,9 +227,10 @@ function RunTests {
     )
 
     if ($Report) {
-      Invoke-Execute { dotnet test -c $Configuration --filter $Filter --logger "trx;LogFileName=test-results.trx" }
-    } else {
-      Invoke-Execute { dotnet test -c $Configuration --filter $Filter }
+        Invoke-Execute { dotnet test -c $Configuration --filter $Filter --logger "trx;LogFileName=test-results.trx" }
+    }
+    else {
+        Invoke-Execute { dotnet test -c $Configuration --filter $Filter }
     }
 }
 
@@ -251,11 +252,11 @@ function ResetTestDatabases {
 
     Invoke-Execute {
         $arguments = @{
-            RestApiPackageVersion = $OdsVersion
-            RestApiPackageName = $OdsPackageName
-            UseIntegratedSecurity = $true
+            RestApiPackageVersion    = $OdsVersion
+            RestApiPackageName       = $OdsPackageName
+            UseIntegratedSecurity    = $true
             RestApiPackagePrerelease = $Prerelease
-            NuGetFeed = $EdFiNuGetFeed
+            NuGetFeed                = $EdFiNuGetFeed
         }
 
         Invoke-PrepareDatabasesForTesting @arguments
@@ -290,11 +291,12 @@ function RunDotNetPack {
 function NewDevCertificate {
     Invoke-Command { dotnet dev-certs https -c }
     if ($lastexitcode) {
-        Write-Host "Generating a new Dev Certificate" -ForegroundColor Magenta
+        Write-Information "Generating a new Dev Certificate" -ForegroundColor Magenta
         Invoke-Execute { dotnet dev-certs https --clean }
         Invoke-Execute { dotnet dev-certs https -t }
-    } else {
-        Write-Host "Dev Certificate already exists" -ForegroundColor Magenta
+    }
+    else {
+        Write-Information "Dev Certificate already exists" -ForegroundColor Magenta
     }
 }
 
@@ -314,19 +316,18 @@ function PushPackage {
     }
 
     if (-not $PackageFile) {
-        if("Web" -ieq $PackageFileType){
-         $PackageFile = "$PSScriptRoot/$entryProject.$PackageVersion.nupkg"
-         DotnetPush  $PackageFile
+        if ("Web" -ieq $PackageFileType) {
+            $PackageFile = "$PSScriptRoot/$entryProject.$PackageVersion.nupkg"
+            DotnetPush  $PackageFile
         }
         else {
-         $PackageFile = "$PSScriptRoot/$transformLoadProject.$PackageVersion.nupkg"
-         DotnetPush  $PackageFile
-         $PackageFileWin64 = "$PSScriptRoot/$transformLoadProject.Win64.$PackageVersion.nupkg"
-         DotnetPush  $PackageFileWin64
+            $PackageFile = "$PSScriptRoot/$transformLoadProject.$PackageVersion.nupkg"
+            DotnetPush  $PackageFile
+            $PackageFileWin64 = "$PSScriptRoot/$transformLoadProject.Win64.$PackageVersion.nupkg"
+            DotnetPush  $PackageFileWin64
         }
     }
-    else
-    {
+    else {
         DotnetPush  $PackageFile
     }
 }
@@ -337,12 +338,12 @@ function DotnetPush {
         $PackageFileName
     )
 
-    Write-Host "Pushing $PackageFileName to $EdFiNuGetFeed"
+    Write-Information "Pushing $PackageFileName to $EdFiNuGetFeed"
     dotnet nuget push $PackageFileName --api-key $NuGetApiKey --source $EdFiNuGetFeed
 }
 
 function Invoke-Build {
-    Write-Host "Building Version $Version" -ForegroundColor Cyan
+    Write-Information "Building Version $Version" -ForegroundColor Cyan
 
     Invoke-Step { DotNetClean }
     Invoke-Step { Restore }
@@ -356,15 +357,16 @@ function Invoke-Publish {
 }
 
 function Invoke-Run {
-    Write-Host "Running Data Import" -ForegroundColor Cyan
+    Write-Information "Running Data Import" -ForegroundColor Cyan
 
     Invoke-Step { NewDevCertificate }
 
     $projectFilePath = "$solutionRoot/$entryProject"
 
     if ([string]::IsNullOrEmpty($LaunchProfile)) {
-        Write-Host "LaunchProfile parameter is required for running Data Import. Please specify the LaunchProfile parameter. Valid values include 'mssql-district', 'mssql-shared', 'mssql-year', 'pg-district', 'pg-shared' and 'pg-year'" -ForegroundColor Red
-    } else {
+        Write-Information "LaunchProfile parameter is required for running Data Import. Please specify the LaunchProfile parameter. Valid values include 'mssql-district', 'mssql-shared', 'mssql-year', 'pg-district', 'pg-shared' and 'pg-year'" -ForegroundColor Red
+    }
+    else {
         Invoke-Execute { dotnet run --project $projectFilePath --launch-profile $LaunchProfile }
     }
 }
@@ -377,15 +379,15 @@ function Invoke-Clean {
     Invoke-Step { DotNetClean }
 }
 
-function Invoke-UnitTests {
+function Invoke-UnitTest {
     Invoke-Step { UnitTests }
 }
 
-function Invoke-IntegrationTests {
+function Invoke-IntegrationTest {
     Invoke-Step { IntegrationTests }
 }
 
-function Invoke-PowerShellTests {
+function Invoke-PowerShellTest {
     Invoke-Step { PowerShellTests }
 }
 
@@ -421,9 +423,9 @@ function RestartDataImportContainer {
 }
 
 function Invoke-DockerDeploy {
-   Invoke-Step { UpdateAppSettingsForDocker }
-   Invoke-Step { CopyLatestFilesToContainer }
-   Invoke-Step { RestartDataImportContainer }
+    Invoke-Step { UpdateAppSettingsForDocker }
+    Invoke-Step { CopyLatestFilesToContainer }
+    Invoke-Step { RestartDataImportContainer }
 }
 
 function Invoke-SetAssemblyInfo {
@@ -436,24 +438,23 @@ function AddAppCommonPackageForInstaller {
     $destinationPath = "$PSScriptRoot/Installer"
 
     $arguments = @{
-        AppCommonPackageName = $appCommonPackageName
+        AppCommonPackageName    = $appCommonPackageName
         AppCommonPackageVersion = $appCommonPackageVersion
-        NuGetFeed = $EdFiNuGetFeed
-        DestinationPath = $destinationPath
+        NuGetFeed               = $EdFiNuGetFeed
+        DestinationPath         = $destinationPath
     }
 
     Add-AppCommon @arguments
 }
 
 Invoke-Main {
-    if($IsLocalBuild)
-    {
+    if ($IsLocalBuild) {
         $nugetExePath = Install-NugetCli
         Set-Alias nuget $nugetExePath -Scope Global -Verbose
     }
     switch ($Command) {
         SetUp { Invoke-SetUp }
-		Clean { Invoke-Clean }
+        Clean { Invoke-Clean }
         Build { Invoke-Build }
         BuildAndPublish {
             Invoke-SetAssemblyInfo
@@ -461,14 +462,14 @@ Invoke-Main {
             Invoke-Publish
         }
         Run { Invoke-Run }
-        UnitTest { Invoke-UnitTests }
-        IntegrationTest { Invoke-IntegrationTests }
-        PowerShellTests { Invoke-PowerShellTests }
+        UnitTest { Invoke-UnitTest }
+        IntegrationTest { Invoke-IntegrationTest }
+        PowerShellTests { Invoke-PowerShellTest }
         BuildAndTest {
             Invoke-Build
-            Invoke-UnitTests
-            Invoke-IntegrationTests
-            Invoke-PowerShellTests
+            Invoke-UnitTest
+            Invoke-IntegrationTest
+            Invoke-PowerShellTest
         }
         Package { Invoke-BuildPackage }
         Push { Invoke-PushPackage }

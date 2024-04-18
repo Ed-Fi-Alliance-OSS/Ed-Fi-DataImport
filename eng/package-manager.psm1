@@ -40,7 +40,7 @@ function MeetsMinimumNuGetVersion {
 function Install-NugetCli {
     param(
         [string]
-        $ToolsPath  = "$PSScriptRoot/.tools",
+        $ToolsPath = "$PSScriptRoot/.tools",
 
         [string]
         $SourceNugetExe = "https://dist.nuget.org/win-x86-commandline/v5.4.0/nuget.exe"
@@ -63,8 +63,8 @@ function Install-NugetCli {
     $exePath = "$ToolsPath/nuget.exe"
     Remove-Item -Path $exePath -Force -ErrorAction SilentlyContinue | Out-Null
 
-    Write-Host "Downloading nuget.exe official distribution from " $sourceNugetExe
-    Write-Host "Saving to $exePath"
+    Write-Information "Downloading nuget.exe official distribution from " $sourceNugetExe
+    Write-Information "Saving to $exePath"
     Invoke-WebRequest $sourceNugetExe -OutFile $exePath
 
     return $exePath
@@ -79,33 +79,33 @@ function Push-Package {
         $NuGetFeed,
 
         [string]
-        $NuGetApiKey       
+        $NuGetApiKey
 
-    )   
-    
-    Write-Host "Executing: nuget.exe $arguments" -ForegroundColor Magenta
+    )
+
+    Write-Information "Executing: nuget.exe $arguments" -ForegroundColor Magenta
     dotnet nuget push $PackageFile --api-key $NuGetApiKey --source $NuGetFeed
 }
 
 function Get-RestApiPackage {
     param (
         [string]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $RestApiPackageName,
 
         [string]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $RestApiPackageVersion,
 
         [Switch]
         $RestApiPackagePrerelease,
 
         [string]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $PackagesPath,
 
         [string]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $NuGetFeed,
 
         [string]
@@ -140,7 +140,7 @@ function Get-RestApiPackage {
         $arguments += "$RestApiPackageVersion"
     }
 
-    Write-Host "Executing: nuget.exe $arguments" -ForegroundColor Magenta
+    Write-Information "Executing: nuget.exe $arguments" -ForegroundColor Magenta
     &$nugetExe @arguments | Out-Null
 
     if ($LASTEXITCODE -ne 0) {
@@ -153,11 +153,11 @@ function Get-RestApiPackage {
 function Move-AppCommon {
     param (
         [string]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $AppCommonSourceDirectory,
 
         [string]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $AppCommonDestinationDirectory
     )
 
@@ -169,9 +169,9 @@ function Move-AppCommon {
         "Utility"
     ) | ForEach-Object {
         $parameters = @{
-            Recurse = $true
-            Force = $true
-            Path = "$AppCommonSourceDirectory/$_"
+            Recurse     = $true
+            Force       = $true
+            Path        = "$AppCommonSourceDirectory/$_"
             Destination = "$AppCommonDestinationDirectory/AppCommon/$_"
         }
         Copy-Item @parameters
@@ -181,19 +181,19 @@ function Move-AppCommon {
 function Add-AppCommon {
     param (
         [string]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $AppCommonPackageName,
 
         [string]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $AppCommonPackageVersion,
 
         [string]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $NuGetFeed,
 
         [string]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $DestinationPath,
 
         [string]
@@ -222,8 +222,8 @@ function Add-AppCommon {
         "-version", $AppCommonPackageVersion
     )
 
-    Write-Host "Downloading AppCommon"
-    Write-Host -ForegroundColor Magenta "Executing nuget: $parameters"
+    Write-Information "Downloading AppCommon"
+    Write-Information -ForegroundColor Magenta "Executing nuget: $parameters"
     nuget $parameters | Out-Null
 
     if ($LASTEXITCODE -ne 0) {

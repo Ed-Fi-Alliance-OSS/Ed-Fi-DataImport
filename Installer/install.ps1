@@ -31,16 +31,16 @@ Installs and connects the applications to the database using PostgreSql Authenti
 #>
 
 $dbConnectionInfo = @{
-    Server = "(local)"
-    Engine = "SqlServer"
-    UseIntegratedSecurity=$true
+    Server                = "(local)"
+    Engine                = "SqlServer"
+    UseIntegratedSecurity = $true
 }
 
 <#
-Review and edit the following application settings and connection information for Data Import 
+Review and edit the following application settings and connection information for Data Import
 
 .EXAMPLE
-Configure DataImport 
+Configure DataImport
 
     $p = @{
         ToolsPath = "C:/temp/tools"
@@ -60,10 +60,10 @@ Configure DataImport
 $packageSource = Split-Path $PSScriptRoot -Parent
 
 $p = @{
-    ToolsPath = "C:/temp/tools"
+    ToolsPath        = "C:/temp/tools"
     DbConnectionInfo = $dbConnectionInfo
-    PackageVersion = '2.2.0.0'
-    PackageSource = $packageSource
+    PackageVersion   = '2.2.0.0'
+    PackageSource    = $packageSource
 }
 
 Install-EdFiDataImport @p

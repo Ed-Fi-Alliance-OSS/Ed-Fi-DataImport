@@ -32,14 +32,14 @@ function Install-NuGetCli {
     $nuget = (Join-Path $ToolsPath "nuget.exe")
 
     if (-not $(Test-Path $nuget)) {
-        Write-Host "Downloading nuget.exe official distribution from " $sourceNuGetExe
+        Write-Information "Downloading nuget.exe official distribution from " $sourceNuGetExe
         Invoke-WebRequest $sourceNuGetExe -OutFile $nuget
     }
     else {
         $info = Get-Command $nuget
 
         if ("5.3.1.0" -ne $info.Version.ToString()) {
-            Write-Host "Updating nuget.exe official distribution from " $sourceNuGetExe
+            Write-Information "Updating nuget.exe official distribution from " $sourceNuGetExe
             Invoke-WebRequest $sourceNuGetExe -OutFile $nuget
         }
     }
@@ -100,12 +100,11 @@ function Get-NuGetPackage {
         $PackageSource = "https://pkgs.dev.azure.com/ed-fi-alliance/Ed-Fi-Alliance-OSS/_packaging/EdFi/nuget/v3/index.json"
     )
 
-    if(-not(Test-Path -Path $OutputDirectory) )
-    {
-        $createdPath = mkdir $OutputDirectory
+    if (-not(Test-Path -Path $OutputDirectory) ) {
+        mkdir $OutputDirectory
     }
 
-    $nuget = Install-NuGetCli $ToolsPath
+    Install-NuGetCli $ToolsPath
     $parameters = @(
         "install", $PackageName,
         "-source", $PackageSource,
@@ -116,9 +115,9 @@ function Get-NuGetPackage {
         $parameters += $PackageVersion
     }
 
-   
-    
-    Write-Host -ForegroundColor Magenta "$ToolsPath\nuget $parameters"
+
+
+    Write-Information -ForegroundColor Magenta "$ToolsPath\nuget $parameters"
     & "$ToolsPath\nuget" $parameters | Out-Null
 
     return Resolve-Path $OutputDirectory/$PackageName.$PackageVersion* | Select-Object -Last 1

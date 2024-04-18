@@ -12,7 +12,7 @@ $sql = (Get-Content $sqlfilePath)
 $connectionString = (Get-Content $connectionStringFilePath)
 
 if (Test-Path $outputFilePath) {
-    Write-Host "Deleting $outputFilePath prior to regenerating it."
+    Write-Information "Deleting $outputFilePath prior to regenerating it."
     Remove-Item -Path $outputFilePath
 }
 

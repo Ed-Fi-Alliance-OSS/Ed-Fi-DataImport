@@ -8,8 +8,11 @@
 $ErrorActionPreference = "Stop"
 
 function Set-TlsVersion {
-
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param()
+    if ($PSCmdlet.ShouldProcess("TlsVersion", "Set")) {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls11 -bor [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+    }
 }
 
 Import-Module "$PSScriptRoot/key-management.psm1"
@@ -62,7 +65,7 @@ function Install-EdFiDataImport {
         # Default: DataImport.Server.TransformLoad.
         [string]
         $TransformLoadPackageName = "DataImport.Server.TransformLoad.Win64",
-        
+
         # Data Import version.
         [string]
         $PackageVersion,
@@ -94,7 +97,7 @@ function Install-EdFiDataImport {
         # Web application name. Default: "DataImport".
         [string]
         $WebApplicationName = "DataImport",
-        
+
         # Transform Load application name. Default: "DataImportTransformLoad".
         [string]
         $TransformLoadApplicationName = "DataImportTransformLoad",
@@ -112,7 +115,7 @@ function Install-EdFiDataImport {
         # The hashtable must include: Server, Engine (SqlServer or PostgreSQL), and
         # either UseIntegratedSecurity or Username and Password. Optionally can include Port.
         [hashtable]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $DbConnectionInfo,
 
         # Database Config
@@ -131,35 +134,35 @@ function Install-EdFiDataImport {
     $result = @()
 
     $Config = @{
-        WebApplicationPath = (Join-Path $WebSitePath $WebApplicationName)
+        WebApplicationPath           = (Join-Path $WebSitePath $WebApplicationName)
         TransformLoadApplicationPath = (Join-Path $WebSitePath $TransformLoadApplicationName)
-        WebPackageName = $WebPackageName
-        TransformLoadPackageName = $TransformLoadPackageName
-        PackageVersion = $PackageVersion
-        PackageSource = $PackageSource
-        ToolsPath = $ToolsPath
-        DownloadPath = $DownloadPath
-        WebSitePath = $WebSitePath
-        WebSiteName = $WebsiteName
-        WebSitePort = $WebsitePort
-        CertThumbprint = $CertThumbprint
-        DataImportDatabaseName = $DataImportDatabaseName
-        WebApplicationName = $WebApplicationName
+        WebPackageName               = $WebPackageName
+        TransformLoadPackageName     = $TransformLoadPackageName
+        PackageVersion               = $PackageVersion
+        PackageSource                = $PackageSource
+        ToolsPath                    = $ToolsPath
+        DownloadPath                 = $DownloadPath
+        WebSitePath                  = $WebSitePath
+        WebSiteName                  = $WebsiteName
+        WebSitePort                  = $WebsitePort
+        CertThumbprint               = $CertThumbprint
+        DataImportDatabaseName       = $DataImportDatabaseName
+        WebApplicationName           = $WebApplicationName
         TransformLoadApplicationName = $TransformLoadApplicationName
-        DbConnectionInfo = $DbConnectionInfo
-        NoDuration = $NoDuration
-        UserRecoveryToken = $UserRecoveryToken
+        DbConnectionInfo             = $DbConnectionInfo
+        NoDuration                   = $NoDuration
+        UserRecoveryToken            = $UserRecoveryToken
     }
 
     $elapsed = Use-StopWatch {
         $result += Initialize-Configuration -Config $config
         $result += Set-DataImportPackagesSource -Config $config
-        $result += Invoke-TransformDataImportWebAppSettings -Config $Config
-        $result += Invoke-TransformDataImportTransformLoadAppSettings -Config $Config
-        $result += Invoke-TransformDataImportWebConnectionStrings -Config $config
-        $result += Invoke-TransformDataImportTransformLoadConnectionStrings -Config $config
+        $result += Invoke-TransformDataImportWebAppSetting -Config $Config
+        $result += Invoke-TransformDataImportTransformLoadAppSetting -Config $Config
+        $result += Invoke-TransformDataImportWebConnectionString -Config $config
+        $result += Invoke-TransformDataImportTransformLoadConnectionString -Config $config
         $result += Install-Application -Config $Config
-        $result += Set-SqlLogins -Config $Config
+        $result += Set-SqlLogin -Config $Config
 
         $result
     }
@@ -226,11 +229,11 @@ function Uninstall-EdFiDataImport {
     )
 
     $config = @{
-        ToolsPath = $ToolsPath
-        WebApplicationPath = $WebApplicationPath
-        TransformLoadApplicationPath = $TransformLoadApplicationPath 
-        WebApplicationName = $WebApplicationName
-        WebSiteName = $WebSiteName
+        ToolsPath                    = $ToolsPath
+        WebApplicationPath           = $WebApplicationPath
+        TransformLoadApplicationPath = $TransformLoadApplicationPath
+        WebApplicationName           = $WebApplicationName
+        WebSiteName                  = $WebSiteName
     }
 
     $result = @()
@@ -255,19 +258,17 @@ function Uninstall-EdFiDataImport {
     }
 }
 
-function UninstallDataImport($config)
-{
+function UninstallDataImport($config) {
     $parameters = @{
         WebApplicationPath = $config.WebApplicationPath
         WebApplicationName = $config.WebApplicationName
-        WebSiteName = $config.WebSiteName
+        WebSiteName        = $config.WebSiteName
     }
 
     Uninstall-EdFiApplicationFromIIS @parameters
 }
 
-function RemoveTransformLoad($Config)
-{
+function RemoveTransformLoad($Config) {
     Remove-Item -Path $Config.TransformLoadApplicationPath -Force -Recurse
 }
 
@@ -286,44 +287,44 @@ function ParseVersion($versionString) {
     for ($i = 1; $i -lt $splitByTags.Length; $i++) {
         $preVersion = $splitByTags[$i] -replace '[^0-9.]', ''
         $cleanedPreVersion = $preVersion.Trim('.')
-        if($cleanedPreVersion -ne '') {
+        if ($cleanedPreVersion -ne '') {
             $version += ".$cleanedPreVersion"
         }
     }
 
     try { return [System.Version]::Parse($version) }
-    catch
-    {
+    catch {
         Write-Warning "Failed to parse version configuration $versionString. Please correct and try again."
         exit
     }
 }
 
 function Set-DataImportPackagesSource {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param (
         [hashtable]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $Config
     )
+    if ($PSCmdlet.ShouldProcess("DataImportPackagesSource", "Set")) {
+        Invoke-Task -Name ($MyInvocation.MyCommand.Name) -Task {
+            $dataImportPackageSource = $Config.PackageSource
+            $webPkgName = $Config.WebPackageName
+            $transformLoadPkgName = $Config.TransformLoadPackageName
+            $webPackageDir = "$dataImportPackageSource/$webPkgName"
+            $transformLoadPackageDir = "$dataImportPackageSource/$transformLoadPkgName"
+            $configVersionString = $Config.PackageVersion
+            $versionString = [System.Diagnostics.FileVersionInfo]::GetVersionInfo("$webPackageDir\DataImport.Web.dll").FileVersion
 
-    Invoke-Task -Name ($MyInvocation.MyCommand.Name) -Task {
-        $dataImportPackageSource = $Config.PackageSource
-        $webPkgName = $Config.WebPackageName
-        $transformLoadPkgName = $Config.TransformLoadPackageName
-        $webPackageDir = "$dataImportPackageSource/$webPkgName"
-        $transformLoadPackageDir = "$dataImportPackageSource/$transformLoadPkgName"
-        $configVersionString = $Config.PackageVersion
-        $versionString = [System.Diagnostics.FileVersionInfo]::GetVersionInfo("$webPackageDir\DataImport.Web.dll").FileVersion
+            if (IsVersionMismatch $versionString $configVersionString) {
+                Write-Warning "The specified Data Import package version $configVersionString in the configuration does not match the file version $versionString of the package used as source. Please specify the correct version in the installer configuration or use the correct source."
+                exit
+            }
 
-        if (IsVersionMismatch $versionString $configVersionString) {
-            Write-Warning "The specified Data Import package version $configVersionString in the configuration does not match the file version $versionString of the package used as source. Please specify the correct version in the installer configuration or use the correct source."
-            exit
-        } 
-
-        $Config.PackageDirectory = $webPackageDir
-        $Config.DataImportWebSettingsPath = $webPackageDir 
-        $Config.DataImportTransformLoadSettingsPath = $transformLoadPackageDir
+            $Config.PackageDirectory = $webPackageDir
+            $Config.DataImportWebSettingsPath = $webPackageDir
+            $Config.DataImportTransformLoadSettingsPath = $transformLoadPackageDir
+        }
     }
 }
 
@@ -334,9 +335,9 @@ function Invoke-ResetIIS {
         Write-Warning "NOTICE: In order to upgrade or uninstall, Information Internet Service (IIS) needs to be stopped during the process. This will impact availability if users are using applications hosted with IIS."
         $confirmation = Request-Information -DefaultValue 'y' -Prompt "Please enter 'y' to proceed with an IIS reset or enter 'n' to stop the upgrade or uninstall. [Default Action: '$default']"
 
-        if (!$confirmation) { $confirmation = $default}
+        if (!$confirmation) { $confirmation = $default }
         if ($confirmation -ieq 'y') {
-            & {iisreset}
+            & { iisreset }
         }
         else {
             Write-Warning "Exiting the uninstall/upgrade process."
@@ -349,7 +350,7 @@ function Initialize-Configuration {
     [CmdletBinding()]
     param (
         [hashtable]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $Config
     )
     Invoke-Task -Name ($MyInvocation.MyCommand.Name) -Task {
@@ -362,6 +363,7 @@ function Initialize-Configuration {
 }
 
 function New-JsonFile {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param(
         [string] $FilePath,
 
@@ -369,17 +371,18 @@ function New-JsonFile {
 
         [switch] $Overwrite
     )
+    if ($PSCmdlet.ShouldProcess("JsonFile", "New")) {
+        if (-not $Overwrite -and (Test-Path $FilePath)) { return }
 
-    if (-not $Overwrite -and (Test-Path $FilePath)) { return }
-
-    $Hashtable | ConvertTo-Json -Depth 10 | Out-File -FilePath $FilePath -NoNewline -Encoding UTF8
+        $Hashtable | ConvertTo-Json -Depth 10 | Out-File -FilePath $FilePath -NoNewline -Encoding UTF8
+    }
 }
 
-function Invoke-TransformDataImportWebAppSettings {
+function Invoke-TransformDataImportWebAppSetting {
     [CmdletBinding()]
     param (
         [hashtable]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $Config
     )
 
@@ -388,10 +391,8 @@ function Invoke-TransformDataImportWebAppSettings {
         $settings = Get-Content $settingsFile | ConvertFrom-Json | ConvertTo-Hashtable
         $settings.AppSettings.DatabaseEngine = $config.engine
 
-        if(!$settings.AppSettings.EncryptionKey)
-        {
-            if($Config.ContainsKey("EncryptionKey") -AND $Config.EncryptionKey)
-            {
+        if (!$settings.AppSettings.EncryptionKey) {
+            if ($Config.ContainsKey("EncryptionKey") -AND $Config.EncryptionKey) {
                 $encryptionKey = $Config.EncryptionKey
             }
             else {
@@ -400,17 +401,17 @@ function Invoke-TransformDataImportWebAppSettings {
             $settings.AppSettings.EncryptionKey = $encryptionKey
         }
         $settings.AppSettings.UserRecoveryToken = $Config.UserRecoveryToken
-        $EmptyHashTable=@{}
+        $EmptyHashTable = @{}
         $mergedSettings = Merge-Hashtables $settings, $EmptyHashTable
         New-JsonFile $settingsFile $mergedSettings -Overwrite
     }
 }
 
-function Invoke-TransformDataImportTransformLoadAppSettings {
+function Invoke-TransformDataImportTransformLoadAppSetting {
     [CmdletBinding()]
     param (
         [hashtable]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $Config
     )
 
@@ -419,10 +420,8 @@ function Invoke-TransformDataImportTransformLoadAppSettings {
         $settings = Get-Content $settingsFile | ConvertFrom-Json | ConvertTo-Hashtable
         $settings.AppSettings.DatabaseEngine = $config.engine
 
-        if(!$settings.AppSettings.EncryptionKey)
-        {
-            if($Config.ContainsKey("EncryptionKey") -AND $Config.EncryptionKey)
-            {
+        if (!$settings.AppSettings.EncryptionKey) {
+            if ($Config.ContainsKey("EncryptionKey") -AND $Config.EncryptionKey) {
                 $encryptionKey = $Config.EncryptionKey
             }
             else {
@@ -431,17 +430,17 @@ function Invoke-TransformDataImportTransformLoadAppSettings {
             $settings.AppSettings.EncryptionKey = $encryptionKey
         }
 
-        $EmptyHashTable=@{}
+        $EmptyHashTable = @{}
         $mergedSettings = Merge-Hashtables $settings, $EmptyHashTable
         New-JsonFile $settingsFile $mergedSettings -Overwrite
     }
 }
 
-function Invoke-TransformDataImportWebConnectionStrings {
+function Invoke-TransformDataImportWebConnectionString {
     [CmdletBinding()]
     param (
         [hashtable]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $Config
     )
     Invoke-Task -Name ($MyInvocation.MyCommand.Name) -Task {
@@ -452,7 +451,7 @@ function Invoke-TransformDataImportWebConnectionStrings {
         $settingsFile = Join-Path $Config.DataImportWebSettingsPath  "appsettings.json"
         $settings = Get-Content $settingsFile | ConvertFrom-Json | ConvertTo-Hashtable
 
-        Write-Host "Setting database connections in $($Config.DataImportWebSettingsPath)"
+        Write-Information "Setting database connections in $($Config.DataImportWebSettingsPath)"
         $connString = New-ConnectionString -ConnectionInfo $Config.DbConnectionInfo -SspiUsername $Config.WebApplicationName
 
         $connectionstrings = @{
@@ -465,11 +464,11 @@ function Invoke-TransformDataImportWebConnectionStrings {
         New-JsonFile $settingsFile  $mergedSettings -Overwrite
     }
 }
-function Invoke-TransformDataImportTransformLoadConnectionStrings {
+function Invoke-TransformDataImportTransformLoadConnectionString {
     [CmdletBinding()]
     param (
         [hashtable]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $Config
     )
     Invoke-Task -Name ($MyInvocation.MyCommand.Name) -Task {
@@ -480,7 +479,7 @@ function Invoke-TransformDataImportTransformLoadConnectionStrings {
         $settingsFile = Join-Path $Config.DataImportTransformLoadSettingsPath  "appsettings.json"
         $settings = Get-Content $settingsFile | ConvertFrom-Json | ConvertTo-Hashtable
 
-        Write-Host "Setting database connections in $($Config.DataImportTransformLoadSettingsPath)"
+        Write-Information "Setting database connections in $($Config.DataImportTransformLoadSettingsPath)"
         $connString = New-ConnectionString -ConnectionInfo $Config.DbConnectionInfo -SspiUsername $Config.WebApplicationName
 
         $connectionstrings = @{
@@ -495,49 +494,50 @@ function Invoke-TransformDataImportTransformLoadConnectionStrings {
 }
 
 function Request-Information {
-  [CmdletBinding()]
-  param (
-      [Parameter(Mandatory=$true)]
-      $Prompt,
-      [Parameter(Mandatory=$true)]
-      $DefaultValue
-  )
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        $Prompt,
+        [Parameter(Mandatory = $true)]
+        $DefaultValue
+    )
 
-  $isInteractive = [Environment]::UserInteractive
-  if($isInteractive) {
-      $confirmation = Read-Host -Prompt $Prompt
-  } else {
-      $confirmation = $DefaultValue
-  }
+    $isInteractive = [Environment]::UserInteractive
+    if ($isInteractive) {
+        $confirmation = Read-Host -Prompt $Prompt
+    }
+    else {
+        $confirmation = $DefaultValue
+    }
 
-  return $confirmation
+    return $confirmation
 }
 
 function Install-Application {
     [CmdletBinding()]
     param (
         [hashtable]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $Config
     )
 
     Invoke-Task -Name ($MyInvocation.MyCommand.Name) -Task {
 
         $iisParams = @{
-            SourceLocation = $Config.PackageDirectory
+            SourceLocation     = $Config.PackageDirectory
             WebApplicationPath = $Config.WebApplicationPath
             WebApplicationName = $Config.WebApplicationName
-            WebSitePath = $Config.WebSitePath
-            WebSitePort = $Config.WebSitePort
-            WebSiteName = $Config.WebSiteName
-            CertThumbprint = $Config.CertThumbprint
-            DotNetVersion = $RequiredDotNetHostingBundleVersion
+            WebSitePath        = $Config.WebSitePath
+            WebSitePort        = $Config.WebSitePort
+            WebSiteName        = $Config.WebSiteName
+            CertThumbprint     = $Config.CertThumbprint
+            DotNetVersion      = $RequiredDotNetHostingBundleVersion
         }
 
         Install-EdFiApplicationIntoIIS @iisParams
-        
+
         $parameters = @{
-            sourceLocation = "$($Config.DataImportTransformLoadSettingsPath)\*"
+            sourceLocation  = "$($Config.DataImportTransformLoadSettingsPath)\*"
             installLocation = $Config.TransformLoadApplicationPath
         }
         Copy-TransformLoadToWebsitePath @parameters
@@ -546,40 +546,40 @@ function Install-Application {
 
 function Copy-TransformLoadToWebsitePath {
     param (
-        [string] [Parameter(Mandatory=$true)] $sourceLocation,
-        [string] [Parameter(Mandatory=$true)] $installLocation
+        [string] [Parameter(Mandatory = $true)] $sourceLocation,
+        [string] [Parameter(Mandatory = $true)] $installLocation
     )
 
     New-Item -ItemType Directory -Path $installLocation -Force -ErrorAction Stop | Out-Null
-    
+
     Write-info "Copying folder: ""$sourceLocation"" to destination: ""$installLocation"""
     $parameters = @{
-        Path = $sourceLocation
-        Recurse = $true
-        Exclude = @(
+        Path        = $sourceLocation
+        Recurse     = $true
+        Exclude     = @(
             "*.nupkg"
             "Web.*.config"
         )
         Destination = $installLocation
-        Force = $true
+        Force       = $true
     }
 
     Copy-Item @parameters
 }
 
-function Set-SqlLogins {
-    [CmdletBinding()]
+function Set-SqlLogin {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param (
         [hashtable]
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $Config
     )
+    if ($PSCmdlet.ShouldProcess("SqlLogin", "Set")) {
+        Invoke-Task -Name ($MyInvocation.MyCommand.Name) -Task {
 
-    Invoke-Task -Name ($MyInvocation.MyCommand.Name) -Task {
-
-        if($Config.hasDbConnectionInfo)
-        {
-            Add-SqlLogins $Config.DbConnectionInfo $Config.WebApplicationName -IsCustomLogin
+            if ($Config.hasDbConnectionInfo) {
+                Add-SqlLogins $Config.DbConnectionInfo $Config.WebApplicationName -IsCustomLogin
+            }
         }
     }
 }

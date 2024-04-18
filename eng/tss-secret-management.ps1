@@ -6,31 +6,31 @@
 
 $confFile = "$PSScriptRoot/.tssconf"
 
-Write-Host "== Template Sharing Service User Enrollment ==`n" -ForegroundColor Green
+Write-Information "== Template Sharing Service User Enrollment ==`n" -ForegroundColor Green
 
 #########################################################################################
 ###   HELPERS
 #########################################################################################
 
 function Write-Labeled-Value ($label, $value){
-  Write-Host "$($label): " -NoNewline
-  Write-Host $value -ForegroundColor Cyan
+  Write-Information "$($label): " -NoNewline
+  Write-Information $value -ForegroundColor Cyan
 }
 
 function Write-Middle-Highlight ($before, $highlighted, $after){
-  Write-Host $before -NoNewline
-  Write-Host $highlighted -NoNewline -ForegroundColor Cyan
-  Write-Host $after
+  Write-Information $before -NoNewline
+  Write-Information $highlighted -NoNewline -ForegroundColor Cyan
+  Write-Information $after
 }
 
-function Prompt-YN-Retry-Loop ($prompt, $default){
+function Invoke-YesNoRetryLoop  ($prompt, $default){
   $result = Read-Host -Prompt $prompt
 
   if($result -eq '') {
     return $default
   }
   if($result -ne 'y' -and $result -ne 'n') {
-    return Prompt-YN-Retry-Loop $prompt $default
+    return Invoke-YesNoRetryLoop  $prompt $default
   }
 
   return $result
@@ -40,7 +40,7 @@ function Prompt-YN-Retry-Loop ($prompt, $default){
 ###   WORKFLOW
 #########################################################################################
 
-function Prompt-For-Config {
+function Get-ConfigInput {
   $tssUrl = Read-Host -Prompt "Template sharing URL (Press Enter for  ""https://template-sharing.ed-fi.org"")"
   If ('' -eq $tssUrl) { $tssUrl = 'https://template-sharing.ed-fi.org' }
   $tssAuthId = Read-Host -Prompt "Client ID (Press Enter for ""Administrator"")"
@@ -54,7 +54,7 @@ function Prompt-For-Config {
   }
 
   Set-Content -Path $confFile -Value ($conf | ConvertTo-Json)
-  Write-Host "Config file saved" -ForegroundColor Green
+  Write-Information "Config file saved" -ForegroundColor Green
   return $conf
 }
 
@@ -68,39 +68,39 @@ function Get-Auth-Token ($conf) {
   try {
     $authResponse = Invoke-RestMethod -Method 'Post' -Uri $authUrl -Body $authRequest -ContentType "application/x-www-form-urlencoded"
   } catch {
-    Write-Host "Authentication failed: " -NoNewLine -ForegroundColor Red
-    Write-Host $_.Exception.Message
+    Write-Information "Authentication failed: " -NoNewLine -ForegroundColor Red
+    Write-Information $_.Exception.Message
 
-    $retry = Prompt-YN-Retry-Loop 'Re-enter configuration and try again [y/N]?' 'n'
+    $retry = Invoke-YesNoRetryLoop  'Re-enter configuration and try again [y/N]?' 'n'
     if ($retry -eq "y") {
-      $conf = Prompt-For-Config
+      $conf = Get-ConfigInput
       return Get-Auth-Token $conf
     }else {
-      Write-Middle-Highlight "See " $confFile " for configuration info"
-      Write-Host "`nExiting"
+      Write-Middle-Highlight -before "See " -highlighted $confFile -after " for configuration info"
+      Write-Information "`nExiting"
       exit
     }
   }
 
-  Write-Host "`nAuthenticated successfully" -ForegroundColor Green
+  Write-Information "`nAuthenticated successfully" -ForegroundColor Green
   return $authResponse.access_token
 }
 
-function Prompt-For-Client {
-  Write-Host "`nInput new client details:" -ForegroundColor Yellow
+function Get-ClientInput  {
+    Write-Information "`nInput new client details:" -ForegroundColor Yellow
 
   $clientName = Read-Host -Prompt "Client/Organization Name"
   $clientFullName = Read-Host -Prompt "Full Name"
   $clientEmail = Read-Host -Prompt "Email"
 
-  Write-Host "`nConfirm details:" -ForegroundColor Yellow
+  Write-Information "`nConfirm details:" -ForegroundColor Yellow
   Write-Labeled-Value "Organization" $clientName
   Write-Labeled-Value "Full Name" $clientFullName
   Write-Labeled-Value "Email" $clientEmail
 
-  $retry = Prompt-YN-Retry-Loop 'Accept details [Y/n]?' 'y'
+  $retry = Invoke-YesNoRetryLoop  'Accept details [Y/n]?' 'y'
   if ($retry -eq "n") {
-    return Prompt-For-Client
+    return Get-ClientInput
   }
 
   return @{
@@ -117,25 +117,25 @@ function Prompt-For-Client {
 #########################################################################################
 
 If (-not(Test-Path -Path $confFile)) {
-  Write-Middle-Highlight "Configuration file (" $confFile ") not found"
-  Write-Host "Please input Template Sharing configuration:" -ForegroundColor Yellow
+  Write-Middle-Highlight -before "Configuration file (" -highlighted $confFile -after ") not found"
+  Write-Information "Please input Template Sharing configuration:" -ForegroundColor Yellow
 
-  $conf = Prompt-For-Config
+  $conf = Get-ConfigInput
 } Else {
-  Write-Host "Loading configuration from file"
+  Write-Information "Loading configuration from file"
   try {
     $conf = Get-Content -Path $confFile | ConvertFrom-Json
   }
   catch {
-    Write-Host "Failed to load configuration: " -NoNewline -ForegroundColor Red
-    Write-Host $_.Exception.Message
+    Write-Information "Failed to load configuration: " -NoNewline -ForegroundColor Red
+    Write-Information $_.Exception.Message
 
-    $retry = Prompt-YN-Retry-Loop 'Re-enter configuration and try again [y/N]?' 'n'
+    $retry = Invoke-YesNoRetryLoop  'Re-enter configuration and try again [y/N]?' 'n'
     if ($retry -eq "y") {
-      $conf = Prompt-For-Config
+      $conf = Get-ConfigInput
     }else {
-      Write-Middle-Highlight "See " $confFile " for configuration info"
-      Write-Host "`nExiting"
+      Write-Middle-Highlight -before "See " -highlighted $confFile -after " for configuration info"
+      Write-Information "`nExiting"
       exit
     }
   }
@@ -145,7 +145,7 @@ $tssClientUrl = "$($conf.Url)/identity/api/client"
 
 $token = Get-Auth-Token $conf
 
-$client = Prompt-For-Client
+$client = Get-ClientInput
 
 $addClientJson =@{
   clientId = ($client.Id)
@@ -176,19 +176,19 @@ $headers = @{
 try {
   Invoke-RestMethod -Method 'Post' -Uri $tssClientUrl -Body ($addClientJson | ConvertTo-Json) -Headers $headers -ContentType "application/json"
 
-  Write-Host "`nClient created successfully" -ForegroundColor Green
+  Write-Information "`nClient created successfully" -ForegroundColor Green
 
-  Write-Host "`nClient details:" -ForegroundColor Yellow
+  Write-Information "`nClient details:" -ForegroundColor Yellow
   Write-Labeled-Value "Organization" $client.Name
   Write-Labeled-Value "Full Name" $client.FullName
   Write-Labeled-Value "Email" $client.Email
   Write-Labeled-Value "Client Key" $client.Id
   Write-Labeled-Value "Client Secret" $client.Secret
 } catch {
-  Write-Host "Client creation failed failed: " -NoNewLine -ForegroundColor Red
-  Write-Host $_.Exception.Message
-  Write-Host "Please check info and try again. See full exception below`n"
+  Write-Information "Client creation failed failed: " -NoNewLine -ForegroundColor Red
+  Write-Information $_.Exception.Message
+  Write-Information "Please check info and try again. See full exception below`n"
   throw $_
 }
 
-Write-Host "`nExiting"
+Write-Information "`nExiting"

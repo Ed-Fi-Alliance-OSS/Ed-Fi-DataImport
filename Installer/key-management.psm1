@@ -3,7 +3,9 @@
 # The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 # See the LICENSE and NOTICES files in the project root for more information.
 
-function New-AESKey() {
+function New-AESKey{
+    [CmdletBinding(SupportsShouldProcess=$true)]
+    param()
     <#
         .SYNOPSIS
             Generates and Base64-encodes a 256 bit key appropriate for use with AES encryption.
@@ -14,11 +16,12 @@ function New-AESKey() {
 
             # Copy the output and paste into the appsettings file.
     #>
-
-    $aes = [System.Security.Cryptography.Aes]::Create()
-    $aes.KeySize = 256
-    $aes.GenerateKey()
-    [System.Convert]::ToBase64String($aes.Key)
+    if ($PSCmdlet.ShouldProcess("AES Key", "New")) {
+        $aes = [System.Security.Cryptography.Aes]::Create()
+        $aes.KeySize = 256
+        $aes.GenerateKey()
+        [System.Convert]::ToBase64String($aes.Key)
+    }
 }
 
 Export-ModuleMember -Function New-AESKey

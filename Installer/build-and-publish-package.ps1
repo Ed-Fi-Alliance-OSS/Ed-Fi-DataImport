@@ -28,7 +28,8 @@ param (
     [string]
     $NuGetApiKey
 )
-
+$NuGetApiKeyReceived = $NuGetApiKey;
+$NuGetFeedReceived = $NuGetFeed;
 $ErrorActionPreference = "Stop"
 $OutputDirectory = Resolve-Path $PSScriptRoot
 $PackageDefinitionFile = Resolve-Path "$PSScriptRoot/Installer.DataImport.nuspec"
@@ -37,7 +38,7 @@ $Downloads = "$PSScriptRoot/downloads"
 function Add-AppCommon{
 
     if(-not(Test-Path -Path $Downloads )){
-        $createDir = mkdir $Downloads
+        mkdir $Downloads
     }
 
     $PackageName = "EdFi.Installer.AppCommon"
@@ -45,13 +46,13 @@ function Add-AppCommon{
 
     $parameters = @(
         "install", $PackageName,
-        "-source", $NuGetFeed,
+        "-source", $NuGetFeedReceivedq,
         "-outputDirectory", $Downloads
         "-version", $PackageVersion
     )
 
-    Write-Host "Downloading AppCommon"
-    Write-Host -ForegroundColor Magenta "Executing nuget: $parameters"
+    Write-Information "Downloading AppCommon"
+    Write-Information -ForegroundColor Magenta "Executing nuget: $parameters"
     nuget $parameters
 
     $appCommonDirectory = Resolve-Path $Downloads/$PackageName.$PackageVersion* | Select-Object -Last 1
@@ -74,24 +75,26 @@ function Add-AppCommon{
 }
 
 function New-Package {
+    [CmdletBinding(SupportsShouldProcess=$true)]
     param (
         [string]
         $Suffix
      )
+    if ($PSCmdlet.ShouldProcess("Package", "New")) {
+        $parameters = @(
+            "pack", $PackageDefinitionFile,
+            "-Version", $SemanticVersion,
+            "-OutputDirectory", $OutputDirectory,
+            "-Verbosity", "detailed"
+        )
+        if ($Suffix) {
+            $parameters += "-Suffix"
+            $parameters += $Suffix
+        }
 
-    $parameters = @(
-        "pack", $PackageDefinitionFile,
-        "-Version", $SemanticVersion,
-        "-OutputDirectory", $OutputDirectory,
-        "-Verbosity", "detailed"
-    )
-    if ($Suffix) {
-        $parameters += "-Suffix"
-        $parameters += $Suffix
+        Write-Information @parameters -ForegroundColor Magenta
+        nuget @parameters
     }
-
-    Write-Host @parameters -ForegroundColor Magenta
-    nuget @parameters
 }
 
 function Get-PackageId
@@ -111,12 +114,12 @@ function Publish-Package{
 
     $parameters = @(
         "push", (Get-ChildItem "$OutputDirectory/$packageName").FullName,
-        "-Source", $NuGetFeed,
-        "-ApiKey", $NuGetApiKey,
+        "-Source", $NuGetFeedReceived
+        "-ApiKey", $NuGetApiKeyReceived,
         "-Verbosity", "detailed"
     )
 
-    Write-Host "Pushing $packageName to azure artifacts"
+    Write-Information "Pushing $packageName to azure artifacts"
     nuget @parameters
 }
 
@@ -124,21 +127,21 @@ function Publish-Package{
 Add-AppCommon
 
 # Build release
-Write-Host "Building Release package"
+Write-Information "Building Release package"
 New-Package
 
 # Build pre-release
-Write-Host "Building Pre-release package"
+Write-Information "Building Pre-release package"
 $Suffix = "$PreReleaseLabel$($BuildCounter.PadLeft(4,'0'))"
 New-Package $Suffix
 
 if($PublishReleaseAndRepackage)
 {
-    Write-Host "Publishing release package"
+    Write-Information "Publishing release package"
     Publish-Package
 }
 if ($PublishPreRelease) {
-    Write-Host "Publishing pre-release package"
+    Write-Information "Publishing pre-release package"
     $PackageVersion = $SemanticVersion + "-$Suffix"
     Publish-Package $PackageVersion
 }
