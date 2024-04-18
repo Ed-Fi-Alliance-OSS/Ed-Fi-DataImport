@@ -31,6 +31,9 @@ namespace DataImport.Models
             if (resourceJson["swaggerVersion"].Value<string>() == "2.0")
                 return GetFieldsForModelFromV2Swagger(resourceJson).ToArray();
 
+            if (resourceJson["swaggerVersion"].Value<string>() == "3.0")
+                return GetFieldsForModelFromV3Swagger(resourceJson).ToArray();
+
             throw new NotSupportedException("Swagger version number is missing.");
         }
 
@@ -150,6 +153,66 @@ namespace DataImport.Models
             }
         }
 
+        private static IEnumerable<ResourceMetadata> GetFieldsForModelFromV3Swagger(JObject resourceJson, JObject fullResourceJson = null)
+        {
+            fullResourceJson = fullResourceJson ?? resourceJson;
+            var requiredProperties = resourceJson != null && resourceJson["required"] != null
+                ? resourceJson["required"].Select(x => x.ToString()).ToArray()
+                : new string[0];
+
+            foreach (var propertyToken in resourceJson["properties"])
+            {
+                var property = (JProperty) propertyToken;
+                var field = new ResourceMetadata
+                {
+                    Name = property.Name,
+                    Required = requiredProperties.Contains(property.Name)
+                };
+
+                foreach (var detailToken in property)
+                {
+                    var detail = (JObject) detailToken;
+                    field.DataType = detail["$ref"] != null
+                        ? GetReferenceNameFromComponentsSchemas(detail["$ref"])
+                        : detail["type"].ToString();
+
+                    if (field.DataType == "array")
+                    {
+                        var subModel = GetReferenceNameFromComponentsSchemas(detail["items"]["$ref"]);
+                        var subModelJson = fullResourceJson["models"][subModel];
+                        //subModel is the type of a single item in this array.
+                        //Create a node for that item, and then recur to describe
+                        //that item's own details in full.
+
+                        field.Children.Add(new ResourceMetadata
+                        {
+                            Name = GetFormattedModelName(subModel),
+                            DataType = subModel,
+                            Children = GetFieldsForModelFromV3Swagger((JObject) subModelJson, fullResourceJson).ToList()
+                        });
+                    }
+                    else
+                    {
+                        // Infer whether this is a complex type requiring a recursive call, by checking whether that recursive call would
+                        // successfully find a model definition for this type. In other words, we avoid recursion for trivial types like
+                        // "string", "date-time", "boolean", "integer", and "number", while avoiding future bugs if other trivial types
+                        // begin to appear in the metadata.
+
+                        var subModel = field.DataType;
+                        var subTypeJson = fullResourceJson["models"][subModel];
+
+                        bool fieldTypeHasModelDefinition = subTypeJson != null;
+
+                        if (fieldTypeHasModelDefinition)
+                            field.Children = GetFieldsForModelFromV3Swagger((JObject) subTypeJson, fullResourceJson).ToList();
+                    }
+                }
+
+                if (IsApplicableField(field))
+                    yield return field;
+            }
+        }
+
         private static readonly string[] _ignoredFields = { "id", "link", "_etag" };
         private static bool IsApplicableField(ResourceMetadata field)
         {
@@ -158,6 +221,9 @@ namespace DataImport.Models
 
         private static string GetReferenceName(JToken reference)
             => reference.Value<string>().Replace("#/definitions/", "");
+
+        private static string GetReferenceNameFromComponentsSchemas(JToken reference)
+            => reference.Value<string>().Replace("#/components/schemas/", "");
 
         private static string GetFormattedModelName(string resource) => resource.Substring(resource.IndexOf('_') + 1);
     }
