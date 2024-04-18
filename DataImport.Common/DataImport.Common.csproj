@@ -20,6 +20,7 @@
     <ProjectReference Include="..\DataImport.Models\DataImport.Models.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Libuv" Version="1.10.0" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.8.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.8.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
