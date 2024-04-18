@@ -18,7 +18,7 @@ function Write-Labeled-Value ($label, $value){
 }
 
 function Write-Middle-Highlight ($before, $highlighted, $after){
-  Write-Information $before -NoNewline
+  Write-Information $before
   Write-Information $highlighted
   Write-Information $after
 }

@@ -76,7 +76,7 @@ catch {
     Write-Information ("`tStatus code: " + $exception.Response.StatusCode)
     Write-Information ("`tStatus description: " + $exception.Response.StatusDescription)
 
-    Write-Information "`tResponse: " -NoNewline
+    Write-Information "`tResponse: "
     $errorResponse = $_.Exception.Response.GetResponseStream()
     $reader = New-Object System.IO.StreamReader($errorResponse)
     $reader.BaseStream.Position = 0
