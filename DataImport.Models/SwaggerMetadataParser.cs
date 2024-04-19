@@ -219,9 +219,11 @@ namespace DataImport.Models
             return !_ignoredFields.Contains(field.Name);
         }
 
+        /// This method works for Swagger 2.0 and previous
         private static string GetReferenceName(JToken reference)
             => reference.Value<string>().Replace("#/definitions/", "");
 
+        /// This method works for Swagger 3.0
         private static string GetReferenceNameFromComponentsSchemas(JToken reference)
             => reference.Value<string>().Replace("#/components/schemas/", "");
 

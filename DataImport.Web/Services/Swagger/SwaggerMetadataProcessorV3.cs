@@ -16,7 +16,7 @@ namespace DataImport.Web.Services.Swagger
         public bool CanHandle(JObject swaggerDocument)
         {
             var version = GetSwaggerDocumentVersion(swaggerDocument);
-            return version == "3.0.1"; // DI-1340 ToDo. Talk to Vinaya about this.
+            return version == "3.0.1";
         }
 
         private static string GetSwaggerDocumentVersion(JObject swaggerDocument)
@@ -70,16 +70,6 @@ namespace DataImport.Web.Services.Swagger
 
         private string GetEntityMetadata(JToken entity, JObject swaggerDocument)
         {
-            //Swagger 2.0 has a number of differences in format compared to v1.2
-            //The most important difference is that we get one large Swagger doc with all
-            //API endpoints and models.
-            //
-            //Since the app stores the Swagger metadata on a per-entity basis
-            //for later processing/mapping, we need the metadata we return to be
-            //self contained.  Therefore, any references in the Swagger doc ("$ref")
-            //are added into a new "models" collection on the object, which mirrors
-            //Swagger v1.2 behavior
-
             var copyOfEntity = entity.DeepClone();
 
             var referenceDictionary = GetReferencedEntitiesByName(copyOfEntity, swaggerDocument);

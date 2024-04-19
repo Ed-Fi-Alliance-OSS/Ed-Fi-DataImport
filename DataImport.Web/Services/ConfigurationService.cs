@@ -55,15 +55,18 @@ namespace DataImport.Web.Services
             {
                 var metadata = SwaggerMetadataParser.Parse(swaggerResource.Path, swaggerResource.Metadata);
 
-                var resource = new Resource
+                if (_database.Resources.Count(x => x.Path == swaggerResource.Path && x.ApiVersion == apiServer.ApiVersion) > 0)
                 {
-                    Metadata = ResourceMetadata.Serialize(metadata),
-                    Path = swaggerResource.Path,
-                    ApiSection = swaggerResource.ApiSection,
-                    ApiVersion = apiServer.ApiVersion
-                };
+                    var resource = new Resource
+                    {
+                        Metadata = ResourceMetadata.Serialize(metadata),
+                        Path = swaggerResource.Path,
+                        ApiSection = swaggerResource.ApiSection,
+                        ApiVersion = apiServer.ApiVersion
+                    };
 
-                _database.Resources.Add(resource);
+                    _database.Resources.Add(resource);
+                }
             }
         }
 

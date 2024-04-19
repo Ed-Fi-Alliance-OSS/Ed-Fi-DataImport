@@ -54,7 +54,7 @@ namespace DataImport.Web.Tests.Services.Swagger
                 .Setup("https://someapiurl/metadata/resources/api-docs", testDocument);
 
             var sut = new SwaggerMetadataFetcherTss(null, swaggerClientMock);
-            sut.GetMetadata("https://someapiurl/api/v2.0/2018", OdsApiV25, "", "")
+            sut.GetMetadata("https://someapiurl/api/v2.0/2018", OdsApiV25, string.Empty, string.Empty)
                 .ShouldThrow<NotSupportedException>()
                 .Message.ShouldBe("No handler available to process Swagger document");
         }

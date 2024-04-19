@@ -138,9 +138,8 @@ namespace DataImport.Web.Services.Swagger
                 var apiVersion = response["version"].ToString();
                 return (true, apiVersion);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex);
                 return (false, null);
             }
         }
@@ -156,9 +155,8 @@ namespace DataImport.Web.Services.Swagger
                 var apiVersion = response["apiVersion"]?.ToString();
                 return (apiVersion == "2.0", apiVersion);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex);
                 return (false, null);
             }
         }
