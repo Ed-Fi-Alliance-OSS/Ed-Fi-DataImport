@@ -48,8 +48,6 @@ namespace DataImport.Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; //DI-1340 Remove this.
         }
 
         public IConfiguration Configuration
@@ -84,11 +82,7 @@ namespace DataImport.Web
             services.AddAutoMapper(typeof(Startup));
             services.AddMediatR(typeof(Startup));
             services.AddHttpContextAccessor();
-
-            services.AddHttpClient("yourServerName").ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler  //DI-1340 Remove this.
-            {
-                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
-            });
+            services.AddHttpClient();
 
             var databaseEngine = Configuration["AppSettings:DatabaseEngine"];
 
