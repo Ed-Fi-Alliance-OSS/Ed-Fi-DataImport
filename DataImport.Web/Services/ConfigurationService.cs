@@ -51,13 +51,15 @@ namespace DataImport.Web.Services
             var existingResources = _database.Resources.Where(x => x.ApiVersion.Version == apiServer.ApiVersion.Version).ToList();
             _database.Resources.RemoveRange(existingResources);
 
+            var resources = new List<DataImport.Models.Resource>();
+
             foreach (var swaggerResource in swaggerResources)
             {
                 var metadata = SwaggerMetadataParser.Parse(swaggerResource.Path, swaggerResource.Metadata);
 
-                if (_database.Resources.Count(x => x.Path == swaggerResource.Path && x.ApiVersion == apiServer.ApiVersion) > 0)
+                if (resources.Count(x => x.Path == swaggerResource.Path && x.ApiVersion == apiServer.ApiVersion) == 0)
                 {
-                    var resource = new Resource
+                    var resource = new DataImport.Models.Resource
                     {
                         Metadata = ResourceMetadata.Serialize(metadata),
                         Path = swaggerResource.Path,
@@ -65,9 +67,11 @@ namespace DataImport.Web.Services
                         ApiVersion = apiServer.ApiVersion
                     };
 
-                    _database.Resources.Add(resource);
+                    resources.Add(resource);
                 }
             }
+
+            _database.Resources.AddRange(resources);
         }
 
         public async Task<string> GetTokenUrl(string apiUrl, string apiVersion, string tenant, string context)
