@@ -34,7 +34,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using DataImport.Web.Middleware;
 using Microsoft.AspNetCore.Http.Features;
-using System.Net.Http;
 
 namespace DataImport.Web
 {
