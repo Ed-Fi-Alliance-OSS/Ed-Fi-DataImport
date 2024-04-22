@@ -6,11 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation.Language;
-using System.Runtime.Serialization;
 
 namespace DataImport.Common.Preprocessors
 {
-    [Serializable]
     public class PowerShellValidateException : Exception
     {
         public IEnumerable<ParseError> ParseErrors { get; }
@@ -23,18 +21,5 @@ namespace DataImport.Common.Preprocessors
 
         public PowerShellValidateException(string message)
             : base(message) { }
-
-#pragma warning disable S1133 // Deprecated code should be removed
-        [Obsolete("Obsolete for NET 8", DiagnosticId = "SYSLIB0051")]
-        protected PowerShellValidateException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
-
-        [Obsolete("Obsolete for NET 8", DiagnosticId = "SYSLIB0051")]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue(nameof(ParseErrors), ParseErrors);
-        }
-#pragma warning disable S1133 // Deprecated code should be removed
     }
 }
