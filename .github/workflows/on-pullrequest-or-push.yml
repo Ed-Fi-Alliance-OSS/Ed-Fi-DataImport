@@ -102,7 +102,7 @@ jobs:
           languages: csharp
 
       - name: Rebuild for CodeQL
-        run: ./build.ps1 -Command Build -Configuration Release
+        run: ./build.ps1 -Command Build -Configuration Debug
 
       - name: Perform CodeQL Analysis
         if: success()
