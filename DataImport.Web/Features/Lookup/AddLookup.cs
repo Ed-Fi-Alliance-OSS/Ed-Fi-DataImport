@@ -11,6 +11,8 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Lookup
 {
@@ -48,7 +50,7 @@ namespace DataImport.Web.Features.Lookup
                     x.SourceTable == lookUp.SourceTable.Trim() && x.Key == lookUp.Key.Trim());
         }
 
-        public class AddHandler : RequestHandler<Command, Response>
+        public class AddHandler : IRequestHandler<Command, Response>
         {
             private readonly ILogger _logger;
             private readonly DataImportDbContext _database;
@@ -59,13 +61,13 @@ namespace DataImport.Web.Features.Lookup
                 _database = database;
             }
 
-            protected override Response Handle(Command message)
+            public Task<Response> Handle(Command request, CancellationToken cancellationToken)
             {
                 var lookup = new DataImport.Models.Lookup
                 {
-                    SourceTable = message.SourceTable.Trim(),
-                    Key = message.Key.Trim(),
-                    Value = message.Value.Trim()
+                    SourceTable = request.SourceTable.Trim(),
+                    Key = request.Key.Trim(),
+                    Value = request.Value.Trim()
                 };
 
                 _database.Lookups.Add(lookup);
@@ -73,11 +75,11 @@ namespace DataImport.Web.Features.Lookup
 
                 _logger.Added(lookup, l => l.Key);
 
-                return new Response
+                return Task.FromResult(new Response
                 {
                     LookupId = lookup.Id,
                     Message = $"Lookup '{lookup.Key}' was created."
-                };
+                });
             }
         }
     }

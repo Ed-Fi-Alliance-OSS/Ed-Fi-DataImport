@@ -5,6 +5,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using DataImport.Models;
 using MediatR;
@@ -34,7 +36,7 @@ namespace DataImport.Web.Features.Lookup
 
         }
 
-        public class QueryHandler : RequestHandler<Query, ViewModel>
+        public class QueryHandler : IRequestHandler<Query, ViewModel>
         {
             private readonly DataImportDbContext _dataImportDbContext;
             private readonly IMapper _mapper;
@@ -45,7 +47,7 @@ namespace DataImport.Web.Features.Lookup
                 _mapper = mapper;
             }
 
-            protected override ViewModel Handle(Query request)
+            public Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 var lookupsFromDb = _dataImportDbContext.Lookups
                     .OrderBy(x => x.SourceTable)
@@ -56,10 +58,10 @@ namespace DataImport.Web.Features.Lookup
                     .Select(x => _mapper.Map<LookupItem>(x))
                     .GroupBy(x => x.SourceTable);
 
-                return new ViewModel
+                return Task.FromResult(new ViewModel
                 {
                     Lookups = lookupsBySourceTable
-                };
+                });
             }
         }
     }

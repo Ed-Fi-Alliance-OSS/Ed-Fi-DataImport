@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Activity
 {
@@ -57,7 +59,7 @@ namespace DataImport.Web.Features.Activity
             public int? ApiVersionId { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, ViewModel>
+        public class QueryHandler : IRequestHandler<Query, ViewModel>
         {
             private readonly DataImportDbContext _database;
             private readonly IMapper _mapper;
@@ -70,13 +72,15 @@ namespace DataImport.Web.Features.Activity
                 _clock = clock;
             }
 
-            protected override ViewModel Handle(Query request) =>
-                new ViewModel
+            public Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
+            {
+                return Task.FromResult(new ViewModel
                 {
                     Health = JobHealth(),
                     Files = Files(request.ApiServerId),
                     HasRecentFiles = HasRecentFiles()
-                };
+                });
+            }
 
             private HealthModel JobHealth()
             {

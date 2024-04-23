@@ -5,6 +5,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using DataImport.Models;
 using DataImport.Web.Services;
@@ -19,7 +21,7 @@ namespace DataImport.Web.Features.Log
             public int PageNumber { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, LogViewModel>
+        public class QueryHandler : IRequestHandler<Query, LogViewModel>
         {
             private readonly DataImportDbContext _dataImportDbContext;
             private readonly IMapper _mapper;
@@ -31,12 +33,12 @@ namespace DataImport.Web.Features.Log
                 _mapper = mapper;
             }
 
-            protected override LogViewModel Handle(Query request)
+            public Task<LogViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 var pagedIngestionLogs =
                     Page<LogViewModel.ApplicationLog>.Fetch(GetApplicationLogs, request.PageNumber);
 
-                return new LogViewModel { ApplicationLogs = pagedIngestionLogs };
+                return Task.FromResult(new LogViewModel { ApplicationLogs = pagedIngestionLogs });
             }
 
             public IEnumerable<LogViewModel.ApplicationLog> GetApplicationLogs(int offset, int limit)
@@ -46,6 +48,7 @@ namespace DataImport.Web.Features.Log
 
                 return pagedList.Select(_mapper.Map<LogViewModel.ApplicationLog>);
             }
+
         }
     }
 }

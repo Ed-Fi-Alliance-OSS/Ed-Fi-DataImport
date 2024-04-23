@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Agent
 {
@@ -24,7 +26,7 @@ namespace DataImport.Web.Features.Agent
 
         }
 
-        public class QueryHandler : RequestHandler<Query, AddEditAgentViewModel>
+        public class QueryHandler : IRequestHandler<Query, AddEditAgentViewModel>
         {
             private readonly AgentSelectListProvider _agentSelectListProvider;
 
@@ -33,9 +35,9 @@ namespace DataImport.Web.Features.Agent
                 _agentSelectListProvider = agentSelectListProvider;
             }
 
-            protected override AddEditAgentViewModel Handle(Query request)
+            public Task<AddEditAgentViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
-                return new AddEditAgentViewModel
+                return Task.FromResult(new AddEditAgentViewModel
                 {
                     DataMaps = _agentSelectListProvider.GetDataMapList(),
                     AgentTypes = _agentSelectListProvider.GetAgentTypes(),
@@ -43,7 +45,7 @@ namespace DataImport.Web.Features.Agent
                     FileGenerators = _agentSelectListProvider.GetFileGenerators(),
                     BootstrapDatas = _agentSelectListProvider.GetBootstrapDataList(),
                     Enabled = true,
-                };
+                });
             }
         }
 
@@ -57,7 +59,7 @@ namespace DataImport.Web.Features.Agent
             public AddEditAgentViewModel ViewModel { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command, Response>
+        public class CommandHandler : IRequestHandler<Command, Response>
         {
             private readonly ILogger _logger;
             private readonly DataImportDbContext _dataImportDbContext;
@@ -72,7 +74,7 @@ namespace DataImport.Web.Features.Agent
                 _encryptionService = encryptionService;
             }
 
-            protected override Response Handle(Command request)
+            public Task<Response> Handle(Command request, CancellationToken cancellationToken)
             {
                 var viewmodel = request.ViewModel;
 
@@ -130,11 +132,11 @@ namespace DataImport.Web.Features.Agent
 
                 _logger.Added(agent, a => a.Name);
 
-                return new Response
+                return Task.FromResult(new Response
                 {
                     AgentId = agent.Id,
                     Message = $"Agent '{agent.Name}' was created."
-                };
+                });
             }
         }
     }

@@ -16,6 +16,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.BootstrapData
 {
@@ -25,11 +27,11 @@ namespace DataImport.Web.Features.BootstrapData
         {
         }
 
-        public class QueryHandler : RequestHandler<Query, Command>
+        public class QueryHandler : IRequestHandler<Query, Command>
         {
-            protected override Command Handle(Query request)
+            public Task<Command> Handle(Query request, CancellationToken cancellationToken)
             {
-                return new Command();
+                return Task.FromResult(new Command());
             }
         }
 
@@ -101,7 +103,7 @@ namespace DataImport.Web.Features.BootstrapData
             public int BootstrapDataId { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command, Response>
+        public class CommandHandler : IRequestHandler<Command, Response>
         {
             private readonly ILogger _logger;
             private readonly DataImportDbContext _database;
@@ -112,7 +114,7 @@ namespace DataImport.Web.Features.BootstrapData
                 _database = database;
             }
 
-            protected override Response Handle(Command request)
+            public Task<Response> Handle(Command request, CancellationToken cancellationToken)
             {
                 var resource = _database.Resources.Single(x => x.Path == request.ResourcePath && x.ApiVersionId == request.ApiVersionId);
 
@@ -132,11 +134,11 @@ namespace DataImport.Web.Features.BootstrapData
 
                 _logger.Added(bootstrapData, b => b.Name);
 
-                return new Response
+                return Task.FromResult(new Response
                 {
                     BootstrapDataId = bootstrapData.Id,
                     Message = $"Bootstrap Data '{bootstrapData.Name}' was created."
-                };
+                });
             }
         }
     }

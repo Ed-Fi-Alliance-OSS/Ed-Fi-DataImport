@@ -5,6 +5,8 @@
 
 using DataImport.Models;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Share
 {
@@ -22,7 +24,7 @@ namespace DataImport.Web.Features.Share
         {
         }
 
-        public class QueryHandler : RequestHandler<Query, Command>
+        public class QueryHandler : IRequestHandler<Query, Command>
         {
             private readonly DataImportDbContext _database;
 
@@ -31,17 +33,17 @@ namespace DataImport.Web.Features.Share
                 _database = database;
             }
 
-            protected override Command Handle(Query request)
+            public Task<Command> Handle(Query request, CancellationToken cancellationToken)
             {
-                return new Command
+                return Task.FromResult(new Command
                 {
                     Bootstraps = BootstrapSelections(_database),
                     DataMaps = DataMapSelections(_database)
-                };
+                });
             }
         }
 
-        public class CommandHandler : RequestHandler<Command, SharingModel>
+        public class CommandHandler : IRequestHandler<Command, SharingModel>
         {
             private readonly DataImportDbContext _database;
 
@@ -50,7 +52,8 @@ namespace DataImport.Web.Features.Share
                 _database = database;
             }
 
-            protected override SharingModel Handle(Command request)
+
+            public Task<SharingModel> Handle(Command request, CancellationToken cancellationToken)
             {
                 SharingLookup[] lookupExports;
                 SharingPreprocessor[] preprocessorExports;
@@ -65,13 +68,14 @@ namespace DataImport.Web.Features.Share
                     Preprocessors = preprocessorExports
                 };
 
-                return new SharingModel
+                var sharingModel = new SharingModel
                 {
                     Title = request.Title,
                     Description = request.Description,
                     ApiVersion = request.ApiVersion,
                     Template = template
                 };
+                return Task.FromResult(sharingModel);
             }
         }
     }

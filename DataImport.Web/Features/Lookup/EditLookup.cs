@@ -12,6 +12,8 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Lookup
 {
@@ -22,7 +24,7 @@ namespace DataImport.Web.Features.Lookup
             public int Id { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, Command>
+        public class QueryHandler : IRequestHandler<Query, Command>
         {
             private readonly DataImportDbContext _database;
             private readonly IMapper _mapper;
@@ -33,11 +35,11 @@ namespace DataImport.Web.Features.Lookup
                 _mapper = mapper;
             }
 
-            protected override Command Handle(Query request)
+            public Task<Command> Handle(Query request, CancellationToken cancellationToken)
             {
                 var lookup = _database.Lookups.FirstOrDefault(x => x.Id == request.Id);
 
-                return _mapper.Map<Command>(lookup);
+                return Task.FromResult(_mapper.Map<Command>(lookup));
             }
         }
 
@@ -90,7 +92,7 @@ namespace DataImport.Web.Features.Lookup
             private bool LookUpsCountMoreThanOne(string sourceTable) => _dbContext.Lookups.Count(x => x.SourceTable == sourceTable) > 1;
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly ILogger<EditLookup> _logger;
             private readonly DataImportDbContext _database;
@@ -101,7 +103,7 @@ namespace DataImport.Web.Features.Lookup
                 _database = database;
             }
 
-            protected override ToastResponse Handle(Command message)
+            public Task<ToastResponse> Handle(Command message, CancellationToken cancellationToken)
             {
                 var lookup = _database.Lookups.Single(x => x.Id == message.Id);
 
@@ -114,10 +116,10 @@ namespace DataImport.Web.Features.Lookup
 
                 _logger.Modified(lookup, l => l.Key);
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"Lookup '{lookup.Key}' was modified."
-                };
+                });
             }
         }
     }

@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.DataMaps
 {
@@ -25,7 +27,7 @@ namespace DataImport.Web.Features.DataMaps
             public string[] SourceCsvHeaders { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, AddEditDataMapViewModel>
+        public class QueryHandler : IRequestHandler<Query, AddEditDataMapViewModel>
         {
             private readonly DataImportDbContext _database;
             private readonly PreprocessorSelectListProvider _preprocessorSelectListProvider;
@@ -36,11 +38,11 @@ namespace DataImport.Web.Features.DataMaps
                 _preprocessorSelectListProvider = preprocessorSelectListProvider;
             }
 
-            protected override AddEditDataMapViewModel Handle(Query request)
+            public Task<AddEditDataMapViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 var columnHeaders = request.SourceCsvHeaders;
 
-                return new AddEditDataMapViewModel
+                return Task.FromResult(new AddEditDataMapViewModel
                 {
                     DataMapId = 0,
 
@@ -54,7 +56,7 @@ namespace DataImport.Web.Features.DataMaps
                         Mappings = new List<DataMapper>()
                     },
                     Preprocessors = _preprocessorSelectListProvider.GetCustomFileProcessors()
-                };
+                });
             }
         }
 
@@ -104,7 +106,7 @@ namespace DataImport.Web.Features.DataMaps
                 _dbContext.DataMaps.FirstOrDefault(map => map.Name == candidateName) == null;
         }
 
-        public class CommandHandler : RequestHandler<Command, Response>
+        public class CommandHandler : IRequestHandler<Command, Response>
         {
             private readonly ILogger _logger;
             private readonly DataImportDbContext _database;
@@ -115,7 +117,7 @@ namespace DataImport.Web.Features.DataMaps
                 _database = database;
             }
 
-            protected override Response Handle(Command request)
+            public Task<Response> Handle(Command request, CancellationToken cancellationToken)
             {
                 var resource = _database.Resources.Single(x => x.Path == request.ResourcePath && x.ApiVersionId == request.ApiVersionId);
 
@@ -147,11 +149,11 @@ namespace DataImport.Web.Features.DataMaps
 
                 _logger.Added(dataMap, d => d.Name);
 
-                return new Response
+                return Task.FromResult(new Response
                 {
                     DataMapId = dataMap.Id,
                     Message = $"Data Map '{dataMap.Name}' was created."
-                };
+                });
             }
         }
     }

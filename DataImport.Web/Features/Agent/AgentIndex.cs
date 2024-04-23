@@ -6,6 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using DataImport.Models;
 using MediatR;
 
@@ -34,7 +36,7 @@ namespace DataImport.Web.Features.Agent
 
         }
 
-        public class QueryHandler : RequestHandler<Query, ViewModel>
+        public class QueryHandler : IRequestHandler<Query, ViewModel>
         {
             private readonly DataImportDbContext _database;
 
@@ -43,12 +45,12 @@ namespace DataImport.Web.Features.Agent
                 _database = database;
             }
 
-            protected override ViewModel Handle(Query request)
+            public Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
-                return new ViewModel
+                return Task.FromResult(new ViewModel
                 {
                     Agents = _database.Agents
-                        .Where(x => x.Archived == false)
+                        .Where(x => !x.Archived)
                         .OrderBy(x => x.RunOrder == null)
                         .ThenBy(x => x.RunOrder)
                         .ThenBy(x => x.Id)
@@ -63,7 +65,7 @@ namespace DataImport.Web.Features.Agent
                             RunOrder = x.RunOrder,
                         })
                         .ToList()
-                };
+                });
             }
         }
     }

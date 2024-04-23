@@ -22,7 +22,7 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
             public int ApiServerId { get; set; }
         }
 
-        public class CommandHandler : AsyncRequestHandler<Command>
+        public class CommandHandler : IRequestHandler<Command>
         {
             private readonly ILogger<FileTransporter> _logger;
             private readonly DataImportDbContext _dbContext;
@@ -35,7 +35,7 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
                 _dbContext = dbContext;
             }
 
-            protected override async Task Handle(Command request, CancellationToken cancellationToken)
+            public async Task Handle(Command request, CancellationToken cancellationToken)
             {
                 var agents = await _dbContext.Agents
                     .Include(agent => agent.AgentSchedules)

@@ -19,6 +19,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace DataImport.Server.TransformLoad
 {
@@ -106,7 +107,7 @@ namespace DataImport.Server.TransformLoad
             services.AddTransient<IExternalPreprocessorService, ExternalPreprocessorService>();
             services.AddTransient<IOAuthRequestWrapper, OAuthRequestWrapper>();
 
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             return services;
         }

@@ -7,6 +7,8 @@ using DataImport.Web.Features.Shared.SelectListProviders;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Shared
 {
@@ -22,7 +24,7 @@ namespace DataImport.Web.Features.Shared
             public int ApiVersionId { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, ViewModel>
+        public class QueryHandler : IRequestHandler<Query, ViewModel>
         {
             private readonly ResourceSelectListProvider _resourceProvider;
 
@@ -31,12 +33,12 @@ namespace DataImport.Web.Features.Shared
                 _resourceProvider = resourceProvider;
             }
 
-            protected override ViewModel Handle(Query request)
+            public Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
-                return new ViewModel
+                return Task.FromResult(new ViewModel
                 {
                     Resources = _resourceProvider.GetResources(request.ApiVersionId)
-                };
+                });
             }
         }
     }

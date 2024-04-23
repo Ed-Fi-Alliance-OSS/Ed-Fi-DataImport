@@ -14,6 +14,8 @@ using Renci.SshNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Agent
 {
@@ -38,7 +40,7 @@ namespace DataImport.Web.Features.Agent
             public string AgentTypeCode { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, QueryResult>
+        public class QueryHandler : IRequestHandler<Query, QueryResult>
         {
             private readonly ILogger _logger;
 
@@ -48,7 +50,7 @@ namespace DataImport.Web.Features.Agent
                 _allowTestCertificates = options.Value.AllowTestCertificates;
             }
 
-            protected override QueryResult Handle(Query request)
+            public Task<QueryResult> Handle(Query request, CancellationToken cancellationToken)
             {
                 try
                 {
@@ -63,12 +65,12 @@ namespace DataImport.Web.Features.Agent
 
                     var files = GetAgentFiles(request.Url, request.Port, request.Username, request.Password, request.Directory, request.FilePattern, request.AgentTypeCode);
 
-                    return new QueryResult { FileNames = files.Select(x => x) };
+                    return Task.FromResult(new QueryResult { FileNames = files.Select(x => x) });
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error retrieving agent files.");
-                    return new QueryResult { ErrorMessage = ex.Message };
+                    return Task.FromResult(new QueryResult { ErrorMessage = ex.Message });
                 }
             }
 

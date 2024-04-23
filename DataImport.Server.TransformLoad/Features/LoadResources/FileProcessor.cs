@@ -53,7 +53,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             public IOdsApi OdsApi { get; set; }
         }
 
-        public class CommandHandler : AsyncRequestHandler<Command>
+        public class CommandHandler : IRequestHandler<Command>
         {
             private readonly ILogger _logger;
             private readonly DataImportDbContext _dbContext;
@@ -79,7 +79,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 _ingestionLogLevels = LogLevels.GetValidList(options.Value.MinimumLevelIngestionLog);
             }
 
-            protected override async Task Handle(Command request, CancellationToken cancellationToken)
+            public async Task Handle(Command request, CancellationToken cancellationToken)
             {
                 List<Agent> enabledAgentsWithFilesToProcess;
                 var apiServerId = request.OdsApi.Config.ApiServerId;

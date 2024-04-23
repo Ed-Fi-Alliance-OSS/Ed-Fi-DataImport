@@ -14,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.DataMaps
 {
@@ -25,7 +27,7 @@ namespace DataImport.Web.Features.DataMaps
             public string[] SourceCsvHeaders { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, AddEditDataMapViewModel>
+        public class QueryHandler : IRequestHandler<Query, AddEditDataMapViewModel>
         {
             private readonly DataImportDbContext _database;
             private readonly PreprocessorSelectListProvider _preprocessorSelectListProvider;
@@ -36,7 +38,7 @@ namespace DataImport.Web.Features.DataMaps
                 _preprocessorSelectListProvider = preprocessorSelectListProvider;
             }
 
-            protected override AddEditDataMapViewModel Handle(Query request)
+            public Task<AddEditDataMapViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 var mapId = request.Id;
 
@@ -49,7 +51,7 @@ namespace DataImport.Web.Features.DataMaps
 
                 var resourceMetadata = ResourceMetadata.DeserializeFrom(dataMap);
 
-                return new AddEditDataMapViewModel
+                return Task.FromResult(new AddEditDataMapViewModel
                 {
                     DataMapId = mapId,
                     ColumnHeaders = columnHeaders,
@@ -77,7 +79,7 @@ namespace DataImport.Web.Features.DataMaps
                     Attribute = dataMap.Attribute,
                     IsDeleteOperation = dataMap.IsDeleteOperation,
                     IsDeleteByNaturalKey = dataMap.IsDeleteByNaturalKey
-                };
+                });
             }
         }
 
@@ -124,7 +126,7 @@ namespace DataImport.Web.Features.DataMaps
                 _dbContext.DataMaps.FirstOrDefault(dataMap => dataMap.Name == candidateName && dataMap.Id != command.DataMapId) == null;
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly ILogger _logger;
             private readonly DataImportDbContext _dataImportDbContext;
@@ -135,7 +137,7 @@ namespace DataImport.Web.Features.DataMaps
                 _dataImportDbContext = dataImportDbContext;
             }
 
-            protected override ToastResponse Handle(Command request)
+            public Task<ToastResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var map = _dataImportDbContext.DataMaps.FirstOrDefault(x => x.Id == request.DataMapId) ?? new DataMap();
 
@@ -153,10 +155,10 @@ namespace DataImport.Web.Features.DataMaps
                 map.IsDeleteByNaturalKey = request.IsDeleteOperation && request.IsDeleteByNaturalKey;
                 _logger.Modified(map, m => m.Name);
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"Data Map '{map.Name}' was modified."
-                };
+                });
             }
         }
     }

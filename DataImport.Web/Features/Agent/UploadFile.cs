@@ -25,14 +25,14 @@ namespace DataImport.Web.Features.Agent
             public int AgentId { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, Command>
+        public class QueryHandler : IRequestHandler<Query, Command>
         {
-            protected override Command Handle(Query request)
+            public Task<Command> Handle(Query request, CancellationToken cancellationToken)
             {
-                return new Command
+                return Task.FromResult(new Command
                 {
                     AgentId = request.AgentId
-                };
+                });
             }
         }
 

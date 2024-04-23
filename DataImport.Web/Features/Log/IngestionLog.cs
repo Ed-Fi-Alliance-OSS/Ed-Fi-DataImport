@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using DataImport.Common.Enums;
 using DataImport.Models;
@@ -24,7 +26,7 @@ namespace DataImport.Web.Features.Log
             public int PageNumber { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, LogViewModel>
+        public class QueryHandler : IRequestHandler<Query, LogViewModel>
         {
             private readonly DataImportDbContext _dataImportDbContext;
             private readonly IMapper _mapper;
@@ -35,15 +37,15 @@ namespace DataImport.Web.Features.Log
                 _mapper = mapper;
             }
 
-            protected override LogViewModel Handle(Query request)
+            public Task<LogViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 var pagedIngestionLogs =
                     Page<LogViewModel.Ingestion>.Fetch(
                         (offset, limit) => GetIngestionLogs(request.LogFilters, offset, limit),
                         request.PageNumber);
 
-                return new LogViewModel
-                { LogFilters = request.LogFilters, IngestionLogs = pagedIngestionLogs };
+                return Task.FromResult(new LogViewModel
+                { LogFilters = request.LogFilters, IngestionLogs = pagedIngestionLogs });
             }
 
             public IEnumerable<LogViewModel.Ingestion> GetIngestionLogs(LogViewModel.Filters filters, int offset, int limit)

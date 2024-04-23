@@ -10,6 +10,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.DataMaps
 {
@@ -20,7 +22,7 @@ namespace DataImport.Web.Features.DataMaps
             public int Id { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly ILogger<DeleteDataMap> _logger;
             private readonly DataImportDbContext _database;
@@ -31,7 +33,7 @@ namespace DataImport.Web.Features.DataMaps
                 _database = database;
             }
 
-            protected override ToastResponse Handle(Command request)
+            public Task<ToastResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var dataMap = _database.DataMaps.Include(x => x.DataMapAgents).Single(x => x.Id == request.Id);
 
@@ -44,10 +46,10 @@ namespace DataImport.Web.Features.DataMaps
 
                 _database.DataMaps.Remove(dataMap);
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"Data Map '{dataMapName}' was deleted."
-                };
+                });
             }
         }
     }

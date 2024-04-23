@@ -10,6 +10,8 @@ using MediatR;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Log
 {
@@ -20,7 +22,7 @@ namespace DataImport.Web.Features.Log
             public int Id { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly DataImportDbContext _dataImportDbContext;
             private readonly IFileService _fileService;
@@ -31,7 +33,7 @@ namespace DataImport.Web.Features.Log
                 _fileService = fileServices(options.Value.FileMode);
             }
 
-            protected override ToastResponse Handle(Command request)
+            public Task<ToastResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var file = _dataImportDbContext.Files.Single(x => x.Id == request.Id);
 
@@ -40,10 +42,10 @@ namespace DataImport.Web.Features.Log
                 file.Status = FileStatus.Canceled;
                 file.UpdateDate = DateTimeOffset.Now;
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"File '{file.FileName}' set to {file.Status}."
-                };
+                });
             }
         }
     }

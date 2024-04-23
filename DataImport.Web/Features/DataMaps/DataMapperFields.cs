@@ -9,6 +9,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.DataMaps
 {
@@ -23,7 +25,7 @@ namespace DataImport.Web.Features.DataMaps
             public bool IsDeleteByNaturalKey { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, DataMapperFieldsViewModel>
+        public class QueryHandler : IRequestHandler<Query, DataMapperFieldsViewModel>
         {
             private readonly DataImportDbContext _database;
 
@@ -32,13 +34,13 @@ namespace DataImport.Web.Features.DataMaps
                 _database = database;
             }
 
-            protected override DataMapperFieldsViewModel Handle(Query request)
+            public Task<DataMapperFieldsViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 var columnHeaders = request.ColumnHeaders;
 
                 var resourceMetadata = GetResourceMetadata(request);
 
-                return new DataMapperFieldsViewModel
+                return Task.FromResult(new DataMapperFieldsViewModel
                 {
                     DataSources = MapDataSourcesTypesToViewModel(),
                     SourceTables = MapLookupTablesToViewModel(_database),
@@ -49,7 +51,7 @@ namespace DataImport.Web.Features.DataMaps
                             ? InitialDeleteByNaturalKeyMappings(resourceMetadata)
                             : InitialDeleteByIdMappings()
                         : InitialMappings(resourceMetadata)
-                };
+                });
             }
 
             private static List<DataMapper> InitialMappings(IEnumerable<ResourceMetadata> resourceMetadata)

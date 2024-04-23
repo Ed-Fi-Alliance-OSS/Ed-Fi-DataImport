@@ -10,6 +10,8 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Lookup
 {
@@ -43,7 +45,7 @@ namespace DataImport.Web.Features.Lookup
             private bool LookUpsCountMoreThanOne(string sourceTable) => _dbContext.Lookups.Count(x => x.SourceTable == sourceTable) > 1;
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly ILogger _logger;
             private readonly DataImportDbContext _dataImportDbContext;
@@ -54,7 +56,7 @@ namespace DataImport.Web.Features.Lookup
                 _dataImportDbContext = dataImportDbContext;
             }
 
-            protected override ToastResponse Handle(Command request)
+            public Task<ToastResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var lookup = _dataImportDbContext.Lookups.Single(x => x.Id == request.Id);
 
@@ -64,10 +66,10 @@ namespace DataImport.Web.Features.Lookup
 
                 _dataImportDbContext.Lookups.Remove(lookup);
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"Lookup '{lookupKey}' was deleted."
-                };
+                });
             }
         }
     }

@@ -11,6 +11,8 @@ using DataImport.Models;
 using DataImport.Web.Features.Shared;
 using DataImport.Web.Services;
 using MediatR;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace DataImport.Web.Features.Log
 {
@@ -23,7 +25,7 @@ namespace DataImport.Web.Features.Log
             public int? ApiVersionId { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, LogViewModel>
+        public class QueryHandler : IRequestHandler<Query, LogViewModel>
         {
             private readonly DataImportDbContext _dataImportDbContext;
             private readonly IMapper _mapper;
@@ -34,11 +36,11 @@ namespace DataImport.Web.Features.Log
                 _mapper = mapper;
             }
 
-            protected override LogViewModel Handle(Query request)
+            public Task<LogViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 var pagedFileLogs =
                     Page<LogViewModel.File>.Fetch((offset, limit) => GetFileLogs(request.ApiServerId, offset, limit), request.PageNumber);
-                return new LogViewModel { Files = pagedFileLogs };
+                return Task.FromResult(new LogViewModel { Files = pagedFileLogs });
             }
 
             public IEnumerable<LogViewModel.File> GetFileLogs(int? apiServerId, int offset, int limit)

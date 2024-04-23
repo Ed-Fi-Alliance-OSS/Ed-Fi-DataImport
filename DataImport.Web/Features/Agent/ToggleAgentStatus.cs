@@ -4,6 +4,8 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using DataImport.Models;
 using DataImport.Web.Helpers;
 using MediatR;
@@ -17,7 +19,7 @@ namespace DataImport.Web.Features.Agent
             public int Id { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly DataImportDbContext _dataImportDbContext;
 
@@ -26,16 +28,16 @@ namespace DataImport.Web.Features.Agent
                 _dataImportDbContext = dataImportDbContext;
             }
 
-            protected override ToastResponse Handle(Command request)
+            public Task<ToastResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var agent = _dataImportDbContext.Agents.Single(x => x.Id == request.Id);
 
                 agent.Enabled = !agent.Enabled;
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"Agent '{agent.Name}' was {(agent.Enabled ? "enabled" : "disabled")}."
-                };
+                });
             }
         }
     }

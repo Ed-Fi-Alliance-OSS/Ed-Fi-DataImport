@@ -4,6 +4,8 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using DataImport.Models;
 using MediatR;
@@ -23,7 +25,7 @@ namespace DataImport.Web.Features.DataMaps
         {
         }
 
-        public class QueryHandler : RequestHandler<Query, ViewModel[]>
+        public class QueryHandler : IRequestHandler<Query, ViewModel[]>
         {
             private readonly DataImportDbContext _database;
             private readonly IMapper _mapper;
@@ -34,13 +36,13 @@ namespace DataImport.Web.Features.DataMaps
                 _mapper = mapper;
             }
 
-            protected override ViewModel[] Handle(Query request)
+            public Task<ViewModel[]> Handle(Query request, CancellationToken cancellationToken)
             {
-                return _database.DataMaps
+                return Task.FromResult(_database.DataMaps
                     .OrderBy(x => x.Name)
                     .ToList()
                     .Select(x => _mapper.Map<ViewModel>(x))
-                    .ToArray();
+                    .ToArray());
             }
         }
     }

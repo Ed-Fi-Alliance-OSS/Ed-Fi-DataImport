@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Agent
 {
@@ -25,7 +27,7 @@ namespace DataImport.Web.Features.Agent
             public int Id { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, AddEditAgentViewModel>
+        public class QueryHandler : IRequestHandler<Query, AddEditAgentViewModel>
         {
             private readonly DataImportDbContext _dataImportDbContext;
             private readonly IMapper _mapper;
@@ -42,7 +44,7 @@ namespace DataImport.Web.Features.Agent
                 _selectListProvider = selectListProvider;
             }
 
-            protected override AddEditAgentViewModel Handle(Query request)
+            public Task<AddEditAgentViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 var agent = _dataImportDbContext.Agents
                     .Include(x => x.AgentSchedules)
@@ -51,7 +53,7 @@ namespace DataImport.Web.Features.Agent
                     .FirstOrDefault(x => x.Id == request.Id);
 
                 if (agent == null)
-                    return new AddEditAgentViewModel();
+                    return Task.FromResult(new AddEditAgentViewModel());
 
                 var vm = _mapper.Map<AddEditAgentViewModel>(agent);
                 vm.EncryptionFailureMsg = null;
@@ -74,7 +76,7 @@ namespace DataImport.Web.Features.Agent
                 vm.FileGenerators = _selectListProvider.GetFileGenerators();
                 vm.BootstrapDatas = _selectListProvider.GetBootstrapDataList();
 
-                return vm;
+                return Task.FromResult(vm);
             }
         }
 
@@ -83,7 +85,7 @@ namespace DataImport.Web.Features.Agent
             public AddEditAgentViewModel ViewModel { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly ILogger<EditAgent> _logger;
             private readonly DataImportDbContext _dataImportDbContext;
@@ -98,7 +100,7 @@ namespace DataImport.Web.Features.Agent
                 _encryptionService = encryptionService;
             }
 
-            protected override ToastResponse Handle(Command request)
+            public Task<ToastResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var vm = request.ViewModel;
 
@@ -168,10 +170,10 @@ namespace DataImport.Web.Features.Agent
 
                 _logger.Modified(agent, a => a.Name);
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"Agent '{agent.Name}' was modified."
-                };
+                });
             }
         }
     }

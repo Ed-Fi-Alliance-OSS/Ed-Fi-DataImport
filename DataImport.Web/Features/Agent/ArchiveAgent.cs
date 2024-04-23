@@ -11,6 +11,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.Agent
 {
@@ -21,7 +23,7 @@ namespace DataImport.Web.Features.Agent
             public int Id { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly ILogger<ArchiveAgent> _logger;
             private readonly DataImportDbContext _database;
@@ -34,7 +36,7 @@ namespace DataImport.Web.Features.Agent
                 _mediator = mediator;
             }
 
-            protected override ToastResponse Handle(Command request)
+            public Task<ToastResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var agent = _database.Agents.Include(x => x.BootstrapDataAgents).Single(x => x.Id == request.Id);
 
@@ -50,10 +52,10 @@ namespace DataImport.Web.Features.Agent
 
                 _logger.Archived(agent, a => a.Name);
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"Agent '{agent.Name}' was archived."
-                };
+                });
             }
 
             private void UpdateAgentFiles(DataImport.Models.Agent agent)

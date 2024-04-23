@@ -14,6 +14,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.BootstrapData
 {
@@ -24,7 +26,7 @@ namespace DataImport.Web.Features.BootstrapData
             public int BootstrapDataId { get; set; }
         }
 
-        public class QueryHandler : RequestHandler<Query, ViewModel>
+        public class QueryHandler : IRequestHandler<Query, ViewModel>
         {
             private readonly DataImportDbContext _database;
 
@@ -33,12 +35,12 @@ namespace DataImport.Web.Features.BootstrapData
                 _database = database;
             }
 
-            protected override ViewModel Handle(Query request)
+            public Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 var bootstrapData = _database.BootstrapDatas.Include(x => x.ApiVersion).AsNoTracking()
                     .Single(x => x.Id == request.BootstrapDataId);
 
-                return new ViewModel
+                return Task.FromResult(new ViewModel
                 {
                     Id = bootstrapData.Id,
                     Name = bootstrapData.Name,
@@ -47,7 +49,7 @@ namespace DataImport.Web.Features.BootstrapData
                     ResourceName = bootstrapData.ToResourceName(),
                     MetadataIsIncompatible = bootstrapData.MetadataIsIncompatible(_database),
                     ApiVersion = bootstrapData.ApiVersion.Version
-                };
+                });
             }
         }
 
@@ -121,7 +123,7 @@ namespace DataImport.Web.Features.BootstrapData
                 _database.BootstrapDatas.FirstOrDefault(bootstrap => bootstrap.Name == candidateName && bootstrap.Id != command.Id) == null;
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly ILogger<EditBootstrapData> _logger;
             private readonly DataImportDbContext _database;
@@ -132,7 +134,7 @@ namespace DataImport.Web.Features.BootstrapData
                 _database = database;
             }
 
-            protected override ToastResponse Handle(Command request)
+            public Task<ToastResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var bootstrapData = _database.BootstrapDatas.Single(x => x.Id == request.Id);
 
@@ -142,10 +144,10 @@ namespace DataImport.Web.Features.BootstrapData
 
                 _logger.Modified(bootstrapData, b => b.Name);
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"Bootstrap Data '{bootstrapData.Name}' was modified."
-                };
+                });
             }
         }
     }

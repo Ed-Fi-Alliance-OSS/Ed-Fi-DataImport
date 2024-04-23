@@ -24,7 +24,7 @@ namespace DataImport.Web.Features.Preprocessor
         {
         }
 
-        public class QueryHandler : RequestHandler<Query, AddEditPreprocessorViewModel>
+        public class QueryHandler : IRequestHandler<Query, AddEditPreprocessorViewModel>
         {
             private readonly ScriptTypeSelectListProvider _scriptTypeSelectListProvider;
             private readonly ExternalPreprocessorOptions _externalPreprocessorSettings;
@@ -35,13 +35,13 @@ namespace DataImport.Web.Features.Preprocessor
                 _externalPreprocessorSettings = externalPreprocessorSettings.Value;
             }
 
-            protected override AddEditPreprocessorViewModel Handle(Query request)
+            public Task<AddEditPreprocessorViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
-                return new AddEditPreprocessorViewModel
+                return Task.FromResult(new AddEditPreprocessorViewModel
                 {
                     ScriptTypes = _scriptTypeSelectListProvider.GetSelectListItems(),
                     ExternalPreprocessorsEnabled = _externalPreprocessorSettings.Enabled,
-                };
+                });
             }
         }
 

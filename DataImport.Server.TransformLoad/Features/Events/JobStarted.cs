@@ -4,6 +4,8 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
+using System.Threading.Tasks;
+using System.Threading;
 using DataImport.Models;
 using MediatR;
 
@@ -15,7 +17,7 @@ namespace DataImport.Server.TransformLoad.Features.Events
         {
         }
 
-        public class EventHandler : RequestHandler<Command>
+        public class EventHandler : IRequestHandler<Command>
         {
             private readonly DataImportDbContext _dbContext;
 
@@ -24,12 +26,13 @@ namespace DataImport.Server.TransformLoad.Features.Events
                 _dbContext = dbContext;
             }
 
-            protected override void Handle(Command notification)
+            public Task Handle(Command request, CancellationToken cancellationToken)
             {
                 var jobStatus = _dbContext.EnsureSingle<JobStatus>();
                 jobStatus.Started = DateTimeOffset.Now;
                 jobStatus.Completed = null;
                 _dbContext.SaveChanges();
+                return Task.CompletedTask;
             }
         }
     }

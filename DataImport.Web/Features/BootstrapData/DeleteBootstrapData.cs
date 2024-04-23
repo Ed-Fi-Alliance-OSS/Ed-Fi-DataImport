@@ -10,6 +10,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.BootstrapData
 {
@@ -20,7 +22,7 @@ namespace DataImport.Web.Features.BootstrapData
             public int BootstrapDataId { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly ILogger _logger;
             private readonly DataImportDbContext _database;
@@ -31,7 +33,7 @@ namespace DataImport.Web.Features.BootstrapData
                 _database = database;
             }
 
-            protected override ToastResponse Handle(Command request)
+            public Task<ToastResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var bootstrapData = _database.BootstrapDatas
                     .Include(x => x.BootstrapDataAgents)
@@ -40,11 +42,11 @@ namespace DataImport.Web.Features.BootstrapData
 
                 if (bootstrapData.BootstrapDataAgents.Count > 0)
                 {
-                    return new ToastResponse
+                    return Task.FromResult(new ToastResponse
                     {
                         IsSuccess = false,
                         Message = "Bootstrap Data cannot be deleted because it is used by one or more Agents."
-                    };
+                    });
                 }
 
                 var bootstrapDataName = bootstrapData.Name;
@@ -58,10 +60,10 @@ namespace DataImport.Web.Features.BootstrapData
 
                 _database.BootstrapDatas.Remove(bootstrapData);
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"Bootstrap Data '{bootstrapDataName}' was deleted."
-                };
+                });
             }
 
         }

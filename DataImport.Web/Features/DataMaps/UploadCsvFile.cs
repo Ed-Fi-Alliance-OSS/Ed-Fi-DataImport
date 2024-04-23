@@ -16,6 +16,8 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DataImport.Web.Features.DataMaps
 {
@@ -29,7 +31,7 @@ namespace DataImport.Web.Features.DataMaps
             public string Attribute { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command, CsvData>
+        public class CommandHandler : IRequestHandler<Command, CsvData>
         {
             private readonly ILogger _logger;
             private readonly DataImportDbContext _dbContext;
@@ -45,7 +47,7 @@ namespace DataImport.Web.Features.DataMaps
                 _externalPreprocessorService = externalPreprocessorService;
             }
 
-            protected override CsvData Handle(Command request)
+            public Task<CsvData> Handle(Command request, CancellationToken cancellationToken)
             {
                 var uploadCsvFile = request.FileBase;
                 _preprocessorLogMessages = new List<LogMessageViewModel>();
@@ -54,10 +56,13 @@ namespace DataImport.Web.Features.DataMaps
 
                 try
                 {
-                    if (uploadCsvFile.Length <= 0 && !request.PreprocessorId.HasValue) return new CsvData
+                    if (uploadCsvFile.Length <= 0 && !request.PreprocessorId.HasValue)
                     {
-                        CsvError = "File is empty."
-                    };
+                        return Task.FromResult(new CsvData
+                        {
+                            CsvError = "File is empty."
+                        });
+                    }
 
                     Stream inputStream = GetInputStream(request, cacheKey);
 
@@ -108,12 +113,12 @@ namespace DataImport.Web.Features.DataMaps
                         }
                     }
 
-                    return new CsvData
+                    return Task.FromResult(new CsvData
                     {
                         ColumnHeaders = columnHeaders,
                         TablePreview = csvDataTable,
                         PreprocessorLogMessages = _preprocessorLogMessages
-                    };
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -125,11 +130,11 @@ namespace DataImport.Web.Features.DataMaps
                     DataImportCacheManager.DestroyCache(cacheKey);
                 }
 
-                return new CsvData
+                return Task.FromResult(new CsvData
                 {
                     PreprocessorLogMessages = _preprocessorLogMessages,
                     CsvError = csvError
-                };
+                });
             }
 
             private Stream GetInputStream(Command request, string cacheKey)

@@ -22,11 +22,11 @@ namespace DataImport.Web.Features.ApiServers
         {
         }
 
-        public class QueryHandler : RequestHandler<Query, AddEditApiServerViewModel>
+        public class QueryHandler : IRequestHandler<Query, AddEditApiServerViewModel>
         {
-            protected override AddEditApiServerViewModel Handle(Query request)
+            public Task<AddEditApiServerViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
-                return new AddEditApiServerViewModel();
+                return Task.FromResult(new AddEditApiServerViewModel());
             }
         }
 

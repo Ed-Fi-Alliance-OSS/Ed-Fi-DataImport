@@ -5,6 +5,8 @@
 
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using DataImport.Models;
 using DataImport.Web.Helpers;
 using MediatR;
@@ -18,7 +20,7 @@ namespace DataImport.Web.Features.Log
             public int Id { get; set; }
         }
 
-        public class CommandHandler : RequestHandler<Command, ToastResponse>
+        public class CommandHandler : IRequestHandler<Command, ToastResponse>
         {
             private readonly DataImportDbContext _dataImportDbContext;
 
@@ -27,17 +29,17 @@ namespace DataImport.Web.Features.Log
                 _dataImportDbContext = dataImportDbContext;
             }
 
-            protected override ToastResponse Handle(Command request)
+            public Task<ToastResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var file = _dataImportDbContext.Files.Single(x => x.Id == request.Id);
 
                 file.Status = FileStatus.Retry;
                 file.UpdateDate = DateTimeOffset.Now;
 
-                return new ToastResponse
+                return Task.FromResult(new ToastResponse
                 {
                     Message = $"File '{file.FileName}' set to {file.Status}."
-                };
+                });
             }
         }
     }

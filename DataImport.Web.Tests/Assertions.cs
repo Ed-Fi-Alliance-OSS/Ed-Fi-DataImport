@@ -16,10 +16,16 @@ namespace DataImport.Web.Tests
 {
     public static class Assertions
     {
+        public static void ShouldValidate(this IRequest message)
+            => Validation(message).ShouldBeSuccessful();
+
         public static void ShouldValidate<TResult>(this IRequest<TResult> message)
             => Validation(message).ShouldBeSuccessful();
 
-        public static void ShouldNotValidate<TResult>(this IRequest<TResult> message, params string[] expectedErrors)
+        public static void ShouldNotValidate(this IRequest message, params string[] expectedErrors)
+            => Validation(message).ShouldBeFailure(expectedErrors);
+
+        public static void ShouldNotValidate<TResponse>(this IRequest<TResponse> message, params string[] expectedErrors)
             => Validation(message).ShouldBeFailure(expectedErrors);
 
         public static void ShouldBeSuccessful(this ValidationResult result)
