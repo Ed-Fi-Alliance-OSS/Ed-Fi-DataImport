@@ -24,7 +24,7 @@ namespace DataImport.Web.Services.Swagger
 
         public async Task<string> DownloadString(string url)
         {
-            var httpClient = _clientFactory.CreateClient("yourServerName");
+            var httpClient = _clientFactory.CreateClient();
 
             using (var response = await httpClient.GetAsync(url))
             {
