@@ -155,7 +155,15 @@ namespace DataImport.Web.Features.ApiServers
                 try
                 {
                     var tokenRetriever = new OdsApiTokenRetriever(_oAuthRequestWrapper, apiServer);
+#if DEBUG
+                    var options = new RestClientOptions()
+                    {
+                        RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                    };
+#else
                     var options = new RestClientOptions();
+#endif
+
                     options.Authenticator = new BearerTokenAuthenticator(tokenRetriever);
                     options.BaseUrl = new Uri(url);
                     var client = new RestClient(options);
