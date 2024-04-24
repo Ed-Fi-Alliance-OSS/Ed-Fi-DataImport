@@ -139,6 +139,14 @@ See the LICENSE and NOTICES files in the project root for more information.
                 disableSaveButton(true);
             });
 
+            $("#Context").keyup(function () {
+                disableSaveButton(true);
+            });
+            $("#Tenant").keyup(function () {
+                disableSaveButton(true);
+            });
+
+
             function handleApiVersionResponse(apiVersion) {
                 var apiUrl = $("#Url").val();
                 if (!apiVersion && apiUrl)
