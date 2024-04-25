@@ -7,13 +7,11 @@ version: "3.8"
 
 services:
   dataimport:
-    platform: linux/x86_64
     build:
       context: ../../
       dockerfile: Dockerfile
-    image: dataimport
     ports:
-      - "8080:80"
+      - "8080:8080"
     environment:
       POSTGRES_HOST: pb-dataimport
       POSTGRES_PORT: "${POSTGRES_PORT:-6432}"
