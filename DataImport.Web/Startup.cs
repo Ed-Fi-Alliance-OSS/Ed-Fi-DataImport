@@ -89,7 +89,7 @@ namespace DataImport.Web
             services.AddHttpContextAccessor();
 
 #if DEBUG
-            services.AddHttpClient("ServerName").ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+            services.AddHttpClient(Helpers.Constants.LocalHttpClientName).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
             });
