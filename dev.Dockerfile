@@ -43,7 +43,7 @@ ENV ASPNETCORE_ENVIRONMENT Development
 
 WORKDIR /app
 ENV TZ=US/Central
-RUN apk add --no-cache icu=~67.1 tzdata
+RUN apk add --no-cache icu=~74 tzdata
 
 WORKDIR /app/DataImport.Web
 COPY --from=publish /app/DataImport.Web .
