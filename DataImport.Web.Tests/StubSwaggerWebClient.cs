@@ -18,12 +18,14 @@ namespace DataImport.Web.Tests
         private const string OdsDomainV311 = "http://test-ods-v3.1.1.example.com";
         private const string OdsDomainV711 = "http://test-ods-v7.1.1.example.com";
 
-        public const string V711Context = "2022";
+        public const string V711Context2002 = "2022";
+        public const string V711Tenant1 = "tenant1";
 
         public const string ApiServerUrlV25 = OdsDomainV25 + "/api/v2.0/2019";
         public const string ApiServerUrlV311 = OdsDomainV311 + "/data/v3";
         public const string ApiServerUrlV711 = OdsDomainV711 + "/data/v3";
-        public const string ApiServerUrlV711WithOdsContext = $"{OdsDomainV711}/{V711Context}/data/v3";
+        public const string ApiServerUrlV711WithOdsContext = $"{OdsDomainV711}/{V711Context2002}/data/v3";
+        public const string ApiServerUrlV711WithTenant = $"{OdsDomainV711}/{V711Tenant1}/data/v3";
 
         public async Task<string> DownloadString(string url)
         {
@@ -36,8 +38,14 @@ namespace DataImport.Web.Tests
             const string SwaggerResourcesV711 = OdsDomainV711 + "/metadata/data/v3/resources/swagger.json";
             const string SwaggerDescriptorsV711 = OdsDomainV711 + "/metadata/data/v3/descriptors/swagger.json";
 
-            const string SwaggerResourcesV711WithOdsContext = $"{OdsDomainV711}/metadata/{V711Context}/data/v3/resources/swagger.json";
-            const string SwaggerDescriptorsV711WithOdsContext = $"{OdsDomainV711}/metadata/{V711Context}/data/v3/descriptors/swagger.json";
+            const string SwaggerResourcesV711WithOdsContext = $"{OdsDomainV711}/metadata/{V711Context2002}/data/v3/resources/swagger.json";
+            const string SwaggerDescriptorsV711WithOdsContext = $"{OdsDomainV711}/metadata/{V711Context2002}/data/v3/descriptors/swagger.json";
+
+            const string SwaggerResourcesV711WithTenant = $"{OdsDomainV711}/metadata/{V711Tenant1}/data/v3/resources/swagger.json";
+            const string SwaggerDescriptorsV711WithTenant = $"{OdsDomainV711}/metadata/{V711Tenant1}/data/v3/descriptors/swagger.json";
+
+            const string SwaggerResourcesV711WithTenantAndContext = $"{OdsDomainV711}/metadata/{V711Tenant1}/{V711Context2002}/data/v3/resources/swagger.json";
+            const string SwaggerDescriptorsV711WithTenantAndContext = $"{OdsDomainV711}/metadata/{V711Tenant1}/{V711Context2002}/data/v3/descriptors/swagger.json";
 
             if (url == SwaggerResourcesV25)
                 return await SampleSwaggerResponseV25("Swagger-Resources-API-Docs.json");
@@ -68,10 +76,16 @@ namespace DataImport.Web.Tests
             if (url == OdsDomainV311)
                 return await SampleSwaggerResponseV311("Swagger-Base-API-Response.json");
 
-            if (url == SwaggerResourcesV711 || url == SwaggerResourcesV711WithOdsContext)
+            if (url == SwaggerResourcesV711
+                || url == SwaggerResourcesV711WithOdsContext
+                || url == SwaggerResourcesV711WithTenant
+                || url == SwaggerResourcesV711WithTenantAndContext)
                 return await SampleSwaggerResponseV711("Swagger-Resources-API-Docs.json");
 
-            if (url == SwaggerDescriptorsV711 || url == SwaggerDescriptorsV711WithOdsContext)
+            if (url == SwaggerDescriptorsV711
+                || url == SwaggerDescriptorsV711WithOdsContext
+                || url == SwaggerDescriptorsV711WithTenant
+                || url == SwaggerDescriptorsV711WithTenantAndContext)
                 return await SampleSwaggerResponseV711("Swagger-Descriptors-API-Docs.json");
 
             if (url == OdsDomainV711)
