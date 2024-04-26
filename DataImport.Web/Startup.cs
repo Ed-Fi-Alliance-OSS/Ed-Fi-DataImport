@@ -57,7 +57,6 @@ namespace DataImport.Web
                 var connectionStrings = Configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>();
                 var connectionStringsOptions = Options.Create(connectionStrings);
                 Common.ExtensionMethods.FileExtensions.SetConnectionStringsOptions(connectionStringsOptions);
-
                 var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
                 ScriptExtensions.SetAppSettingsOptions(appSettings);
             }
