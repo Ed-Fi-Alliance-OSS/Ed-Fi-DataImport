@@ -6,7 +6,7 @@ In addition to the prerequisites mentioned [here](../README.md#prerequisites), f
 
 * Windows environment using Internet Information Server (IIS)
 
-* The **.NET 6 SDK** and **.NET 6 Hosting Bundle** is required on the destination server before installation of Data Import. After installing .NET, it is necessary to restart the computer for the changes to take effect.
+* The **.NET 8** is required on the destination server before installation of Data Import. After installing .NET, it is necessary to restart the computer for the changes to take effect.
 
 * The IIS Server Role or Windows Feature must be enabled.
 
