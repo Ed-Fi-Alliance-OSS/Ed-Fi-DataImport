@@ -39,7 +39,7 @@ namespace DataImport.Web.Services.Swagger
         {
             var (swaggerDocument, handler) = await GetSwaggerDocument(apiUrl, apiVersion, tenant, context, ApiSection.Resources);
 
-            if (!string.IsNullOrEmpty(apiVersion) && apiVersion == "7.1" && !string.IsNullOrEmpty(context))
+            if (!string.IsNullOrEmpty(apiVersion) && apiVersion.StartsWith("7."))
             {
                 return handler.GetTokenUrl(apiUrl, apiVersion, tenant, context);
             }
@@ -195,24 +195,30 @@ namespace DataImport.Web.Services.Swagger
             else if (apiVersion.IsOdsV3())
             {
                 var baseUrl = Common.Helpers.UrlUtility.RemoveAfterLastInstanceOf(apiUrl.Trim(), "/data/");
-                var year = await GetYearSpecificYear(apiUrl);
-
-                var instanceYearSpecificInstance = await GetInstanceYearSpecificInstance(apiUrl);
-                var instanceYearSpecificYear = await GetInstanceYearSpecificYear(apiUrl);
 
                 string path;
-
-                if (apiVersion == "7.1" && !string.IsNullOrEmpty(context))
+                if (apiVersion == "7.1")
                 {
-                    path = $"{context}/data/v3";
-                }
-                else if (year is not null)
-                {
-                    path = $"data/v3/{year}";
-                }
-                else if (instanceYearSpecificInstance is not null && instanceYearSpecificYear is not null)
-                {
-                    path = $"data/v3/{instanceYearSpecificInstance}/{instanceYearSpecificYear}";
+                    if (!string.IsNullOrEmpty(tenant) && string.IsNullOrEmpty(context))
+                    {
+                        // MultiTenant Environment
+                        path = $"{tenant}/data/v3";
+                    }
+                    else if (!string.IsNullOrEmpty(context) && string.IsNullOrEmpty(tenant))
+                    {
+                        // SingleTenant with ODS Context Routes Environment
+                        path = $"{context}/data/v3";
+                    }
+                    else if (!string.IsNullOrEmpty(context) && !string.IsNullOrEmpty(tenant))
+                    {
+                        // MultiTenant with ODS Context Routes Environments
+                        path = $"{tenant}/{context}/data/v3";
+                    }
+                    else
+                    {
+                        // SingleTenant Environment
+                        path = "data/v3";
+                    }
                 }
                 else
                 {
