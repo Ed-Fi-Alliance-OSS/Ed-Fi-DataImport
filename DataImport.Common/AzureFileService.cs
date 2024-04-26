@@ -8,14 +8,14 @@ using DataImport.Common.Helpers;
 using DataImport.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.File;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using File = DataImport.Models.File;
+using Azure.Storage.Files.Shares;
+using Azure.Storage.Files.Shares.Models;
 
 namespace DataImport.Common
 {
@@ -40,17 +40,17 @@ namespace DataImport.Common
 
             if (await fileShare.ExistsAsync())
             {
-                var fileDirectoryRoot = fileShare.GetRootDirectoryReference();
-                var fileAgentDirectory = fileDirectoryRoot.GetDirectoryReference(agent.GetDirectory());
+                var fileDirectoryRoot = fileShare.GetRootDirectoryClient();
+                var fileAgentDirectory = fileDirectoryRoot.GetSubdirectoryClient(agent.GetDirectory());
 
                 await EnsureDataImportDirectoryExists(fileDirectoryRoot);
                 await fileAgentDirectory.CreateIfNotExistsAsync();
-                var cloudFile = fileAgentDirectory.GetFileReference($"{Guid.NewGuid()}-{fileName}");
-                await cloudFile.UploadFromStreamAsync(fileStream);
+                var cloudFile = fileAgentDirectory.GetFileClient($"{Guid.NewGuid()}-{fileName}");
+                await cloudFile.UploadAsync(fileStream);
                 var recordCount = fileStream.TotalLines(fileName.IsCsvFile());
 
-                _fileHelper.LogFile(fileName, agent.Id, cloudFile.StorageUri.PrimaryUri.ToString(), FileStatus.Uploaded, recordCount);
-                _logger.LogInformation("File '{File}' was uploaded to '{Uri}' for Agent '{Name}' (Id: {Id}).", fileName, cloudFile.StorageUri.PrimaryUri, agent.Name, agent.Id);
+                _fileHelper.LogFile(fileName, agent.Id, cloudFile.Uri.ToString(), FileStatus.Uploaded, recordCount);
+                _logger.LogInformation("File '{File}' was uploaded to '{Uri}' for Agent '{Name}' (Id: {Id}).", fileName, cloudFile.Uri, agent.Name, agent.Id);
             }
             else
             {
@@ -72,19 +72,19 @@ namespace DataImport.Common
             {
                 try
                 {
-                    var fileDirectoryRoot = fileShare.GetRootDirectoryReference();
-                    var fileAgentDirectory = fileDirectoryRoot.GetDirectoryReference(agent.GetDirectory());
+                    var fileDirectoryRoot = fileShare.GetRootDirectoryClient();
+                    var fileAgentDirectory = fileDirectoryRoot.GetSubdirectoryClient(agent.GetDirectory());
 
                     await EnsureDataImportDirectoryExists(fileDirectoryRoot);
                     await fileAgentDirectory.CreateIfNotExistsAsync();
-                    var cloudFile = fileAgentDirectory.GetFileReference($"{Guid.NewGuid()}-{shortFileName}");
+                    var cloudFile = fileAgentDirectory.GetFileClient($"{Guid.NewGuid()}-{shortFileName}");
                     stream.Seek(0, SeekOrigin.Begin);
-                    await cloudFile.UploadFromStreamAsync(stream);
+                    await cloudFile.UploadAsync(stream);
                     stream.Seek(0, SeekOrigin.Begin);
                     var recordCount = stream.TotalLines(file.IsCsvFile());
 
-                    await _fileHelper.LogFileAsync(shortFileName, agent.Id, cloudFile.StorageUri.PrimaryUri.ToString(), FileStatus.Uploaded, recordCount);
-                    _logger.LogInformation("Successfully transferred file {File} to {Uri} by agent ID: {Agent}", shortFileName, cloudFile.StorageUri.PrimaryUri, agent.Id);
+                    await _fileHelper.LogFileAsync(shortFileName, agent.Id, cloudFile.Uri.ToString(), FileStatus.Uploaded, recordCount);
+                    _logger.LogInformation("Successfully transferred file {File} to {Uri} by agent ID: {Agent}", shortFileName, cloudFile.Uri, agent.Id);
                 }
                 catch (Exception ex)
                 {
@@ -101,67 +101,59 @@ namespace DataImport.Common
                 Guid.NewGuid() + Path.GetExtension(file.FileName));
 
             var cloudFile = GetCloudFile(file);
-            await cloudFile.DownloadToFileAsync(tempFileFullPath, FileMode.Create);
-
+            ShareFileDownloadInfo download = await cloudFile.DownloadAsync();
+            using (FileStream stream = System.IO.File.OpenWrite(tempFileFullPath))
+            {
+                await download.Content.CopyToAsync(stream);
+            }
             return tempFileFullPath;
         }
 
         public async Task Delete(File file)
         {
+            var shareClient = GetFileShare();
             var cloudFile = GetCloudFile(file);
+            string parentDirectoryName = Path.GetDirectoryName(cloudFile.Path);
+            ShareDirectoryClient parentDirectoryClient = shareClient.GetDirectoryClient(parentDirectoryName);
             await cloudFile.DeleteAsync();
-            await CleanAgentDirectoryIfEmpty(cloudFile.Parent);
+            await CleanAgentDirectoryIfEmpty(parentDirectoryClient);
         }
 
-        private CloudFileShare GetFileShare()
+        private ShareClient GetFileShare()
         {
-            var storageAccount = GetStorageAccount();
-            var fileClient = storageAccount.CreateCloudFileClient();
-            return fileClient.GetShareReference(_azureFileSettings.ShareName);
+            var shareName = _azureFileSettings.ShareName;
+            var connectionString = _connectionStrings.StorageConnection;
+            var shareClient = new ShareClient(connectionString, shareName);
+            return shareClient;
         }
 
-        private CloudFile GetCloudFile(File file)
+        private ShareFileClient GetCloudFile(File file)
         {
+            var shareName = _azureFileSettings.ShareName;
+            var connectionString = _connectionStrings.StorageConnection;
             var fileUri = new Uri(file.Url);
-            var storageAccount = GetStorageAccount();
-            storageAccount.CreateCloudFileClient();
-            return new CloudFile(fileUri, storageAccount.Credentials);
+            return new ShareFileClient(connectionString, shareName, fileUri.AbsolutePath);
         }
 
-        private CloudStorageAccount GetStorageAccount()
+        private static async Task EnsureDataImportDirectoryExists(ShareDirectoryClient fileDirectoryRoot)
         {
-            var azureFileConnectionString = _connectionStrings.StorageConnection;
-            return CloudStorageAccount.Parse(azureFileConnectionString);
-        }
-
-        private static async Task EnsureDataImportDirectoryExists(CloudFileDirectory fileDirectoryRoot)
-        {
-            var fileAgentDirectory = fileDirectoryRoot.GetDirectoryReference("DataImport");
+            var fileAgentDirectory = fileDirectoryRoot.GetSubdirectoryClient("DataImport");
             await fileAgentDirectory.CreateIfNotExistsAsync();
         }
 
-        private static async Task CleanAgentDirectoryIfEmpty(CloudFileDirectory agentDirectory)
+        private static async Task CleanAgentDirectoryIfEmpty(ShareDirectoryClient agentDirectory)
         {
             if (!(await ListFilesAndDirectories(agentDirectory)).Any())
                 await agentDirectory.DeleteAsync();
         }
 
-        private static async Task<IEnumerable<IListFileItem>> ListFilesAndDirectories(CloudFileDirectory directory)
+        private static async Task<IEnumerable<ShareFileItem>> ListFilesAndDirectories(ShareDirectoryClient directory)
         {
-            FileContinuationToken token = null;
-            var listResultItems = new List<IListFileItem>();
-            do
+            var listResultItems = new List<ShareFileItem>();
+            await foreach (ShareFileItem item in directory.GetFilesAndDirectoriesAsync())
             {
-                FileResultSegment resultSegment = await directory.ListFilesAndDirectoriesSegmentedAsync(token);
-                token = resultSegment.ContinuationToken;
-
-                foreach (IListFileItem listResultItem in resultSegment.Results)
-                {
-                    listResultItems.Add(listResultItem);
-                }
+                listResultItems.Add(item);
             }
-            while (token != null);
-
             return listResultItems;
         }
 
@@ -178,15 +170,27 @@ namespace DataImport.Common
         private async Task<string> GetScriptContent(string scriptFolder, string name)
         {
             var directory = GetFileShare()
-                .GetRootDirectoryReference()
-                .GetDirectoryReference(Path.Combine("DataImport", scriptFolder));
+                .GetRootDirectoryClient()
+                .GetSubdirectoryClient(Path.Combine("DataImport", scriptFolder));
 
             var filesAndDirectories = await ListFilesAndDirectories(directory);
 
-            return await filesAndDirectories
-                .OfType<CloudFile>()
-                .Single(x => x.Name == name)
-                .DownloadTextAsync();
+            var scriptToDownload = filesAndDirectories
+                .OfType<ShareFileItem>()
+                .Single(x => x.Name == name);
+            if (scriptToDownload != null)
+            {
+                // Get a reference to the file
+                ShareFileClient file = directory.GetFileClient(scriptToDownload.Name);
+
+                // Download the file
+                ShareFileDownloadInfo downloadFile = await file.DownloadAsync();
+
+                // Convert the downloaded data to a string
+                StreamReader reader = new StreamReader(downloadFile.Content);
+                return await reader.ReadToEndAsync();
+            }
+            return null;
         }
     }
 }
