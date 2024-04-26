@@ -197,31 +197,24 @@ namespace DataImport.Web.Services.Swagger
                 var baseUrl = Common.Helpers.UrlUtility.RemoveAfterLastInstanceOf(apiUrl.Trim(), "/data/");
 
                 string path;
-                if (apiVersion == "7.1")
+                if (!string.IsNullOrEmpty(tenant) && string.IsNullOrEmpty(context))
                 {
-                    if (!string.IsNullOrEmpty(tenant) && string.IsNullOrEmpty(context))
-                    {
-                        // MultiTenant Environment
-                        path = $"{tenant}/data/v3";
-                    }
-                    else if (!string.IsNullOrEmpty(context) && string.IsNullOrEmpty(tenant))
-                    {
-                        // SingleTenant with ODS Context Routes Environment
-                        path = $"{context}/data/v3";
-                    }
-                    else if (!string.IsNullOrEmpty(context) && !string.IsNullOrEmpty(tenant))
-                    {
-                        // MultiTenant with ODS Context Routes Environments
-                        path = $"{tenant}/{context}/data/v3";
-                    }
-                    else
-                    {
-                        // SingleTenant Environment
-                        path = "data/v3";
-                    }
+                    // MultiTenant Environment
+                    path = $"{tenant}/data/v3";
+                }
+                else if (!string.IsNullOrEmpty(context) && string.IsNullOrEmpty(tenant))
+                {
+                    // SingleTenant with ODS Context Routes Environment
+                    path = $"{context}/data/v3";
+                }
+                else if (!string.IsNullOrEmpty(context) && !string.IsNullOrEmpty(tenant))
+                {
+                    // MultiTenant with ODS Context Routes Environments
+                    path = $"{tenant}/{context}/data/v3";
                 }
                 else
                 {
+                    // SingleTenant Environment
                     path = "data/v3";
                 }
 

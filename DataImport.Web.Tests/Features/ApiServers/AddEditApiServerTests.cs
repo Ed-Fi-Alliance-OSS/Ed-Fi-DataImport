@@ -191,7 +191,7 @@ namespace DataImport.Web.Tests.Features.ApiServers
                 Url = StubSwaggerWebClient.ApiServerUrlV711,
                 Key = SampleString("testKey"),
                 Secret = SampleString("testSecret"),
-                Context = SampleString("testContext")
+                Context = StubSwaggerWebClient.V711Context
             };
 
             var addApiServerResponse = await Send(new AddApiServer.Command { ViewModel = viewModel });
@@ -218,7 +218,7 @@ namespace DataImport.Web.Tests.Features.ApiServers
                 Url = StubSwaggerWebClient.ApiServerUrlV711,
                 Key = SampleString("testKey"),
                 Secret = SampleString("testSecret"),
-                Context = SampleString("testContext")
+                Context = StubSwaggerWebClient.V711Context
             };
             var editApiServerResponse = await Send(new EditApiServer.Command { ViewModel = viewModel });
             editApiServerResponse.AssertToast($"Connection '{viewModel.Name}' was modified.");
