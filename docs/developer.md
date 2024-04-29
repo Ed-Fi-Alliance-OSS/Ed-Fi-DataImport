@@ -16,10 +16,11 @@
 
 4. Replace MigrationName with an appropriate one.
 5. Replace ConnectionString a valid connection string for both engines.
+
    Ejm for SQL Server:
 
-        `Add-Migration InitialsqlMigrations -Context SqlDataImportDbContext -OutputDir ./Migrations/SqlServer -verbose -Args "DataSource=(local);InitialCatalog=EdFi_DataImport;Trusted_Connection=True; SqlServer"`
+        `DataSource=(local);InitialCatalog=EdFi_DataImport;Trusted_Connection=True;`
 
    Ejm for Postgres:
 
-        `Add-Migration InitialPostgresqlMigrations -Context PostgreSqlDataImportDbContext -OutputDir ./Migrations/PostgreSql -verbose -Args "Host=localhost;Port=5432;Database=EdFi_DataImport;username=postgres;Password=password; PostgreSql"`
+        `Host=localhost;Port=5432;Database=EdFi_DataImport;username=postgres;Password=password;`
