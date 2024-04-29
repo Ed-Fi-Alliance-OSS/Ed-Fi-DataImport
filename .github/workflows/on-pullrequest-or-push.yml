@@ -9,6 +9,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "**/*.cs"
   pull_request:
     branches:
       - main
@@ -38,6 +40,7 @@ jobs:
       config-file-path: ./.github/workflows/bidi-config.json
 
   code-analysis:
+    if: github.event_name == 'pull_request'
     name: Code Analysis
     runs-on: ubuntu-latest
     defaults:
