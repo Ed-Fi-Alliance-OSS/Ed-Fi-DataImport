@@ -3,7 +3,7 @@
 # The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 # See the LICENSE and NOTICES files in the project root for more information.
 
-name: On Pull Request or Push
+name: On Pull Request run CodeQL Analysis
 
 on:
   pull_request:
@@ -17,23 +17,7 @@ on:
       - ".github/**/*.yml"
   workflow_dispatch:
 
-env:
-  DB_PASS: ${{ secrets.DB_PASS }}
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  run-ps-lint:
-     name: PowerShell Linter
-     uses: Ed-Fi-Alliance-OSS/Ed-Fi-Actions/.github/workflows/powershell-analyzer.yml@main
-  scan-actions-bidi:
-    name: Scan Actions, scan all files for BIDI Trojan Attacks
-    uses: ed-fi-alliance-oss/ed-fi-actions/.github/workflows/repository-scanner.yml@main
-    with:
-      config-file-path: ./.github/workflows/bidi-config.json
-
   code-analysis:
     if: github.event_name == 'pull_request'
     name: Code Analysis
@@ -60,15 +44,3 @@ jobs:
       - name: Perform CodeQL Analysis
         if: success()
         uses: github/codeql-action/analyze@cf7e9f23492505046de9a37830c3711dd0f25bb3 # v2.16.2
-
-
-  event_file:
-    name: "Event File"
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Upload
-        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
-        with:
-            name: Event File
-            path: ${{ github.event_path }}
