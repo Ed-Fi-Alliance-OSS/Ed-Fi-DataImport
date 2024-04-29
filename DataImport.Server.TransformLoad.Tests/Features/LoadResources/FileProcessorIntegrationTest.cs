@@ -404,12 +404,12 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
                 database.SaveChanges();
             });
         }
-        //This test fail if the test name is changed. Looking into it
+
         [Test]
         [TestCase(AgentActionsFile.DeleteOnSuccessful, AgentTypeCodeEnum.Ftps, false)]
         [TestCase(AgentActionsFile.NeverDelete, AgentTypeCodeEnum.Sftp, true)]
         [TestCase(AgentActionsFile.AlwaysDelete, AgentTypeCodeEnum.Ftps, false)]
-        public async Task ShouldTempFilesBeDeleted_When_AgentFileActionIsSelected(AgentActionsFile fileAction, string agentTypeCode, bool expectedResult)
+        public async Task ShouldHandleTempFilesBehaviorWhenAgentFileActionIsSelected(AgentActionsFile fileAction, string agentTypeCode, bool expectedResult)
         {
             var referenceFilePath = Path.Combine(GetAssemblyPath(), "TestFiles/testing.csv");
 
@@ -417,9 +417,12 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
 
             var apiServer = GetDefaultApiServer();
 
-            PerformDataMapAndAgentFTPSetup(fileAction, agentTypeCode, apiServer.Id, uploadedFilePath);
             var testOdsApi = new TestOdsApi { Config = { ApiServerId = apiServer.Id } };
+
+            PerformDataMapAndAgentFTPSetup(fileAction, agentTypeCode, apiServer.Id, uploadedFilePath);
+            var bootstrapResponse = await Send(new PostBootstrapData.Command { OdsApi = testOdsApi, CheckMetadata = false });
             await Send(new FileProcessor.Command { OdsApi = testOdsApi, CheckMetadata = false });
+
             System.IO.File.Exists(uploadedFilePath).ShouldBe(expectedResult);
         }
         private ApiServer SaveNewApiServer()
