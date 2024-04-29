@@ -80,6 +80,35 @@ jobs:
           path: "**/*.trx"
           retention-days: 5
 
+  code-analysis:
+    if: github.event_name == 'pull_request'
+    name: Code Analysis
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+            shell: pwsh
+    steps:
+      - name: Checkout the Repo
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Dependency Review ("Dependabot on PR")
+        uses: actions/dependency-review-action@9129d7d40b8c12c1ed0f60400d00c92d437adcce # v4.1.3
+
+      - name: Initialize CodeQL
+        if: success()
+        uses: github/codeql-action/init@cf7e9f23492505046de9a37830c3711dd0f25bb3 # v2.16.2
+        with:
+          languages: csharp
+
+      - name: Rebuild for CodeQL
+        run: ./build.ps1 Build -Configuration Debug
+
+      - name: Perform CodeQL Analysis
+        if: success()
+        uses: github/codeql-action/analyze@cf7e9f23492505046de9a37830c3711dd0f25bb3 # v2.16.2
+
+
   event_file:
     name: "Event File"
     runs-on: ubuntu-latest
