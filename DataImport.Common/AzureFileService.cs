@@ -192,5 +192,10 @@ namespace DataImport.Common
             }
             return null;
         }
+        public async Task<bool> Exist(File file)
+        {
+            var cloudFile = GetCloudFile(file);
+            return await cloudFile.ExistsAsync();
+        }
     }
 }

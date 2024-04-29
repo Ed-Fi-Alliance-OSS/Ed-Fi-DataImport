@@ -6,6 +6,7 @@
 using DataImport.Common.Enums;
 using DataImport.Common.Helpers;
 using DataImport.Models;
+using DataImport.Web.Features.Shared.SelectListProviders;
 using DataImport.Web.Helpers;
 using DataImport.Web.Infrastructure;
 using DataImport.Web.Services;
@@ -29,10 +30,12 @@ namespace DataImport.Web.Features.Agent
         public class QueryHandler : IRequestHandler<Query, AddEditAgentViewModel>
         {
             private readonly AgentSelectListProvider _agentSelectListProvider;
+            private readonly FilesActionSelectListProvider _filesActionSelectListProvider;
 
-            public QueryHandler(AgentSelectListProvider agentSelectListProvider)
+            public QueryHandler(AgentSelectListProvider agentSelectListProvider, FilesActionSelectListProvider filesActionSelectListProvider)
             {
                 _agentSelectListProvider = agentSelectListProvider;
+                _filesActionSelectListProvider = filesActionSelectListProvider;
             }
 
             public Task<AddEditAgentViewModel> Handle(Query request, CancellationToken cancellationToken)
@@ -44,6 +47,7 @@ namespace DataImport.Web.Features.Agent
                     RowProcessors = _agentSelectListProvider.GetRowProcessors(),
                     FileGenerators = _agentSelectListProvider.GetFileGenerators(),
                     BootstrapDatas = _agentSelectListProvider.GetBootstrapDataList(),
+                    ActionFiles = _filesActionSelectListProvider.GetSelectListItems(),
                     Enabled = true,
                 });
             }
@@ -92,7 +96,8 @@ namespace DataImport.Web.Features.Agent
                     Directory = viewmodel.Directory,
                     RowProcessorScriptId = viewmodel.AgentTypeCode != AgentTypeCodeEnum.PowerShell ? viewmodel.RowProcessorId : null,
                     FileGeneratorScriptId = viewmodel.AgentTypeCode == AgentTypeCodeEnum.PowerShell ? viewmodel.FileGeneratorId : null,
-                    ApiServerId = viewmodel.ApiServerId
+                    ApiServerId = viewmodel.ApiServerId,
+                    ActionFileCode = viewmodel.AgentTypeCode is AgentTypeCodeEnum.Sftp or AgentTypeCodeEnum.Ftps ? viewmodel.ActionFileCode : null,
                 };
 
                 foreach (var dataMap in viewmodel.DdlDataMaps.Select(JsonConvert.DeserializeObject<MappedAgent>))

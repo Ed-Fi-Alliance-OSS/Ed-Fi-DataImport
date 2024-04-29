@@ -73,5 +73,9 @@ namespace DataImport.Models
 
         [ForeignKey("FileGeneratorScriptId")]
         public Script FileGenerator { get; set; }
+
+        [Display(Name = "Action Files")]
+        [MaxLength(50)]
+        public string ActionFileCode { get; set; }
     }
 }

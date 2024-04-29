@@ -25,6 +25,7 @@ using Newtonsoft.Json.Linq;
 using static System.Environment;
 using File = DataImport.Models.File;
 using LogLevels = DataImport.Common.Enums.LogLevel;
+using DataImport.Common.Enums;
 
 namespace DataImport.Server.TransformLoad.Features.LoadResources
 {
@@ -148,7 +149,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
 
                             _logger.LogInformation("Processing file: {file}. URL: {ulr}. DataMap: {datamap}", file.FileName, file.Url, dataMap.Name);
 
-                            UpdateStatus(file.Id, FileStatus.Transforming);
+                            await UpdateStatus(file.Id, FileStatus.Transforming);
 
                             await TransformAndProcessEachRowUsingDataMap(file, dataMap, request.OdsApi, agent);
                         }
@@ -162,7 +163,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
 
                         var message = string.Join(NewLine + NewLine, fileResponse.Value.Select(x => x.Message));
 
-                        UpdateStatus(fileResponse.Key, status, message);
+                        await UpdateStatus(fileResponse.Key, status, message);
                     }
 
                     agent.LastExecuted = DateTimeOffset.Now;
@@ -538,9 +539,9 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     _fileResponses[file.Id] = new List<FileResponse> { fileResponse };
             }
 
-            private void UpdateStatus(int fileId, FileStatus status, string message = null)
+            private async Task UpdateStatus(int fileId, FileStatus status, string message = null)
             {
-                var file = _dbContext.Files.Single(x => x.Id == fileId);
+                var file = _dbContext.Files.Include(file => file.Agent).Single(x => x.Id == fileId);
 
                 file.Status = status;
                 file.UpdateDate = DateTimeOffset.Now;
@@ -548,10 +549,23 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 if (message != null)
                     file.Message = message;
 
-                _dbContext.SaveChanges();
+                if (file.Agent.ActionFileCode != null
+                    && (file.Agent.AgentTypeCode == AgentTypeCodeEnum.Sftp || file.Agent.AgentTypeCode == AgentTypeCodeEnum.Ftps)
+                    && (file.Status != FileStatus.Transforming && file.Status != FileStatus.Loading))
+                {
+                    var actionFileCode = ((AgentActionsFile) Enum.Parse(typeof(AgentActionsFile), file.Agent.ActionFileCode));
+                    //Delete files only if the Agent was configured to delete files on AlwaysDelete or DeleteOnSuccessful
+                    if (((file.Status == FileStatus.Loaded && actionFileCode == AgentActionsFile.DeleteOnSuccessful)
+                        || (actionFileCode == AgentActionsFile.AlwaysDelete))
+                        && await _fileService.Exist(file))
+                        await _fileService.Delete(file);
 
-                if (file.Status == FileStatus.Loaded)
-                    _fileService.Delete(file);
+                    if (actionFileCode != AgentActionsFile.NeverDelete)
+                        file.Status = FileStatus.Canceled;
+                }
+                else if (file.Status == FileStatus.Loaded && await _fileService.Exist(file))
+                    await _fileService.Delete(file);
+                await _dbContext.SaveChangesAsync();
             }
 
             private void WriteLog(IngestionLogMarker marker)

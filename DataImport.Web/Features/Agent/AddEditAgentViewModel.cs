@@ -71,6 +71,10 @@ namespace DataImport.Web.Features.Agent
 
         [Display(Name = "Run Order")]
         public int? RunOrder { get; set; }
+
+        [Display(Name = "Files Action")]
+        public string ActionFileCode { get; set; } = AgentActionsFile.DeleteOnSuccessful.ToString();
+        public IEnumerable<SelectListItem> ActionFiles { get; set; }
     }
 
     public class Validator : AbstractValidator<AddEditAgentViewModel>

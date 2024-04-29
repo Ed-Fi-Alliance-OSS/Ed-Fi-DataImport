@@ -19,7 +19,7 @@ namespace DataImport.Server.TransformLoad.Features
             var shortFileName = file.Substring(file.LastIndexOf('/') + 1);
 
             var fileCount = await dbContext.Files
-                .CountAsync(f => (f.FileName == shortFileName && f.AgentId == agentId));
+                .CountAsync(f => (f.FileName == shortFileName && f.AgentId == agentId && f.Status != FileStatus.Canceled));
 
             var fileFound = fileCount != 0;
 
