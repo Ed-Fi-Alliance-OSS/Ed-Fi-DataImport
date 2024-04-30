@@ -60,14 +60,14 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Build
-        run: ./build.ps1 -Command Build -Configuration Debug
+        run: ./build.ps1 -Command Build -Configuration Release
 
       - name: Run Unit Tests
         if: success()
-        run: ./build.ps1 -Command UnitTest -Configuration Debug  -Report True
+        run: ./build.ps1 -Command UnitTest -Configuration Release  -Report True
 
       - name: Integration Tests
-        run: ./build.ps1 -Command IntegrationTest -Configuration Debug  -Report True
+        run: ./build.ps1 -Command IntegrationTest -Configuration Release  -Report True
         shell: pwsh
         env:
           ConnectionStrings__defaultConnection: "Server=localhost,1433;Initial Catalog=EdFi_DataImport_Test;User Id=sa;Password=${{ env.DB_PASS }};Trusted_Connection=False;TrustServerCertificate=True;"
@@ -87,7 +87,7 @@ jobs:
           languages: csharp
 
       - name: Rebuild for CodeQL
-        run: ./build.ps1 Build -Configuration Debug
+        run: ./build.ps1 Build -Configuration Release
 
       - name: Perform CodeQL Analysis
         if: success()
@@ -114,7 +114,7 @@ jobs:
           languages: csharp
 
       - name: Rebuild for CodeQL
-        run: ./build.ps1 Build -Configuration Debug
+        run: ./build.ps1 Build -Configuration Release
 
       - name: Perform CodeQL Analysis
         if: success()
