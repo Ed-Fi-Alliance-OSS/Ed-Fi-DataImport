@@ -34,9 +34,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using DataImport.Web.Middleware;
 using Microsoft.AspNetCore.Http.Features;
-#if DEBUG
 using System.Net.Http;
-#endif
 
 namespace DataImport.Web
 {
@@ -50,9 +48,11 @@ namespace DataImport.Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-#if DEBUG
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-#endif
+
+            if (Configuration.GetSection("AppSettings").Get<AppSettings>().IgnoresCertificateErrors)
+            {
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+            }
         }
 
         public IConfiguration Configuration
@@ -87,14 +87,18 @@ namespace DataImport.Web
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddHttpContextAccessor();
 
-#if DEBUG
-            services.AddHttpClient(Helpers.Constants.LocalHttpClientName).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+            if (bool.Parse(Configuration["AppSettings:IgnoresCertificateErrors"]))
             {
-                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
-            });
-#else
-            services.AddHttpClient();
-#endif
+                services.AddHttpClient(Helpers.Constants.LocalHttpClientName).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+                });
+            }
+            else
+            {
+                services.AddHttpClient();
+
+            }
 
             var databaseEngine = Configuration["AppSettings:DatabaseEngine"];
 

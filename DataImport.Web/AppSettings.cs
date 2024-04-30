@@ -20,5 +20,6 @@ namespace DataImport.Web
         public string DatabaseEngine { get; set; }
         public string UserRecoveryToken { get; set; }
         public bool AllowUserRegistration { get; set; }
+        public bool IgnoresCertificateErrors { get; set; } = false;
     }
 }
