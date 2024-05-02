@@ -56,17 +56,21 @@ namespace DataImport.Common.Helpers
         public string GetBearerToken(ApiServer apiServer, string encryptionKey, string accessCode)
         {
             var tokenUrl = new Uri(apiServer.TokenUrl);
+            RestClientOptions options;
 
-#if DEBUG
-#pragma warning disable S4830
-            var options = new RestClientOptions(tokenUrl.GetLeftPart(UriPartial.Authority))
+            if (ScriptExtensions.IgnoresCertificateErrors())
             {
-                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-            };
+#pragma warning disable S4830
+                options = new RestClientOptions(tokenUrl.GetLeftPart(UriPartial.Authority))
+                {
+                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                };
 #pragma warning restore S4830
-#else
-            var options = new RestClientOptions(tokenUrl.GetLeftPart(UriPartial.Authority));
-#endif
+            }
+            else
+            {
+                options = new RestClientOptions(tokenUrl.GetLeftPart(UriPartial.Authority));
+            }
 
             var oauthClient = new RestClient(options);
 

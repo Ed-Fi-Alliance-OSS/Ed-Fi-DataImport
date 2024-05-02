@@ -11,7 +11,6 @@ using DataImport.Common.Preprocessors;
 using DataImport.Models;
 using DataImport.Server.TransformLoad.Features.FileTransport;
 using DataImport.Server.TransformLoad.Features.LoadResources;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +32,7 @@ namespace DataImport.Server.TransformLoad
         public static IHost ConfigureStaticGlobals(this IHost host)
         {
             FileExtensions.SetConnectionStringsOptions(host.Services.GetRequiredService<IOptions<ConnectionStrings>>());
-            ScriptExtensions.SetAppSettingsOptions(host.Services.GetRequiredService<IPowerShellPreprocessSettings>());
+            Common.Preprocessors.ScriptExtensions.SetAppSettingsOptions(host.Services.GetRequiredService<IPowerShellPreprocessSettings>());
             return host;
         }
 

@@ -75,6 +75,11 @@ See the LICENSE and NOTICES files in the project root for more information.
         $(function($) {
             disableSaveButton(true);
             $("#btnTest").click(function() {
+                var url = $("#Url").val();
+                if (!url.endsWith('/')) {
+                    $("#Url").val(url + '/');
+                }
+
                 disableFormButtons(true);
                 clearValidationSummary();
                 $.ajax({

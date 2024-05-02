@@ -9,7 +9,7 @@ using DataImport.Common.Preprocessors;
 
 namespace DataImport.Web
 {
-    public class AppSettings : IFileSettings, IPowerShellPreprocessSettings, IEncryptionKeySettings
+    public class AppSettings : IFileSettings, IPowerShellPreprocessSettings, IEncryptionKeySettings, IIgnoresCertificateErrorsSettings
     {
         public bool AllowTestCertificates { get; set; }
         public string EncryptionKey { get; set; }

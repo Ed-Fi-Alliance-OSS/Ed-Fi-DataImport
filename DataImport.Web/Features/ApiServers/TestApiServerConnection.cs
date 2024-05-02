@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DataImport.Common.ExtensionMethods;
+using Microsoft.Extensions.Options;
 
 namespace DataImport.Web.Features.ApiServers
 {
@@ -85,9 +86,10 @@ namespace DataImport.Web.Features.ApiServers
             private readonly IConfigurationService _configurationService;
             private readonly IOAuthRequestWrapper _oAuthRequestWrapper;
             private readonly string _encryptionKey;
+            private readonly IOptions<AppSettings> _options;
 
             public QueryHandler(ILogger<TestApiServerConnection> logger, DataImportDbContext database, IEncryptionKeyResolver encryptionKeyResolver,
-                IEncryptionService encryptionService, IConfigurationService configurationService, IOAuthRequestWrapper oAuthRequestWrapper)
+                IEncryptionService encryptionService, IConfigurationService configurationService, IOAuthRequestWrapper oAuthRequestWrapper, IOptions<AppSettings> options)
             {
                 _logger = logger;
                 _database = database;
@@ -95,6 +97,7 @@ namespace DataImport.Web.Features.ApiServers
                 _encryptionKey = encryptionKeyResolver.GetEncryptionKey();
                 _configurationService = configurationService;
                 _oAuthRequestWrapper = oAuthRequestWrapper;
+                _options = options;
             }
 
             public async Task<Response> Handle(Query request, CancellationToken cancellationToken)
@@ -155,14 +158,19 @@ namespace DataImport.Web.Features.ApiServers
                 try
                 {
                     var tokenRetriever = new OdsApiTokenRetriever(_oAuthRequestWrapper, apiServer);
-#if DEBUG
-                    var options = new RestClientOptions()
+                    RestClientOptions options;
+
+                    if (_options.Value.IgnoresCertificateErrors)
                     {
-                        RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-                    };
-#else
-                    var options = new RestClientOptions();
-#endif
+                        options = new RestClientOptions()
+                        {
+                            RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                        };
+                    }
+                    else
+                    {
+                        options = new RestClientOptions();
+                    }
 
                     options.Authenticator = new BearerTokenAuthenticator(tokenRetriever);
                     options.BaseUrl = new Uri(url);
