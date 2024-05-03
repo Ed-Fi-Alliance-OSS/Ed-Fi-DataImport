@@ -223,9 +223,9 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
                 catch (Exception ex)
                 {
-                    if (ex.GetType().Name == "DirectoryNotFoundException")
+                    if(ex.GetType().Name == "DirectoryNotFoundException")
                     {
-                        var errorMessage = "File or folder not found"
+                        var errorMessage = "File or folder not found";
                         _logger.LogError("Error processing file: {File}. URL: {Url}. DataMap: {Datamap}. Details: {Details}.", file.FileName, file.Url, dataMap.Name, errorMessage);
                     }
                     else
