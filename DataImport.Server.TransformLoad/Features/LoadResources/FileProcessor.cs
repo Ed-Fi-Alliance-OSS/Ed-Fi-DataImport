@@ -223,8 +223,15 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error processing file: {file}. URL: {url}. DataMap: {datamap}", file.FileName, file.Url, dataMap.Name);
-
+                    if (ex.GetType().Name == "DirectoryNotFoundException")
+                    {
+                        var errorMessage = "File or folder not found"
+                        _logger.LogError("Error processing file: {File}. URL: {Url}. DataMap: {Datamap}. Details: {Details}.", file.FileName, file.Url, dataMap.Name, errorMessage);
+                    }
+                    else
+                    {
+                        _logger.LogError(ex, "Error processing file: {File}. URL: {Url}. DataMap: {Datamap}", file.FileName, file.Url, dataMap.Name);
+                    }
                     var fileResponse = new FileResponse
                     {
                         Success = successCount,
