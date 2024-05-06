@@ -124,9 +124,5 @@ namespace DataImport.Common
             var filePath = Path.Combine(_fileSettings.ShareName, "DataImport", scriptFolder, name);
             return await System.IO.File.ReadAllTextAsync(filePath);
         }
-        public Task<bool> Exist(File file)
-        {
-            return Task.FromResult(System.IO.File.Exists(new Uri(file.Url).LocalPath));
-        }
     }
 }

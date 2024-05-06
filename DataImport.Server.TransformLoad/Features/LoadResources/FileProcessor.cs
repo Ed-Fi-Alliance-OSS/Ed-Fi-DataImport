@@ -26,6 +26,7 @@ using static System.Environment;
 using File = DataImport.Models.File;
 using LogLevels = DataImport.Common.Enums.LogLevel;
 using DataImport.Common.Enums;
+using DataImport.Common.ExtensionMethods;
 
 namespace DataImport.Server.TransformLoad.Features.LoadResources
 {
@@ -549,22 +550,21 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 if (message != null)
                     file.Message = message;
 
-                if (file.Agent.ActionFileCode != null
-                    && (file.Agent.AgentTypeCode == AgentTypeCodeEnum.Sftp || file.Agent.AgentTypeCode == AgentTypeCodeEnum.Ftps)
-                    && (file.Status != FileStatus.Transforming && file.Status != FileStatus.Loading))
+                switch (file.Status)
                 {
-                    var actionFileCode = ((AgentActionsFile) Enum.Parse(typeof(AgentActionsFile), file.Agent.ActionFileCode));
-                    //Delete files only if the Agent was configured to delete files on AlwaysDelete or DeleteOnSuccessful
-                    if (((file.Status == FileStatus.Loaded && actionFileCode == AgentActionsFile.DeleteOnSuccessful)
-                        || (actionFileCode == AgentActionsFile.AlwaysDelete))
-                        && await _fileService.Exist(file))
-                        await _fileService.Delete(file);
+                    case FileStatus.Loaded:
+                        if (file.Agent.GetActionFileCode() == AgentActionsFile.DeleteOnSuccessful || file.Agent.GetActionFileCode() == AgentActionsFile.AlwaysDelete)
+                            await _fileService.Delete(file);
+                        break;
+                    default:
+                        if (file.Status.CanBeRetried() && file.Agent.GetActionFileCode() == AgentActionsFile.AlwaysDelete)
+                        {
+                            await _fileService.Delete(file);
+                            file.Status = FileStatus.Canceled;
+                        }
+                        break;
 
-                    if (actionFileCode != AgentActionsFile.NeverDelete)
-                        file.Status = FileStatus.Canceled;
                 }
-                else if (file.Status == FileStatus.Loaded && await _fileService.Exist(file))
-                    await _fileService.Delete(file);
                 await _dbContext.SaveChangesAsync();
             }
 
