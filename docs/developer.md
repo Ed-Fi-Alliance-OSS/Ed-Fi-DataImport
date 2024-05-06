@@ -24,3 +24,8 @@
    Example for Postgres:
 
         `Host=localhost;Port=5432;Database=EdFi_DataImport;username=postgres;Password=password;`
+
+## Skipping certificate validation for SSL Connections
+
+In order to be able to skip the certificate validation for local development we have added a flag with name `IgnoresCertificateErrors` to the application settings.
+Change its value to true, when you are using a self signed certificate. Otherwise the application will throw errors, for example, when trying to create a new connection to the ODS API.
