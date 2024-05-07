@@ -221,6 +221,8 @@ namespace DataImport.Web
                 pipeline.AddCssBundle("/content/dataimport.min.css", minifyCssSettings, "/css/footable.bootstrap.css", "/css/site.css");
                 pipeline.AddJavaScriptBundle("/bundles/toastr.min.js", minifyJsSettings, "/js/toastr.js");
                 pipeline.AddCssBundle("/content/toastr.min.css", "/css/toastr.min.css");
+                pipeline.AddJavaScriptBundle("/bundles/sort-table.min.js", minifyJsSettings, "/js/sort-table.js");
+                pipeline.AddJavaScriptBundle("/bundles/filter-table.min.js", minifyJsSettings, "/js/filter-table.js");
             });
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
