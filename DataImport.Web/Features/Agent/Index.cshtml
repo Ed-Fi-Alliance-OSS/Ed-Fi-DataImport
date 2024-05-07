@@ -14,16 +14,15 @@ See the LICENSE and NOTICES files in the project root for more information.
 }
 
 <h2>@ViewBag.Title</h2>
-
-<div style="padding-bottom: 10px;">
-    @HtmlHelperService.NavigationButton(Html, "Add Agent", "Add")
-</div>
-<div class="form-group">
-	<div class="col-sm-2">
+<div class="row">
+	<div class="col-md-10" style="padding-bottom: 10px;">
+		@HtmlHelperService.NavigationButton(Html, "Add Agent", "Add")
+	</div>
+	<div class="col-md-2">
 		<label class="control-label" for="Enabled">Enabled</label>
 	</div>
-	<div class="col-sm-10">
-		<select id="filterValues">
+	<div class="col-md-2">
+		<select id="filterValues" style="width:100%">
 			<option value="all">All</option>
 			<option value="true">True</option>
 			<option value="false">False</option>
