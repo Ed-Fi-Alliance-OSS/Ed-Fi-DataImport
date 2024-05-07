@@ -2,9 +2,7 @@
 
 ## Overview
 
-`Data Import` is a tool to simplify the loading of CSV data to the Operational Data Store (ODS) of the [Ed-Fi ODS / API](https://techdocs.ed-fi.org/pages/viewpage.action?pageId=95259668). The import handles domains where vendor integration to the Ed-Fi APIs is inchoate or nonexistent from legacy data sources such as state assessment systems. The system works by providing methods to extract information out of spreadsheet-based CSV data files, and transform and load to the Ed-Fi ODS / API. 
-
-Data Import is designed to match the Ed-Fi ODS / API operating model of choice by education-serving entities. The Data Import solution is intended to be used by system IT administrators and technical data analysts, in service of Local Education Agency (LEA) and State Education Agency (SEA) needs where directly integrated API solutions do not exist.
+`Data Import` is a tool to simplify the loading of CSV data to the Operational Data Store (ODS) of the [Ed-Fi ODS / API](https://techdocs.ed-fi.org/pages/viewpage.action?pageId=95259668). The import handles domains where vendor integration to the Ed-Fi APIs is inchoate or nonexistent from legacy data sources such as state assessment systems. The system works by providing methods to extract information out of spreadsheet-based CSV data files, and transform and load to the Ed-Fi ODS / API.
 
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport)
 
