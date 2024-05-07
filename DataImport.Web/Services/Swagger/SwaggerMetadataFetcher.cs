@@ -214,7 +214,7 @@ namespace DataImport.Web.Services.Swagger
                 }
                 else
                 {
-                    // SingleTenant Environment
+                    // SingleTenant and Sandbox Environments
                     path = "data/v3";
                 }
 
