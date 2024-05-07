@@ -6,6 +6,8 @@
 
 Data Import is designed to match the Ed-Fi ODS / API operating model of choice by education-serving entities. The Data Import solution is intended to be used by system IT administrators and technical data analysts, in service of Local Education Agency (LEA) and State Education Agency (SEA) needs where directly integrated API solutions do not exist.
 
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Ed-Fi-Alliance-OSS/Ed-Fi-ODS-AdminApp)
+
 ### Features
 
 * Obtain CSVs via SFTP, FTPS, web site, or manual upload
