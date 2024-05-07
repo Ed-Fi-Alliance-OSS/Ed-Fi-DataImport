@@ -29,7 +29,7 @@ Data Import is a multi-project C# .NET solution with a web administration panel 
 
 ### Prerequisites
 
-Data Import 3.3+ requires **.NET 8**
+Data Import 2.3+ requires **.NET 8**
 
 Additionally, familiarity with the following technologies are required for installing and configuring Data Import:
 
