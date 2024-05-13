@@ -68,6 +68,15 @@ namespace DataImport.Web.Features.ApiServers
         }
 
         [HttpPost]
+        public async Task<ActionResult> Update(int id)
+        {
+            var response = await _mediator.Send(new RefreshDataModel.Command { ApiServerId = id });
+            ToastMessage(response);
+
+            return this.RedirectToActionJson("Index");
+        }
+
+        [HttpPost]
         public async Task<ActionResult> TestOdsApiConfiguration(TestApiServerConnection.Query query)
         {
             var result = await _mediator.Send(query);

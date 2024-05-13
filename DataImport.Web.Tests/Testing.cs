@@ -366,6 +366,14 @@ namespace DataImport.Web.Tests
             return Query(d => d.ApiServers.OrderBy(y => y.Id).Select(y => y.ApiVersion).First());
         }
 
+        public static ApiVersion GetApiVersionNotExist()
+        {
+            var apiVersion = new ApiVersion();
+            apiVersion.Id = -1;
+            return apiVersion;
+        }
+        
+
         public static async Task<BootstrapData> AddBootstrapData(Resource resource, JToken data = null)
         {
             var resourcePath = resource.Path;
