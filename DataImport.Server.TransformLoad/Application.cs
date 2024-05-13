@@ -13,6 +13,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,13 +32,15 @@ namespace DataImport.Server.TransformLoad
     public class Application : IApplication, IHostedService
     {
         private readonly ILogger<Application> _logger;
+        private readonly IOptions<AppSettings> _options;
         private readonly DataImportDbContext _dbContext;
         private readonly IMediator _mediator;
         private readonly string _encryptionKey;
 
-        public Application(ILogger<Application> logger, DataImportDbContext dbContext, IEncryptionKeySettings encryptionKeySettings, IMediator mediator)
+        public Application(ILogger<Application> logger, IOptions<AppSettings> options, DataImportDbContext dbContext, IEncryptionKeySettings encryptionKeySettings, IMediator mediator)
         {
             _logger = logger;
+            _options = options;
             _dbContext = dbContext;
             _mediator = mediator;
             _encryptionKey = encryptionKeySettings.EncryptionKey;
@@ -58,7 +61,7 @@ namespace DataImport.Server.TransformLoad
                     await _mediator.Send(new FileTransporter.Command { ApiServerId = odsConfig.ApiServerId });
                     await _mediator.Send(new FileGenerator.Command { ApiServerId = odsConfig.ApiServerId });
 
-                    var odsApi = new OdsApi(_logger, odsConfig);
+                    var odsApi = new OdsApi(_logger, odsConfig, _options);
 
                     var bootstrapResponse = await _mediator.Send(new PostBootstrapData.Command { OdsApi = odsApi });
 
