@@ -592,6 +592,10 @@ namespace DataImport.Models.Migrations.PostgreSql
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
+                    b.Property<string>("Context")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.Property<string>("Data")
                         .HasColumnType("text");
 
@@ -629,6 +633,10 @@ namespace DataImport.Models.Migrations.PostgreSql
 
                     b.Property<string>("RowNumber")
                         .HasColumnType("text");
+
+                    b.Property<string>("Tenant")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.HasKey("Id");
 

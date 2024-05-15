@@ -113,6 +113,20 @@
                                         "DataLength": 20,
                                         "AllowNull": true,
                                         "PropertyName": "ApiVersion"
+                                    },
+                                    {
+                                        "ColumnName": "Tenant",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 255,
+                                        "AllowNull": true,
+                                        "PropertyName": "Tenant"
+                                    },
+                                    {
+                                        "ColumnName": "Context",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 255,
+                                        "AllowNull": true,
+                                        "PropertyName": "Context"
                                     }
                                 ],
                                 "Id": {

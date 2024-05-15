@@ -48,5 +48,12 @@ namespace DataImport.Models
 
         [MaxLength(255)]
         public string ApiServerName { get; set; }
+
+        [MaxLength(255)]
+        public string Tenant { get; set; }
+
+        [MaxLength(255)]
+        public string Context { get; set; }
+
     }
 }

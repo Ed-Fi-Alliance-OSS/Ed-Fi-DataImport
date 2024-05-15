@@ -90,6 +90,16 @@
                                     "Name": "ApiVersion",
                                     "WriteMethod": "Raw",
                                     "DbType": "Varchar"
+                                },
+                                "Tenant": {
+                                    "Name": "Tenant",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
+                                },
+                                "Context": {
+                                    "Name": "Context",
+                                    "WriteMethod": "Raw",
+                                    "DbType": "Varchar"
                                 }
                             }
                         }

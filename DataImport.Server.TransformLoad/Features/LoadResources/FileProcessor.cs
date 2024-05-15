@@ -194,6 +194,10 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         _logger.LogDebug("Transforming {path} row {row}", dataMap.ResourcePath, row.Number);
                         var (rowPostResponse, log) = await MapAndProcessCsvRow(odsApi, row.Content, dataMap, row.Number, file);
 
+                        /// Tenant and Context are valid for Ods Api 7.x only. These values are null for other versions.
+                        log.Tenant = agent.ApiServer.Tenant;
+                        log.Context = agent.ApiServer.Context;
+
                         if (log != null && _ingestionLogLevels.Contains(log.Level))
                             WriteLog(log);
 
@@ -437,12 +441,12 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 switch (odsResponse.StatusCode)
                 {
                     case HttpStatusCode.OK:
-                        return (RowResult.Exist, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
+                        return (RowResult.Exist, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, null, null, odsResponse.StatusCode));
                     case HttpStatusCode.Created:
-                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
+                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, null, null, odsResponse.StatusCode));
                     default:
                         _logger.LogError($"POST returned unexpected HTTP status: {endpointUrl}, Row Number: {mappedRow.RowNumber}, Status: {odsResponse.StatusCode}, Error: {odsResponse.Content}");
-                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, odsResponse.StatusCode, odsResponse.Content));
+                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, null, null, odsResponse.StatusCode, odsResponse.Content));
                 }
             }
 
@@ -471,10 +475,10 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 switch (odsResponse.StatusCode)
                 {
                     case HttpStatusCode.NoContent:
-                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
+                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, null, null, odsResponse.StatusCode));
                     default:
                         _logger.LogError($"DELETE returned unexpected HTTP status: {endpointUrl}, Row Number: {mappedRow.RowNumber}, Status: {odsResponse.StatusCode}, Error: {odsResponse.Content}");
-                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, odsResponse.StatusCode, odsResponse.Content));
+                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, null, null, odsResponse.StatusCode, odsResponse.Content));
                 }
             }
 
@@ -503,10 +507,10 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 switch (odsResponse.StatusCode)
                 {
                     case HttpStatusCode.NoContent:
-                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, odsResponse.StatusCode));
+                        return (RowResult.Success, new IngestionLogMarker(IngestionResult.Success, LogLevels.Information, mappedRow, endpointUrl, null, null, odsResponse.StatusCode));
                     default:
                         _logger.LogError($"DELETE returned unexpected HTTP status: {endpointUrl}, Row Number: {mappedRow.RowNumber}, Status: {odsResponse.StatusCode}, Error: {odsResponse.Content}");
-                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, odsResponse.StatusCode, odsResponse.Content));
+                        return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, null, null, odsResponse.StatusCode, odsResponse.Content));
                 }
             }
 
@@ -571,7 +575,9 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     FileName = marker.MappedResource?.FileName,
                     AgentName = marker.MappedResource?.AgentName,
                     ApiServerName = marker.MappedResource?.ApiServerName,
-                    ApiVersion = marker.MappedResource?.ApiVersion
+                    ApiVersion = marker.MappedResource?.ApiVersion,
+                    Tenant = marker.Tenant,
+                    Context = marker.Context
                 };
                 _logger.LogToTable($"Writing in IngestionLog for row: {model.RowNumber}", model, "IngestionLog");
             }
@@ -606,8 +612,10 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             public HttpStatusCode? StatusCode { get; }
             public string OdsResponse { get; }
             public DateTimeOffset Date { get; }
+            public string Tenant { get; set; }
+            public string Context { get; set; }
 
-            public IngestionLogMarker(IngestionResult result, string level, MappedResource mappedResource, string endpointUrl, HttpStatusCode? statusCode = null, string odsResponse = null)
+            public IngestionLogMarker(IngestionResult result, string level, MappedResource mappedResource, string endpointUrl, string tenant = null, string context = null, HttpStatusCode? statusCode = null, string odsResponse = null)
             {
                 Result = result;
                 Level = level;
@@ -616,6 +624,8 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 StatusCode = statusCode;
                 OdsResponse = odsResponse;
                 Date = DateTimeOffset.Now;
+                Tenant = tenant;
+                Context = context;
             }
         }
     }

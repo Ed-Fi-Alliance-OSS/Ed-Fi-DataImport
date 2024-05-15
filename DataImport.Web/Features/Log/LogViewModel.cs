@@ -46,6 +46,8 @@ namespace DataImport.Web.Features.Log
             public string HttpStatusCode { get; set; }
             public string Data { get; set; }
             public string OdsResponse { get; set; }
+            public string Tenant { get; set; }
+            public string Context { get; set; }
         }
 
         public class File
