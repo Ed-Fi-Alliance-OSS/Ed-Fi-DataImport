@@ -33,8 +33,13 @@ namespace DataImport.Web.Features.Log
 
             public Task<LogViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
-                var allTenants = _dataImportDbContext.IngestionLogs.GroupBy(c => c.Tenant).Select(g => g.First()).ToList();
-                var allContexts = _dataImportDbContext.IngestionLogs.GroupBy(c => c.Context).Select(g => g.First()).ToList();
+                var allTenants = _dataImportDbContext.IngestionLogs
+                    .Where(c => !string.IsNullOrEmpty(c.Tenant))
+                    .GroupBy(c => c.Tenant).Select(g => g.First()).ToList();
+
+                var allContexts = _dataImportDbContext.IngestionLogs
+                    .Where(c => !string.IsNullOrEmpty(c.Context))
+                    .GroupBy(c => c.Context).Select(g => g.First()).ToList();
 
                 return Task.FromResult(new LogViewModel
                 {

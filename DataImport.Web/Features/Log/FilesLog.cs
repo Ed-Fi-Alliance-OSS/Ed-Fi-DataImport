@@ -42,13 +42,8 @@ namespace DataImport.Web.Features.Log
                 var pagedFileLogs =
                     Page<LogViewModel.File>.Fetch((offset, limit) => GetFileLogs(request.ApiServerId, offset, limit), request.PageNumber);
 
-                var allTenants = _dataImportDbContext.IngestionLogs.GroupBy(c => c.Tenant).Select(g => g.First()).ToList();
-                var allContexts = _dataImportDbContext.IngestionLogs.GroupBy(c => c.Context).Select(g => g.First()).ToList();
-
                 return Task.FromResult(new LogViewModel
                 {
-                    Tenants = allTenants.Select(i => new SelectListItem { Value = i.Tenant, Text = i.Tenant }).ToList(),
-                    Contexts = allContexts.Select(i => new SelectListItem { Value = i.Context, Text = i.Context }).ToList(),
                     Files = pagedFileLogs
                 });
             }
