@@ -45,7 +45,10 @@ namespace DataImport.Web.Features.Log
                         request.PageNumber);
 
                 return Task.FromResult(new LogViewModel
-                { LogFilters = request.LogFilters, IngestionLogs = pagedIngestionLogs });
+                {
+                    LogFilters = request.LogFilters,
+                    IngestionLogs = pagedIngestionLogs
+                });
             }
 
             public IEnumerable<LogViewModel.Ingestion> GetIngestionLogs(LogViewModel.Filters filters, int offset, int limit)
@@ -82,6 +85,16 @@ namespace DataImport.Web.Features.Log
                     {
                         logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
                             x.FileName.ToLower().Contains(filters.Filename.ToLower()));
+                    }
+                    if (!string.IsNullOrEmpty(filters.SelectedTenant))
+                    {
+                        logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                            x.Tenant.ToLower().Contains(filters.SelectedTenant.ToLower()));
+                    }
+                    if (!string.IsNullOrEmpty(filters.SelectedContext))
+                    {
+                        logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                            x.Context.ToLower().Contains(filters.SelectedContext.ToLower()));
                     }
                 }
                 var pagedList = logsByDateDesc.Skip(offset).Take(limit).ToList();

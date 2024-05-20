@@ -3,27 +3,21 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using DataImport.Models;
-using DataImport.Web.Features.Shared;
-using DataImport.Web.Services;
 using MediatR;
-using System.Threading.Tasks;
-using System.Threading;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DataImport.Web.Features.Log
 {
-    public class FilesLog
+    public class OdsApi7xFilters
     {
-        public class Query : IRequest<LogViewModel>, IApiServerSpecificRequest
+        public class Query : IRequest<LogViewModel>
         {
-            public int PageNumber { get; set; }
-            public int? ApiServerId { get; set; }
-            public int? ApiVersionId { get; set; }
+
         }
 
         public class QueryHandler : IRequestHandler<Query, LogViewModel>
@@ -39,31 +33,14 @@ namespace DataImport.Web.Features.Log
 
             public Task<LogViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
-                var pagedFileLogs =
-                    Page<LogViewModel.File>.Fetch((offset, limit) => GetFileLogs(request.ApiServerId, offset, limit), request.PageNumber);
-
                 var allTenants = _dataImportDbContext.IngestionLogs.GroupBy(c => c.Tenant).Select(g => g.First()).ToList();
                 var allContexts = _dataImportDbContext.IngestionLogs.GroupBy(c => c.Context).Select(g => g.First()).ToList();
 
                 return Task.FromResult(new LogViewModel
                 {
                     Tenants = allTenants.Select(i => new SelectListItem { Value = i.Tenant, Text = i.Tenant }).ToList(),
-                    Contexts = allContexts.Select(i => new SelectListItem { Value = i.Context, Text = i.Context }).ToList(),
-                    Files = pagedFileLogs
+                    Contexts = allContexts.Select(i => new SelectListItem { Value = i.Context, Text = i.Context }).ToList()
                 });
-            }
-
-            public IEnumerable<LogViewModel.File> GetFileLogs(int? apiServerId, int offset, int limit)
-            {
-                var pagedList =
-                    _dataImportDbContext.Files
-                        .Include(x => x.Agent)
-                        .ThenInclude(x => x.ApiServer)
-                        .Where(x => !apiServerId.HasValue || apiServerId.HasValue && x.Agent.ApiServerId == apiServerId.Value)
-                        .OrderByDescending(x => x.CreateDate)
-                        .Skip(offset)
-                        .Take(limit).ToList();
-                return pagedList.Select(_mapper.Map<LogViewModel.File>);
             }
         }
     }

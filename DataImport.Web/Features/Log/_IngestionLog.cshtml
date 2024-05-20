@@ -20,17 +20,13 @@ See the LICENSE and NOTICES files in the project root for more information.
             <th>Result</th>
             <th>Row Number</th>
             <th>HTTP Status Code</th>
-            <th>Tenant and Context</th>
+            <th>Tenant</th>
+            <th>Context</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var m in Model.IngestionLogs.Items)
         {
-            var tenantAndContext = "N/A";
-            if (!string.IsNullOrEmpty(@m.Tenant) || !string.IsNullOrEmpty(@m.Context))
-            {
-                tenantAndContext = $"Tenant: {@m.Tenant} Context: {@m.Context}";
-            }
             <tr class="parentrow">
                 <td style="text-align:justify">
                     <span class="sign" style="margin-right: 5px"></span>
@@ -43,7 +39,8 @@ See the LICENSE and NOTICES files in the project root for more information.
                 <td>@m.Result</td>
                 <td>@m.RowNumber</td>
                 <td>@m.HttpStatusCode</td>
-                <td>@tenantAndContext</td>
+                <td>@m.Tenant</td>
+                <td>@m.Context</td>
             </tr>
             <tr class="childContent">
                 <td colspan="8">
