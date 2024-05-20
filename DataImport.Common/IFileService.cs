@@ -18,5 +18,6 @@ namespace DataImport.Common
         Task Delete(File file);
         Task<string> GetRowProcessorScript(string name);
         Task<string> GetFileGeneratorScript(string name);
+
     }
 }

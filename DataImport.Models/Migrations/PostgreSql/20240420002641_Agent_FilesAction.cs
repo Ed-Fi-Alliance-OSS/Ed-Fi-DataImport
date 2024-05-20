@@ -7,26 +7,19 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DataImport.Models.Migrations.SqlServer
+namespace DataImport.Models.Migrations.PostgreSql
 {
     /// <inheritdoc />
-    public partial class AddsODSAPI7xSupport : Migration
+    public partial class Agent_FilesAction : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Context",
-                table: "ApiServers",
-                type: "nvarchar(255)",
-                maxLength: 255,
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Tenant",
-                table: "ApiServers",
-                type: "nvarchar(255)",
-                maxLength: 255,
+                name: "ActionFileCode",
+                table: "Agents",
+                type: "character varying(50)",
+                maxLength: 50,
                 nullable: true);
         }
 
@@ -34,12 +27,8 @@ namespace DataImport.Models.Migrations.SqlServer
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Context",
-                table: "ApiServers");
-
-            migrationBuilder.DropColumn(
-                name: "Tenant",
-                table: "ApiServers");
+                name: "ActionFileCode",
+                table: "Agents");
         }
     }
 }

@@ -7,6 +7,7 @@ using AutoMapper;
 using DataImport.Common.Enums;
 using DataImport.Common.Helpers;
 using DataImport.Models;
+using DataImport.Web.Features.Shared.SelectListProviders;
 using DataImport.Web.Helpers;
 using DataImport.Web.Infrastructure;
 using DataImport.Web.Services;
@@ -34,14 +35,15 @@ namespace DataImport.Web.Features.Agent
             private readonly AgentSelectListProvider _selectListProvider;
             private readonly IEncryptionService _encryptionService;
             private readonly string _encryptionKey;
-
-            public QueryHandler(DataImportDbContext dataImportDbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, AgentSelectListProvider selectListProvider, IEncryptionService encryptionService)
+            private readonly FilesActionSelectListProvider _filesActionProvider;
+            public QueryHandler(DataImportDbContext dataImportDbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, AgentSelectListProvider selectListProvider, IEncryptionService encryptionService, FilesActionSelectListProvider filesActionProvider)
             {
                 _dataImportDbContext = dataImportDbContext;
                 _encryptionService = encryptionService;
                 _encryptionKey = encryptionKeyResolver.GetEncryptionKey();
                 _mapper = mapper;
                 _selectListProvider = selectListProvider;
+                _filesActionProvider = filesActionProvider;
             }
 
             public Task<AddEditAgentViewModel> Handle(Query request, CancellationToken cancellationToken)
@@ -69,13 +71,13 @@ namespace DataImport.Web.Features.Agent
                         vm.EncryptionFailureMsg = Constants.AgentDecryptionError;
                     }
                 }
-
+                vm.ActionFileCode = vm.ActionFileCode ?? AgentActionsFile.DeleteOnSuccessful.ToString();
                 vm.DataMaps = _selectListProvider.GetDataMapList();
                 vm.AgentTypes = _selectListProvider.GetAgentTypes();
                 vm.RowProcessors = _selectListProvider.GetRowProcessors();
                 vm.FileGenerators = _selectListProvider.GetFileGenerators();
                 vm.BootstrapDatas = _selectListProvider.GetBootstrapDataList();
-
+                vm.ActionFiles = _filesActionProvider.GetSelectListItems();
                 return Task.FromResult(vm);
             }
         }
@@ -121,7 +123,7 @@ namespace DataImport.Web.Features.Agent
                 agent.Directory = vm.Directory;
                 agent.RowProcessorScriptId = vm.AgentTypeCode != AgentTypeCodeEnum.PowerShell ? vm.RowProcessorId : null;
                 agent.FileGeneratorScriptId = vm.AgentTypeCode == AgentTypeCodeEnum.PowerShell ? vm.FileGeneratorId : null;
-
+                agent.ActionFileCode = vm.AgentTypeCode is AgentTypeCodeEnum.Sftp or AgentTypeCodeEnum.Ftps ? vm.ActionFileCode : null;
                 agent.ApiServerId = vm.ApiServerId;
 
                 foreach (var dataMapAgent in _dataImportDbContext.DataMapAgents.Where(x => x.AgentId == agent.Id))

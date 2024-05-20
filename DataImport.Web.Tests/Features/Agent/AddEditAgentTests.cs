@@ -193,7 +193,8 @@ namespace DataImport.Web.Tests.Features.Agent
                 AgentTypes = editForm.AgentTypes,
                 ApiServerId = apiServer.Id,
                 ApiServers = editForm.ApiServers,
-                BootstrapDatas = editForm.BootstrapDatas
+                BootstrapDatas = editForm.BootstrapDatas,
+                ActionFiles = editForm.ActionFiles
             });
 
             editForm.Name = name + " Edited";
@@ -220,7 +221,8 @@ namespace DataImport.Web.Tests.Features.Agent
                 Password = "",
                 ApiServerId = apiServer.Id,
                 ApiServers = editForm.ApiServers,
-                BootstrapDatas = editForm.BootstrapDatas
+                BootstrapDatas = editForm.BootstrapDatas,
+                ActionFiles = editForm.ActionFiles
             });
         }
 
@@ -259,7 +261,8 @@ namespace DataImport.Web.Tests.Features.Agent
                 AgentTypes = editForm.AgentTypes,
                 ApiServerId = apiServer.Id,
                 ApiServers = editForm.ApiServers,
-                BootstrapDatas = editForm.BootstrapDatas
+                BootstrapDatas = editForm.BootstrapDatas,
+                ActionFiles = editForm.ActionFiles
             });
 
             editForm.Name = name + " Edited";
@@ -286,7 +289,8 @@ namespace DataImport.Web.Tests.Features.Agent
                 Password = "",
                 ApiServerId = apiServer.Id,
                 ApiServers = editForm.ApiServers,
-                BootstrapDatas = editForm.BootstrapDatas
+                BootstrapDatas = editForm.BootstrapDatas,
+                ActionFiles = editForm.ActionFiles
             });
         }
 
@@ -325,7 +329,8 @@ namespace DataImport.Web.Tests.Features.Agent
                 AgentTypes = editForm.AgentTypes,
                 ApiServerId = apiServer.Id,
                 ApiServers = editForm.ApiServers,
-                BootstrapDatas = editForm.BootstrapDatas
+                BootstrapDatas = editForm.BootstrapDatas,
+                ActionFiles = editForm.ActionFiles
             });
 
             editForm.Name = name + " Edited";
@@ -352,7 +357,8 @@ namespace DataImport.Web.Tests.Features.Agent
                 Password = "",
                 ApiServerId = apiServer.Id,
                 ApiServers = editForm.ApiServers,
-                BootstrapDatas = editForm.BootstrapDatas
+                BootstrapDatas = editForm.BootstrapDatas,
+                ActionFiles = editForm.ActionFiles
             });
         }
 
@@ -390,6 +396,7 @@ namespace DataImport.Web.Tests.Features.Agent
             viewModel.FileGenerators = actual.FileGenerators;
             viewModel.ApiServers = actual.ApiServers;
             viewModel.BootstrapDatas = actual.BootstrapDatas;
+            viewModel.ActionFiles = actual.ActionFiles;
 
             response.AssertToast($"Agent '{viewModel.Name}' was created.");
             actual.ShouldMatch(viewModel);

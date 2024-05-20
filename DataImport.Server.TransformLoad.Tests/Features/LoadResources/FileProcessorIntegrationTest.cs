@@ -405,6 +405,26 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
             });
         }
 
+        [Test]
+        [TestCase(AgentActionsFile.DeleteOnSuccessful, AgentTypeCodeEnum.Ftps, false)]
+        [TestCase(AgentActionsFile.NeverDelete, AgentTypeCodeEnum.Sftp, true)]
+        [TestCase(AgentActionsFile.AlwaysDelete, AgentTypeCodeEnum.Ftps, false)]
+        public async Task ShouldHandleTempFilesBehaviorWhenAgentFileActionIsSelected(AgentActionsFile fileAction, string agentTypeCode, bool expectedResult)
+        {
+            var referenceFilePath = Path.Combine(GetAssemblyPath(), "TestFiles/testing.csv");
+
+            var uploadedFilePath = SimulateFileUpload(referenceFilePath);
+
+            var apiServer = GetDefaultApiServer();
+
+            var testOdsApi = new TestOdsApi { Config = { ApiServerId = apiServer.Id } };
+
+            PerformDataMapAndAgentFTPSetup(fileAction, agentTypeCode, apiServer.Id, uploadedFilePath);
+            var bootstrapResponse = await Send(new PostBootstrapData.Command { OdsApi = testOdsApi, CheckMetadata = false });
+            await Send(new FileProcessor.Command { OdsApi = testOdsApi, CheckMetadata = false });
+
+            System.IO.File.Exists(uploadedFilePath).ShouldBe(expectedResult);
+        }
         private ApiServer SaveNewApiServer()
         {
             var version = Query(x => x.ApiVersions.First());
@@ -427,7 +447,64 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
 
             return apiServer;
         }
+        private void PerformDataMapAndAgentFTPSetup(AgentActionsFile fileAction, string agentTypeCode, int apiServerId, string uploadedFilePath)
+        {
+            var studentAssessmentsMetadata = SwaggerMetadataParser.Parse("/studentAssessments", _datamapMetadata);
+            var assessmentsMetadata = SwaggerMetadataParser.Parse("/assessments", _bootstrapMetadata);
 
+            var enabledAgentBootstrapData = new BootstrapData
+            {
+                Name = SampleString(),
+                CreateDate = DateTimeOffset.Now,
+                Data = _bootstrapData,
+                Metadata = ResourceMetadata.Serialize(assessmentsMetadata),
+                ResourcePath = "/assessments",
+                ApiVersionId = apiServerId
+            };
+
+            var dataMapName = SampleString();
+            var dataMap = new DataMap
+            {
+                Name = dataMapName,
+                Map = _datamapData,
+                CreateDate = DateTimeOffset.Now,
+                Metadata = ResourceMetadata.Serialize(studentAssessmentsMetadata),
+                ResourcePath = "/studentAssessments",
+                ApiVersionId = apiServerId
+            };
+
+            var enabledAgent = new Agent
+            {
+                Name = SampleString("EnabledAgent"),
+                AgentTypeCode = agentTypeCode,
+                Enabled = true,
+                Created = DateTimeOffset.Now,
+                ApiServerId = apiServerId,
+                ActionFileCode = fileAction.ToString(),
+            };
+
+            var enabledAgentFile = new File
+            {
+                Agent = enabledAgent,
+                CreateDate = DateTimeOffset.Now,
+                FileName = "testing.csv",
+                Rows = 2,
+                Status = FileStatus.Uploaded,
+                Url = new Uri(uploadedFilePath).AbsoluteUri
+            };
+
+            using (var scope = Services.CreateScope())
+            {
+                using var context = scope.ServiceProvider.GetRequiredService<DataImportDbContext>();
+                context.Database.ExecuteSqlRaw($"UPDATE Files SET Status = {(int) FileStatus.Loaded}");
+                context.DataMaps.Add(dataMap);
+                context.BootstrapDatas.AddRange(enabledAgentBootstrapData);
+                context.Files.AddRange(enabledAgentFile);
+                context.DataMapAgents.Add(new DataMapAgent { Agent = enabledAgent, DataMap = dataMap });
+                context.BootstrapDataAgents.Add(new BootstrapDataAgent { Agent = enabledAgent, BootstrapData = enabledAgentBootstrapData });
+                context.SaveChanges();
+            }
+        }
         private static string SimulateFileUpload(string referenceFilePath)
         {
             var shareFolder = Path.Combine(GetAssemblyPath(), "Uploaded");

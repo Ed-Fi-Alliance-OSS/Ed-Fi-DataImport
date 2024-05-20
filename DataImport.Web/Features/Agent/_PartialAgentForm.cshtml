@@ -20,6 +20,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 @Html.Input(m => m.RunOrder)
 
 <div class="ftp-agents-only">
+    @Html.DropDown(m => m.ActionFileCode, Model.ActionFiles)
     @Html.Input(m => m.Url)
     @Html.Input(m => m.Port)
     @Html.Input(m => m.Username, new { autocomplete = "off" })

@@ -142,6 +142,7 @@ namespace DataImport.Web
             services.AddScoped<Features.Shared.SelectListProviders.ResourceSelectListProvider>();
             services.AddScoped<Features.Shared.SelectListProviders.ApiServerSelectListProvider>();
             services.AddScoped<Features.Shared.SelectListProviders.ApiVersionSelectListProvider>();
+            services.AddScoped<Features.Shared.SelectListProviders.FilesActionSelectListProvider>();
             services.AddScoped<Services.Swagger.ISwaggerWebClient, Services.Swagger.SwaggerWebClient>();
             services.AddScoped<Services.Swagger.ISwaggerMetadataFetcher, Services.Swagger.SwaggerMetadataFetcher>();
             services.AddScoped<Services.Swagger.ISwaggerMetadataProcessor, Services.Swagger.SwaggerMetadataProcessorV1>();

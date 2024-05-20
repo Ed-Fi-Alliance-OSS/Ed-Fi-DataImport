@@ -22,6 +22,8 @@ namespace DataImport.Web.Features.Agent
                 .ForMember(dest => dest.AgentTypes, opt => opt.Ignore())
                 .ForMember(dest => dest.MappedAgents, opt => opt.MapFrom(src => src.DataMapAgents))
                 .ForMember(dest => dest.AgentBootstrapDatas, opt => opt.MapFrom(src => src.BootstrapDataAgents))
+                .ForMember(dest => dest.ActionFileCode, opt => opt.MapFrom(x => x.ActionFileCode))
+                .ForMember(dest => dest.ActionFiles, opt => opt.Ignore())
                 .ForMember(dest => dest.EncryptionFailureMsg, opt => opt.Ignore())
                 .ForMember(dest => dest.ApiServers, opt => opt.Ignore())
                 .ForMember(dest => dest.BootstrapDatas, opt => opt.Ignore())
