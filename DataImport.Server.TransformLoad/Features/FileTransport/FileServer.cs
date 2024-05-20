@@ -31,12 +31,14 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
         private readonly ILogger<FtpServer> _logger;
         private readonly AppSettings _appSettings;
         private readonly IFileService _fileService;
+        private readonly bool _ignoresCertificateErrors;
 
         public FtpsServer(ILogger<FtpServer> logger, IOptions<AppSettings> options, ResolveFileService fileServices)
         {
             _logger = logger;
             _appSettings = options.Value;
             _fileService = fileServices(_appSettings.FileMode);
+            _ignoresCertificateErrors = options.Value?.IgnoresCertificateErrors ?? false;
         }
 
         public async Task<IEnumerable<string>> GetFileList(Agent ftpsAgent)
@@ -48,8 +50,20 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
                 _logger.LogInformation("Connecting to host: {url}", ftpsAgent.Url);
                 using (var client = CreateAsyncClient(ftpsAgent))
                 {
-                    //TODO: CHECK
-                    client.ValidateCertificate += OnValidateFtpsCertificate;
+                    if (_ignoresCertificateErrors)
+                    {
+                        // Handle certificate validation
+                        client.ValidateCertificate += (control, e) =>
+                        {
+                            // Accept the certificate
+                            e.Accept = true;
+                        };
+                    }
+                    else
+                    {
+                        client.ValidateCertificate += OnValidateFtpsCertificate;
+                    }
+
                     await client.Connect();
 
                     list.AddRange(from file in await client.GetListing(ftpsAgent.Directory)
