@@ -40,11 +40,7 @@ namespace DataImport.Web.Features.Log
             {
                 var pagedFileLogs =
                     Page<LogViewModel.File>.Fetch((offset, limit) => GetFileLogs(request.ApiServerId, offset, limit), request.PageNumber);
-
-                return Task.FromResult(new LogViewModel
-                {
-                    Files = pagedFileLogs
-                });
+                return Task.FromResult(new LogViewModel { Files = pagedFileLogs });
             }
 
             public IEnumerable<LogViewModel.File> GetFileLogs(int? apiServerId, int offset, int limit)
