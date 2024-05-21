@@ -266,7 +266,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             }
         }
 
-        private class CsvRow
+        public class CsvRow
         {
             private readonly Dictionary<string, string> _csvRow;
 

@@ -18,5 +18,6 @@ namespace DataImport.Server.TransformLoad
         public string Metadata { get; set; }
         public int RowNumber { get; set; }
         public JToken Value { get; set; }
+        public string EducationOrganizationId { get; set; }
     }
 }

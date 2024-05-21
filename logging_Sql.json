@@ -22,7 +22,8 @@
                                 "additionalColumns": [
                                     {
                                         "ColumnName": "EducationOrganizationId",
-                                        "DataType": "uniqueidentifier",
+                                        "DataType": "nvarchar",
+                                        "DataLength": 50,
                                         "AllowNull": true,
                                         "PropertyName": "EducationOrganizationId"
                                     },

@@ -25,6 +25,7 @@ namespace DataImport.Web.Features.DataMaps
         {
             public int Id { get; set; }
             public string[] SourceCsvHeaders { get; set; }
+            public string[] ExtraSourceCsvHeaders { get; set; }
         }
 
         public class QueryHandler : IRequestHandler<Query, AddEditDataMapViewModel>
@@ -43,6 +44,7 @@ namespace DataImport.Web.Features.DataMaps
                 var mapId = request.Id;
 
                 var columnHeaders = request.SourceCsvHeaders;
+                var extraColumnHeaders = request.ExtraSourceCsvHeaders;
 
                 var dataMap = _database.DataMaps.Include(x => x.ApiVersion).Single(x => x.Id == mapId);
 
@@ -78,7 +80,8 @@ namespace DataImport.Web.Features.DataMaps
                     Preprocessors = _preprocessorSelectListProvider.GetCustomFileProcessors(),
                     Attribute = dataMap.Attribute,
                     IsDeleteOperation = dataMap.IsDeleteOperation,
-                    IsDeleteByNaturalKey = dataMap.IsDeleteByNaturalKey
+                    IsDeleteByNaturalKey = dataMap.IsDeleteByNaturalKey,
+                    SelectedIngestionLogEdOrgIdColumn = dataMap.SelectedIngestionLogEdOrgIdColumn
                 });
             }
         }

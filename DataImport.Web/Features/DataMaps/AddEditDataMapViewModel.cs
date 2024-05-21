@@ -17,6 +17,8 @@ namespace DataImport.Web.Features.DataMaps
         [Display(Name = "Map Name")]
         public string MapName { get; set; }
         public string[] ColumnHeaders { get; set; }
+        [Display(Name = "Selected Ingestion Log EdOrgId Column")]
+        public string SelectedIngestionLogEdOrgIdColumn { get; set; }
 
         [Display(Name = "Map To Resource")]
         public string ResourceName { get; set; }

@@ -35,6 +35,7 @@ namespace DataImport.Models
         public DateTimeOffset? UpdateDate { get; set; }
 
         public string ColumnHeaders { get; set; }
+        public string SelectedIngestionLogEdOrgIdColumn { get; set; }
 
         public int ApiVersionId { get; set; }
 

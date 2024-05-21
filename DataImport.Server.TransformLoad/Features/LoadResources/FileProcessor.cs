@@ -359,10 +359,13 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             private Task<(RowResult, IngestionLogMarker)> MapAndProcessCsvRow(IOdsApi odsApi, Dictionary<string, string> currentRow, DataMap map, int rowNum, File file)
             {
                 MappedResource mappedRow = null;
+                string edOrgId = null;
 
                 try
                 {
+                    edOrgId = currentRow[map.SelectedIngestionLogEdOrgIdColumn] as string;
                     mappedRow = TransformCsvRow(map, currentRow, rowNum, file);
+                    mappedRow.EducationOrganizationId = edOrgId;
                 }
                 catch (Exception ex)
                 {
@@ -376,8 +379,10 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         ApiServerName = file.Agent?.ApiServer?.Name,
                         ApiVersion = file.Agent?.ApiServer?.ApiVersion?.Version.ToString(),
                         FileName = file.FileName,
-                        RowNumber = rowNum
+                        RowNumber = rowNum,
+                        EducationOrganizationId = edOrgId
                     };
+
                     return Task.FromResult((RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, rowWithError, $"{odsApi.Config.ApiUrl}{map.ResourcePath}", null, ex.Message)));
                 }
 
@@ -559,6 +564,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 var model = new IngestionLog
                 {
                     Date = marker.Date,
+                    EducationOrganizationId = marker.MappedResource?.EducationOrganizationId,
                     Result = marker.Result,
                     RowNumber = marker.MappedResource?.RowNumber.ToString(),
                     EndPointUrl = marker.EndpointUrl,

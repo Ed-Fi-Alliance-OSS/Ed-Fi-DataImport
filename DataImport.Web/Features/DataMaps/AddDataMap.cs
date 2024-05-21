@@ -69,6 +69,7 @@ namespace DataImport.Web.Features.DataMaps
             public string ResourcePath { get; set; }
             public DataMapper[] Mappings { get; set; }
             public string[] ColumnHeaders { get; set; }
+            public string[] ExtraColumnHeaders { get; set; }
             public int? PreprocessorId { get; set; }
             public string Attribute { get; set; }
             public bool IsDeleteOperation { get; set; }
@@ -137,6 +138,10 @@ namespace DataImport.Web.Features.DataMaps
                         request.ColumnHeaders == null
                             ? null
                             : JsonConvert.SerializeObject(request.ColumnHeaders),
+                    SelectedIngestionLogEdOrgIdColumn =
+                        request.ExtraColumnHeaders == null
+                            ? null
+                            : JsonConvert.SerializeObject(request.ExtraColumnHeaders),
                     ApiVersionId = request.ApiVersionId,
                     FileProcessorScriptId = request.PreprocessorId,
                     Attribute = request.Attribute,

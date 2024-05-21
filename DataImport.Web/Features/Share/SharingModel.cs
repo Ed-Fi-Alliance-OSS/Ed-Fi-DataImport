@@ -103,6 +103,7 @@ namespace DataImport.Web.Features.Share
         public string Name { get; set; }
         public string ResourcePath { get; set; }
         public string[] ColumnHeaders { get; set; }
+        public string[] ExtraColumnHeaders { get; set; }
         public JObject Map { get; set; }
         public string CustomFileProcessor { get; set; }
         public string Attribute { get; set; }
@@ -118,6 +119,7 @@ namespace DataImport.Web.Features.Share
                 ColumnHeaders = ColumnHeaders,
                 Mappings = serializer.Deserialize(Map),
                 ApiVersionId = resource.ApiVersionId,
+                ExtraColumnHeaders = ExtraColumnHeaders,
                 PreprocessorId = preprocessorId,
                 Attribute = Attribute
             };
