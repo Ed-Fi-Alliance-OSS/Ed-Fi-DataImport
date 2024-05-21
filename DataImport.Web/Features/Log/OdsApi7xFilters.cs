@@ -3,6 +3,7 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,10 +42,19 @@ namespace DataImport.Web.Features.Log
                     .Where(c => !string.IsNullOrEmpty(c.Context))
                     .GroupBy(c => c.Context).Select(g => g.First()).ToList();
 
+                var tenants = allTenants.Select(i => new SelectListItem { Value = i.Tenant, Text = i.Tenant }).ToList();
+                var contexts = allContexts.Select(i => new SelectListItem { Value = i.Context, Text = i.Context }).ToList();
+
+                var noTenant = new SelectListItem { Value = Helpers.Constants.IngestionLogsFiltersNoTenant, Text = Helpers.Constants.IngestionLogsFiltersNoTenant };
+                var noContext = new SelectListItem { Value = Helpers.Constants.IngestionLogsFiltersNoContext, Text = Helpers.Constants.IngestionLogsFiltersNoContext };
+
+                tenants.Insert(0, noTenant);
+                contexts.Insert(0, noContext);
+
                 return Task.FromResult(new LogViewModel
                 {
-                    Tenants = allTenants.Select(i => new SelectListItem { Value = i.Tenant, Text = i.Tenant }).ToList(),
-                    Contexts = allContexts.Select(i => new SelectListItem { Value = i.Context, Text = i.Context }).ToList()
+                    Tenants = tenants,
+                    Contexts = contexts
                 });
             }
         }

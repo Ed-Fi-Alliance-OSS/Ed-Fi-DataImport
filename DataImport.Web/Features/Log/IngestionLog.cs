@@ -88,13 +88,29 @@ namespace DataImport.Web.Features.Log
                     }
                     if (!string.IsNullOrEmpty(filters.SelectedTenant))
                     {
-                        logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
-                            x.Tenant.ToLower().Contains(filters.SelectedTenant.ToLower()));
+                        if (filters.SelectedTenant == Helpers.Constants.IngestionLogsFiltersNoTenant)
+                        {
+                            logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                                string.IsNullOrWhiteSpace(x.Tenant));
+                        }
+                        else
+                        {
+                            logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                                x.Tenant.ToLower().Contains(filters.SelectedTenant.ToLower()));
+                        }
                     }
                     if (!string.IsNullOrEmpty(filters.SelectedContext))
                     {
-                        logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                        if (filters.SelectedContext == Helpers.Constants.IngestionLogsFiltersNoContext)
+                        {
+                            logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                                string.IsNullOrWhiteSpace(x.Context));
+                        }
+                        else
+                        {
+                            logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
                             x.Context.ToLower().Contains(filters.SelectedContext.ToLower()));
+                        }
                     }
                 }
                 var pagedList = logsByDateDesc.Skip(offset).Take(limit).ToList();

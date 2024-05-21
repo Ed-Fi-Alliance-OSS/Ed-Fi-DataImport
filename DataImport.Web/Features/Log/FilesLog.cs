@@ -13,7 +13,6 @@ using DataImport.Web.Services;
 using MediatR;
 using System.Threading.Tasks;
 using System.Threading;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DataImport.Web.Features.Log
 {

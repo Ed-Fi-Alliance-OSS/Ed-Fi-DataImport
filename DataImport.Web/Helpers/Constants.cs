@@ -14,5 +14,7 @@ namespace DataImport.Web.Helpers
         public const string ConfigDecryptionError = "An error occurred while trying to decrypt the key and secret. This may be caused by an invalid encryption key. Please contact your administrator for configuring the correct encryption key.";
         public const string ConfigEncryptionError = "An error occurred while trying to encrypt the key and secret. This may be caused by an invalid encryption key. Please contact your administrator for configuring the correct encryption key.";
         public const string LocalHttpClientName = "LocalHttpClientName";
+        public const string IngestionLogsFiltersNoTenant = "<No Tenant>";
+        public const string IngestionLogsFiltersNoContext = "<No Context>";
     }
 }
