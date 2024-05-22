@@ -93,7 +93,7 @@ See the LICENSE and NOTICES files in the project root for more information.
         </div>
     </div>
     <div class="container body-content">
-        @RenderBody()
+		@RenderBody()
         <hr />
         <footer>
             <div class="row">
@@ -214,6 +214,36 @@ See the LICENSE and NOTICES files in the project root for more information.
                 window.location.reload();
             }
         };
+		function showLoadingModal(loadingText) {
+			var loadingTextShow = loadingText ?? "Loading";
+			var container = $('<div>').addClass('process-loading-container');
+			var img = $('<img>').attr({
+				src: "/images/spinner.gif", // Replace with your actual image URL
+				alt: 'Loading',
+			});
+			img.css('max-width', '30px');
+			var loadingLabel = $('<span><strong>').text(' '+loadingTextShow+'...').addClass('loading-text');
+			container.append(img, loadingLabel);
+			container.css({
+				'position': 'absolute',
+				'top': '50%',
+				'left': '50%',
+				'transform': 'translate(-50%, -50%)'
+			});
+			$("#SimpleModal").modal();
+			$("#SimpleModal .modal-body").html("");
+			$("#SimpleModal .modal-header").html("");			
+			$("#SimpleModal .modal-body").append(container);
+			$("#SimpleModal").css({
+				'position': 'absolute',
+				'top': '50%',
+				'left': '50%',
+				'transform': 'translate(-50%, -50%)'
+			});
+			$("#SimpleModal").modal({ backdrop: 'static', keyboard: false });
+			// Open the dialog
+			$("#SimpleModal").dialog("open");
+		}
 
         function ajaxPostFromHref() {
             var $this = $(this);
@@ -227,7 +257,6 @@ See the LICENSE and NOTICES files in the project root for more information.
             if (!shouldPost) {
                 return false;
             }
-
             $.ajax({
                 url: $this.attr('href'),
                 type: 'post',
@@ -235,7 +264,13 @@ See the LICENSE and NOTICES files in the project root for more information.
                 dataType: 'json',
                 statusCode: {
                     200: redirect
-                }
+                },
+				beforeSend: function () {
+					showLoadingModal("Refreshing Data Model");
+				},
+				complete: function () {
+					$('#SimpleModal').modal('hide');
+				}
             }).catch(handleAjaxErrors);
 
             return false;
