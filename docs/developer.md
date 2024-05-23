@@ -27,5 +27,5 @@
 
 ## Skipping certificate validation for SSL Connections
 
-In order to be able to skip the certificate validation for local development we have added a flag with name `IgnoresCertificateErrors` to the application settings.
-Change its value to true, when you are using a self signed certificate. Otherwise the application will throw errors, for example, when trying to create a new connection to the ODS API.
+In order to be able to skip the certificate validation for local development we have added a flag with name `IgnoresCertificateErrors` to the Web application settings and to the Transform Load settings. Since these applications work independently, it needed to be added on both.
+Change its value to true, when you are using a self signed certificate or any other not valid one. Otherwise the application will throw errors, for example, when trying to create a new connection to the ODS API, or when trying to transform and load the data.
