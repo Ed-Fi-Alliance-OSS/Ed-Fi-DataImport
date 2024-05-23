@@ -31,6 +31,7 @@ namespace DataImport.Web.Features.Log
             public int SelectedResult { get; set; }
             public int SelectedResponse { get; set; }
             public string Filename { get; set; }
+            public string EducationOrganizationId { get; set; }
         }
 
         public class Ingestion

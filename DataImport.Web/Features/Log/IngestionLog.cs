@@ -83,6 +83,11 @@ namespace DataImport.Web.Features.Log
                         logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
                             x.FileName.ToLower().Contains(filters.Filename.ToLower()));
                     }
+                    if (!string.IsNullOrEmpty(filters.EducationOrganizationId))
+                    {
+                        logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                            x.EducationOrganizationId.ToLower().Contains(filters.EducationOrganizationId.ToLower()));
+                    }
                 }
                 var pagedList = logsByDateDesc.Skip(offset).Take(limit).ToList();
                 return pagedList.Select(_mapper.Map<LogViewModel.Ingestion>);
