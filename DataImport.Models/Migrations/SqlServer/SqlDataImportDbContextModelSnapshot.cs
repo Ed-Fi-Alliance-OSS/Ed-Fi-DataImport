@@ -603,9 +603,6 @@ namespace DataImport.Models.Migrations.SqlServer
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid?>("EducationOrganizationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("EndPointUrl")
                         .HasColumnType("nvarchar(max)");
 

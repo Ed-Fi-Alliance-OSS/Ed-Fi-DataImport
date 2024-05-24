@@ -14,8 +14,6 @@ namespace DataImport.Models
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        public Guid? EducationOrganizationId { get; set; }
-
         [MaxLength(255)]
         public string Level { get; set; }
 
