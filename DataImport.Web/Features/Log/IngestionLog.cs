@@ -78,7 +78,7 @@ namespace DataImport.Web.Features.Log
                         {
                             var statusCode = Enum.GetName(typeof(EdFiHttpStatus), filters.SelectedResponse);
                             logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
-                                x.HttpStatusCode == statusCode);
+                                x.HttpStatusCode.ToLower() == statusCode.ToLower());
                         }
                     }
                     if (!string.IsNullOrEmpty(filters.Filename))
