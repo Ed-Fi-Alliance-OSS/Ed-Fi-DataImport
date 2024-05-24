@@ -22,7 +22,7 @@
                                 "additionalColumns": [
                                     {
                                         "ColumnName": "EducationOrganizationId",
-                                        "DataType": "uniqueidentifier",
+                                        "DataType": "int",
                                         "AllowNull": true,
                                         "PropertyName": "EducationOrganizationId"
                                     },

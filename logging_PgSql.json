@@ -24,7 +24,7 @@
                                 "EducationOrganizationId": {
                                     "Name": "EducationOrganizationId",
                                     "WriteMethod": "Raw",
-                                    "DbType": "Uuid"
+                                    "DbType": "Integer"
                                 },
                                 "Level": {
                                     "Name": "Level",
