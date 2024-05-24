@@ -20,6 +20,7 @@
    Example for SQL Server:
 
         DataSource=(local);InitialCatalog=EdFi_DataImport;Trusted_Connection=True;
+        Server=(local);Database=EdFi_DataImport;Trusted_Connection=True;TrustServerCertificate=True;Encrypt=False;
 
    Example for Postgres:
 
