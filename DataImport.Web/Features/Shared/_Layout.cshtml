@@ -217,13 +217,10 @@ See the LICENSE and NOTICES files in the project root for more information.
 		function showLoadingModal(loadingText) {
 			var loadingTextShow = loadingText ?? "Loading";
 			var container = $('<div>').addClass('process-loading-container');
-			var img = $('<img>').attr({
-				src: "/images/spinner.gif", // Replace with your actual image URL
-				alt: 'Loading',
-			});
-			img.css('max-width', '30px');
+			var refreshingIcon = $("<i>").addClass("fas fa-fw fa-sync fa-spin");
 			var loadingLabel = $('<span><strong>').text(' '+loadingTextShow+'...').addClass('loading-text');
-			container.append(img, loadingLabel);
+
+			container.append(refreshingIcon, loadingLabel);
 			container.css({
 				'position': 'absolute',
 				'top': '50%',
