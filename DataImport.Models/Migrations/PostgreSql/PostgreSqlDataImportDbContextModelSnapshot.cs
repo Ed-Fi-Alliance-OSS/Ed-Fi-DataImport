@@ -422,6 +422,9 @@ namespace DataImport.Models.Migrations.PostgreSql
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<string>("SelectedIngestionLogEdOrgIdColumn")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("timestamp with time zone");
 

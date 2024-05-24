@@ -52,5 +52,7 @@ namespace DataImport.Models
         public bool IsDeleteOperation { get; set; }
 
         public bool IsDeleteByNaturalKey { get; set; }
+
+        public string SelectedIngestionLogEdOrgIdColumn { get; set; }
     }
 }
