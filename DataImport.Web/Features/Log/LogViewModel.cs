@@ -7,6 +7,7 @@ using DataImport.Common.Enums;
 using DataImport.Models;
 using DataImport.Web.Features.Shared;
 using DataImport.Web.Services;
+using Json.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
@@ -31,6 +32,8 @@ namespace DataImport.Web.Features.Log
             public int SelectedResult { get; set; }
             public int SelectedResponse { get; set; }
             public string Filename { get; set; }
+            public int? EducationOrganizationId { get; set; }
+
         }
 
         public class Ingestion
@@ -46,6 +49,7 @@ namespace DataImport.Web.Features.Log
             public string HttpStatusCode { get; set; }
             public string Data { get; set; }
             public string OdsResponse { get; set; }
+            public string EducationOrganizationId { get; set; }
         }
 
         public class File

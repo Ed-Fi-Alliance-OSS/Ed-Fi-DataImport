@@ -73,6 +73,7 @@ namespace DataImport.Web.Features.DataMaps
             public string Attribute { get; set; }
             public bool IsDeleteOperation { get; set; }
             public bool IsDeleteByNaturalKey { get; set; }
+            public int? SelectedIngestionLogEdOrgIdColumn { get; set; }
         }
 
         public class Response : ToastResponse
@@ -141,7 +142,11 @@ namespace DataImport.Web.Features.DataMaps
                     FileProcessorScriptId = request.PreprocessorId,
                     Attribute = request.Attribute,
                     IsDeleteOperation = request.IsDeleteOperation,
-                    IsDeleteByNaturalKey = request.IsDeleteOperation && request.IsDeleteByNaturalKey
+                    IsDeleteByNaturalKey = request.IsDeleteOperation && request.IsDeleteByNaturalKey,
+                    SelectedIngestionLogEdOrgIdColumn =
+                        request.SelectedIngestionLogEdOrgIdColumn == null
+                            ? null
+                            : JsonConvert.SerializeObject(request.SelectedIngestionLogEdOrgIdColumn),
                 };
 
                 _database.DataMaps.Add(dataMap);

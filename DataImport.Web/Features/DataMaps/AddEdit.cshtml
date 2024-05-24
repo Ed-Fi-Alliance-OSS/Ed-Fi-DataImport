@@ -267,31 +267,32 @@ See the LICENSE and NOTICES files in the project root for more information.
 
 @if (Model.CsvPreviewDataTable != null)
 {
-<div id="csvPreview">
-    <table id="tblCsvDataPreview" class="table table-striped table-hover table-bordered table-responsive">
-        <thead>
-            <tr>
-                @foreach (DataColumn column in Model.CsvPreviewDataTable.Columns)
+    <div id="csvPreview">
+        <table id="tblCsvDataPreview" class="table table-striped table-hover table-bordered table-responsive">
+            <thead>
+                <tr>
+                    @foreach (DataColumn column in Model.CsvPreviewDataTable.Columns)
+                    {
+                        <th>@column.ColumnName</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in Model.CsvPreviewDataTable.Rows)
                 {
-<th>@column.ColumnName</th>
+                    <tr>
+                        @for (var i = 0; i <= Model.CsvPreviewDataTable.Columns.Count - 1; i++)
+                        {
+                            <td>
+                                @row[i]
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (DataRow row in Model.CsvPreviewDataTable.Rows)
-            {
-<tr>
-    @for (var i = 0; i <= Model.CsvPreviewDataTable.Columns.Count - 1; i++)
-    {
-<td>
-    @row[i]
-</td>
-}
-</tr>
-           }
-        </tbody>
-    </table>
-</div>}
 
 @functions
 { public static string ControllerAction(RouteValueDictionary routeValues)
@@ -328,6 +329,11 @@ See the LICENSE and NOTICES files in the project root for more information.
                     </div>
                 }
         @Html.Hidden("ColumnHeaders", JsonConvert.SerializeObject(Model.ColumnHeaders))
+        <fieldset>
+            <div>
+                @Html.Input(x => x.SelectedIngestionLogEdOrgIdColumn, new { placeholder = "EdOrgId" }, Html.HelpSpan("Columns name to map your EdOrgId."))
+            </div>
+        </fieldset>
         @Html.SubmitButton("Save Map", new { id = "btnSubmit" })}
 }
 

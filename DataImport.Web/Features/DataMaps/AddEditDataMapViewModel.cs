@@ -56,5 +56,8 @@ namespace DataImport.Web.Features.DataMaps
         public bool IsDeleteOperation { get; set; }
 
         public bool IsDeleteByNaturalKey { get; set; }
+        [Display(Name = "Selected Ingestion Log EdOrgId Column")]
+        public string SelectedIngestionLogEdOrgIdColumn { get; set; }
+
     }
 }

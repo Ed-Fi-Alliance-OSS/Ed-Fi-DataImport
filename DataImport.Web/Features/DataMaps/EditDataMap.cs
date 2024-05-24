@@ -78,7 +78,8 @@ namespace DataImport.Web.Features.DataMaps
                     Preprocessors = _preprocessorSelectListProvider.GetCustomFileProcessors(),
                     Attribute = dataMap.Attribute,
                     IsDeleteOperation = dataMap.IsDeleteOperation,
-                    IsDeleteByNaturalKey = dataMap.IsDeleteByNaturalKey
+                    IsDeleteByNaturalKey = dataMap.IsDeleteByNaturalKey,
+                    SelectedIngestionLogEdOrgIdColumn = dataMap.SelectedIngestionLogEdOrgIdColumn
                 });
             }
         }
