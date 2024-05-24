@@ -40,6 +40,10 @@ namespace DataImport.Models.Migrations.SqlServer
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ActionFileCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("AgentAction")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
