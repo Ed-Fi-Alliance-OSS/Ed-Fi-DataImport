@@ -31,11 +31,11 @@ To update the database you need to follow similar steps. The only difference is 
 
    **SQL Server**
 
-        Add-Migration <MigrationName> -Context SqlDataImportDbContext -OutputDir ./Migrations/SqlServer -verbose -Args "<ConnectionString> SqlServer"
+        Update-Database -Context SqlDataImportDbContext  -verbose -Args "<ConnectionString> SqlServer"
 
    **Postgres**
 
-        Add-Migration <MigrationName> -Context PostgreSqlDataImportDbContext -OutputDir ./Migrations/PostgreSql -verbose -Args "<ConnectionString> PostgreSql"
+        Update-Database -Context PostgreSqlDataImportDbContext  -verbose -Args "<ConnectionString> PostgreSql"
 
 ## Skipping certificate validation for SSL Connections
 
