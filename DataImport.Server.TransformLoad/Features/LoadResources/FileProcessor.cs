@@ -361,6 +361,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             private Task<(RowResult, IngestionLogMarker)> MapAndProcessCsvRow(IOdsApi odsApi, Dictionary<string, string> currentRow, DataMap map, int rowNum, File file)
             {
                 MappedResource mappedRow = null;
+                int? edOrgId = Helper.GetEdOrgIdFromCsv(currentRow, map.SelectedIngestionLogEdOrgIdColumn);
 
                 try
                 {
@@ -378,7 +379,8 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         ApiServerName = file.Agent?.ApiServer?.Name,
                         ApiVersion = file.Agent?.ApiServer?.ApiVersion?.Version.ToString(),
                         FileName = file.FileName,
-                        RowNumber = rowNum
+                        RowNumber = rowNum,
+                        EducationOrganizationId = edOrgId
                     };
                     return Task.FromResult((RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, rowWithError, $"{odsApi.Config.ApiUrl}{map.ResourcePath}", null, ex.Message)));
                 }
@@ -585,7 +587,8 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     FileName = marker.MappedResource?.FileName,
                     AgentName = marker.MappedResource?.AgentName,
                     ApiServerName = marker.MappedResource?.ApiServerName,
-                    ApiVersion = marker.MappedResource?.ApiVersion
+                    ApiVersion = marker.MappedResource?.ApiVersion,
+                    EducationOrganizationId = marker.MappedResource?.EducationOrganizationId,
                 };
                 _logger.LogToTable($"Writing in IngestionLog for row: {model.RowNumber}", model, "IngestionLog");
             }

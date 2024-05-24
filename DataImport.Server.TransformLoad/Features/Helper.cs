@@ -60,5 +60,21 @@ namespace DataImport.Server.TransformLoad.Features
             }
             return shouldRun;
         }
+
+        public static int? GetEdOrgIdFromCsv(Dictionary<string, string> currentRow, string selectedIngestionLogEdOrgIdColumn)
+        {
+            int edOrgId;
+            if (!currentRow.ContainsKey(selectedIngestionLogEdOrgIdColumn))
+                return null;
+
+            string csvValue = currentRow[selectedIngestionLogEdOrgIdColumn] as string;
+
+            if (string.IsNullOrEmpty(csvValue))
+                return null;
+
+            int.TryParse(csvValue, out edOrgId);
+
+            return edOrgId;
+        }
     }
 }
