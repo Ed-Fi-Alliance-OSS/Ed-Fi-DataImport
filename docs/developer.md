@@ -29,13 +29,13 @@
 
 To update the database you need to follow similar steps. The only difference is that the Command changes a little bit
 
-    **SQL Server**
+   **SQL Server**
 
-        Update-Database -Context PostgreSqlDataImportDbContext  -verbose -Args "<ConnectionString> PostgreSql"
+        Add-Migration <MigrationName> -Context SqlDataImportDbContext -OutputDir ./Migrations/SqlServer -verbose -Args "<ConnectionString> SqlServer"
 
-    **Postgres**
+   **Postgres**
 
-        Update-Database -Context PostgreSqlDataImportDbContext  -verbose -Args "<ConnectionString> PostgreSql"
+        Add-Migration <MigrationName> -Context PostgreSqlDataImportDbContext -OutputDir ./Migrations/PostgreSql -verbose -Args "<ConnectionString> PostgreSql"
 
 ## Skipping certificate validation for SSL Connections
 
