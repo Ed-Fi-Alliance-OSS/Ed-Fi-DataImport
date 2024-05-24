@@ -602,6 +602,9 @@ namespace DataImport.Models.Migrations.PostgreSql
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("EducationOrganizationId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("EndPointUrl")
                         .HasColumnType("text");
 
