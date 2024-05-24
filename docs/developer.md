@@ -27,15 +27,15 @@
 
 ## How to update database
 
-    To update the database you need to follow similar steps. The only difference is that the Command changes a little bit
+To update the database you need to follow similar steps. The only difference is that the Command changes a little bit
 
-        **SQL Server**
+    **SQL Server**
 
-            Update-Database -Context PostgreSqlDataImportDbContext  -verbose -Args "<ConnectionString> PostgreSql"
+        Update-Database -Context PostgreSqlDataImportDbContext  -verbose -Args "<ConnectionString> PostgreSql"
 
-        **Postgres**
+    **Postgres**
 
-            Update-Database -Context PostgreSqlDataImportDbContext  -verbose -Args "<ConnectionString> PostgreSql"
+        Update-Database -Context PostgreSqlDataImportDbContext  -verbose -Args "<ConnectionString> PostgreSql"
 
 ## Skipping certificate validation for SSL Connections
 
