@@ -24,10 +24,10 @@ namespace DataImport.Web.Services.Swagger
             _swaggerWebClient = swaggerWebClient;
         }
 
-        public async Task<IEnumerable<SwaggerResource>> GetMetadata(string apiUrl, string apiVersion, string tenant, string context)
+        public async Task<IEnumerable<SwaggerResource>> GetMetadata(string apiUrl, string apiVersion)
         {
-            var (resourcesSwaggerDocument, resourcesHandler) = await GetSwaggerDocument(apiUrl, apiVersion, tenant, context, ApiSection.Resources);
-            var (descriptorsSwaggerDocument, descriptorsHandler) = await GetSwaggerDocument(apiUrl, apiVersion, tenant, context, ApiSection.Descriptors);
+            var (resourcesSwaggerDocument, resourcesHandler) = await GetSwaggerDocument(apiUrl, apiVersion, ApiSection.Resources);
+            var (descriptorsSwaggerDocument, descriptorsHandler) = await GetSwaggerDocument(apiUrl, apiVersion, ApiSection.Descriptors);
 
             var resources = await resourcesHandler.GetMetadata(resourcesSwaggerDocument, ApiSection.Resources);
             var descriptors = await descriptorsHandler.GetMetadata(descriptorsSwaggerDocument, ApiSection.Descriptors);
@@ -37,7 +37,7 @@ namespace DataImport.Web.Services.Swagger
 
         public async Task<string> GetTokenUrl(string apiUrl, string apiVersion, string tenant, string context)
         {
-            var (swaggerDocument, handler) = await GetSwaggerDocument(apiUrl, apiVersion, tenant, context, ApiSection.Resources);
+            var (swaggerDocument, handler) = await GetSwaggerDocument(apiUrl, apiVersion, ApiSection.Resources);
 
             if (!string.IsNullOrEmpty(apiVersion) && apiVersion.StartsWith("7."))
             {
@@ -49,7 +49,7 @@ namespace DataImport.Web.Services.Swagger
 
         public async Task<string> GetAuthUrl(string apiUrl, string apiVersion, string tenant, string context)
         {
-            var (swaggerDocument, handler) = await GetSwaggerDocument(apiUrl, apiVersion, tenant, context, ApiSection.Resources);
+            var (swaggerDocument, handler) = await GetSwaggerDocument(apiUrl, apiVersion, ApiSection.Resources);
 
             return handler.GetAuthUrl(swaggerDocument);
         }
@@ -161,9 +161,9 @@ namespace DataImport.Web.Services.Swagger
             }
         }
 
-        private async Task<(JObject swaggerDocument, ISwaggerMetadataProcessor swaggerMetadataProcessor)> GetSwaggerDocument(string apiUrl, string apiVersion, string tenant, string context, ApiSection apiSection)
+        private async Task<(JObject swaggerDocument, ISwaggerMetadataProcessor swaggerMetadataProcessor)> GetSwaggerDocument(string apiUrl, string apiVersion, ApiSection apiSection)
         {
-            var baseUrl = await GetSwaggerBaseDocumentUrl(apiUrl, apiVersion, tenant, context, apiSection);
+            var baseUrl = await GetSwaggerBaseDocumentUrl(apiUrl, apiVersion, apiSection);
 
             var rawApis = await _swaggerWebClient.DownloadString(baseUrl);
 
@@ -185,7 +185,7 @@ namespace DataImport.Web.Services.Swagger
             return (swaggerDocument, handler);
         }
 
-        protected async Task<string> GetSwaggerBaseDocumentUrl(string apiUrl, string apiVersion, string tenant, string context, ApiSection apiSection)
+        protected async Task<string> GetSwaggerBaseDocumentUrl(string apiUrl, string apiVersion, ApiSection apiSection)
         {
             if (apiVersion.IsOdsV2())
             {
@@ -195,30 +195,7 @@ namespace DataImport.Web.Services.Swagger
             else if (apiVersion.IsOdsV3())
             {
                 var baseUrl = Common.Helpers.UrlUtility.RemoveAfterLastInstanceOf(apiUrl.Trim(), "/data/");
-
-                string path;
-                if (!string.IsNullOrEmpty(tenant) && string.IsNullOrEmpty(context))
-                {
-                    // MultiTenant Environment
-                    path = $"{tenant}/data/v3";
-                }
-                else if (!string.IsNullOrEmpty(context) && string.IsNullOrEmpty(tenant))
-                {
-                    // SingleTenant with ODS Context Routes Environment
-                    path = $"{context}/data/v3";
-                }
-                else if (!string.IsNullOrEmpty(context) && !string.IsNullOrEmpty(tenant))
-                {
-                    // MultiTenant with ODS Context Routes Environments
-                    path = $"{tenant}/{context}/data/v3";
-                }
-                else
-                {
-                    // SingleTenant and Sandbox Environments
-                    path = "data/v3";
-                }
-
-                return $"{baseUrl}/metadata/{path}/{apiSection.ToMetadataRoutePart()}/swagger.json";
+                return $"{baseUrl}/metadata/data/v3/{apiSection.ToMetadataRoutePart()}/swagger.json";
             }
             else
             {
