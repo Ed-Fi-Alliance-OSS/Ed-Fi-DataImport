@@ -106,6 +106,7 @@ namespace DataImport.Web.Features.Share
         public JObject Map { get; set; }
         public string CustomFileProcessor { get; set; }
         public string Attribute { get; set; }
+        public string SelectedIngestionLogEdOrgIdColumn { get; set; }
 
         public AddDataMap.Command ToAddCommand(Resource resource, int? preprocessorId)
         {
@@ -119,7 +120,8 @@ namespace DataImport.Web.Features.Share
                 Mappings = serializer.Deserialize(Map),
                 ApiVersionId = resource.ApiVersionId,
                 PreprocessorId = preprocessorId,
-                Attribute = Attribute
+                Attribute = Attribute,
+                SelectedIngestionLogEdOrgIdColumn = SelectedIngestionLogEdOrgIdColumn
             };
         }
     }

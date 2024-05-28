@@ -179,7 +179,8 @@ namespace DataImport.Web.Features.Share
                         : JsonConvert.DeserializeObject<string[]>(x.ColumnHeaders),
                     Map = JObject.Parse(x.Map),
                     Attribute = x.FileProcessorScript != null && x.FileProcessorScript.HasAttribute ? x.Attribute : null,
-                    CustomFileProcessor = x.FileProcessorScript?.Name
+                    CustomFileProcessor = x.FileProcessorScript?.Name,
+                    SelectedIngestionLogEdOrgIdColumn = x.SelectedIngestionLogEdOrgIdColumn
                 })
                 .ToArray();
 

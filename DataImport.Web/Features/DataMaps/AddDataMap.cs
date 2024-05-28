@@ -73,7 +73,7 @@ namespace DataImport.Web.Features.DataMaps
             public string Attribute { get; set; }
             public bool IsDeleteOperation { get; set; }
             public bool IsDeleteByNaturalKey { get; set; }
-            public int? SelectedIngestionLogEdOrgIdColumn { get; set; }
+            public string SelectedIngestionLogEdOrgIdColumn { get; set; }
         }
 
         public class Response : ToastResponse
