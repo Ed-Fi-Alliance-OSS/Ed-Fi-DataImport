@@ -28,6 +28,8 @@ namespace DataImport.Web.Features.Log
 
         public List<SelectListItem> Contexts = new List<SelectListItem>();
 
+        public List<SelectListItem> EducationOrganizationIds = new List<SelectListItem>();
+
         public Filters LogFilters { get; set; }
 
         public class Filters

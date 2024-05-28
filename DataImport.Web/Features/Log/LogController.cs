@@ -40,6 +40,12 @@ namespace DataImport.Web.Features.Log
             return PartialView("_OdsApi7xPartial", await _mediator.Send(query));
         }
 
+        [HttpGet]
+        public async Task<ActionResult> IngestionLogEdOrgIds(EducationOrganizationId.Query query)
+        {
+            return PartialView("_EducationOrganizationIds", await _mediator.Send(query));
+        }
+
         public async Task<ActionResult> ApplicationLog(ApplicationLog.Query query)
         {
             return PartialView("_ApplicationLog", await _mediator.Send(query));
