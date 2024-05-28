@@ -25,7 +25,6 @@ using Newtonsoft.Json.Linq;
 using static System.Environment;
 using File = DataImport.Models.File;
 using LogLevels = DataImport.Common.Enums.LogLevel;
-using DataImport.Common.Enums;
 using DataImport.Common.ExtensionMethods;
 
 namespace DataImport.Server.TransformLoad.Features.LoadResources
@@ -361,7 +360,6 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
             private Task<(RowResult, IngestionLogMarker)> MapAndProcessCsvRow(IOdsApi odsApi, Dictionary<string, string> currentRow, DataMap map, int rowNum, File file)
             {
                 MappedResource mappedRow = null;
-                int? edOrgId = Helper.GetEdOrgIdFromCsv(currentRow, map.SelectedIngestionLogEdOrgIdColumn);
 
                 try
                 {
@@ -380,7 +378,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         ApiVersion = file.Agent?.ApiServer?.ApiVersion?.Version.ToString(),
                         FileName = file.FileName,
                         RowNumber = rowNum,
-                        EducationOrganizationId = edOrgId
+                        EducationOrganizationId = Helper.GetEdOrgIdFromCsv(currentRow, map.SelectedIngestionLogEdOrgIdColumn)
                     };
                     return Task.FromResult((RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, rowWithError, $"{odsApi.Config.ApiUrl}{map.ResourcePath}", null, ex.Message)));
                 }
@@ -412,7 +410,8 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     ApiServerName = file.Agent?.ApiServer?.Name,
                     ApiVersion = file.Agent?.ApiServer?.ApiVersion?.Version.ToString(),
                     FileName = file.FileName,
-                    RowNumber = rowNum
+                    RowNumber = rowNum,
+                    EducationOrganizationId = Helper.GetEdOrgIdFromCsv(currentRow, dataMap.SelectedIngestionLogEdOrgIdColumn)
                 };
             }
 
