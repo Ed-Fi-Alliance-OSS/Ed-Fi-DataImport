@@ -34,6 +34,12 @@ namespace DataImport.Web.Features.Log
                 await _mediator.Send(new IngestionLog.Query { LogFilters = filters, PageNumber = pageNumber }));
         }
 
+        [HttpGet]
+        public async Task<ActionResult> IngestionLog7xFilters(OdsApi7xFilters.Query query)
+        {
+            return PartialView("_OdsApi7xPartial", await _mediator.Send(query));
+        }
+
         public async Task<ActionResult> ApplicationLog(ApplicationLog.Query query)
         {
             return PartialView("_ApplicationLog", await _mediator.Send(query));

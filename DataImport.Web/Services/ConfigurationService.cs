@@ -40,7 +40,7 @@ namespace DataImport.Web.Services
             IEnumerable<SwaggerResource> swaggerResources;
             try
             {
-                swaggerResources = await _swaggerMetadataFetcher.GetMetadata(apiServer.Url, apiServer.ApiVersion.Version, apiServer.Tenant, apiServer.Context);
+                swaggerResources = await _swaggerMetadataFetcher.GetMetadata(apiServer.Url, apiServer.ApiVersion.Version);
             }
             catch (OdsApiServerException e)
             {

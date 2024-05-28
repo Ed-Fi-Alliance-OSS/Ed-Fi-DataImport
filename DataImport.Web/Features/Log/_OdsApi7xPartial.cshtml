@@ -1,0 +1,12 @@
+@*
+SPDX-License-Identifier: Apache-2.0
+Licensed to the Ed-Fi Alliance under one or more agreements.
+The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
+See the LICENSE and NOTICES files in the project root for more information.
+*@
+
+@using DataImport.Web.Infrastructure
+@model DataImport.Web.Features.Log.LogViewModel
+
+<div class="col-md-3"><span style="font-weight: bold">Tenant</span>@Html.DropDownList("TenantDropDown", Model.Tenants, "Select Tenant", new { @class = "form-control" })</div>
+<div class="col-md-3"><span style="font-weight: bold">Context</span>@Html.DropDownList("ContextDropDown", Model.Contexts, "Select Context", new { @class = "form-control" })</div>

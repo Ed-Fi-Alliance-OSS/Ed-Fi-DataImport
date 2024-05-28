@@ -9,6 +9,7 @@ using DataImport.Common.Helpers;
 using DataImport.EdFi;
 using DataImport.Models;
 using DataImport.Web.Services.Swagger;
+using Microsoft.Extensions.Options;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,15 @@ namespace DataImport.Web.Services
         private readonly Dictionary<string, string> _yearSpecificYearCache = new Dictionary<string, string>();
         private readonly IOAuthRequestWrapper _oauthRequestWrapper;
         private string _encryptionKey;
+        private readonly IOptions<AppSettings> _options;
 
-        public EdFiServiceV311(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, ISwaggerMetadataFetcher metadataFetcher, IOAuthRequestWrapper oauthRequestWrapper)
+        public EdFiServiceV311(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, ISwaggerMetadataFetcher metadataFetcher, IOAuthRequestWrapper oauthRequestWrapper, IOptions<AppSettings> options)
             : base(mapper, dbContext)
         {
             _metadataFetcher = metadataFetcher;
             _oauthRequestWrapper = oauthRequestWrapper ?? throw new ArgumentNullException(nameof(oauthRequestWrapper));
             _encryptionKey = encryptionKeyResolver.GetEncryptionKey();
+            _options = options;
         }
 
         private string EncryptionKey
@@ -47,6 +50,10 @@ namespace DataImport.Web.Services
             var options = new RestClientOptions();
             options.Authenticator = new BearerTokenAuthenticator(tokenRetriever);
             options.BaseUrl = new Uri(apiServer?.Url);
+            if (_options.Value.IgnoresCertificateErrors)
+            {
+                options.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            }
             return new RestClient(options);
         }
 

@@ -29,6 +29,8 @@ See the LICENSE and NOTICES files in the project root for more information.
             <div class="col-md-2"><span style="font-weight: bold">Ed Org Id</span>@Html.TextBox("EducationOrganizationId", "", new { @class = "form-control", style = "width: 80px !important" })</div>
             <div class="col-md-1"> <button type="button" class="btn btn-primary filterresults" style="margin-top: 20px; float: right">Filter Results</button> </div>
         </div>
+        <div id="divLogIngestionTenantAndContext" class="row" style=" margin-top: 15px; margin-bottom: 15px ">
+        </div>
         <hr/>
         <div id="ingestionLog" class="ajax-content"></div>
     </div>
@@ -46,15 +48,32 @@ See the LICENSE and NOTICES files in the project root for more information.
                 logFilters.SelectedResult = result.length != 0 ? result : '0';
                 logFilters.SelectedResponse = response.length != 0 ? response : '0';
                 logFilters.FileName = $("#FileName").val();
+
+                logFilters.SelectedTenant = $("#TenantDropDown").children("option:selected").val();
+                logFilters.SelectedContext = $("#ContextDropDown").children("option:selected").val();
+
                 logFilters.EducationOrganizationId = $("#EducationOrganizationId").val();
                 return logFilters;
             }
 
             var ingestionLogUrl = "@Url.Action("IngestionLog", "Log", new IngestionLog.Query { PageNumber = 1 })";
+            var ingestionLog7xFiltersUrl = "@Url.Action("IngestionLog7xFilters", "Log", new OdsApi7xFilters.Query { })";
             var filesUrl = "@Html.Raw(Url.Action("FilesLog", "Log", new FilesLog.Query { PageNumber = 1, ApiServerId = Model.ApiServerId }))";
             var logApplicationUrl = "@Url.Action("ApplicationLog", "Log", new ApplicationLog.Query { PageNumber = 1 })";
 
             $("#divFiles").load(filesUrl);
+
+            function loadIngestionData7xFilters(url) {
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    dataType: "html",
+                    success: function (data) {
+                        $("#divLogIngestionTenantAndContext").html(data);
+                    }
+                });
+            }
 
             function loadIngestionData(url) {
 
@@ -104,6 +123,7 @@ See the LICENSE and NOTICES files in the project root for more information.
                 if (activatedTab === "#divFiles") {
                     $("#divFiles").load(filesUrl);
                 } else if (activatedTab === "#divLogIngestion") {
+                    loadIngestionData7xFilters(ingestionLog7xFiltersUrl);
                     loadIngestionData(ingestionLogUrl);
                 } else if (activatedTab === "#divLogApplication") {
                     $("#divLogApplication").load(logApplicationUrl);

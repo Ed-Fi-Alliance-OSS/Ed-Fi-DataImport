@@ -16,12 +16,12 @@ See the LICENSE and NOTICES files in the project root for more information.
 <div style="padding-bottom: 10px;">
     @HtmlHelperService.NavigationButton(Html, "Add Preprocessor", "Add")
 </div>
-<table id="tblPreprocessor" class="table table-striped table-hover table-bordered table-responsive js-sort-table" data-paging="true" data-paging-size="20">
+<table id="tblPreprocessor" class="table table-striped table-hover table-bordered table-responsive" data-paging="true" data-paging-size="20" data-sorting="true">
     <thead>
         <tr>
 			<th data-tooltip="Name">Name</th>
 			<th data-tooltip="Script Type">Script Type</th>
-			<th data-tooltip="Used By">Used By</th>
+			<th data-sortable="false" data-tooltip="Used By">Used By</th>
             <th data-sortable="false" data-filterable="false" class="actions">Actions</th>
         </tr>
     </thead>

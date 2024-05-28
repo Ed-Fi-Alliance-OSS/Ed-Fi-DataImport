@@ -25,9 +25,9 @@ namespace DataImport.Web.Tests.Services.Swagger
             {
             }
 
-            public new async Task<string> GetSwaggerBaseDocumentUrl(string apiUrl, string apiVersion, string tenant, string context, ApiSection apiSection)
+            public new async Task<string> GetSwaggerBaseDocumentUrl(string apiUrl, string apiVersion, ApiSection apiSection)
             {
-                return await base.GetSwaggerBaseDocumentUrl(apiUrl, apiVersion, tenant, context, apiSection);
+                return await base.GetSwaggerBaseDocumentUrl(apiUrl, apiVersion, apiSection);
             }
         }
 
@@ -54,7 +54,7 @@ namespace DataImport.Web.Tests.Services.Swagger
                 .Setup("https://someapiurl/metadata/resources/api-docs", testDocument);
 
             var sut = new SwaggerMetadataFetcherTss(null, swaggerClientMock);
-            sut.GetMetadata("https://someapiurl/api/v2.0/2018", OdsApiV25, string.Empty, string.Empty)
+            sut.GetMetadata("https://someapiurl/api/v2.0/2018", OdsApiV25)
                 .ShouldThrow<NotSupportedException>()
                 .Message.ShouldBe("No handler available to process Swagger document");
         }
@@ -72,7 +72,7 @@ namespace DataImport.Web.Tests.Services.Swagger
 
                 // Act
                 var sut = new SwaggerMetadataFetcherTss(null, null);
-                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(version260Url, apiVersion, string.Empty, string.Empty, apiSection);
+                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(version260Url, apiVersion, apiSection);
 
                 // Assert
                 baseDocumentUrl.ShouldBe(
@@ -106,7 +106,7 @@ namespace DataImport.Web.Tests.Services.Swagger
 
                 // Act
                 var sut = new SwaggerMetadataFetcherTss(null, swaggerClientMock);
-                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, string.Empty, string.Empty, apiSection);
+                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, apiSection);
 
                 // Assert
                 baseDocumentUrl.ShouldBe(
@@ -146,7 +146,7 @@ namespace DataImport.Web.Tests.Services.Swagger
 
                 // Act
                 var sut = new SwaggerMetadataFetcherTss(null, swaggerClientMock);
-                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, string.Empty, string.Empty, apiSection);
+                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, apiSection);
 
                 // Assert
                 baseDocumentUrl.ShouldBe(
@@ -179,7 +179,7 @@ namespace DataImport.Web.Tests.Services.Swagger
 
                 // Act
                 var sut = new SwaggerMetadataFetcherTss(null, swaggerClientMock);
-                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, string.Empty, string.Empty, apiSection);
+                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, apiSection);
 
                 // Assert
                 baseDocumentUrl.ShouldBe(
@@ -219,7 +219,7 @@ namespace DataImport.Web.Tests.Services.Swagger
 
                 // Act
                 var sut = new SwaggerMetadataFetcherTss(null, swaggerClientMock);
-                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, string.Empty, string.Empty, apiSection);
+                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, apiSection);
 
                 // Assert
                 baseDocumentUrl.ShouldBe(
@@ -252,7 +252,7 @@ namespace DataImport.Web.Tests.Services.Swagger
 
                 // Act
                 var sut = new SwaggerMetadataFetcherTss(null, swaggerClientMock);
-                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, string.Empty, string.Empty, apiSection);
+                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, apiSection);
 
                 // Assert
                 baseDocumentUrl.ShouldBe(
@@ -293,7 +293,7 @@ namespace DataImport.Web.Tests.Services.Swagger
 
                 // Act
                 var sut = new SwaggerMetadataFetcherTss(null, swaggerClientMock);
-                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, string.Empty, string.Empty, apiSection);
+                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, apiSection);
 
                 // Assert
                 baseDocumentUrl.ShouldBe(
@@ -332,7 +332,7 @@ namespace DataImport.Web.Tests.Services.Swagger
 
                 // Act
                 var sut = new SwaggerMetadataFetcherTss(null, swaggerClientMock);
-                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, string.Empty, string.Empty, apiSection);
+                var baseDocumentUrl = await sut.GetSwaggerBaseDocumentUrl(versionUrl, apiVersion, apiSection);
 
                 // Assert
                 baseDocumentUrl.ShouldBe(
@@ -385,7 +385,7 @@ namespace DataImport.Web.Tests.Services.Swagger
             var processors = GetMetadataProcessors(swaggerClientMock);
             var sut = new SwaggerMetadataFetcherTss(processors, swaggerClientMock);
 
-            var resources = (await sut.GetMetadata("https://someapiurl/api/v2.0/2018", OdsApiV25, string.Empty, string.Empty)).ToList();
+            var resources = (await sut.GetMetadata("https://someapiurl/api/v2.0/2018", OdsApiV25)).ToList();
             resources.Count.ShouldBe(3);
             resources.Any(e => e.Path == "/student").ShouldBeTrue();
             resources.Any(e => e.Path == "/studentAssessments").ShouldBeTrue();
@@ -438,7 +438,7 @@ namespace DataImport.Web.Tests.Services.Swagger
             var processors = GetMetadataProcessors(swaggerClientMock);
             var sut = new SwaggerMetadataFetcherTss(processors, swaggerClientMock);
 
-            var resources = (await sut.GetMetadata("https://someapiurl/v2/api/api/v2.0/2018", OdsApiV25, string.Empty, string.Empty)).ToList();
+            var resources = (await sut.GetMetadata("https://someapiurl/v2/api/api/v2.0/2018", OdsApiV25)).ToList();
             resources.Count.ShouldBe(3);
         }
 

@@ -45,7 +45,10 @@ namespace DataImport.Web.Features.Log
                         request.PageNumber);
 
                 return Task.FromResult(new LogViewModel
-                { LogFilters = request.LogFilters, IngestionLogs = pagedIngestionLogs });
+                {
+                    LogFilters = request.LogFilters,
+                    IngestionLogs = pagedIngestionLogs
+                });
             }
 
             public IEnumerable<LogViewModel.Ingestion> GetIngestionLogs(LogViewModel.Filters filters, int offset, int limit)
@@ -75,13 +78,39 @@ namespace DataImport.Web.Features.Log
                         {
                             var statusCode = Enum.GetName(typeof(EdFiHttpStatus), filters.SelectedResponse);
                             logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
-                                x.HttpStatusCode == statusCode);
+                                x.HttpStatusCode.ToLower() == statusCode.ToLower());
                         }
                     }
                     if (!string.IsNullOrEmpty(filters.Filename))
                     {
                         logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
                             x.FileName.ToLower().Contains(filters.Filename.ToLower()));
+                    }
+                    if (!string.IsNullOrEmpty(filters.SelectedTenant))
+                    {
+                        if (filters.SelectedTenant == Helpers.Constants.IngestionLogsFiltersNoTenant)
+                        {
+                            logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                                string.IsNullOrWhiteSpace(x.Tenant));
+                        }
+                        else
+                        {
+                            logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                                x.Tenant.ToLower().Contains(filters.SelectedTenant.ToLower()));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(filters.SelectedContext))
+                    {
+                        if (filters.SelectedContext == Helpers.Constants.IngestionLogsFiltersNoContext)
+                        {
+                            logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                                string.IsNullOrWhiteSpace(x.Context));
+                        }
+                        else
+                        {
+                            logsByDateDesc = (IOrderedQueryable<DataImport.Models.IngestionLog>) logsByDateDesc.Where(x =>
+                            x.Context.ToLower().Contains(filters.SelectedContext.ToLower()));
+                        }
                     }
 
                     if (filters.EducationOrganizationId.HasValue)

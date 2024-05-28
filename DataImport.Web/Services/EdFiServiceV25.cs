@@ -8,6 +8,7 @@ using DataImport.Common.ExtensionMethods;
 using DataImport.Common.Helpers;
 using DataImport.EdFi;
 using DataImport.Models;
+using Microsoft.Extensions.Options;
 using RestSharp;
 using System;
 using System.Threading.Tasks;
@@ -18,13 +19,14 @@ namespace DataImport.Web.Services
     {
         private readonly IOAuthRequestWrapper _oauthRequestWrapper;
         private readonly string _encryptionKey;
+        private readonly IOptions<AppSettings> _options;
 
-        public EdFiServiceV25(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, IOAuthRequestWrapper oauthRequestWrapper)
+        public EdFiServiceV25(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, IOAuthRequestWrapper oauthRequestWrapper, IOptions<AppSettings> options)
             : base(mapper, dbContext)
         {
             _encryptionKey = encryptionKeyResolver.GetEncryptionKey();
-
             _oauthRequestWrapper = oauthRequestWrapper ?? throw new ArgumentNullException(nameof(oauthRequestWrapper));
+            _options = options;
         }
 
         public override bool CanHandle(string apiVersion) => apiVersion.IsOdsV2();
@@ -35,6 +37,10 @@ namespace DataImport.Web.Services
             var options = new RestClientOptions();
             options.Authenticator = new BearerTokenAuthenticator(tokenRetriever);
             options.BaseUrl = new Uri(apiServer?.Url);
+            if (_options.Value.IgnoresCertificateErrors)
+            {
+                options.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            }
             return new RestClient(options);
         }
 

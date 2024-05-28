@@ -4,6 +4,7 @@ using DataImport.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataImport.Models.Migrations.SqlServer
 {
     [DbContext(typeof(SqlDataImportDbContext))]
-    partial class SqlDataImportDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240515193250_AddsTenantAndContextToIngestionLogs")]
+    partial class AddsTenantAndContextToIngestionLogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,10 +42,6 @@ namespace DataImport.Models.Migrations.SqlServer
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ActionFileCode")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("AgentAction")
                         .HasMaxLength(50)
@@ -422,9 +421,6 @@ namespace DataImport.Models.Migrations.SqlServer
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("SelectedIngestionLogEdOrgIdColumn")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTimeOffset?>("UpdateDate")
                         .HasColumnType("datetimeoffset");
 
@@ -610,8 +606,8 @@ namespace DataImport.Models.Migrations.SqlServer
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("EducationOrganizationId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("EducationOrganizationId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EndPointUrl")
                         .HasColumnType("nvarchar(max)");

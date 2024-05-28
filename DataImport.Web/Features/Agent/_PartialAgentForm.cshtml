@@ -45,12 +45,12 @@ See the LICENSE and NOTICES files in the project root for more information.
     </p>
 </div>
 
-<table id="tblAgentDataMaps" class="table table-striped table-hover table-bordered table-responsive js-sort-table">
+<table id="tblAgentDataMaps" class="table table-striped table-hover table-bordered table-responsive" data-sorting="true">
     <thead>
         <tr>
 			<td data-tooltip="Name">Name</td>
 			<td data-tooltip="Processing Order">Processing Order</td>
-			<td></td>
+			<td data-sortable="false"></td>
         </tr>
     </thead>
     <tbody>
@@ -85,13 +85,13 @@ See the LICENSE and NOTICES files in the project root for more information.
 
 <h4>Bootstraps</h4>
 
-<table id="tblAgentBootstrapDatas" class="table table-striped table-hover table-bordered table-responsive js-sort-table">
+<table id="tblAgentBootstrapDatas" class="table table-striped table-hover table-bordered table-responsive" data-sorting="true">
     <thead>
         <tr>
 			<td data-tooltip="Bootstrap Name">Bootstrap Name</td>
 			<td data-tooltip="Resource">Resource</td>
 			<td data-tooltip="Processing Order">Processing Order</td>
-            <td></td>
+			<td data-sortable="false"></td>
         </tr>
     </thead>
     <tbody>
@@ -139,13 +139,13 @@ See the LICENSE and NOTICES files in the project root for more information.
 
 <div class="scheduled-agents-only">
     <h4>Schedule</h4>
-    <table id="tblAgentSchedule" class="table table-striped table-hover table-bordered table-responsive">
+	<table id="tblAgentSchedule" class="table table-striped table-hover table-bordered table-responsive" data-sorting="true">
         <thead>
             <tr>
-                <td>Day</td>
-                <td>Hour</td>
-                <td>Minute</td>
-                <td></td>
+                <th>Day</th>
+				<th data-sorting="true">Hour</th>
+				<th data-sorting="true">Minute</th>
+				<th data-sorting="true"></th>
             </tr>
         </thead>
         <tbody>
