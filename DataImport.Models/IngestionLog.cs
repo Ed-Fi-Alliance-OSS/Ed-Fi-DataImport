@@ -53,7 +53,6 @@ namespace DataImport.Models
         [MaxLength(255)]
         public string Context { get; set; }
 
-
         public int? EducationOrganizationId { get; set; }
     }
 }

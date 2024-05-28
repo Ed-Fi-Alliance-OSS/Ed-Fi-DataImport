@@ -7,7 +7,6 @@ using DataImport.Common.Enums;
 using DataImport.Models;
 using DataImport.Web.Features.Shared;
 using DataImport.Web.Services;
-using Json.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 

@@ -592,7 +592,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     ApiServerName = marker.MappedResource?.ApiServerName,
                     ApiVersion = marker.MappedResource?.ApiVersion,
                     Tenant = marker.Tenant,
-                    Context = marker.Context
+                    Context = marker.Context,
                     EducationOrganizationId = marker.MappedResource?.EducationOrganizationId,
                 };
                 _logger.LogToTable($"Writing in IngestionLog for row: {model.RowNumber}", model, "IngestionLog");
