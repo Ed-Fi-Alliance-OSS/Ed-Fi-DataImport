@@ -284,7 +284,8 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[0].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[0])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[0].Attribute) ? "null" : $"\"{expectedMaps[0].Attribute}\"")}
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[0].Attribute) ? "null" : $"\"{expectedMaps[0].Attribute}\"")},
+                            ""selectedIngestionLogEdOrgIdColumn"": {(string.IsNullOrEmpty(expectedMaps[1].SelectedIngestionLogEdOrgIdColumn) ? "null" : $"\"{expectedMaps[1].SelectedIngestionLogEdOrgIdColumn}\"")}
                         }},
                         {{
                             ""name"": ""{expectedMaps[1].Name}"",
@@ -296,7 +297,8 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[1].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[1])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[1].Attribute) ? "null" : $"\"{expectedMaps[1].Attribute}\"")}
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[1].Attribute) ? "null" : $"\"{expectedMaps[1].Attribute}\"")},
+                            ""selectedIngestionLogEdOrgIdColumn"": {(string.IsNullOrEmpty(expectedMaps[1].SelectedIngestionLogEdOrgIdColumn) ? "null" : $"\"{expectedMaps[1].SelectedIngestionLogEdOrgIdColumn}\"")}
                         }},
                         {{
                             ""name"": ""{expectedMaps[2].Name}"",
@@ -308,7 +310,8 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[2].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[2])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[2].Attribute) ? "null" : $"\"{expectedMaps[2].Attribute}\"")}
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[2].Attribute) ? "null" : $"\"{expectedMaps[2].Attribute}\"")},
+                            ""selectedIngestionLogEdOrgIdColumn"": {(string.IsNullOrEmpty(expectedMaps[1].SelectedIngestionLogEdOrgIdColumn) ? "null" : $"\"{expectedMaps[1].SelectedIngestionLogEdOrgIdColumn}\"")}
                         }},
                     ],
                     ""bootstraps"": [
@@ -415,7 +418,8 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[0].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[0])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[0].Attribute) ? "null" : $"\"{expectedMaps[0].Attribute}\"")}
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[0].Attribute) ? "null" : $"\"{expectedMaps[0].Attribute}\"")},
+                            ""selectedIngestionLogEdOrgIdColumn"": {(string.IsNullOrEmpty(expectedMaps[1].SelectedIngestionLogEdOrgIdColumn) ? "null" : $"\"{expectedMaps[1].SelectedIngestionLogEdOrgIdColumn}\"")}
                         }},
                         {{
                             ""name"": ""{expectedMaps[1].Name}"",
@@ -427,7 +431,8 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[1].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[1])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[1].Attribute) ? "null" : $"\"{expectedMaps[1].Attribute}\"")}
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[1].Attribute) ? "null" : $"\"{expectedMaps[1].Attribute}\"")},
+                            ""selectedIngestionLogEdOrgIdColumn"": {(string.IsNullOrEmpty(expectedMaps[1].SelectedIngestionLogEdOrgIdColumn) ? "null" : $"\"{expectedMaps[1].SelectedIngestionLogEdOrgIdColumn}\"")}
                         }},
                         {{
                             ""name"": ""{expectedMaps[2].Name}"",
@@ -439,7 +444,8 @@ namespace DataImport.Web.Tests.Features.Share
                             ],
                             ""map"": {expectedMaps[2].Map},
                             ""customFileProcessor"": {GetNameOfExpectedPreprocessorForMap(expectedMaps[2])},
-                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[2].Attribute) ? "null" : $"\"{expectedMaps[2].Attribute}\"")}
+                            ""attribute"": {(string.IsNullOrEmpty(expectedMaps[2].Attribute) ? "null" : $"\"{expectedMaps[2].Attribute}\"")},
+                            ""selectedIngestionLogEdOrgIdColumn"": {(string.IsNullOrEmpty(expectedMaps[1].SelectedIngestionLogEdOrgIdColumn) ? "null" : $"\"{expectedMaps[1].SelectedIngestionLogEdOrgIdColumn}\"")}
                         }},
                     ],
                     ""bootstraps"": [

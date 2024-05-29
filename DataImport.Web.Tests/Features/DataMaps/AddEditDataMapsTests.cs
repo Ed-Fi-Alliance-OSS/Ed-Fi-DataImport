@@ -575,6 +575,41 @@ namespace DataImport.Web.Tests.Features.DataMaps
             editDataMap.Attribute.ShouldBe("Updated attribute");
         }
 
+        [Test]
+        public async Task ShouldPersistSelectedIngestionLogEdOrgIdColumnValue()
+        {
+            var existingResource = RandomResource();
+
+            var trivialMappings = await TrivialMappings(existingResource);
+            const string SelectedEdOrId = "Some SelectedIngestionLogEdOrgIdColumn";
+            const string UpdatedSelectedEdOrId = "Updated SelectedIngestionLogEdOrgIdColumn";
+
+            var dataMap = await Send(new AddDataMap.Command
+            {
+                ApiVersionId = existingResource.ApiVersionId,
+                MapName = SampleString("Data Map"),
+                ResourcePath = existingResource.Path,
+                Mappings = trivialMappings,
+                SelectedIngestionLogEdOrgIdColumn = SelectedEdOrId
+            });
+
+            var editDataMap = await Send(new EditDataMap.Query { Id = dataMap.DataMapId });
+            editDataMap.SelectedIngestionLogEdOrgIdColumn.Equals(SelectedEdOrId);
+
+            var editResponse = await Send(new EditDataMap.Command
+            {
+                DataMapId = editDataMap.DataMapId,
+                ColumnHeaders = editDataMap.ColumnHeaders,
+                MapName = editDataMap.MapName,
+                Mappings = trivialMappings,
+                ResourcePath = existingResource.Path,
+                SelectedIngestionLogEdOrgIdColumn = UpdatedSelectedEdOrId
+            });
+
+            editDataMap = await Send(new EditDataMap.Query { Id = dataMap.DataMapId });
+            editDataMap.SelectedIngestionLogEdOrgIdColumn.Equals(UpdatedSelectedEdOrId);
+        }
+
         private DataMapper FirstStaticMappableProperty(IReadOnlyList<DataMapper> mappings, Resource resource)
         {
             var metadatas = ResourceMetadata.DeserializeFrom(resource);
