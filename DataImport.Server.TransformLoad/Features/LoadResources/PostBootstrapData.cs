@@ -52,7 +52,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error uploading bootstrap data. Data import cannot proceed.");
+                    _logger.LogError(ex, $"Error uploading bootstrap data. Data import cannot proceed. Please check the {request.OdsApi.Config.Name} API Connection.");
                     return new Response { Success = false };
                 }
             }
