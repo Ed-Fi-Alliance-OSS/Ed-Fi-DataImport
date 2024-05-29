@@ -382,7 +382,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         ApiVersion = file.Agent?.ApiServer?.ApiVersion?.Version.ToString(),
                         FileName = file.FileName,
                         RowNumber = rowNum,
-                        EducationOrganizationId = Helper.GetEdOrgIdFromCsv(currentRow, map.SelectedIngestionLogEdOrgIdColumn)
+                        EducationOrganizationId = GetEdOrgId(currentRow, map.SelectedIngestionLogEdOrgIdColumn)
                     };
                     return Task.FromResult((RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, rowWithError, $"{odsApi.Config.ApiUrl}{map.ResourcePath}", null, ex.Message)));
                 }
@@ -415,8 +415,20 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     ApiVersion = file.Agent?.ApiServer?.ApiVersion?.Version.ToString(),
                     FileName = file.FileName,
                     RowNumber = rowNum,
-                    EducationOrganizationId = Helper.GetEdOrgIdFromCsv(currentRow, dataMap.SelectedIngestionLogEdOrgIdColumn)
+                    EducationOrganizationId = GetEdOrgId(currentRow, dataMap.SelectedIngestionLogEdOrgIdColumn, mappedRowJson)
                 };
+            }
+
+            private int? GetEdOrgId(Dictionary<string, string> currentRow, string selectedIngestionLogEdOrgIdColumn, JToken mappedRowJson = null)
+            {
+                int? edOrgId = null;
+                if (mappedRowJson != null)
+                    edOrgId = Helper.GetEdOrgIdFromJsonTransformed(mappedRowJson);
+
+                if (!edOrgId.HasValue)
+                    edOrgId = Helper.GetEdOrgIdFromCsv(currentRow, selectedIngestionLogEdOrgIdColumn);
+
+                return edOrgId;
             }
 
             private async Task<(RowResult Error, IngestionLogMarker)> PostMappedRow(IOdsApi odsApi, MappedResource mappedRow, string resourcePath)

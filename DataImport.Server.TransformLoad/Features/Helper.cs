@@ -5,6 +5,7 @@
 
 using DataImport.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace DataImport.Server.TransformLoad.Features
 {
     public static class Helper
     {
+        public const string EducationOrganizationIdJsonPath = "educationOrganizationReference.educationOrganizationId";
+        public const string SchoolIdJsonPath = "reportedSchoolReference.schoolId";
+
         public static async Task<bool> DoesFileExistInLog(DataImportDbContext dbContext, int agentId, string file)
         {
             var shortFileName = file.Substring(file.LastIndexOf('/') + 1);
@@ -64,6 +68,10 @@ namespace DataImport.Server.TransformLoad.Features
         public static int? GetEdOrgIdFromCsv(Dictionary<string, string> currentRow, string selectedIngestionLogEdOrgIdColumn)
         {
             int edOrgId;
+
+            if (string.IsNullOrEmpty(selectedIngestionLogEdOrgIdColumn))
+                return null;
+
             if (!currentRow.ContainsKey(selectedIngestionLogEdOrgIdColumn))
                 return null;
 
@@ -74,6 +82,22 @@ namespace DataImport.Server.TransformLoad.Features
 
             int.TryParse(csvValue, out edOrgId);
 
+            return edOrgId;
+        }
+
+        public static int? GetEdOrgIdFromJsonTransformed(JToken jToken)
+        {
+            int? edOrgId = null;
+            JToken jtokenEdOrgId = jToken.SelectToken(EducationOrganizationIdJsonPath);
+            if (jtokenEdOrgId != null)
+                edOrgId = jtokenEdOrgId.Value<int?>();
+
+            if (edOrgId == null)
+            {
+                JToken jtokenSchoolId = jToken.SelectToken(SchoolIdJsonPath);
+                if (jtokenSchoolId != null)
+                    edOrgId = jtokenSchoolId.Value<int?>();
+            }
             return edOrgId;
         }
     }
