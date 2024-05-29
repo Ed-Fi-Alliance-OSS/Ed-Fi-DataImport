@@ -25,11 +25,11 @@ See the LICENSE and NOTICES files in the project root for more information.
         <div class="row margin-top-bottom-15">
             <div class="col-md-3"><span style="font-weight: bold">Results</span>@Html.DropDownListFor(m => m.Results, Html.GetEnumSelectList(typeof(DataImport.Models.IngestionResult)),"Select Result", new {@class="form-control"})</div>
             <div class="col-md-3"><span style="font-weight: bold">Http Statuses</span>@Html.DropDownListFor(m =>m.HttpStatuses, Html.GetEnumSelectList(typeof(DataImport.Common.Enums.EdFiHttpStatus)), "Select Status", new { @class = "form-control" })</div>
-            <div class="col-md-6"><span style="font-weight: bold">File Name</span>@Html.TextBox("FileName", "", new { @class = "form-control" })</div>
             <div id="divLogIngestionTenantAndContext">
             </div>
             <div id="divLogIngestionEdOrgIds">
             </div>
+            <div class="col-md-6 margin-top-bottom-15"><span style="font-weight: bold">File Name</span>@Html.TextBox("FileName", "", new { @class = "form-control" })</div>
             <div class="col-md-3 margin-top-bottom-15"> <button type="button" class="btn btn-primary filterresults" style="margin-top: 20px; float: right">Filter Results</button> </div>
         </div>
         <hr/>
