@@ -143,10 +143,7 @@ namespace DataImport.Web.Features.DataMaps
                     Attribute = request.Attribute,
                     IsDeleteOperation = request.IsDeleteOperation,
                     IsDeleteByNaturalKey = request.IsDeleteOperation && request.IsDeleteByNaturalKey,
-                    SelectedIngestionLogEdOrgIdColumn =
-                        request.SelectedIngestionLogEdOrgIdColumn == null
-                            ? null
-                            : JsonConvert.SerializeObject(request.SelectedIngestionLogEdOrgIdColumn),
+                    SelectedIngestionLogEdOrgIdColumn = request.SelectedIngestionLogEdOrgIdColumn,
                 };
 
                 _database.DataMaps.Add(dataMap);
