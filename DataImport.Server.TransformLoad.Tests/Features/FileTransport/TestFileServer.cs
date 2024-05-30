@@ -7,6 +7,7 @@ using DataImport.Common;
 using DataImport.Models;
 using DataImport.Server.TransformLoad.Features.FileTransport;
 using Microsoft.Extensions.Options;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -38,6 +39,11 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
                 await _fileService.Transfer(stream, fileName, agent);
             }
         }
+
+        public async Task RemoveFileFromStorage(Models.File file)
+        {
+            await _fileService.Delete(file);
+        }
     }
 
     public class TestSftpServer : IFileServer
@@ -63,6 +69,11 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileTransport
             {
                 await _fileService.Transfer(stream, fileName, agent);
             }
+        }
+
+        public async Task RemoveFileFromStorage(Models.File file)
+        {
+            await _fileService.Delete(file);
         }
     }
 }
