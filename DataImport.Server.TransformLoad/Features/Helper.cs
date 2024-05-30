@@ -30,6 +30,15 @@ namespace DataImport.Server.TransformLoad.Features
             return fileFound;
         }
 
+        public static async Task<File> GetFileRow(DataImportDbContext dbContext, int agentId, string file)
+        {
+            var shortFileName = file.Substring(file.LastIndexOf('/') + 1);
+
+            var fileResult = await dbContext.Files
+                .FirstAsync(f => (f.FileName == shortFileName && f.AgentId == agentId));
+
+            return fileResult;
+        }
         public static bool ShouldExecuteOnSchedule(Agent agent, DateTimeOffset? nowDate = null)
         {
             if (!nowDate.HasValue)

@@ -120,7 +120,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 {
                     if (!agent.DataMapAgents.Any())
                     {
-                        _logger.LogError("The '{agent}' Agent is active with files to process, but has no Data Maps " +
+                        _logger.LogError("The '{Agent}' Agent is active with files to process, but has no Data Maps " +
                                   "associated with it. Because there is no mapping work to perform, the Agent cannot " +
                                   "process files. Because an active agent cannot process files, no work will be performed. " +
                                   "Correct the definition of this Agent by associating it with a Data Map.", agent.Name);

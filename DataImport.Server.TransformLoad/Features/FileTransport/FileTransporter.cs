@@ -4,6 +4,7 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using DataImport.Common.Enums;
+using DataImport.Common.ExtensionMethods;
 using DataImport.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
         public class Command : IRequest
         {
             public int ApiServerId { get; set; }
+            public bool CleanUpProcess { get; set; }
         }
 
         public class CommandHandler : IRequestHandler<Command>
@@ -50,7 +52,7 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
 
                 foreach (var agent in agents)
                 {
-                    if (!Helper.ShouldExecuteOnSchedule(agent, DateTimeOffset.Now))
+                    if (!request.CleanUpProcess && !Helper.ShouldExecuteOnSchedule(agent, DateTimeOffset.Now))
                         continue;
                     _logger.LogInformation("Processing agent name: {name}", agent.Name);
 
@@ -62,9 +64,23 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
                     {
                         _logger.LogInformation("Processing file: {file}", file);
 
+                        if (agent.GetActionFileCode() == AgentActionsFile.AlwaysDelete
+                            && request.CleanUpProcess
+                            && await Helper.DoesFileExistInLog(_dbContext, agent.Id, file))
+                        {
+                            var fileToDelete = await Helper.GetFileRow(_dbContext, agent.Id, file);
+                            if (fileToDelete != null)
+                            {
+                                await fileServer.RemoveFileFromStorage(fileToDelete);
+                            }
+                            continue;
+                        }
+                        if (request.CleanUpProcess)
+                            continue;
                         // Check the file log to see if the file already exists, if not, upload to file storage
                         if (!await Helper.DoesFileExistInLog(_dbContext, agent.Id, file))
                             await fileServer.TransferFileToStorage(agent, file);
+                        
                     }
 
                     agent.LastExecuted = DateTimeOffset.Now;

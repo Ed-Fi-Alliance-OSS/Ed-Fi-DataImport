@@ -67,6 +67,8 @@ namespace DataImport.Server.TransformLoad
 
                     if (bootstrapResponse.Success)
                         await _mediator.Send(new FileProcessor.Command { OdsApi = odsApi });
+                    // Remove files from the temp folder if FileAction is Always Delete
+                    await _mediator.Send(new FileTransporter.Command { ApiServerId = odsConfig.ApiServerId, CleanUpProcess = true });
                 }
 
                 watch.Stop();

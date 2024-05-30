@@ -9,6 +9,7 @@ using DataImport.Common.ExtensionMethods;
 using DataImport.Models;
 using FluentFTP;
 using FluentFTP.Client.BaseClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Renci.SshNet;
@@ -24,6 +25,7 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
     {
         Task<IEnumerable<string>> GetFileList(Agent agent);
         Task TransferFileToStorage(Agent agent, string fileName);
+        Task RemoveFileFromStorage(Models.File file);
     }
 
     public class FtpsServer : IFileServer
@@ -97,6 +99,11 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
             }
         }
 
+        public async Task RemoveFileFromStorage(Models.File file)
+        {
+            await _fileService.Delete(file);
+        }
+
         private FtpClient CreateClient(Agent agent)
         {
             FtpConfig ftpConfig = new FtpConfig();
@@ -167,6 +174,11 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
                 client.DownloadFile(fileName, stream);
                 await _fileService.Transfer(stream, fileName, agent);
             }
+        }
+
+        public async Task RemoveFileFromStorage(Models.File file)
+        {
+            await _fileService.Delete(file);
         }
 
         private SftpClient CreateClient(Agent agent)
