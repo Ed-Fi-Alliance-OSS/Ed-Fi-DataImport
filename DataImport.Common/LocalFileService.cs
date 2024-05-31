@@ -97,8 +97,12 @@ namespace DataImport.Common
 
         public Task Delete(File file)
         {
-            System.IO.File.Delete(new Uri(file.Url).LocalPath);
-            return CleanAgentDirectoryIfEmpty(file);
+            if (System.IO.File.Exists(new Uri(file.Url).LocalPath))
+            {
+                System.IO.File.Delete(new Uri(file.Url).LocalPath);
+                return CleanAgentDirectoryIfEmpty(file);
+            }
+            return Task.CompletedTask;
         }
 
         private static Task CleanAgentDirectoryIfEmpty(File file)

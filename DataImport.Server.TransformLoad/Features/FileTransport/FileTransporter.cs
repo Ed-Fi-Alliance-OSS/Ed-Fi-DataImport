@@ -80,7 +80,6 @@ namespace DataImport.Server.TransformLoad.Features.FileTransport
                         // Check the file log to see if the file already exists, if not, upload to file storage
                         if (!await Helper.DoesFileExistInLog(_dbContext, agent.Id, file))
                             await fileServer.TransferFileToStorage(agent, file);
-                        
                     }
 
                     agent.LastExecuted = DateTimeOffset.Now;
