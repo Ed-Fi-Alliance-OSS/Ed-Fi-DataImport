@@ -92,7 +92,7 @@ namespace DataImport.Web.Infrastructure
             result.RouteValues.Remove("controller");
 
             var redirectUrl = generator.GetUriByAction(action, controller, result.RouteValues,
-                filterContext.HttpContext.Request.Scheme, filterContext.HttpContext.Request.Host);
+                filterContext.HttpContext.Request.Scheme, filterContext.HttpContext.Request.Host, filterContext.HttpContext.Request.PathBase);
 
             // JSON response is not allowed in GET requests by default in ASP.NET MVC due to security concerns
             if (filterContext.HttpContext.Request.Method == "GET")
