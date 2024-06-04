@@ -11,7 +11,7 @@ See the LICENSE and NOTICES files in the project root for more information.
 @{
     ViewBag.Title = (!@Model.Id.HasValue ? "Add" : "Edit") + " API Connection";
     var hidden = string.IsNullOrEmpty(Model.ApiVersion) ? "hidden=true" : "";
-    var hiddenForApiVersionSeven = string.IsNullOrEmpty(Model.ApiVersion) || Model.ApiVersion != "7.1" ? "hidden=true" : "";
+    var hiddenForApiVersionSeven = string.IsNullOrEmpty(Model.ApiVersion) || Model.ApiVersion.Substring(0, 2) != "7." ? "hidden=true" : "";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -150,7 +150,7 @@ See the LICENSE and NOTICES files in the project root for more information.
             $("#Tenant").keyup(function () {
                 disableSaveButton(true);
             });
-
+            
             function handleApiVersionResponse(apiVersion) {
                 var apiUrl = $("#Url").val();
                 if (!apiVersion && apiUrl)
@@ -160,7 +160,7 @@ See the LICENSE and NOTICES files in the project root for more information.
                 input.val(apiVersion);
                 $("#ApiVersionContent").text(apiVersion);
                 $("#divApiVersion").attr('hidden', !apiVersion);
-                $("#divApiVersionSeven").attr('hidden', apiVersion != "7.1");
+                $("#divApiVersionSeven").attr('hidden', apiVersion.substring(0, 2) != "7.");
             }
 
             function disableFormButtons(disabled) {
