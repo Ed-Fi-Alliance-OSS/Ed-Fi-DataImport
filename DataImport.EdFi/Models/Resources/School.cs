@@ -11,6 +11,6 @@ namespace DataImport.EdFi.Models.Resources
 
         public string NameOfInstitution { get; set; }
 
-        public int? SchoolId { get; set; }
+        public long? SchoolId { get; set; }
     }
 }
