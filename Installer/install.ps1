@@ -45,14 +45,14 @@ Configure DataImport
     $p = @{
         ToolsPath = "C:/temp/tools"
         DbConnectionInfo = $dbConnectionInfo
-        PackageVersion = '2.3.0.0'
+        PackageVersion = '2.3.1.0'
     }
 
     UserRecoveryToken is optional. This value can be used to recover/ reset the application user credentials
     $p = @{
         ToolsPath = "C:/temp/tools"
         DbConnectionInfo = $dbConnectionInfo
-        PackageVersion = '2.3.0.0'
+        PackageVersion = '2.3.1.0'
         UserRecoveryToken = "bEnFYNociET2R1Wua3DHzwfU5u"
     }
 #>
@@ -62,7 +62,7 @@ $packageSource = Split-Path $PSScriptRoot -Parent
 $p = @{
     ToolsPath        = "C:/temp/tools"
     DbConnectionInfo = $dbConnectionInfo
-    PackageVersion   = '2.3.0.0'
+    PackageVersion   = '2.3.1.0'
     PackageSource    = $packageSource
 }
 
