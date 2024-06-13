@@ -33,6 +33,8 @@ jobs:
   run-ps-lint:
      name: PowerShell Linter
      permissions:
+        actions: read
+        contents: read
         security-events: write
      uses: Ed-Fi-Alliance-OSS/Ed-Fi-Actions/.github/workflows/powershell-analyzer.yml@main
   scan-actions-bidi:
