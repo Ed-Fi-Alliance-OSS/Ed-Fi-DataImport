@@ -37,6 +37,65 @@ services:
 ...
 ```
 
+### Using .env.example
+
+Please see the reference [.env.example](https://github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport/blob/main/Compose/pgsql/.env.example) as a listing of available variables.
+
+Below is a copy of that file.  Please note that some settings are commented out by default to disable the setting, however it could be uncommented to fit your production use case.
+
+```
+POSTGRES_USER=<default postgres database user>
+POSTGRES_PASSWORD=<password for default postgres user>
+POSTGRES_PORT=<postgresql port or port for pg bouncer to listen to if using PgBouncer>
+
+ENCRYPTION_KEY=<base64-encoded 256-bit key>
+TIME_ZONE=<US/Central>
+USER_RECOVERY_TOKEN=<base64-encoded 256-bit key>
+
+# NOTE: PostgreSql is supported by default. If SqlServer is used, then environment section of the dataimport container
+# within the docker compose file needs to be customized to have appropriate connection string
+DATABASE_ENGINE=<PostgreSql or SqlServer>
+
+## Additional Configurable Settings
+# NOTE: These appsettings need to be added to the environment section of the dataimport container within the docker compose file in order to take effect
+
+# Uncomment below to skip certificate validation for FTPS agents
+# APPSETTINGS__ALLOWTESTCERTIFICATES: "true"
+
+
+# Uncomment below allow arbitrary PowerShell code to run in preprocessors
+# APPSETTINGS__USEPOWERSHELLWITHNORESTRICTIONS: "true"
+
+
+# Uncomment and update to change logged in timeout rate
+# APPSETTINGS__LOGINTIMEOUTINMINUTES: <amount of time>
+
+
+### File Settings
+# Uncomment the below to override upload / script path
+## Must be a valid directory on the container.
+## To use a location on the host machine, map a volume to the container and update this to match
+# APPSETTINGS__SHARENAME: <path>
+
+# Uncomment below to use Azure for file storage
+# APPSETTINGS__FILEMODE: "Azure"
+# CONNECTIONSTRINGS__STORAGECONNECTION: <azure storage connection string>
+
+
+### External Preprocessor Settings
+# Uncomment below to enable experimental "External Process" preprocessors
+# EXTERNALPREPROCESSORS__ENABLED: "false"
+# Uncomment to override process timeout (default 5000)
+# EXTERNALPREPROCESSORS__TIMEOUTINMILLISECONDS: <amount>
+
+# This will allow a web Form to contain more than the default limit of 1024 values.
+# FORMOPTIONS__VALUECOUNTLIMIT: <amount>
+
+
+# Uncomment below to skip certificate validation for HTTPS connections to the Ods Api
+# APPSETTINGS__IGNORESCERTIFICATEERRORS: "true"
+```
+
 ### Using a Released Data Import image
 
 You can use a released Data Import image by modifying the example compose file to use the released image as follows:
