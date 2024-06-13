@@ -20,6 +20,8 @@ on:
       - ".github/**/*.yml"
   workflow_dispatch:
 
+permissions: read-all
+
 env:
   DB_PASS: ${{ secrets.DB_PASS }}
 
