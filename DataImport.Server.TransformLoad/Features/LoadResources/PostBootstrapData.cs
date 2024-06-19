@@ -100,7 +100,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                     _logger.LogInformation($"Inserting bootstrap data for ID: {singlePayload.Id}");
 
                     var resourcePath = singlePayload.ResourcePath;
-                    var endpointUrl = $"{ods.Config.ApiUrl}{resourcePath}";
+                    var endpointUrl = $"{ods.Config.ApiUrl.TrimEnd('/')}{resourcePath}";
 
                     var convertedPayload = JToken.Parse(singlePayload.Data);
 
