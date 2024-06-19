@@ -24,8 +24,8 @@ Data Import documentation is available here: [Data Import on TechDocs](https://e
 
 Data Import is a multi-project C# .NET solution with a web administration panel in ASP.NET to view data and job status, and server components as .NET command-line applications to process data. Data Import is designed to run on-premises or within Docker containers. 
 
-* Please see [Build Script Documentation](docs/build-script.md) to setup Data Import locally.
-* Please see [Docker Documentation](#docker-deployment) to setup Data Import within Docker Containers.
+* Please see [Build Script Documentation](https://github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport/blob/main/docs/build-script.md) to setup Data Import locally.
+* Please see [Docker Documentation](https://edfi.atlassian.net/wiki/spaces/EDFITOOLS/pages/24119478/Docker+Deployment+for+Data+Import) to setup Data Import within Docker Containers.
 
 ## Installation Requirements
 
@@ -60,7 +60,7 @@ Data Import supports 2 methods of installation: PowerShell scripts and Docker.
 
 PowerShell installation provides a convenient method for installing Data Import using PowerShell scripts and a simple configuration file.
 
-* For installation instructions, see [PowerShell Installation for Data Import using NuGet Packages](docs/powershell-installation.md) based on the version you are installing.
+* For installation instructions, see [PowerShell Installation for Data Import using NuGet Packages](https://github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport/blob/main/docs/powershell-installation.md) based on the version you are installing.
 
 ### Docker Deployment
 
@@ -68,7 +68,7 @@ PowerShell installation provides a convenient method for installing Data Import 
 
 ## First-Time Configuration
 
-For information on post-installation Data Import configuration process, see [First-Time Data Import Configuration](docs/first-time-configuration.md)
+For information on post-installation Data Import configuration process, see [First-Time Data Import Configuration](https://github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport/blob/main/docs/build-script.md)
 
 ## Quick Start
 
