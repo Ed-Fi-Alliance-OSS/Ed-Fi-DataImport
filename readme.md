@@ -44,11 +44,11 @@ Additionally, familiarity with the following technologies are required for insta
 
 Data Import is designed for use with the `Ed-Fi ODS / API v3.1+`. Data Import can be installed either alongside your Ed-Fi ODS / API server or used as a standalone application. Additionally, the Ed-Fi ODS / API instance must be reachable from the network on which the Data Import tool will be running.
 
-See the [Ed-Fi Operational Data Store and API](https://techdocs.ed-fi.org/display/ETKB/Ed-Fi+Operational+Data+Store+and+API) and [Ed-Fi Technology Version Index](https://techdocs.ed-fi.org/display/ETKB/Ed-Fi+Technology+Version+Index) sections for more details on the ODS / API and version compatibility.
+See the [Ed-Fi Operational Data Store and API](https://edfi.atlassian.net/wiki/spaces/ETKB/pages/20875869/Products+Technology) sections for more details on the ODS / API and version compatibility.
 
 ### The following are functional requirements to use Data Import:
 
-* An API key and secret is needed with access permissions to create data for targeted entities. Please see [How To: View Security Configuration Details](https://techdocs.ed-fi.org/display/ODSAPIS3V53/How+To%3A+View+Security+Configuration+Details) and [How To: Configure Claim Sets](https://techdocs.ed-fi.org/display/ODSAPIS3V53/How+To%3A+Configure+Claim+Sets) for more information on managing security configuration and access permissions via claim sets.
+* An API key and secret is needed with access permissions to create data for targeted entities.
 
 * A SQL login for Data Import to use. This login can use either Windows Authentication or SQL Authentication, and will be provided during installation of Data Import. The login must have the `dbcreator` role assigned.
 
