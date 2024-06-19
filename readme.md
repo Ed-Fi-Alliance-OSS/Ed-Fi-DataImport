@@ -2,9 +2,11 @@
 
 ## Overview
 
-`Data Import` is a tool to simplify the loading of CSV data to the Operational Data Store (ODS) of the [Ed-Fi ODS / API](https://techdocs.ed-fi.org/pages/viewpage.action?pageId=95259668). The import handles domains where vendor integration to the Ed-Fi APIs is inchoate or nonexistent from legacy data sources such as state assessment systems. The system works by providing methods to extract information out of spreadsheet-based CSV data files, and transform and load to the Ed-Fi ODS / API.
+`Data Import` is a tool to simplify the loading of CSV data to the Operational Data Store (ODS) of the [Ed-Fi ODS / API](https://edfi.atlassian.net/wiki/spaces/ETKB/pages/20875869/Products+Technology). The import handles domains where vendor integration to the Ed-Fi APIs is inchoate or nonexistent from legacy data sources such as state assessment systems. The system works by providing methods to extract information out of spreadsheet-based CSV data files, and transform and load to the Ed-Fi ODS / API.
 
 Data Import is designed to match the Ed-Fi ODS / API operating model of choice by education-serving entities. The Data Import solution is intended to be used by system IT administrators and technical data analysts, in service of Local Education Agency (LEA) and State Education Agency (SEA) needs where directly integrated API solutions do not exist.
+
+Data Import documentation is available here: [Data Import on TechDocs](https://edfi.atlassian.net/wiki/spaces/EDFITOOLS/pages/24119638/Data+Import)
 
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport)
 
@@ -62,13 +64,7 @@ PowerShell installation provides a convenient method for installing Data Import 
 
 ### Docker Deployment
 
-**Only Data Import 1.3 and above support deployment using Docker.**
-
-* For general Docker Deployment information, see [Docker Deployment for Data Import](https://techdocs.ed-fi.org/display/EDFITOOLS/Docker+Deployment+for+Data+Import)
-
-* For simple, out-of-the-box deployment of Data Import, see [Docker DI - Quick Start](https://techdocs.ed-fi.org/display/EDFITOOLS/Quick+Start+for+Data+Import+in+Docker)
-
-> For additional information and detailed steps, please refer the [Docker Deployment documentation](https://techdocs.ed-fi.org/display/EDFITOOLS/Docker+Deployment+for+Data+Import)
+* For general Docker Deployment information, see [Docker Deployment for Data Import](https://edfi.atlassian.net/wiki/spaces/EDFITOOLS/pages/24119478/Docker+Deployment+for+Data+Import)
 
 ## First-Time Configuration
 
@@ -76,17 +72,16 @@ For information on post-installation Data Import configuration process, see [Fir
 
 ## Quick Start
 
-Please refer the [Quick Start guide](https://techdocs.ed-fi.org/display/EDFITOOLS/Quick+Start) to verify installation and perform a simple end-to-end import using an Ed-Fi ODS / API v3.2 and the Grand Bend sample data set.
+Please refer the [Quick Start guide](https://edfi.atlassian.net/wiki/spaces/EDFITOOLS/pages/24119444/Quick+Start) to verify installation and perform a simple end-to-end import using an Ed-Fi ODS / API v3.2 and the Grand Bend sample data set.
 
 ## Documentation
 
-For detailed documentation, please see the [Data Import Tech Docs](https://techdocs.ed-fi.org/display/EDFITOOLS/Data+Import).
+For detailed documentation, please see the [Data Import Tech Docs](https://edfi.atlassian.net/wiki/spaces/EDFITOOLS/pages/24119638/Data+Import).
 
 ## Contributing
 
 The Ed-Fi Alliance welcomes code contributions from the community. Please read
-the [Ed-Fi Contribution
-Guidelines](https://techdocs.ed-fi.org/display/ETKB/Code+Contribution+Guidelines)
+the [Ed-Fi Contribution Guidelines](https://edfi.atlassian.net/wiki/spaces/ETKB/pages/20874883/Code+Contribution+Guidelines)
 for detailed information on how to contribute source code.
 
 ## License
