@@ -4,7 +4,7 @@ The Docker Deployment for Data Import provides deployment scripts to install Dat
 
 ## Prerequisites
 
-In addition to the prerequisites mentioned [here](../README.md#prerequisites), following requirements are additionaly needed to run Docker Deployment for Data Import:
+In addition to the prerequisites mentioned [here](https://github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport/tree/main?tab=readme-ov-file#prerequisites), following requirements are additionally needed to run Docker Deployment for Data Import:
 
 * Access to a Docker environment. The instructions below use [Docker Desktop](https://www.docker.com/products/docker-desktop/) for workstation usage.
 * An execution shell, such as PowerShell or bash using WSL, Mac OS or Linux.
