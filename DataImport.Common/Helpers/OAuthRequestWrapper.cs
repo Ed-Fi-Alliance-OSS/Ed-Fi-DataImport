@@ -5,7 +5,9 @@
 
 using System;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Authentication;
+using System.Text;
 using DataImport.Models;
 using RestSharp;
 using static DataImport.Common.Encryption;
@@ -83,8 +85,10 @@ namespace DataImport.Common.Helpers
                 ? Decrypt(apiServer.Secret, encryptionKey)
                 : apiServer.Secret;
 
-            bearerTokenRequest.AddParameter("client_id", apiServerKey);
-            bearerTokenRequest.AddParameter("client_secret", apiServerSecret);
+            // HTTP authentication
+            var keySecretBytes = Encoding.UTF8.GetBytes($"{apiServerKey}:{apiServerSecret}");
+            bearerTokenRequest.AddHeader("Authorization", $"Basic {Convert.ToBase64String(keySecretBytes)}");
+
             if (accessCode != null)
             {
                 bearerTokenRequest.AddParameter("code", accessCode);
