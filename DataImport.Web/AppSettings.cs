@@ -21,5 +21,6 @@ namespace DataImport.Web
         public string UserRecoveryToken { get; set; }
         public bool AllowUserRegistration { get; set; }
         public bool IgnoresCertificateErrors { get; set; } = false;
+        public bool UseBasicAuthentication { get; set; } = false;
     }
 }

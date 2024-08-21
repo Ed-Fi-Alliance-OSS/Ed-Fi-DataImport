@@ -18,6 +18,7 @@ namespace DataImport.Server.TransformLoad
         public bool UsePowerShellWithNoRestrictions { get; set; }
         public string MinimumLevelIngestionLog { get; set; }
         public bool IgnoresCertificateErrors { get; set; } = false;
+        public bool UseBasicAuthentication { get; set; } = false;
     }
 
     public class ConcurrencySettings
