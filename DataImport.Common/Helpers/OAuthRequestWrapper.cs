@@ -4,50 +4,21 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System;
-using System.Net;
-using System.Security.Authentication;
 using DataImport.Models;
 using RestSharp;
 using static DataImport.Common.Encryption;
 
 namespace DataImport.Common.Helpers
 {
-    public interface IOAuthRequestWrapper
+    public interface IOAuthRequestWrapper : IAuthRequestWrapper
     {
-        string GetAccessCode(ApiServer apiServer, string encryptionKey);
-
         string GetBearerToken(ApiServer apiServer, string encryptionKey, string accessCode);
 
         string GetBearerToken(ApiServer apiServer, string encryptionKey);
     }
 
-    public class OAuthRequestWrapper : IOAuthRequestWrapper
+    public class OAuthRequestWrapper : AuthRequestWrapper, IOAuthRequestWrapper
     {
-        public string GetAccessCode(ApiServer apiServer, string encryptionKey)
-        {
-            var authUrl = new Uri(apiServer.AuthUrl);
-            var oauthClient = new RestClient(authUrl.GetLeftPart(UriPartial.Authority));
-
-            var accessCodeRequest = new RestRequest(authUrl.AbsolutePath, Method.Post);
-            var apiServerKey = !string.IsNullOrEmpty(encryptionKey)
-                ? Decrypt(apiServer.Key, encryptionKey)
-                : apiServer.Key;
-            accessCodeRequest.AddParameter("Client_id", apiServerKey);
-            accessCodeRequest.AddParameter("Response_type", "code");
-
-            var accessCodeResponse = oauthClient.Execute<AccessCodeResponse>(accessCodeRequest);
-
-            if (accessCodeResponse.StatusCode != HttpStatusCode.OK)
-                throw new AuthenticationException("Unable to retrieve an authorization code. Error message: " +
-                                                  accessCodeResponse.ErrorMessage);
-            if (accessCodeResponse.Data.Error != null)
-                throw new AuthenticationException(
-                    "Unable to retrieve an authorization code. Please verify that your application key is correct. Alternately, the service address may not be correct: " +
-                    authUrl);
-
-            return accessCodeResponse.Data.Code;
-        }
-
         public string GetBearerToken(ApiServer apiServer, string encryptionKey)
         {
             return GetBearerToken(apiServer, encryptionKey, null);
@@ -56,21 +27,7 @@ namespace DataImport.Common.Helpers
         public string GetBearerToken(ApiServer apiServer, string encryptionKey, string accessCode)
         {
             var tokenUrl = new Uri(apiServer.TokenUrl);
-            RestClientOptions options;
-
-            if (ScriptExtensions.IgnoresCertificateErrors())
-            {
-#pragma warning disable S4830
-                options = new RestClientOptions(tokenUrl.GetLeftPart(UriPartial.Authority))
-                {
-                    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
-                };
-#pragma warning restore S4830
-            }
-            else
-            {
-                options = new RestClientOptions(tokenUrl.GetLeftPart(UriPartial.Authority));
-            }
+            RestClientOptions options = GetOptions(tokenUrl);
 
             var oauthClient = new RestClient(options);
 
@@ -95,16 +52,7 @@ namespace DataImport.Common.Helpers
                 bearerTokenRequest.AddParameter("grant_type", "client_credentials");
             }
 
-            var bearerTokenResponse = oauthClient.Execute<BearerTokenResponse>(bearerTokenRequest);
-            if (bearerTokenResponse.StatusCode != HttpStatusCode.OK)
-                throw new AuthenticationException("Unable to retrieve an access token. Error message: " +
-                                                  bearerTokenResponse.ErrorMessage);
-
-            if (bearerTokenResponse.Data.Error != null || bearerTokenResponse.Data.TokenType != "bearer")
-                throw new AuthenticationException(
-                    "Unable to retrieve an access token. Please verify that your application secret is correct.");
-
-            return bearerTokenResponse.Data.AccessToken;
+            return GetToken(bearerTokenRequest, oauthClient);
         }
     }
 }
