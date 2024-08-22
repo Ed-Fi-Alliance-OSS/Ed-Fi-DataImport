@@ -21,11 +21,11 @@ namespace DataImport.Web.Services
     {
         private readonly ISwaggerMetadataFetcher _metadataFetcher;
         private readonly Dictionary<string, string> _yearSpecificYearCache = new Dictionary<string, string>();
-        private readonly IOAuthRequestWrapper _oauthRequestWrapper;
+        private readonly IAuthRequestWrapper _oauthRequestWrapper;
         private string _encryptionKey;
         private readonly IOptions<AppSettings> _options;
 
-        public EdFiServiceV311(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, ISwaggerMetadataFetcher metadataFetcher, IOAuthRequestWrapper oauthRequestWrapper, IOptions<AppSettings> options)
+        public EdFiServiceV311(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, ISwaggerMetadataFetcher metadataFetcher, IAuthRequestWrapper oauthRequestWrapper, IOptions<AppSettings> options)
             : base(mapper, dbContext)
         {
             _metadataFetcher = metadataFetcher;

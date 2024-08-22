@@ -119,13 +119,9 @@ namespace DataImport.Web
             }
 
             if (bool.Parse(Configuration["AppSettings:UseBasicAuthentication"]))
-            {
-                services.AddTransient<IBasicAuthRequestWrapper, BasicAuthRequestWrapper>();
-            }
+                services.AddTransient<IAuthRequestWrapper, BasicAuthRequestWrapper>();
             else
-            {
-                services.AddTransient<IOAuthRequestWrapper, OAuthRequestWrapper>();
-            }
+                services.AddTransient<IAuthRequestWrapper, OAuthRequestWrapper>();
 
             //Configure MVC Razor Views under "FeatureFolder" and with compilation
             services.Configure<RazorViewEngineOptions>(options => options.ViewLocationExpanders.Add(new FeatureViewLocationExpander()))

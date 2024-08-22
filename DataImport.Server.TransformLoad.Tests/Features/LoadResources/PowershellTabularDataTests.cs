@@ -36,10 +36,10 @@ $row.'Integer' = [int]123";
         [SetUp]
         public void Setup()
         {
-            var oAuthRequestWrapper = A.Fake<IOAuthRequestWrapper>();
+            var oAuthRequestWrapper = A.Fake<IAuthRequestWrapper>();
             A.CallTo(() => oAuthRequestWrapper.GetAccessCode(null, null)).WithAnyArguments().Returns("fake token");
-            A.CallTo(() => oAuthRequestWrapper.GetBearerToken(null, null)).WithAnyArguments().Returns("fake token");
-            A.CallTo(() => oAuthRequestWrapper.GetBearerToken(null, null, null)).WithAnyArguments().Returns("fake token");
+            A.CallTo(() => oAuthRequestWrapper.GetToken(null, null)).WithAnyArguments().Returns("fake token");
+            A.CallTo(() => oAuthRequestWrapper.GetToken(null, null, null)).WithAnyArguments().Returns("fake token");
 
             var appSettings = new AppSettings { EncryptionKey = Guid.NewGuid().ToString() };
             _service = new PowerShellPreprocessorService(appSettings, new PowerShellPreprocessorOptions(), oAuthRequestWrapper);

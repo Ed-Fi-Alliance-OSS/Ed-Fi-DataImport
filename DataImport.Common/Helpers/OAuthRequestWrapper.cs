@@ -10,21 +10,14 @@ using static DataImport.Common.Encryption;
 
 namespace DataImport.Common.Helpers
 {
-    public interface IOAuthRequestWrapper : IAuthRequestWrapper
+    public class OAuthRequestWrapper : AuthRequestWrapper, IAuthRequestWrapper
     {
-        string GetBearerToken(ApiServer apiServer, string encryptionKey, string accessCode);
-
-        string GetBearerToken(ApiServer apiServer, string encryptionKey);
-    }
-
-    public class OAuthRequestWrapper : AuthRequestWrapper, IOAuthRequestWrapper
-    {
-        public string GetBearerToken(ApiServer apiServer, string encryptionKey)
+        public string GetToken(ApiServer apiServer, string encryptionKey)
         {
-            return GetBearerToken(apiServer, encryptionKey, null);
+            return GetToken(apiServer, encryptionKey, null);
         }
 
-        public string GetBearerToken(ApiServer apiServer, string encryptionKey, string accessCode)
+        public string GetToken(ApiServer apiServer, string encryptionKey, string accessCode)
         {
             var tokenUrl = new Uri(apiServer.TokenUrl);
             RestClientOptions options = GetOptions(tokenUrl);

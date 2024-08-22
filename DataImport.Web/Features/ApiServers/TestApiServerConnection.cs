@@ -84,12 +84,12 @@ namespace DataImport.Web.Features.ApiServers
             private readonly DataImportDbContext _database;
             private readonly IEncryptionService _encryptionService;
             private readonly IConfigurationService _configurationService;
-            private readonly IOAuthRequestWrapper _oAuthRequestWrapper;
+            private readonly IAuthRequestWrapper _oAuthRequestWrapper;
             private readonly string _encryptionKey;
             private readonly IOptions<AppSettings> _options;
 
             public QueryHandler(ILogger<TestApiServerConnection> logger, DataImportDbContext database, IEncryptionKeyResolver encryptionKeyResolver,
-                IEncryptionService encryptionService, IConfigurationService configurationService, IOAuthRequestWrapper oAuthRequestWrapper, IOptions<AppSettings> options)
+                IEncryptionService encryptionService, IConfigurationService configurationService, IAuthRequestWrapper oAuthRequestWrapper, IOptions<AppSettings> options)
             {
                 _logger = logger;
                 _database = database;

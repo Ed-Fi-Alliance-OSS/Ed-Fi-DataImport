@@ -38,10 +38,10 @@ namespace DataImport.Common.Tests
         {
             _powerShellPreprocessorOptions = new PowerShellPreprocessorOptions();
 
-            var oAuthRequestWrapper = A.Fake<IOAuthRequestWrapper>();
+            var oAuthRequestWrapper = A.Fake<IAuthRequestWrapper>();
             A.CallTo(() => oAuthRequestWrapper.GetAccessCode(null, null)).WithAnyArguments().Returns("fake token");
-            A.CallTo(() => oAuthRequestWrapper.GetBearerToken(null, null)).WithAnyArguments().Returns("fake token");
-            A.CallTo(() => oAuthRequestWrapper.GetBearerToken(null, null, null)).WithAnyArguments().Returns("fake token");
+            A.CallTo(() => oAuthRequestWrapper.GetToken(null, null)).WithAnyArguments().Returns("fake token");
+            A.CallTo(() => oAuthRequestWrapper.GetToken(null, null, null)).WithAnyArguments().Returns("fake token");
 
             var powerShellPreprocessSettings = new PowerShellPreprocessSettings { EncryptionKey = Guid.NewGuid().ToString() };
             _service = new PowerShellPreprocessorService(powerShellPreprocessSettings, _powerShellPreprocessorOptions, oAuthRequestWrapper);

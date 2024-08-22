@@ -34,7 +34,7 @@ namespace DataImport.Web.Tests.Services
                    GetEncryptionKeyResolver(),
                    A.Fake<IMapper>(),
                    metadataFetcher,
-                   A.Fake<IOAuthRequestWrapper>(),
+                   A.Fake<IAuthRequestWrapper>(),
                    null)
             {
             }

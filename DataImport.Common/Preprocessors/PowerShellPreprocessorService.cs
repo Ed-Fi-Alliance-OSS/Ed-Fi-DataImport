@@ -28,10 +28,10 @@ namespace DataImport.Common.Preprocessors
     public class PowerShellPreprocessorService : IPowerShellPreprocessorService
     {
         private readonly PowerShellPreprocessorOptions _psPreprocessorOptions;
-        private readonly IOAuthRequestWrapper _authRequestWrapper;
+        private readonly IAuthRequestWrapper _authRequestWrapper;
         private readonly IPowerShellPreprocessSettings _powerShellPreprocessSettings;
 
-        public PowerShellPreprocessorService(IPowerShellPreprocessSettings powerShellPreprocessSettings, PowerShellPreprocessorOptions options, IOAuthRequestWrapper authRequestWrapper)
+        public PowerShellPreprocessorService(IPowerShellPreprocessSettings powerShellPreprocessSettings, PowerShellPreprocessorOptions options, IAuthRequestWrapper authRequestWrapper)
         {
             _psPreprocessorOptions = options ?? throw new ArgumentNullException(nameof(options));
             _authRequestWrapper = authRequestWrapper;

@@ -11,14 +11,14 @@ using static DataImport.Common.Encryption;
 
 namespace DataImport.Common.Helpers
 {
-    public interface IBasicAuthRequestWrapper : IAuthRequestWrapper
+    public class BasicAuthRequestWrapper : AuthRequestWrapper, IAuthRequestWrapper
     {
-        string GetBasicToken(ApiServer apiServer, string encryptionKey, string accessCode);
-    }
+        public string GetToken(ApiServer apiServer, string encryptionKey)
+        {
+            return GetToken(apiServer, encryptionKey, null);
+        }
 
-    public class BasicAuthRequestWrapper : AuthRequestWrapper, IBasicAuthRequestWrapper
-    {
-        public string GetBasicToken(ApiServer apiServer, string encryptionKey, string accessCode)
+        public string GetToken(ApiServer apiServer, string encryptionKey, string accessCode)
         {
             var tokenUrl = new Uri(apiServer.TokenUrl);
             RestClientOptions options = GetOptions(tokenUrl);

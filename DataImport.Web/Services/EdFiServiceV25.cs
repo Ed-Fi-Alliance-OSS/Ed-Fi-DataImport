@@ -17,11 +17,11 @@ namespace DataImport.Web.Services
 {
     public class EdFiServiceV25 : EdFiServiceBase
     {
-        private readonly IOAuthRequestWrapper _oauthRequestWrapper;
+        private readonly IAuthRequestWrapper _oauthRequestWrapper;
         private readonly string _encryptionKey;
         private readonly IOptions<AppSettings> _options;
 
-        public EdFiServiceV25(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, IOAuthRequestWrapper oauthRequestWrapper, IOptions<AppSettings> options)
+        public EdFiServiceV25(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, IAuthRequestWrapper oauthRequestWrapper, IOptions<AppSettings> options)
             : base(mapper, dbContext)
         {
             _encryptionKey = encryptionKeyResolver.GetEncryptionKey();

@@ -23,7 +23,7 @@ namespace DataImport.Web.Tests.Helpers
             {
                 Action act = () =>
                 {
-                    var _ = new OdsApiTokenRetriever(A.Fake<IOAuthRequestWrapper>(), new ApiServer
+                    var _ = new OdsApiTokenRetriever(A.Fake<IAuthRequestWrapper>(), new ApiServer
                     {
                         ApiVersion = new ApiVersion
                         {
@@ -59,7 +59,7 @@ namespace DataImport.Web.Tests.Helpers
             [SetUp]
             public void SetUp()
             {
-                _oAuthRequestWrapper = A.Fake<IOAuthRequestWrapper>();
+                _oAuthRequestWrapper = A.Fake<IAuthRequestWrapper>();
                 _apiServer = new ApiServer
                 {
                     ApiVersion = new ApiVersion()
@@ -70,7 +70,7 @@ namespace DataImport.Web.Tests.Helpers
 
             private OdsApiTokenRetriever _systemUnderTest;
 
-            private IOAuthRequestWrapper _oAuthRequestWrapper;
+            private IAuthRequestWrapper _oAuthRequestWrapper;
 
             private ApiServer _apiServer;
 
@@ -87,7 +87,7 @@ namespace DataImport.Web.Tests.Helpers
                     .Returns(AccessCode);
 
                 A.CallTo(() =>
-                        _oAuthRequestWrapper.GetBearerToken(_apiServer, EncryptionKey, AccessCode))
+                        _oAuthRequestWrapper.GetToken(_apiServer, EncryptionKey, AccessCode))
                     .Returns(BearerToken);
 
                 _apiServer.ApiVersion.Version = "2.6.0";
@@ -105,7 +105,7 @@ namespace DataImport.Web.Tests.Helpers
                 // Arrange
                 const string BearerToken = "bearer token";
 
-                A.CallTo(() => _oAuthRequestWrapper.GetBearerToken(_apiServer, EncryptionKey))
+                A.CallTo(() => _oAuthRequestWrapper.GetToken(_apiServer, EncryptionKey))
                     .Returns(BearerToken);
 
                 _apiServer.ApiVersion.Version = "3.1.1";
@@ -123,7 +123,7 @@ namespace DataImport.Web.Tests.Helpers
                 // Arrange
                 const string BearerToken = "bearer token";
 
-                A.CallTo(() => _oAuthRequestWrapper.GetBearerToken(_apiServer, EncryptionKey))
+                A.CallTo(() => _oAuthRequestWrapper.GetToken(_apiServer, EncryptionKey))
                     .Returns(BearerToken);
 
                 _apiServer.ApiVersion.Version = "5.1.0";

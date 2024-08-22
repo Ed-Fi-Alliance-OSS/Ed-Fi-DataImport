@@ -10,5 +10,9 @@ namespace DataImport.Common.Helpers
     public interface IAuthRequestWrapper
     {
         string GetAccessCode(ApiServer apiServer, string encryptionKey);
+
+        string GetToken(ApiServer apiServer, string encryptionKey, string accessCode);
+
+        string GetToken(ApiServer apiServer, string encryptionKey);
     }
 }

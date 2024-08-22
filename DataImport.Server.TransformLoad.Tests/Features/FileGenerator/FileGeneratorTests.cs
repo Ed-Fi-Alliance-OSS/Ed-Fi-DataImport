@@ -34,7 +34,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileGenerator
             var fileServices = GetRegisteredFileServices();
             var dbContext = Services.GetService<DataImportDbContext>();
             var options = Services.GetService<IOptions<AppSettings>>();
-            var service = new PowerShellPreprocessorService(options.Value, new PowerShellPreprocessorOptions(), A.Fake<IOAuthRequestWrapper>());
+            var service = new PowerShellPreprocessorService(options.Value, new PowerShellPreprocessorOptions(), A.Fake<IAuthRequestWrapper>());
             var extService = Services.GetService<ExternalPreprocessorService>();
             var commandHandler = new CommandHandlerTestWrapper(logger, options, dbContext, fileServices, service, extService);
 
@@ -79,7 +79,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileGenerator
             var fileServices = GetRegisteredFileServices();
             var dbContext = Services.GetService<DataImportDbContext>();
             var options = Services.GetService<IOptions<AppSettings>>();
-            var service = new PowerShellPreprocessorService(options.Value, new PowerShellPreprocessorOptions(), A.Fake<IOAuthRequestWrapper>());
+            var service = new PowerShellPreprocessorService(options.Value, new PowerShellPreprocessorOptions(), A.Fake<IAuthRequestWrapper>());
             var extService = Services.GetService<ExternalPreprocessorService>();
             var commandHandler = new CommandHandlerTestWrapper(logger, options, dbContext, fileServices, service, extService);
 
@@ -147,7 +147,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.FileGenerator
             var fileServices = GetRegisteredFileServices();
             var dbContext = Services.GetService<DataImportDbContext>();
             var options = Services.GetService<IOptions<AppSettings>>();
-            var service = new PowerShellPreprocessorService(options.Value, new PowerShellPreprocessorOptions(), A.Fake<IOAuthRequestWrapper>());
+            var service = new PowerShellPreprocessorService(options.Value, new PowerShellPreprocessorOptions(), A.Fake<IAuthRequestWrapper>());
             var extService = Services.GetService<ExternalPreprocessorService>();
             var commandHandler = new CommandHandlerTestWrapper(logger, options, dbContext, fileServices, service, extService);
 

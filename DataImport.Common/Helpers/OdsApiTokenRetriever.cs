@@ -14,9 +14,9 @@ namespace DataImport.Common.Helpers
     {
         private readonly ApiServer _apiServer;
         private readonly string _encryptionKey;
-        private readonly IOAuthRequestWrapper _requestWrapper;
+        private readonly IAuthRequestWrapper _requestWrapper;
 
-        public OdsApiTokenRetriever(IOAuthRequestWrapper requestWrapper, ApiServer apiServer, string encryptionKey = "")
+        public OdsApiTokenRetriever(IAuthRequestWrapper requestWrapper, ApiServer apiServer, string encryptionKey = "")
         {
             _requestWrapper = requestWrapper ?? throw new ArgumentNullException(nameof(requestWrapper));
 
@@ -30,10 +30,10 @@ namespace DataImport.Common.Helpers
             {
                 var accessCode = _requestWrapper.GetAccessCode(_apiServer, _encryptionKey);
 
-                return _requestWrapper.GetBearerToken(_apiServer, _encryptionKey, accessCode);
+                return _requestWrapper.GetToken(_apiServer, _encryptionKey, accessCode);
             }
 
-            return _requestWrapper.GetBearerToken(_apiServer, _encryptionKey);
+            return _requestWrapper.GetToken(_apiServer, _encryptionKey);
         }
     }
 

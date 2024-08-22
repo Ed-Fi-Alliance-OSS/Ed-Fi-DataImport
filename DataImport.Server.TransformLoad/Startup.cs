@@ -106,13 +106,9 @@ namespace DataImport.Server.TransformLoad
             services.AddTransient<IExternalPreprocessorService, ExternalPreprocessorService>();
 
             if (bool.Parse(configuration.GetSection("AppSettings")["UseBasicAuthentication"]))
-            {
-                services.AddTransient<IBasicAuthRequestWrapper, BasicAuthRequestWrapper>();
-            }
+                services.AddTransient<IAuthRequestWrapper, BasicAuthRequestWrapper>();
             else
-            {
-                services.AddTransient<IOAuthRequestWrapper, OAuthRequestWrapper>();
-            }
+                services.AddTransient<IAuthRequestWrapper, OAuthRequestWrapper>();
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
