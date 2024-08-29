@@ -6,7 +6,7 @@
 #tag 8.0-alpine
 FROM mcr.microsoft.com/dotnet/aspnet@sha256:646b1c5ff36375f35f6149b0ce19ca095f97b4b882b90652801e9fbe82bcfa8a
 LABEL maintainer="Ed-Fi Alliance, LLC and Contributors <techsupport@ed-fi.org>"
-ENV VERSION="2.3.3"
+ENV VERSION="2.3.4"
 ENV TZ=${TIME_ZONE}
 
 # Alpine image does not contain Globalization Cultures library so we need to install ICU library to get fopr LINQ expression to work
