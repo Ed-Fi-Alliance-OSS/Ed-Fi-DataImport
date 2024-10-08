@@ -37,7 +37,7 @@ function Invoke-Promote {
     )
 
     $package = "DataImport.Web"
-    $version = $ReleaseRef.substring(1)
+    $version = $ReleaseRef.substring(0)
 
     $body = '
     {
