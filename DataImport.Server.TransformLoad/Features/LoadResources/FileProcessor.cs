@@ -384,7 +384,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                         RowNumber = rowNum,
                         EducationOrganizationId = GetEdOrgId(currentRow, map.SelectedIngestionLogEdOrgIdColumn)
                     };
-                    return Task.FromResult((RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, rowWithError, $"{odsApi.Config.ApiUrl}{map.ResourcePath}", null, ex.Message)));
+                    return Task.FromResult((RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, rowWithError, $"{odsApi.Config.ApiUrl}{map.ResourcePath}", null, null, null, ex.Message)));
                 }
 
                 return mappedRow == null
