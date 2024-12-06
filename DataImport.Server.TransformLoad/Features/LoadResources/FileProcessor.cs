@@ -450,7 +450,7 @@ namespace DataImport.Server.TransformLoad.Features.LoadResources
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "POST failed for resource: {url}, Row Number: {row}", endpointUrl, mappedRow.RowNumber);
-                    return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl));
+                    return (RowResult.Error, new IngestionLogMarker(IngestionResult.Error, LogLevels.Error, mappedRow, endpointUrl, null, null, null, ex.Message));
                 }
 
                 switch (odsResponse.StatusCode)
