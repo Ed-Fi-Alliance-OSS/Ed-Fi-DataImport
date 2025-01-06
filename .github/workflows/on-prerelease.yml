@@ -21,7 +21,7 @@ env:
 jobs:
   pack:
     name: Build and Pack
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         shell: pwsh
