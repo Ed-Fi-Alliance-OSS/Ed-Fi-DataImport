@@ -3,8 +3,8 @@
 # The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 # See the LICENSE and NOTICES files in the project root for more information.
 
-# tag sdk:8.0 alpine
-FROM mcr.microsoft.com/dotnet/sdk@sha256:e646d8a0fa589bcd970e0ebde394780398e8ae08fffeb36781753c51fc9e87b0 AS build
+# tag sdk:10.0-alpine
+FROM mcr.microsoft.com/dotnet/sdk@sha256:2b0e46d490f5b53a8dc07fbf636cdf5b90796878a256e1ce5b441e8d9675c5f4 AS build
 WORKDIR /source
 
 COPY DataImport.Web/*.csproj DataImport.Web/
@@ -33,8 +33,8 @@ WORKDIR /source/DataImport.Server.TransformLoad
 RUN dotnet build -c Release --no-restore
 RUN dotnet publish -c Release --no-build -o /app/DataImport.Server.TransformLoad
 
-#tag 8.0-alpine
-FROM mcr.microsoft.com/dotnet/aspnet@sha256:646b1c5ff36375f35f6149b0ce19ca095f97b4b882b90652801e9fbe82bcfa8a
+#tag 10.0-alpine
+FROM mcr.microsoft.com/dotnet/aspnet@sha256:49dce27611d8fe4fbe50483ea9438abd18ccb0198d0737af231335244d0c9b94
 LABEL maintainer="Ed-Fi Alliance, LLC and Contributors <techsupport@ed-fi.org>"
 # Alpine image does not contain Globalization Cultures library so we need to install ICU library to get for LINQ expression to work
 # Disable the globaliztion invariant mode (set in base image)
