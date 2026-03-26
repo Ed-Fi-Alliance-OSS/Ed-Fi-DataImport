@@ -28,7 +28,10 @@
 
 ## How to update database
 
-To update the database you need to follow similar steps. The only difference is that the Command changes a little bit
+> [!TIP]
+> The compiled application auto-installs database updates on startup. This is the recommended way to keep the database up to date. However, you can also apply updates manually from the Package Manager Console.
+
+To update the database from within Visual Studio you need to follow similar steps. The only difference is that the Command changes a little bit
 
    **SQL Server**
 
