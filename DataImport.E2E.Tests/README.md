@@ -1,5 +1,8 @@
 # Data Import End To End Tests
 
+> [!WARNING]
+> These tests may be broken / non-functional. Needs more investigation. We might just delete them.
+
 ## Install
 
 To get started run `npm install`
@@ -22,7 +25,7 @@ To execute all the tests, run `npm test`
 
 The preferred method for debug is the integrated playwright inspector.
 
-```
+```pwsh
 $env:PWDEBUG=1
 npm run test .\feature\{feature file name}
 ```

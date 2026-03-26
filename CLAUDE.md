@@ -30,14 +30,7 @@ dotnet test DataImport.Web.Tests
 
 ## E2E Tests
 
-```bash
-cd DataImport.E2E.Tests
-npm install
-cp .env.example .env    # Fill in URL, Username, Password, API_URL, etc.
-npm test                # All Cucumber features
-npm run test-login      # Single feature
-PWDEBUG=1 npm run test  # Debug mode
-```
+Do not run the E2E tests as they may be broken.
 
 ## Architecture
 
