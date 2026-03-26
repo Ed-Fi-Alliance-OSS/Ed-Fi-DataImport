@@ -80,7 +80,6 @@ namespace DataImport.Web
             services.AddTransient<IEncryptionKeySettings>(sp => sp.GetService<IOptions<AppSettings>>().Value);
             services.AddTransient<IEncryptionKeyResolver, OptionsEncryptionKeyResolver>();
 
-            services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Startup).Assembly));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddHttpContextAccessor();
 

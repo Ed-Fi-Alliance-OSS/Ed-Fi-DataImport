@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.EdFi;
 using DataImport.EdFi.Api;
 using DataImport.EdFi.Api.EnrollmentComposite;
@@ -23,13 +22,10 @@ namespace DataImport.Web.Services
 {
     public abstract class EdFiServiceBase
     {
-        protected IMapper Mapper { get; }
-
         public DataImportDbContext DatabaseContext { get; }
 
-        protected EdFiServiceBase(IMapper mapper, DataImportDbContext databaseContext)
+        protected EdFiServiceBase(DataImportDbContext databaseContext)
         {
-            Mapper = mapper;
             DatabaseContext = databaseContext;
         }
 
@@ -57,7 +53,7 @@ namespace DataImport.Web.Services
         {
             return Query((client, apiVersion, yearSpecificYear) =>
             {
-                var api = new EnrollmentApi(client, apiVersion.Version, yearSpecificYear, Mapper);
+                var api = new EnrollmentApi(client, apiVersion.Version, yearSpecificYear);
                 return api.GetSectionsBySchoolId(schoolId, offset, limit);
             }, apiServer);
         }
@@ -66,7 +62,7 @@ namespace DataImport.Web.Services
         {
             return Query((client, apiVersion, yearSpecificYear) =>
             {
-                var api = new AssessmentsApi(client, apiVersion.Version, Mapper);
+                var api = new AssessmentsApi(client, apiVersion.Version);
                 return api.GetAssessmentById(id);
             }, apiServer);
         }
@@ -86,7 +82,7 @@ namespace DataImport.Web.Services
         {
             return Query((client, apiVersion, yearSpecificYear) =>
             {
-                var api = new EnrollmentApi(client, apiVersion.Version, yearSpecificYear, Mapper);
+                var api = new EnrollmentApi(client, apiVersion.Version, yearSpecificYear);
                 return api.GetAllSchools(offset, limit);
             }, apiServer);
         }
@@ -104,7 +100,7 @@ namespace DataImport.Web.Services
         {
             return Query((client, apiVersion, yearSpecificYear) =>
             {
-                var api = new AssessmentsApi(client, apiVersion.Version, Mapper);
+                var api = new AssessmentsApi(client, apiVersion.Version);
                 return api.GetAllAssessments(offset, limit);
             }, apiServer);
         }

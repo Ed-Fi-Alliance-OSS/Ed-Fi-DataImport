@@ -3,13 +3,13 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.Models;
 using DataImport.Web.Helpers;
 using DataImport.Web.Infrastructure;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
@@ -27,19 +27,22 @@ namespace DataImport.Web.Features.Lookup
         public class QueryHandler : IRequestHandler<Query, Command>
         {
             private readonly DataImportDbContext _database;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(DataImportDbContext database, IMapper mapper)
+            public QueryHandler(DataImportDbContext database)
             {
                 _database = database;
-                _mapper = mapper;
             }
 
             public Task<Command> Handle(Query request, CancellationToken cancellationToken)
             {
-                var lookup = _database.Lookups.FirstOrDefault(x => x.Id == request.Id);
+                var lookup = _database.Lookups.SingleOrDefault(x => x.Id == request.Id);
 
-                return Task.FromResult(_mapper.Map<Command>(lookup));
+                if (lookup == null)
+                {
+                    throw new KeyNotFoundException($"Lookup with id '{request.Id}' was not found.");
+                }
+
+                return Task.FromResult(lookup.ToEditCommand());
             }
         }
 

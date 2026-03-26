@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using DataImport.Models;
 using MediatR;
 
@@ -39,12 +38,10 @@ namespace DataImport.Web.Features.Lookup
         public class QueryHandler : IRequestHandler<Query, ViewModel>
         {
             private readonly DataImportDbContext _dataImportDbContext;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(DataImportDbContext dataImportDbContext, IMapper mapper)
+            public QueryHandler(DataImportDbContext dataImportDbContext)
             {
                 _dataImportDbContext = dataImportDbContext;
-                _mapper = mapper;
             }
 
             public Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
@@ -55,7 +52,7 @@ namespace DataImport.Web.Features.Lookup
                     .ToList();
 
                 var lookupsBySourceTable = lookupsFromDb
-                    .Select(x => _mapper.Map<LookupItem>(x))
+                    .Select(x => x.ToLookupItem())
                     .GroupBy(x => x.SourceTable);
 
                 return Task.FromResult(new ViewModel

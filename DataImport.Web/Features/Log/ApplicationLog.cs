@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using DataImport.Models;
 using DataImport.Web.Services;
 using MediatR;
@@ -24,13 +23,10 @@ namespace DataImport.Web.Features.Log
         public class QueryHandler : IRequestHandler<Query, LogViewModel>
         {
             private readonly DataImportDbContext _dataImportDbContext;
-            private readonly IMapper _mapper;
 
-
-            public QueryHandler(DataImportDbContext dataImportDbContext, IMapper mapper)
+            public QueryHandler(DataImportDbContext dataImportDbContext)
             {
                 _dataImportDbContext = dataImportDbContext;
-                _mapper = mapper;
             }
 
             public Task<LogViewModel> Handle(Query request, CancellationToken cancellationToken)
@@ -46,7 +42,7 @@ namespace DataImport.Web.Features.Log
                 var pagedList = _dataImportDbContext.ApplicationLogs
                     .OrderByDescending(x => x.Logged).Skip(offset).Take(limit).ToList();
 
-                return pagedList.Select(_mapper.Map<LogViewModel.ApplicationLog>);
+                return pagedList.Select(x => x.ToLogApplicationLog());
             }
 
         }

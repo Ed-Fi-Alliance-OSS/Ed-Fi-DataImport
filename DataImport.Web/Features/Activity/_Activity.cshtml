@@ -45,7 +45,7 @@ else
                     <td>@m.AgentName</td>
                     <td>@m.FileName</td>
                     <td>@m.ApiConnection</td>
-                    <td>@(m.CreateDate?.ToString("yyyy-MM-dd hh:mm tt"))</td>
+                    <td>@m.CreateDate</td>
                     <td>@m.Rows</td>
                     <td>
                         @if (m.Status == FileStatus.ErrorLoading ||

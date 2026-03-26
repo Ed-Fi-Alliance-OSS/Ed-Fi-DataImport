@@ -8,7 +8,5 @@
   <ItemGroup>
     <ProjectReference Include="..\DataImport.Common\DataImport.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="16.1.1" />
-  </ItemGroup>
+
 </Project>

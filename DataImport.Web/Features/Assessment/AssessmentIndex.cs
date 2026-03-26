@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.Web.Features.Shared;
 using DataImport.Web.Helpers;
 using DataImport.Web.Services;
@@ -52,12 +51,10 @@ namespace DataImport.Web.Features.Assessment
         public class QueryHandler : IRequestHandler<Query, ViewModel>
         {
             private readonly EdFiServiceManager _edFiServiceManager;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(EdFiServiceManager edFiServiceManager, IMapper mapper)
+            public QueryHandler(EdFiServiceManager edFiServiceManager)
             {
                 _edFiServiceManager = edFiServiceManager;
-                _mapper = mapper;
             }
 
             public async Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
@@ -74,7 +71,7 @@ namespace DataImport.Web.Features.Assessment
 
                 return pagedAssessments.Select(x =>
                 {
-                    var mappedAssessment = _mapper.Map<ViewModel.Assessment>(x);
+                    var mappedAssessment = x.ToAssessmentIndexViewModel();
 
                     mappedAssessment.AssessmentIdentificationSystemDescriptor = x.IdentificationCodes.FirstOrDefault()
                         ?.AssessmentIdentificationSystemDescriptor.ToDescriptorName();

@@ -16,7 +16,6 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using DataImport.Common.Preprocessors;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -296,7 +295,7 @@ namespace DataImport.Web.Tests.Features.Preprocessor
             var disabledSettings = new ExternalPreprocessorOptions { Enabled = false };
             var handler = new AddPreprocessor.CommandHandler(
                 Testing.Services.GetRequiredService<ILogger<AddPreprocessor.CommandHandler>>(),
-                Testing.Services.GetRequiredService<DataImportDbContext>(), Testing.Services.GetRequiredService<IMapper>(),
+                Testing.Services.GetRequiredService<DataImportDbContext>(),
                 Options.Create(disabledSettings));
 
             var command = new AddPreprocessor.Command
