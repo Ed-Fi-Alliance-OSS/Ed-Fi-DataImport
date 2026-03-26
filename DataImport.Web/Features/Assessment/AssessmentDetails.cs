@@ -71,7 +71,11 @@ namespace DataImport.Web.Features.Assessment
             {
                 if (!request.ApiServerId.HasValue)
                 {
-                    return new AssessmentDetail();
+                    return new AssessmentDetail
+                    {
+                        PerformanceLevels = new List<AssessmentPerformanceLevel>(),
+                        ObjectiveAssessments = new PagedList<ObjectiveAssessment>()
+                    };
                 }
 
                 const int PageNumber = 1;
@@ -80,7 +84,19 @@ namespace DataImport.Web.Features.Assessment
 
                 var assessment = await _edFiServiceManager.GetAssessmentById(request.ApiServerId.Value, id);
 
+                if (assessment == null)
+                {
+                    return new AssessmentDetail
+                    {
+                        Id = id,
+                        ApiServerId = request.ApiServerId,
+                        PerformanceLevels = new List<AssessmentPerformanceLevel>(),
+                        ObjectiveAssessments = new PagedList<ObjectiveAssessment>()
+                    };
+                }
+
                 var assessmentDetail = assessment.ToAssessmentDetail();
+                assessmentDetail.ApiServerId = request.ApiServerId;
                 assessmentDetail.ObjectiveAssessments = await Page<ObjectiveAssessment>.FetchAsync(async (offset, limit) => await _edFiServiceManager.GetObjectiveAssessmentsByAssessment(request.ApiServerId.Value, assessment, offset, limit),
                     PageNumber, 10);
 

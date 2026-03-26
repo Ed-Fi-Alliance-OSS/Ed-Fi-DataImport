@@ -13,6 +13,7 @@ namespace DataImport.Web.Features.ApiServers
                 Id = src.Id,
                 Name = src.Name,
                 Url = src.Url,
+                // ApiVersion can be null for legacy records; preserve null (avoid a new exception and match prior mapping behavior).
                 ApiVersion = src.ApiVersion?.Version
             };
     }

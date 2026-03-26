@@ -3,6 +3,7 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
+using System.Collections.Generic;
 using System.Linq;
 using DataImport.Web.Helpers;
 
@@ -33,7 +34,7 @@ namespace DataImport.Web.Features.Assessment
                 AcademicSubjects = string.Join(", ", src.AcademicSubjects.Select(a => a.AcademicSubjectDescriptor.ToDescriptorName())),
                 AssessedGradeLevels = string.Join(", ", src.AssessedGradeLevels.Select(a => a.GradeLevelDescriptor.ToDescriptorName())),
                 IdentificationCodes = string.Join(", ", src.IdentificationCodes.Select(a => a.AssessmentIdentificationSystemDescriptor.ToDescriptorName())),
-                PerformanceLevels = src.PerformanceLevels
+                PerformanceLevels = src.PerformanceLevels ?? new List<EdFi.Models.Resources.AssessmentPerformanceLevel>()
                 // ObjectiveAssessments, ApiServerId, ApiServers are set by the handler after mapping
             };
     }

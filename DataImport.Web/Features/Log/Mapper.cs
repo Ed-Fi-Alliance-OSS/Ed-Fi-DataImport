@@ -33,6 +33,7 @@ namespace DataImport.Web.Features.Log
                 FileName = src.FileName,
                 Result = Enum.GetName(typeof(IngestionResult), src.Result),
                 Date = src.Date.ToString("yyyy-MM-dd hh:mm tt"),
+                // RowNumber is stored as a string in the ingestion log. When it isn't numeric, default to 0 (unknown) for display.
                 RowNumber = int.TryParse(src.RowNumber, out var rowNum) ? rowNum : 0,
                 EndPointUrl = src.EndPointUrl,
                 HttpStatusCode = src.HttpStatusCode,

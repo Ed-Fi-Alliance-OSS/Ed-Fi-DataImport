@@ -15,6 +15,7 @@ namespace DataImport.Web.Features.Preprocessor
                 // Id and DataMaps are intentionally omitted — managed by EF
                 Name = src.Name,
                 ScriptContent = src.ScriptContent,
+                // When unset, default(ScriptType)=CustomFileProcessor (0).
                 ScriptType = src.ScriptType ?? default,
                 RequireOdsApiAccess = src.RequireOdsApiAccess,
                 HasAttribute = src.HasAttribute,
@@ -27,6 +28,7 @@ namespace DataImport.Web.Features.Preprocessor
             // Id and DataMaps are intentionally omitted — EF manages these
             dest.Name = src.Name;
             dest.ScriptContent = src.ScriptContent;
+            // When unset, default(ScriptType)=CustomFileProcessor (0).
             dest.ScriptType = src.ScriptType ?? default;
             dest.RequireOdsApiAccess = src.RequireOdsApiAccess;
             dest.HasAttribute = src.HasAttribute;

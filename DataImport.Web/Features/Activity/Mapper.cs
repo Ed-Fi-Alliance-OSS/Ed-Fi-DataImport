@@ -14,7 +14,7 @@ namespace DataImport.Web.Features.Activity
             {
                 AgentName = src.Agent?.Name,
                 FileName = src.FileName,
-                CreateDate = src.CreateDate,
+                CreateDate = src.CreateDate?.ToString("yyyy-MM-dd hh:mm tt"),
                 Rows = src.Rows,
                 Status = src.Status,
                 ApiConnection = src.Agent?.ApiServer != null ? src.Agent.ApiServer.Name : string.Empty

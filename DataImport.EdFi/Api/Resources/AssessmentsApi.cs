@@ -41,15 +41,16 @@ namespace DataImport.EdFi.Api.Resources
                 var clientExecute =
                     _client.ExecuteAsync<List<Assessment>>(request);
                 clientExecute.Wait();
-                return clientExecute.Result.Data;
+                return clientExecute.Result.Data ?? new List<Assessment>();
             }
             else
             {
                 var clientExecute =
                     _client.ExecuteAsync<List<ModelsV25.Resources.Assessment>>(request);
                 clientExecute.Wait();
-                return clientExecute.Result.Data
-                    .Select(x => x.ToCurrentAssessment()).ToList();
+
+                var data = clientExecute.Result.Data;
+                return data?.Select(x => x.ToCurrentAssessment()).ToList() ?? new List<Assessment>();
             }
         }
 
@@ -76,7 +77,7 @@ namespace DataImport.EdFi.Api.Resources
                 var clientExecute =
                     _client.ExecuteAsync<ModelsV25.Resources.Assessment>(request);
                 clientExecute.Wait();
-                return clientExecute.Result.Data.ToCurrentAssessment();
+                return clientExecute.Result.Data?.ToCurrentAssessment();
             }
         }
     }

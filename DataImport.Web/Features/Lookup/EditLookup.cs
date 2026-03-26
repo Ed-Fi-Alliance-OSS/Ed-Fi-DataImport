@@ -9,6 +9,7 @@ using DataImport.Web.Infrastructure;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
@@ -34,7 +35,12 @@ namespace DataImport.Web.Features.Lookup
 
             public Task<Command> Handle(Query request, CancellationToken cancellationToken)
             {
-                var lookup = _database.Lookups.FirstOrDefault(x => x.Id == request.Id);
+                var lookup = _database.Lookups.SingleOrDefault(x => x.Id == request.Id);
+
+                if (lookup == null)
+                {
+                    throw new KeyNotFoundException($"Lookup with id '{request.Id}' was not found.");
+                }
 
                 return Task.FromResult(lookup.ToEditCommand());
             }

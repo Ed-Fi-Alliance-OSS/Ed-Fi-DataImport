@@ -46,7 +46,7 @@ namespace DataImport.Web.Features.Activity
         {
             public string AgentName { get; set; }
             public string FileName { get; set; }
-            public DateTimeOffset? CreateDate { get; set; }
+            public string CreateDate { get; set; }
             public int? Rows { get; set; }
             public FileStatus Status { get; set; }
             public string ApiConnection { get; set; }

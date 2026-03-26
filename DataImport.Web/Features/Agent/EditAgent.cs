@@ -56,6 +56,10 @@ namespace DataImport.Web.Features.Agent
 
                 var vm = agent.ToViewModel();
                 vm.EncryptionFailureMsg = null;
+
+                // Keep null vs empty-string distinct: null means "never set" (new agent), empty means "intentionally cleared".
+                vm.Password = agent.Password == string.Empty ? string.Empty : null;
+
                 if (!string.IsNullOrWhiteSpace(agent.Password))
                 {
                     if (_encryptionService.TryDecrypt(agent.Password, _encryptionKey, out var decryptedValue))
