@@ -106,7 +106,7 @@ param(
 
     # Only required with the Run command.
     [string]
-    [ValidateSet("mssql", "pg")]
+    [ValidateSet("mssql-shared", "mssql-year", "mssql-district", "pg-shared", "pg-year", "pg-district")]
     $LaunchProfile,
 
     #Generate Test Report
@@ -120,7 +120,12 @@ param(
 
     # Only required with local builds and testing.
     [switch]
-    $IsLocalBuild
+    $IsLocalBuild,
+
+    # Only required with the Run command. When set, passes --trust to dotnet run
+    # to trust the self-signed HTTPS development certificate.
+    [switch]
+    $TrustCertificate
 )
 
 $Env:MSBUILDDISABLENODEREUSE = "1"
@@ -364,10 +369,11 @@ function Invoke-Run {
     $projectFilePath = "$solutionRoot/$entryProject"
 
     if ([string]::IsNullOrEmpty($LaunchProfile)) {
-        Write-Information "LaunchProfile parameter is required for running Data Import. Please specify the LaunchProfile parameter. Valid values include 'mssql-district', 'mssql-shared', 'mssql-year', 'pg-district', 'pg-shared' and 'pg-year'"
+        Write-Information "LaunchProfile parameter is required for running Data Import. Please specify the LaunchProfile parameter. Valid values: 'mssql-shared', 'mssql-year', 'mssql-district', 'pg-shared', 'pg-year', 'pg-district'"
     }
     else {
-        Invoke-Execute { dotnet run --project $projectFilePath --launch-profile $LaunchProfile }
+        $trustFlag = if ($TrustCertificate) { "--trust" } else { "" }
+        Invoke-Execute { dotnet run --project $projectFilePath --launch-profile $LaunchProfile $trustFlag }
     }
 }
 

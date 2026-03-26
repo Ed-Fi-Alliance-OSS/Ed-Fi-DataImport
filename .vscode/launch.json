@@ -1,0 +1,137 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "DataImport Web (mssql-shared)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DataImport.Web/bin/Debug/net10.0/DataImport.Web.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/DataImport.Web",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "AppSettings__DatabaseEngine": "SqlServer",
+                "ConnectionStrings__defaultConnection": "Data Source=(local);Initial Catalog=EdFi_DataImport;Trusted_Connection=True;TrustServerCertificate=True;"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "DataImport Web (mssql-year)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DataImport.Web/bin/Debug/net10.0/DataImport.Web.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/DataImport.Web",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "AppSettings__DatabaseEngine": "SqlServer",
+                "ConnectionStrings__defaultConnection": "Data Source=(local);Initial Catalog=EdFi_DataImport_YearSpecific;Trusted_Connection=True;TrustServerCertificate=True;"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "DataImport Web (mssql-district)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DataImport.Web/bin/Debug/net10.0/DataImport.Web.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/DataImport.Web",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "AppSettings__DatabaseEngine": "SqlServer",
+                "ConnectionStrings__defaultConnection": "Data Source=(local);Initial Catalog=EdFi_DataImport_DistrictSpecific;Trusted_Connection=True;TrustServerCertificate=True;"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "DataImport Web (pg-shared)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DataImport.Web/bin/Debug/net10.0/DataImport.Web.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/DataImport.Web",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "AppSettings__DatabaseEngine": "PostgreSql",
+                "ConnectionStrings__defaultConnection": "host=localhost;port=5432;username=postgres;password=postgres;database=EdFi_DataImport;Application Name=EdFi.DataImport;"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "DataImport Web (pg-year)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DataImport.Web/bin/Debug/net10.0/DataImport.Web.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/DataImport.Web",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "AppSettings__DatabaseEngine": "PostgreSql",
+                "ConnectionStrings__defaultConnection": "host=localhost;port=5432;username=postgres;password=postgres;database=EdFi_DataImport_YearSpecific;Application Name=EdFi.DataImport;"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "DataImport Web (pg-district)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/DataImport.Web/bin/Debug/net10.0/DataImport.Web.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/DataImport.Web",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "AppSettings__DatabaseEngine": "PostgreSql",
+                "ConnectionStrings__defaultConnection": "host=localhost;port=5432;username=postgres;password=postgres;database=EdFi_DataImport_DistrictSpecific;Application Name=EdFi.DataImport;"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        }
+    ]
+}
