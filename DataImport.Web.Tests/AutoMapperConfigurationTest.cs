@@ -16,6 +16,7 @@ namespace DataImport.Web.Tests
         public void AssertConfigurationIsValid()
         {
             var services = new ServiceCollection();
+            services.AddLogging();
             services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Startup).Assembly));
             var provider = services.BuildServiceProvider();
             var mapper = provider.GetRequiredService<IMapper>();
