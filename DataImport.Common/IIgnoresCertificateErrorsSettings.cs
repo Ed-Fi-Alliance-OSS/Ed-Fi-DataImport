@@ -7,6 +7,6 @@ namespace DataImport.Common
 {
     public interface IIgnoresCertificateErrorsSettings
     {
-        public bool IgnoresCertificateErrors { get; set; }
+        bool IgnoresCertificateErrors { get; set; }
     }
 }

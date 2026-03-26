@@ -4,6 +4,7 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 namespace DataImport.Web.Tests
@@ -14,8 +15,11 @@ namespace DataImport.Web.Tests
         [Test]
         public void AssertConfigurationIsValid()
         {
-            var config = new MapperConfiguration(cfg => cfg.AddMaps(typeof(Startup).Assembly));
-            config.AssertConfigurationIsValid();
+            var services = new ServiceCollection();
+            services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Startup).Assembly));
+            var provider = services.BuildServiceProvider();
+            var mapper = provider.GetRequiredService<IMapper>();
+            mapper.ConfigurationProvider.AssertConfigurationIsValid();
         }
     }
 }

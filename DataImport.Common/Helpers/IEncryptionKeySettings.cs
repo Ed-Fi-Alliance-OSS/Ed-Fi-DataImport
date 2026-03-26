@@ -7,6 +7,6 @@ namespace DataImport.Common.Helpers
 {
     public interface IEncryptionKeySettings
     {
-        public string EncryptionKey { get; set; }
+        string EncryptionKey { get; set; }
     }
 }

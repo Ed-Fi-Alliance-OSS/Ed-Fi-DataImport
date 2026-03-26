@@ -11,13 +11,13 @@
     <ProjectReference Include="..\DataImport.Web\DataImport.Web.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="FakeItEasy" Version="8.3.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.6.0" />
     <PackageReference Include="NUnit" Version="4.2.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
-    <PackageReference Include="Serilog" Version="4.0.2" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
     <PackageReference Include="Shouldly" Version="4.2.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.5" />
   </ItemGroup>
