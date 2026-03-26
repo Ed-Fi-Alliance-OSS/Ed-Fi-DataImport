@@ -2,11 +2,11 @@
 
 ## Overview
 
-`Data Import` is a tool to simplify the loading of CSV data to the Operational Data Store (ODS) of the [Ed-Fi ODS / API](https://edfi.atlassian.net/wiki/spaces/ETKB/pages/20875869/Products+Technology). The import handles domains where vendor integration to the Ed-Fi APIs is inchoate or nonexistent from legacy data sources such as state assessment systems. The system works by providing methods to extract information out of spreadsheet-based CSV data files, and transform and load to the Ed-Fi ODS / API.
+`Data Import` is a tool to simplify the loading of CSV data to the Operational Data Store (ODS) of the [Ed-Fi ODS / API](https://docs.ed-fi.org/reference/ods-api). The import handles domains where vendor integration to the Ed-Fi APIs is inchoate or nonexistent from legacy data sources such as state assessment systems. The system works by providing methods to extract information out of spreadsheet-based CSV data files, and transform and load to the Ed-Fi ODS / API.
 
 Data Import is designed to match the Ed-Fi ODS / API operating model of choice by education-serving entities. The Data Import solution is intended to be used by system IT administrators and technical data analysts, in service of Local Education Agency (LEA) and State Education Agency (SEA) needs where directly integrated API solutions do not exist.
 
-Data Import documentation is available here: [Data Import on TechDocs](https://edfi.atlassian.net/wiki/spaces/EDFITOOLS/pages/24119638/Data+Import)
+Data Import documentation is available here: [Data Import on TechDocs](https://docs.ed-fi.org/reference/data-import/)
 
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport)
 
@@ -25,13 +25,13 @@ Data Import documentation is available here: [Data Import on TechDocs](https://e
 Data Import is a multi-project C# .NET solution with a web administration panel in ASP.NET to view data and job status, and server components as .NET command-line applications to process data. Data Import is designed to run on-premises or within Docker containers. 
 
 * Please see [Build Script Documentation](https://github.com/Ed-Fi-Alliance-OSS/Ed-Fi-DataImport/blob/main/docs/build-script.md) to setup Data Import locally.
-* Please see [Docker Documentation](https://edfi.atlassian.net/wiki/spaces/EDFITOOLS/pages/24119478/Docker+Deployment+for+Data+Import) to setup Data Import within Docker Containers.
+* Please see [Docker Documentation](https://docs.ed-fi.org/reference/data-import/technical-articles/quick-start-for-data-import-in-docker) to setup Data Import within Docker Containers.
 
 ## Installation Requirements
 
 ### Prerequisites
 
-Data Import 2.3+ requires **.NET 8**
+Data Import 2.3+ requires **.NET 10**
 
 Additionally, familiarity with the following technologies are required for installing and configuring Data Import:
 
@@ -44,9 +44,9 @@ Additionally, familiarity with the following technologies are required for insta
 
 Data Import is designed for use with the `Ed-Fi ODS / API v3.1+`. Data Import can be installed either alongside your Ed-Fi ODS / API server or used as a standalone application. Additionally, the Ed-Fi ODS / API instance must be reachable from the network on which the Data Import tool will be running.
 
-See the [Ed-Fi Operational Data Store and API](https://edfi.atlassian.net/wiki/spaces/ETKB/pages/20875869/Products+Technology) sections for more details on the ODS / API and version compatibility.
+See the [Ed-Fi ODS/API](https://docs.ed-fi.org/reference/ods-api) sections for more details on the ODS / API and version compatibility.
 
-### The following are functional requirements to use Data Import:
+### The following are functional requirements to use Data Import
 
 * An API key and secret is needed with access permissions to create data for targeted entities.
 
@@ -64,7 +64,7 @@ PowerShell installation provides a convenient method for installing Data Import 
 
 ### Docker Deployment
 
-* For general Docker Deployment information, see [Docker Deployment for Data Import](https://edfi.atlassian.net/wiki/spaces/EDFITOOLS/pages/24119478/Docker+Deployment+for+Data+Import)
+* For general Docker Deployment information, see [Docker Deployment for Data Import](https://docs.ed-fi.org/reference/data-import/technical-articles/quick-start-for-data-import-in-docker)
 
 ## First-Time Configuration
 
@@ -72,24 +72,24 @@ For information on post-installation Data Import configuration process, see [Fir
 
 ## Quick Start
 
-Please refer the [Quick Start guide](https://edfi.atlassian.net/wiki/spaces/EDFITOOLS/pages/24119444/Quick+Start) to verify installation and perform a simple end-to-end import using an Ed-Fi ODS / API v3.2 and the Grand Bend sample data set.
+Please refer the [Quick Start guide](https://docs.ed-fi.org/reference/data-import/getting-started/quick-start) to verify installation and perform a simple end-to-end import using an Ed-Fi ODS / API v3.2 and the Grand Bend sample data set.
 
 ## Documentation
 
-For detailed documentation, please see the [Data Import Tech Docs](https://edfi.atlassian.net/wiki/spaces/EDFITOOLS/pages/24119638/Data+Import).
+For detailed documentation, please see the [Data Import Tech Docs](https://docs.ed-fi.org/reference/data-import/).
 
 ## Contributing
 
 The Ed-Fi Alliance welcomes code contributions from the community. Please read
-the [Ed-Fi Contribution Guidelines](https://edfi.atlassian.net/wiki/spaces/ETKB/pages/20874883/Code+Contribution+Guidelines)
+the [Ed-Fi Contribution Guidelines](https://docs.ed-fi.org/community/sdlc/code-contribution-guidelines/)
 for detailed information on how to contribute source code.
 
 ## License
 
-Copyright (c) 2024 Ed-Fi Alliance, LLC and contributors.
+Copyright (c) 2026 Ed-Fi Alliance, LLC and contributors.
 
 Licensed under the Apache License, Version 2.0 (the "License").
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-See NOTICES for additional copyright and license notifications.
+See [NOTICES](./NOTICES.md) for additional copyright and license notifications.
