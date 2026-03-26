@@ -25,6 +25,72 @@
       },
       "dotnetRunMessages": "true",
       "applicationUrl": "https://localhost:56323;http://localhost:56322"
+    },
+    "mssql-shared": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "dotnetRunMessages": "true",
+      "applicationUrl": "https://localhost:56323;http://localhost:56322",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppSettings__DatabaseEngine": "SqlServer",
+        "ConnectionStrings__defaultConnection": "Data Source=(local);Initial Catalog=EdFi_DataImport;Trusted_Connection=True;TrustServerCertificate=True;"
+      }
+    },
+    "mssql-year": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "dotnetRunMessages": "true",
+      "applicationUrl": "https://localhost:56323;http://localhost:56322",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppSettings__DatabaseEngine": "SqlServer",
+        "ConnectionStrings__defaultConnection": "Data Source=(local);Initial Catalog=EdFi_DataImport_YearSpecific;Trusted_Connection=True;TrustServerCertificate=True;"
+      }
+    },
+    "mssql-district": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "dotnetRunMessages": "true",
+      "applicationUrl": "https://localhost:56323;http://localhost:56322",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppSettings__DatabaseEngine": "SqlServer",
+        "ConnectionStrings__defaultConnection": "Data Source=(local);Initial Catalog=EdFi_DataImport_DistrictSpecific;Trusted_Connection=True;TrustServerCertificate=True;"
+      }
+    },
+    "pg-shared": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "dotnetRunMessages": "true",
+      "applicationUrl": "https://localhost:56323;http://localhost:56322",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppSettings__DatabaseEngine": "PostgreSql",
+        "ConnectionStrings__defaultConnection": "host=localhost;port=5432;username=postgres;password=postgres;database=EdFi_DataImport;Application Name=EdFi.DataImport;"
+      }
+    },
+    "pg-year": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "dotnetRunMessages": "true",
+      "applicationUrl": "https://localhost:56323;http://localhost:56322",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppSettings__DatabaseEngine": "PostgreSql",
+        "ConnectionStrings__defaultConnection": "host=localhost;port=5432;username=postgres;password=postgres;database=EdFi_DataImport_YearSpecific;Application Name=EdFi.DataImport;"
+      }
+    },
+    "pg-district": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "dotnetRunMessages": "true",
+      "applicationUrl": "https://localhost:56323;http://localhost:56322",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AppSettings__DatabaseEngine": "PostgreSql",
+        "ConnectionStrings__defaultConnection": "host=localhost;port=5432;username=postgres;password=postgres;database=EdFi_DataImport_DistrictSpecific;Application Name=EdFi.DataImport;"
+      }
     }
   }
 }
