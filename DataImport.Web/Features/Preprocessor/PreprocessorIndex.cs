@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -38,12 +37,10 @@ namespace DataImport.Web.Features.Preprocessor
         public class QueryHandler : IRequestHandler<Query, ViewModel>
         {
             private readonly DataImportDbContext _database;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(DataImportDbContext database, IMapper mapper)
+            public QueryHandler(DataImportDbContext database)
             {
                 _database = database;
-                _mapper = mapper;
             }
 
             public async Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
@@ -59,7 +56,7 @@ namespace DataImport.Web.Features.Preprocessor
                 var preprocessorModels = preprocessors
                     .Select(x =>
                     {
-                        var preprocessor = _mapper.Map<PreprocessorIndexModel>(x.Preprocessor);
+                        var preprocessor = x.Preprocessor.ToIndexModel();
 
                         if (preprocessor.ScriptType == ScriptType.CustomFileProcessor)
                         {

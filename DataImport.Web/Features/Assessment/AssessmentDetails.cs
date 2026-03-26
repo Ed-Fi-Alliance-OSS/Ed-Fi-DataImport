@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.EdFi.Models.Resources;
 using DataImport.Web.Features.Shared;
 using DataImport.Web.Services;
@@ -62,12 +61,10 @@ namespace DataImport.Web.Features.Assessment
         public class QueryHandler : IRequestHandler<Query, AssessmentDetail>
         {
             private readonly EdFiServiceManager _edFiServiceManager;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(EdFiServiceManager edFiServiceManager, IMapper mapper)
+            public QueryHandler(EdFiServiceManager edFiServiceManager)
             {
                 _edFiServiceManager = edFiServiceManager;
-                _mapper = mapper;
             }
 
             public async Task<AssessmentDetail> Handle(Query request, CancellationToken cancellationToken)
@@ -83,7 +80,7 @@ namespace DataImport.Web.Features.Assessment
 
                 var assessment = await _edFiServiceManager.GetAssessmentById(request.ApiServerId.Value, id);
 
-                var assessmentDetail = _mapper.Map<AssessmentDetail>(assessment);
+                var assessmentDetail = assessment.ToAssessmentDetail();
                 assessmentDetail.ObjectiveAssessments = await Page<ObjectiveAssessment>.FetchAsync(async (offset, limit) => await _edFiServiceManager.GetObjectiveAssessmentsByAssessment(request.ApiServerId.Value, assessment, offset, limit),
                     PageNumber, 10);
 

@@ -6,7 +6,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using DataImport.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,12 +22,10 @@ namespace DataImport.Web.Features.Log
         public class QueryHandler : IRequestHandler<Query, LogViewModel>
         {
             private readonly DataImportDbContext _dataImportDbContext;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(DataImportDbContext dataImportDbContext, IMapper mapper)
+            public QueryHandler(DataImportDbContext dataImportDbContext)
             {
                 _dataImportDbContext = dataImportDbContext;
-                _mapper = mapper;
             }
 
             public Task<LogViewModel> Handle(Query request, CancellationToken cancellationToken)

@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.Common;
 using DataImport.Models;
 using DataImport.Web.Features.Shared;
@@ -62,13 +61,11 @@ namespace DataImport.Web.Features.Activity
         public class QueryHandler : IRequestHandler<Query, ViewModel>
         {
             private readonly DataImportDbContext _database;
-            private readonly IMapper _mapper;
             private readonly IClock _clock;
 
-            public QueryHandler(DataImportDbContext database, IMapper mapper, IClock clock)
+            public QueryHandler(DataImportDbContext database, IClock clock)
             {
                 _database = database;
-                _mapper = mapper;
                 _clock = clock;
             }
 
@@ -110,7 +107,7 @@ namespace DataImport.Web.Features.Activity
                     .Where(x => apiServerId.HasValue && x.Agent.ApiServerId == apiServerId.Value || !apiServerId.HasValue)
                     .Where(GetRecentActivityFilterExpression())
                     .ToList()
-                    .Select(_mapper.Map<FileModel>)
+                    .Select(x => x.ToFileModel())
                     .ToArray();
             }
 

@@ -25,7 +25,7 @@ namespace DataImport.EdFi.UnitTests.Api.EnrollmentComposite
         {
             public new IRestClient Client => base.Client;
 
-            public EnrollmentApiTss(IRestClient client, string apiVersion, string year) : base(client, apiVersion, year, null)
+            public EnrollmentApiTss(IRestClient client, string apiVersion, string year) : base(client, apiVersion, year)
             {
             }
         }

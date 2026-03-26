@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using DataImport.Common.ExtensionMethods;
 using DataImport.EdFi.Models.Resources;
 using RestSharp;
@@ -17,13 +16,11 @@ namespace DataImport.EdFi.Api.Resources
     {
         private readonly IRestClient _client;
         private readonly string _apiVersion;
-        private readonly IMapper _mapper;
 
-        public AssessmentsApi(IRestClient client, string apiVersion, IMapper mapper)
+        public AssessmentsApi(IRestClient client, string apiVersion)
         {
             _client = client;
             _apiVersion = apiVersion;
-            _mapper = mapper;
         }
 
         public List<Assessment> GetAllAssessments(int? offset = null, int? limit = null)
@@ -44,8 +41,7 @@ namespace DataImport.EdFi.Api.Resources
                 var clientExecute =
                     _client.ExecuteAsync<List<Assessment>>(request);
                 clientExecute.Wait();
-                return clientExecute.Result.Data
-                    .Select(_mapper.Map<Assessment>).ToList();
+                return clientExecute.Result.Data;
             }
             else
             {
@@ -53,7 +49,7 @@ namespace DataImport.EdFi.Api.Resources
                     _client.ExecuteAsync<List<ModelsV25.Resources.Assessment>>(request);
                 clientExecute.Wait();
                 return clientExecute.Result.Data
-                    .Select(_mapper.Map<Assessment>).ToList();
+                    .Select(x => x.ToCurrentAssessment()).ToList();
             }
         }
 
@@ -80,7 +76,7 @@ namespace DataImport.EdFi.Api.Resources
                 var clientExecute =
                     _client.ExecuteAsync<ModelsV25.Resources.Assessment>(request);
                 clientExecute.Wait();
-                return _mapper.Map<Assessment>(clientExecute.Result.Data);
+                return clientExecute.Result.Data.ToCurrentAssessment();
             }
         }
     }

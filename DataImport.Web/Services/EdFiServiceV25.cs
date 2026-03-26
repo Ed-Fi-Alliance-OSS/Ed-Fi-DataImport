@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.Common.ExtensionMethods;
 using DataImport.Common.Helpers;
 using DataImport.EdFi;
@@ -21,8 +20,8 @@ namespace DataImport.Web.Services
         private readonly string _encryptionKey;
         private readonly IOptions<AppSettings> _options;
 
-        public EdFiServiceV25(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, IAuthRequestWrapper oauthRequestWrapper, IOptions<AppSettings> options)
-            : base(mapper, dbContext)
+        public EdFiServiceV25(DataImportDbContext dbContext, IEncryptionKeyResolver encryptionKeyResolver, IAuthRequestWrapper oauthRequestWrapper, IOptions<AppSettings> options)
+            : base(dbContext)
         {
             _encryptionKey = encryptionKeyResolver.GetEncryptionKey();
             _oauthRequestWrapper = oauthRequestWrapper ?? throw new ArgumentNullException(nameof(oauthRequestWrapper));

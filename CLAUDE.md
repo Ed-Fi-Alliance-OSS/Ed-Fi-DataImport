@@ -52,7 +52,6 @@ Add-Migration <Name> -Context PostgreSqlDataImportDbContext -OutputDir ./Migrati
 ### Key Libraries
 
 - **MediatR** — CQRS command/query dispatch
-- **AutoMapper** — entity/DTO mapping
 - **CsvHelper** — CSV parsing
 - **FluentFTP / SSH.NET** — file ingestion via FTPS/SFTP
 - **Serilog** — structured logging (configured via `logging.json`, `logging_Sql.json`, `logging_PgSql.json`)

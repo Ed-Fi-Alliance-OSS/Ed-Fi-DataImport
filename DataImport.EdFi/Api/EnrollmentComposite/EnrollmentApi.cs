@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using DataImport.Common.ExtensionMethods;
 using DataImport.EdFi.Models.EnrollmentComposite;
 using RestSharp;
@@ -17,14 +16,12 @@ namespace DataImport.EdFi.Api.EnrollmentComposite
     {
         public readonly IRestClient Client;
         private readonly string _apiVersion;
-        private readonly IMapper _mapper;
         protected readonly string CompositePath;
 
-        public EnrollmentApi(IRestClient client, string apiVersion, string year, IMapper mapper = null)
+        public EnrollmentApi(IRestClient client, string apiVersion, string year)
         {
             Client = client;
             _apiVersion = apiVersion;
-            _mapper = mapper;
 
             if (!apiVersion.IsOdsV2())
             {
@@ -61,7 +58,7 @@ namespace DataImport.EdFi.Api.EnrollmentComposite
                  Client.ExecuteAsync<List<ModelsV25.EnrollmentComposite.School>>(request);
                 clientExecute.Wait();
                 return clientExecute.Result.Data
-                    .Select(_mapper.Map<School>).ToList();
+                    .Select(x => x.ToCurrentSchool()).ToList();
             }
         }
 
@@ -91,7 +88,7 @@ namespace DataImport.EdFi.Api.EnrollmentComposite
                 var clientExecute = Client.ExecuteAsync<List<ModelsV25.EnrollmentComposite.Section>>(request);
                 clientExecute.Wait();
                 return clientExecute.Result.Data
-                    .Select(_mapper.Map<Section>).ToList();
+                    .Select(x => x.ToCurrentSection()).ToList();
             }
         }
 

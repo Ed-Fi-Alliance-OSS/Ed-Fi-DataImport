@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.Common.Enums;
 using DataImport.Common.Helpers;
 using DataImport.Models;
@@ -31,17 +30,15 @@ namespace DataImport.Web.Features.Agent
         public class QueryHandler : IRequestHandler<Query, AddEditAgentViewModel>
         {
             private readonly DataImportDbContext _dataImportDbContext;
-            private readonly IMapper _mapper;
             private readonly AgentSelectListProvider _selectListProvider;
             private readonly IEncryptionService _encryptionService;
             private readonly string _encryptionKey;
             private readonly FilesActionSelectListProvider _filesActionProvider;
-            public QueryHandler(DataImportDbContext dataImportDbContext, IEncryptionKeyResolver encryptionKeyResolver, IMapper mapper, AgentSelectListProvider selectListProvider, IEncryptionService encryptionService, FilesActionSelectListProvider filesActionProvider)
+            public QueryHandler(DataImportDbContext dataImportDbContext, IEncryptionKeyResolver encryptionKeyResolver, AgentSelectListProvider selectListProvider, IEncryptionService encryptionService, FilesActionSelectListProvider filesActionProvider)
             {
                 _dataImportDbContext = dataImportDbContext;
                 _encryptionService = encryptionService;
                 _encryptionKey = encryptionKeyResolver.GetEncryptionKey();
-                _mapper = mapper;
                 _selectListProvider = selectListProvider;
                 _filesActionProvider = filesActionProvider;
             }
@@ -57,7 +54,7 @@ namespace DataImport.Web.Features.Agent
                 if (agent == null)
                     return Task.FromResult(new AddEditAgentViewModel());
 
-                var vm = _mapper.Map<AddEditAgentViewModel>(agent);
+                var vm = agent.ToViewModel();
                 vm.EncryptionFailureMsg = null;
                 if (!string.IsNullOrWhiteSpace(agent.Password))
                 {
