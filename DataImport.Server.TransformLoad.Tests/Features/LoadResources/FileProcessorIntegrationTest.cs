@@ -164,7 +164,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
 
             Transaction(database =>
             {
-                database.Database.ExecuteSqlRaw("UPDATE Files SET Status =  " + (int) FileStatus.Loaded);
+                database.Database.ExecuteSql($"UPDATE Files SET Status = {(int) FileStatus.Loaded}");
                 database.DataMaps.Add(dataMap);
                 database.Files.AddRange(secondFile, unorderedFile, firstFile);
                 database.DataMapAgents.Add(new DataMapAgent { Agent = secondAgent, DataMap = dataMap });
@@ -281,7 +281,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
             using (var scope = Services.CreateScope())
             {
                 using var context = scope.ServiceProvider.GetRequiredService<DataImportDbContext>();
-                context.Database.ExecuteSqlRaw("UPDATE Files SET Status =  " + (int) FileStatus.Loaded);
+                context.Database.ExecuteSql($"UPDATE Files SET Status = {(int) FileStatus.Loaded}");
                 context.DataMaps.Add(dataMap);
                 context.BootstrapDatas.AddRange(enabledAgentBootstrapData, disabledAgentBootstrapData);
                 context.Files.AddRange(enabledAgentFile, disabledAgentFile);
@@ -395,7 +395,7 @@ namespace DataImport.Server.TransformLoad.Tests.Features.LoadResources
 
             Transaction(database =>
             {
-                database.Database.ExecuteSqlRaw("UPDATE Files SET Status =  " + (int) FileStatus.Loaded);
+                database.Database.ExecuteSql($"UPDATE Files SET Status = {(int) FileStatus.Loaded}");
                 database.BootstrapDatas.Add(bootstrapData);
                 database.DataMaps.Add(dataMap);
                 database.Files.Add(file);

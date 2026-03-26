@@ -49,10 +49,6 @@ namespace DataImport.Web
         {
             Configuration = configuration;
 
-            if (Configuration.GetSection("AppSettings").Get<AppSettings>().IgnoresCertificateErrors)
-            {
-                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-            }
         }
 
         public IConfiguration Configuration
@@ -84,7 +80,7 @@ namespace DataImport.Web
             services.AddTransient<IEncryptionKeySettings>(sp => sp.GetService<IOptions<AppSettings>>().Value);
             services.AddTransient<IEncryptionKeyResolver, OptionsEncryptionKeyResolver>();
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Startup).Assembly));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddHttpContextAccessor();
 

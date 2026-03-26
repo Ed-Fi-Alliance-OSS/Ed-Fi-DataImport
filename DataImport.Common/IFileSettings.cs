@@ -7,6 +7,6 @@ namespace DataImport.Common
 {
     public interface IFileSettings
     {
-        public string ShareName { get; set; }
+        string ShareName { get; set; }
     }
 }
