@@ -35,11 +35,12 @@ services:
   db-dataimport:
     image: postgres@sha256:67cff2d866a237c54a21f2038e15e61cd257b7dde465436e231bb91e31ac9f79 # postgres:11-alpine
     ports:
-      - "5432"
+      - "5880:5432"
     environment:
       POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_DB: "EdFi_DataImport"
+      POSTGRES_PORT: "${POSTGRES_PORT:-5432}"
     volumes:
       - vol-db-dataimport:/var/lib/postgresql/data
     restart: always
