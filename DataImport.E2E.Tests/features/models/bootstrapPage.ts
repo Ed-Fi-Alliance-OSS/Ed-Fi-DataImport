@@ -53,7 +53,7 @@ export class BootstrapPage extends DataImportPage {
 
   async executeDelete(url: string): Promise<void> {
     await Promise.all([
-      this.waitForResponse("/DataImport/BootstrapData/Delete"),
+      this.waitForResponse("/BootstrapData"),
       this.clickLinkByURL(url),
     ]);
   }

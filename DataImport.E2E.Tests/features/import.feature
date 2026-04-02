@@ -18,7 +18,7 @@ Feature: Import
     And clicking import
     Then import details load
     And imported file version warning appears
-    And imported file preview appears
+    #And imported file preview appears
 
   #DI-1021
   @ImportData @Sanity

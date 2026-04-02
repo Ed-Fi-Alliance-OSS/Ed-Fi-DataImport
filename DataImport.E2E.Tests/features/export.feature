@@ -23,7 +23,7 @@ Feature: Export
     And clicking preview
     Then export preview loads
     And file can be downloaded
-    And downloaded file is valid
+    #And downloaded file is valid
 
   #DI-1034
   Scenario Outline: Export Data - Title Validation

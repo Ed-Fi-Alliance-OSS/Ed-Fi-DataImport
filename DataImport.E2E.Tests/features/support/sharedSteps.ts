@@ -17,6 +17,7 @@ Given("there's an API connection added", async () => {
   await models.apiConnectionsPage.waitForSaveButton();
   await models.apiConnectionsPage.isSaveButtonEnabled();
   await models.apiConnectionsPage.saveConnection();
+  await models.apiConnectionsPage.waitForSaveButtonIsHidden();
 });
 
 Given("user is logged in", async () => {

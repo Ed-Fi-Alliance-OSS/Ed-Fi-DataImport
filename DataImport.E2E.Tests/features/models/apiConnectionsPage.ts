@@ -94,6 +94,12 @@ export class ApiConnectionsPage extends DataImportPage {
     await this.waitForButtonEnabled(this.saveChangesBtn);
   }
 
+  async waitForSaveButtonIsHidden(): Promise<void> {
+    await this.page.locator(this.saveChangesBtn).waitFor({
+      state: "hidden",
+    });
+  }
+
   isSaveButtonEnabled(): Promise<boolean> {
     return this.page.locator(this.saveChangesBtn).isEnabled();
   }

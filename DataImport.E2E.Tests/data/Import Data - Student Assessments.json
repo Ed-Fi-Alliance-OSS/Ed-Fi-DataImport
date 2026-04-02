@@ -1,11 +1,11 @@
 {
   "title": "Automation - Student Assessment",
   "description": "Automated Test Data for Student Assessments",
-  "apiVersion": "5.3",
+  "apiVersion": "5.4",
   "template": {
     "maps": [
       {
-        "name": "Automated - SA Map for 5.3",
+        "name": "Automated - SA Map for 5.4",
         "resourcePath": "/ed-fi/studentAssessments",
         "attribute": null,
         "columnHeaders": [
@@ -56,7 +56,7 @@
     ],
     "bootstraps": [
       {
-        "name": "Automated - SA Bootstrap for 5.3",
+        "name": "Automated - SA Bootstrap for 5.4",
         "resourcePath": "/ed-fi/assessments",
         "data": {
           "educationOrganizationReference": {

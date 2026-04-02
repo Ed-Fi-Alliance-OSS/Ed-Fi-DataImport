@@ -67,13 +67,13 @@ async function cleanAPIConnection() {
   await models.apiConnectionsPage.clickDelete();
 }
 
-async function cleanMap(version = API_Versions.Version53) {
+async function cleanMap(version = API_Versions.Version54) {
   await models.mapsPage
     .navigate()
     .then(async () => await models.mapsPage.deleteMap(version));
 }
 
-async function cleanBootstrap(version = API_Versions.Version53) {
+async function cleanBootstrap(version = API_Versions.Version54) {
   await models.bootstrapPage
     .navigate()
     .then(async () => await models.bootstrapPage.deleteBootstrap(version));
