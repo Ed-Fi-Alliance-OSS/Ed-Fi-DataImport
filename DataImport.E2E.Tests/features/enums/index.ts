@@ -6,5 +6,5 @@
 export enum API_Versions {
   Version34 = "3.4.0",
   Version52 = "5.2",
-  Version53 = "5.3",
+  Version54 = "5.4",
 }

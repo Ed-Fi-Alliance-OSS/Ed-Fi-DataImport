@@ -52,7 +52,7 @@ export class MapsPage extends DataImportPage {
 
   async executeDelete(url: string): Promise<void> {
     await Promise.all([
-      this.waitForResponse("/DataImport/DataMaps/Delete"),
+      this.waitForResponse("/DataMaps"),
       this.clickLinkByURL(url),
     ]);
   }

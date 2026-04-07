@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using DataImport.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -37,12 +36,10 @@ namespace DataImport.Web.Features.ApiServers
         public class QueryHandler : IRequestHandler<Query, ViewModel>
         {
             private readonly DataImportDbContext _database;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(DataImportDbContext database, IMapper mapper)
+            public QueryHandler(DataImportDbContext database)
             {
                 _database = database;
-                _mapper = mapper;
             }
 
             public async Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
@@ -51,7 +48,7 @@ namespace DataImport.Web.Features.ApiServers
 
                 return new ViewModel
                 {
-                    ApiServers = apiServers.Select(x => _mapper.Map<ApiServerModel>(x)).OrderBy(x => x.Name).ToList(),
+                    ApiServers = apiServers.Select(x => x.ToApiServerModel()).OrderBy(x => x.Name).ToList(),
                     ConfigurationFailureMsg = !apiServers.Any() ? "In order to proceed, please configure the ODS API Server." : null
                 };
             }

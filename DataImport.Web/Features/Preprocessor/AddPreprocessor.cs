@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.Models;
 using DataImport.Web.Features.Shared.SelectListProviders;
 using DataImport.Web.Helpers;
@@ -59,14 +58,12 @@ namespace DataImport.Web.Features.Preprocessor
         {
             private readonly ILogger _logger;
             private readonly DataImportDbContext _database;
-            private readonly IMapper _mapper;
             private readonly ExternalPreprocessorOptions _externalPreprocessorSettings;
 
-            public CommandHandler(ILogger<CommandHandler> logger, DataImportDbContext database, IMapper mapper, IOptions<ExternalPreprocessorOptions> externalPreprocessorSettings)
+            public CommandHandler(ILogger<CommandHandler> logger, DataImportDbContext database, IOptions<ExternalPreprocessorOptions> externalPreprocessorSettings)
             {
                 _logger = logger;
                 _database = database;
-                _mapper = mapper;
                 _externalPreprocessorSettings = externalPreprocessorSettings.Value;
             }
 
@@ -75,7 +72,7 @@ namespace DataImport.Web.Features.Preprocessor
                 if (request.ViewModel.ScriptType.Value.IsExternal() && !_externalPreprocessorSettings.Enabled)
                     throw new ValidationException("External PreProcessors are disabled. Update application settings to enable them.");
 
-                var script = _mapper.Map<Script>(request.ViewModel);
+                var script = request.ViewModel.ToScript();
                 _database.Scripts.Add(script);
 
                 await _database.SaveChangesAsync(cancellationToken); // Explicitly call SaveChanges to get Id for the script.

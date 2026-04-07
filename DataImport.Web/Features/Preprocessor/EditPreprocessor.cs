@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.Models;
 using DataImport.Web.Helpers;
 using DataImport.Web.Infrastructure;
@@ -25,19 +24,17 @@ namespace DataImport.Web.Features.Preprocessor
         public class QueryHandler : IRequestHandler<Query, AddEditPreprocessorViewModel>
         {
             private readonly DataImportDbContext _database;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(DataImportDbContext database, IMapper mapper)
+            public QueryHandler(DataImportDbContext database)
             {
                 _database = database;
-                _mapper = mapper;
             }
 
             public async Task<AddEditPreprocessorViewModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 var script = await _database.Scripts.SingleAsync(x => x.Id == request.Id, cancellationToken);
 
-                return _mapper.Map<AddEditPreprocessorViewModel>(script);
+                return script.ToViewModel();
             }
         }
 
@@ -55,19 +52,17 @@ namespace DataImport.Web.Features.Preprocessor
         {
             private readonly ILogger<EditPreprocessor> _logger;
             private readonly DataImportDbContext _database;
-            private readonly IMapper _mapper;
 
-            public CommandHandler(ILogger<EditPreprocessor> logger, DataImportDbContext database, IMapper mapper)
+            public CommandHandler(ILogger<EditPreprocessor> logger, DataImportDbContext database)
             {
                 _logger = logger;
                 _database = database;
-                _mapper = mapper;
             }
 
             public async Task<Response> Handle(Command request, CancellationToken cancellationToken)
             {
                 var script = await _database.Scripts.SingleAsync(x => x.Id == request.ViewModel.Id, cancellationToken);
-                _mapper.Map(request.ViewModel, script);
+                request.ViewModel.ApplyToScript(script);
 
                 _logger.Modified(script, x => x.Name);
 

@@ -4,7 +4,6 @@
 // See the LICENSE and NOTICES files in the project root for more information.
 
 using System.Threading.Tasks;
-using AutoMapper;
 using DataImport.Common.Helpers;
 using DataImport.Models;
 using DataImport.Web.Services;
@@ -32,7 +31,6 @@ namespace DataImport.Web.Tests.Services
                 : base(
                    null,
                    GetEncryptionKeyResolver(),
-                   A.Fake<IMapper>(),
                    metadataFetcher,
                    A.Fake<IAuthRequestWrapper>(),
                    null)

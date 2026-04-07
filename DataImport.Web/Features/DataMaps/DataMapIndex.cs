@@ -6,7 +6,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using DataImport.Models;
 using MediatR;
 
@@ -28,12 +27,10 @@ namespace DataImport.Web.Features.DataMaps
         public class QueryHandler : IRequestHandler<Query, ViewModel[]>
         {
             private readonly DataImportDbContext _database;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(DataImportDbContext database, IMapper mapper)
+            public QueryHandler(DataImportDbContext database)
             {
                 _database = database;
-                _mapper = mapper;
             }
 
             public Task<ViewModel[]> Handle(Query request, CancellationToken cancellationToken)
@@ -41,7 +38,7 @@ namespace DataImport.Web.Features.DataMaps
                 return Task.FromResult(_database.DataMaps
                     .OrderBy(x => x.Name)
                     .ToList()
-                    .Select(x => _mapper.Map<ViewModel>(x))
+                    .Select(x => x.ToViewModel())
                     .ToArray());
             }
         }

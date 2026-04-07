@@ -3,7 +3,6 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.EdFi.Models.Resources;
 using DataImport.Web.Features.Shared;
 using DataImport.Web.Services;
@@ -62,19 +61,21 @@ namespace DataImport.Web.Features.Assessment
         public class QueryHandler : IRequestHandler<Query, AssessmentDetail>
         {
             private readonly EdFiServiceManager _edFiServiceManager;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(EdFiServiceManager edFiServiceManager, IMapper mapper)
+            public QueryHandler(EdFiServiceManager edFiServiceManager)
             {
                 _edFiServiceManager = edFiServiceManager;
-                _mapper = mapper;
             }
 
             public async Task<AssessmentDetail> Handle(Query request, CancellationToken cancellationToken)
             {
                 if (!request.ApiServerId.HasValue)
                 {
-                    return new AssessmentDetail();
+                    return new AssessmentDetail
+                    {
+                        PerformanceLevels = new List<AssessmentPerformanceLevel>(),
+                        ObjectiveAssessments = new PagedList<ObjectiveAssessment>()
+                    };
                 }
 
                 const int PageNumber = 1;
@@ -83,7 +84,19 @@ namespace DataImport.Web.Features.Assessment
 
                 var assessment = await _edFiServiceManager.GetAssessmentById(request.ApiServerId.Value, id);
 
-                var assessmentDetail = _mapper.Map<AssessmentDetail>(assessment);
+                if (assessment == null)
+                {
+                    return new AssessmentDetail
+                    {
+                        Id = id,
+                        ApiServerId = request.ApiServerId,
+                        PerformanceLevels = new List<AssessmentPerformanceLevel>(),
+                        ObjectiveAssessments = new PagedList<ObjectiveAssessment>()
+                    };
+                }
+
+                var assessmentDetail = assessment.ToAssessmentDetail();
+                assessmentDetail.ApiServerId = request.ApiServerId;
                 assessmentDetail.ObjectiveAssessments = await Page<ObjectiveAssessment>.FetchAsync(async (offset, limit) => await _edFiServiceManager.GetObjectiveAssessmentsByAssessment(request.ApiServerId.Value, assessment, offset, limit),
                     PageNumber, 10);
 

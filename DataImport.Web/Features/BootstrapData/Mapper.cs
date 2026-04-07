@@ -3,17 +3,18 @@
 // The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 // See the LICENSE and NOTICES files in the project root for more information.
 
-using AutoMapper;
 using DataImport.Models;
 
 namespace DataImport.Web.Features.BootstrapData
 {
-    public class MappingProfile : Profile
+    public static class Mapper
     {
-        public MappingProfile()
-        {
-            CreateMap<DataImport.Models.BootstrapData, BootstrapDataIndex.ViewModel>()
-                .ForMember(m => m.ResourceName, opt => opt.MapFrom(x => x.ToResourceName()));
-        }
+        public static BootstrapDataIndex.ViewModel ToViewModel(this DataImport.Models.BootstrapData src) =>
+            new()
+            {
+                Id = src.Id.ToString(),
+                Name = src.Name,
+                ResourceName = src.ToResourceName()
+            };
     }
 }

@@ -18,7 +18,7 @@ function Set-TlsVersion {
 Import-Module "$PSScriptRoot/key-management.psm1"
 
 $appCommonDirectory = "$PSScriptRoot/AppCommon"
-$RequiredDotNetHostingBundleVersion = "6.0.0"
+$RequiredDotNetHostingBundleVersion = "10.0.0"
 Import-Module -Force "$appCommonDirectory/Environment/Prerequisites.psm1" -Scope Global
 Set-TlsVersion
 Install-DotNetCore "C:\temp\tools"

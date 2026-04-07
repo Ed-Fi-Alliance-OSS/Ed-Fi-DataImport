@@ -7,7 +7,7 @@ namespace DataImport.Common.Preprocessors
 {
     public interface IPowerShellPreprocessSettings
     {
-        public string EncryptionKey { get; set; }
-        public bool UsePowerShellWithNoRestrictions { get; set; }
+        string EncryptionKey { get; set; }
+        bool UsePowerShellWithNoRestrictions { get; set; }
     }
 }

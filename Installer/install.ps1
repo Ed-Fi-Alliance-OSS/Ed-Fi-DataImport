@@ -3,67 +3,67 @@
 # The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 # See the LICENSE and NOTICES files in the project root for more information.
 
+#Requires -Version 5.0
+
+param(
+    # Database server hostname or instance name.
+    [string]
+    $Server = "(local)",
+
+    # Database engine. Options are: SqlServer, PostgreSql.
+    [string]
+    [ValidateSet("SqlServer", "PostgreSql")]
+    $Engine = "SqlServer",
+
+    # When set, uses integrated (Windows) security instead of Username/Password.
+    [switch]
+    $UseIntegratedSecurity,
+
+    # Database username. Only required when UseIntegratedSecurity is not set.
+    [string]
+    $Username,
+
+    # Database password. Only required when UseIntegratedSecurity is not set.
+    [string]
+    $Password,
+
+    # Path where temporary tools will be installed.
+    [string]
+    $ToolsPath = "C:/temp/tools",
+
+    # Version of the DataImport package to install.
+    [string]
+    $PackageVersion = "2.3.4.0",
+
+    # Optional token used to recover or reset application user credentials.
+    [string]
+    $UserRecoveryToken
+)
+
 import-module -force "$PSScriptRoot/Install-EdFiDataImport.psm1"
 
-<#
-Review and edit the following connection information for your database server
-
-.EXAMPLE
-Installs and connects the applications to the database using SQL Authentication
-
-    $dbConnectionInfo = @{
-        Server = "(local)"
-        Engine = "SqlServer"
-        UseIntegratedSecurity = $false
-        Username = "exampleAdmin"
-        Password = "examplePassword"
-    }
-
-Installs and connects the applications to the database using PostgreSql Authentication
-
-    $dbConnectionInfo = @{
-        Server = "localhost"
-        Engine = "PostgreSql"
-        UseIntegratedSecurity = $false
-        Username = "postgres"
-        Password = "examplePassword"
-    }
-#>
-
 $dbConnectionInfo = @{
-    Server                = "(local)"
-    Engine                = "SqlServer"
-    UseIntegratedSecurity = $true
+    Server                = $Server
+    Engine                = $Engine
+    UseIntegratedSecurity = $UseIntegratedSecurity.IsPresent
 }
 
-<#
-Review and edit the following application settings and connection information for Data Import
-
-.EXAMPLE
-Configure DataImport
-
-    $p = @{
-        ToolsPath = "C:/temp/tools"
-        DbConnectionInfo = $dbConnectionInfo
-        PackageVersion = '2.3.4.0'
-    }
-
-    UserRecoveryToken is optional. This value can be used to recover/ reset the application user credentials
-    $p = @{
-        ToolsPath = "C:/temp/tools"
-        DbConnectionInfo = $dbConnectionInfo
-        PackageVersion = '2.3.4.0'
-        UserRecoveryToken = "bEnFYNociET2R1Wua3DHzwfU5u"
-    }
-#>
+if (-not $UseIntegratedSecurity) {
+    $dbConnectionInfo["Username"] = $Username
+    $dbConnectionInfo["Password"] = $Password
+}
 
 $packageSource = Split-Path $PSScriptRoot -Parent
 
 $p = @{
-    ToolsPath        = "C:/temp/tools"
+    ToolsPath        = $ToolsPath
     DbConnectionInfo = $dbConnectionInfo
-    PackageVersion   = '2.3.4.0'
+    PackageVersion   = $PackageVersion
     PackageSource    = $packageSource
+}
+
+if ($UserRecoveryToken) {
+    $p["UserRecoveryToken"] = $UserRecoveryToken
 }
 
 Install-EdFiDataImport @p

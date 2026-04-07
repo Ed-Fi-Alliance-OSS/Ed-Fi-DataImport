@@ -3,13 +3,10 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataImport.Common\DataImport.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="Libuv" Version="1.10.0" />
-  </ItemGroup>
+
 </Project>

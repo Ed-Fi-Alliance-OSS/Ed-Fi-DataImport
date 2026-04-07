@@ -9,7 +9,6 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using DataImport.Common.Enums;
 using DataImport.Models;
 using DataImport.Web.Services;
@@ -29,12 +28,10 @@ namespace DataImport.Web.Features.Log
         public class QueryHandler : IRequestHandler<Query, LogViewModel>
         {
             private readonly DataImportDbContext _dataImportDbContext;
-            private readonly IMapper _mapper;
 
-            public QueryHandler(DataImportDbContext dataImportDbContext, IMapper mapper)
+            public QueryHandler(DataImportDbContext dataImportDbContext)
             {
                 _dataImportDbContext = dataImportDbContext;
-                _mapper = mapper;
             }
 
             public Task<LogViewModel> Handle(Query request, CancellationToken cancellationToken)
@@ -120,7 +117,7 @@ namespace DataImport.Web.Features.Log
                     }
                 }
                 var pagedList = logsByDateDesc.Skip(offset).Take(limit).ToList();
-                return pagedList.Select(_mapper.Map<LogViewModel.Ingestion>);
+                return pagedList.Select(x => x.ToLogIngestion());
             }
         }
     }

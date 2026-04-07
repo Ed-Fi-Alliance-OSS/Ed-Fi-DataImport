@@ -66,9 +66,6 @@ namespace DataImport.Server.TransformLoad
             var logger = builtHost.Services.GetService<ILogger<Program>>();
             logger.LogInformation("{name} {version} Starting", assembly.GetName().Name, informationalVersion);
 
-            // Force TLS 1.2, resolving an error in Azure where all calls between DataImport and ODS API fail
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
             // Not using run because this process is done when this returns.
             //If you do the host wait, it deadlocks since the host already completed and nothing signals the wait task.
             Log.Information("Starting host");

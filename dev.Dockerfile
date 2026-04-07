@@ -3,8 +3,8 @@
 # The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 # See the LICENSE and NOTICES files in the project root for more information.
 
-# tag sdk:8.0 alpine
-FROM mcr.microsoft.com/dotnet/sdk@sha256:e646d8a0fa589bcd970e0ebde394780398e8ae08fffeb36781753c51fc9e87b0 AS build
+# tag sdk:10.0.201-alpine3.23
+FROM mcr.microsoft.com/dotnet/sdk@sha256:a65df8d9ad0661a1a785a4f26188b3a2826540d448df317ac69cfb6e801e1592 AS build
 WORKDIR /source
 
 COPY DataImport.Web/*.csproj DataImport.Web/
@@ -33,17 +33,17 @@ WORKDIR /source/DataImport.Server.TransformLoad
 RUN dotnet build -c Release --no-restore
 RUN dotnet publish -c Release --no-build -o /app/DataImport.Server.TransformLoad
 
-#tag 8.0-alpine
-FROM mcr.microsoft.com/dotnet/aspnet@sha256:646b1c5ff36375f35f6149b0ce19ca095f97b4b882b90652801e9fbe82bcfa8a
+#tag aspnet:10.0.5-alpine3.23
+FROM mcr.microsoft.com/dotnet/aspnet@sha256:8c7671a6f0f984d0c102ee70d61e8010857de032b320561dea97cc5781aea5f8
 LABEL maintainer="Ed-Fi Alliance, LLC and Contributors <techsupport@ed-fi.org>"
 # Alpine image does not contain Globalization Cultures library so we need to install ICU library to get for LINQ expression to work
 # Disable the globaliztion invariant mode (set in base image)
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
-ENV ASPNETCORE_ENVIRONMENT Development
+ENV ASPNETCORE_ENVIRONMENT=Development
 
 WORKDIR /app
 ENV TZ=US/Central
-RUN apk add --no-cache icu=~74 tzdata
+RUN apk add --no-cache icu=~76 tzdata=~2026a
 
 WORKDIR /app/DataImport.Web
 COPY --from=publish /app/DataImport.Web .
