@@ -17,7 +17,7 @@ param(
 
     # When set, uses integrated (Windows) security instead of Username/Password.
     [switch]
-    $UseIntegratedSecurity,
+    $UseIntegratedSecurity = $true,
 
     # Database username. Only required when UseIntegratedSecurity is not set.
     [string]
