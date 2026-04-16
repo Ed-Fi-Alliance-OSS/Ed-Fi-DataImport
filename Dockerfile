@@ -3,8 +3,8 @@
 # The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 # See the LICENSE and NOTICES files in the project root for more information.
 
-#tag aspnet:10.0.5-alpine3.23
-FROM mcr.microsoft.com/dotnet/aspnet@sha256:8c7671a6f0f984d0c102ee70d61e8010857de032b320561dea97cc5781aea5f8
+#tag aspnet:10.0.6-alpine3.23
+FROM mcr.microsoft.com/dotnet/aspnet@sha256:1201dde897ab436b7c6b386f6dbd4f9a3ca0245f9c5a8aac8f8bcdccb4c7d484
 LABEL maintainer="Ed-Fi Alliance, LLC and Contributors <techsupport@ed-fi.org>"
 ARG TIME_ZONE=US/Central
 ENV VERSION="2.4.0"
