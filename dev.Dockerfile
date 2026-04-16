@@ -43,7 +43,7 @@ ENV ASPNETCORE_ENVIRONMENT=Development
 
 WORKDIR /app
 ENV TZ=US/Central
-RUN apk add --no-cache icu=~76 tzdata=~2026a
+RUN apk add --no-cache icu=~76 tzdata=~2026a krb5-libs=~1
 
 WORKDIR /app/DataImport.Web
 COPY --from=publish /app/DataImport.Web .

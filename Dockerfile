@@ -16,7 +16,7 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
 WORKDIR /app
 
-RUN apk --no-cache add unzip=~6 dos2unix=~7 bash=~5 gettext=~0 postgresql16-client=~16 jq=~1 icu=~76 gcompat=~1 tzdata=~2026a && \
+RUN apk --no-cache add unzip=~6 dos2unix=~7 bash=~5 gettext=~0 postgresql16-client=~16 jq=~1 icu=~76 gcompat=~1 tzdata=~2026a krb5-libs=~1 && \
     wget -O /app/DataImport.zip https://pkgs.dev.azure.com/ed-fi-alliance/Ed-Fi-Alliance-OSS/_apis/packaging/feeds/EdFi/nuget/packages/DataImport.Web/versions/${VERSION}/content && \
     unzip /app/DataImport.zip -d /app/DataImport && \
     cp -r /app/DataImport/DataImport.Web/. /app/DataImport.Web && \
