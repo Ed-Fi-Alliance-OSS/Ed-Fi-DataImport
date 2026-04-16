@@ -33,7 +33,7 @@ param(
 
     # Version of the DataImport package to install.
     [string]
-    $PackageVersion = "2.3.4.0",
+    $PackageVersion = "2.4.0.0",
 
     # Optional token used to recover or reset application user credentials.
     [string]

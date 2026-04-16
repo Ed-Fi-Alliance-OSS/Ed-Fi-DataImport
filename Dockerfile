@@ -3,11 +3,11 @@
 # The Ed-Fi Alliance licenses this file to you under the Apache License, Version 2.0.
 # See the LICENSE and NOTICES files in the project root for more information.
 
-#tag aspnet:10.0.5-alpine3.23
-FROM mcr.microsoft.com/dotnet/aspnet@sha256:8c7671a6f0f984d0c102ee70d61e8010857de032b320561dea97cc5781aea5f8
+#tag aspnet:10.0.6-alpine3.23
+FROM mcr.microsoft.com/dotnet/aspnet@sha256:1201dde897ab436b7c6b386f6dbd4f9a3ca0245f9c5a8aac8f8bcdccb4c7d484
 LABEL maintainer="Ed-Fi Alliance, LLC and Contributors <techsupport@ed-fi.org>"
 ARG TIME_ZONE=US/Central
-ENV VERSION="2.3.4"
+ENV VERSION="2.4.0"
 ENV TZ=${TIME_ZONE}
 
 # Alpine image does not contain Globalization Cultures library so we need to install ICU library to get for LINQ expression to work
@@ -16,7 +16,7 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
 WORKDIR /app
 
-RUN apk --no-cache add unzip=~6 dos2unix=~7 bash=~5 gettext=~0 postgresql16-client=~16 jq=~1 icu=~76 gcompat=~1 tzdata=~2026a && \
+RUN apk --no-cache add unzip=~6 dos2unix=~7 bash=~5 gettext=~0 postgresql16-client=~16 jq=~1 icu=~76 gcompat=~1 tzdata=~2026a krb5-libs=~1 && \
     wget -O /app/DataImport.zip https://pkgs.dev.azure.com/ed-fi-alliance/Ed-Fi-Alliance-OSS/_apis/packaging/feeds/EdFi/nuget/packages/DataImport.Web/versions/${VERSION}/content && \
     unzip /app/DataImport.zip -d /app/DataImport && \
     cp -r /app/DataImport/DataImport.Web/. /app/DataImport.Web && \
