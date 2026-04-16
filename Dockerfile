@@ -7,7 +7,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet@sha256:8c7671a6f0f984d0c102ee70d61e8010857de032b320561dea97cc5781aea5f8
 LABEL maintainer="Ed-Fi Alliance, LLC and Contributors <techsupport@ed-fi.org>"
 ARG TIME_ZONE=US/Central
-ENV VERSION="2.3.4"
+ENV VERSION="2.4.0"
 ENV TZ=${TIME_ZONE}
 
 # Alpine image does not contain Globalization Cultures library so we need to install ICU library to get for LINQ expression to work
