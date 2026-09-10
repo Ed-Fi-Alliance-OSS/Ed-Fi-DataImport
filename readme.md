@@ -1,8 +1,11 @@
 # Data Import
 
+> [!WARNING]
+> Formal support for this legacy application ended on June 30, 2026: see the [announcement](https://docs.ed-fi.org/reference/roadmap/notifications/data-import) for more information.
+
 ## Overview
 
-`Data Import` is a tool to simplify the loading of CSV data to the Operational Data Store (ODS) of the [Ed-Fi ODS / API](https://docs.ed-fi.org/reference/ods-api). The import handles domains where vendor integration to the Ed-Fi APIs is inchoate or nonexistent from legacy data sources such as state assessment systems. The system works by providing methods to extract information out of spreadsheet-based CSV data files, and transform and load to the Ed-Fi ODS / API.
+Ed-Fi Data Import is a tool to simplify the loading of CSV data to the Operational Data Store (ODS) of the [Ed-Fi ODS / API](https://docs.ed-fi.org/reference/ods-api). The import handles domains where vendor integration to the Ed-Fi APIs is inchoate or nonexistent from legacy data sources such as state assessment systems. The system works by providing methods to extract information out of spreadsheet-based CSV data files, and transform and load to the Ed-Fi ODS / API.
 
 Data Import is designed to match the Ed-Fi ODS / API operating model of choice by education-serving entities. The Data Import solution is intended to be used by system IT administrators and technical data analysts, in service of Local Education Agency (LEA) and State Education Agency (SEA) needs where directly integrated API solutions do not exist.
 
@@ -77,12 +80,6 @@ Please refer the [Quick Start guide](https://docs.ed-fi.org/reference/data-impor
 ## Documentation
 
 For detailed documentation, please see the [Data Import Tech Docs](https://docs.ed-fi.org/reference/data-import/).
-
-## Contributing
-
-The Ed-Fi Alliance welcomes code contributions from the community. Please read
-the [Ed-Fi Contribution Guidelines](https://docs.ed-fi.org/community/sdlc/code-contribution-guidelines/)
-for detailed information on how to contribute source code.
 
 ## License
 
